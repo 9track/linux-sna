@@ -701,7 +701,7 @@ fi
 
 PACKAGE=linux-sna
 
-VERSION=1.00pre16
+VERSION=1.00PRE18
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -1942,9 +1942,125 @@ EOF
 fi
 
 
+# Extract the first word of "xml-config", so it can be a program name with args.
+set dummy xml-config; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1949: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_XML_CONFIG'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$XML_CONFIG" in
+  /*)
+  ac_cv_path_XML_CONFIG="$XML_CONFIG" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_XML_CONFIG="$XML_CONFIG" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_XML_CONFIG="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_path_XML_CONFIG" && ac_cv_path_XML_CONFIG="no"
+  ;;
+esac
+fi
+XML_CONFIG="$ac_cv_path_XML_CONFIG"
+if test -n "$XML_CONFIG"; then
+  echo "$ac_t""$XML_CONFIG" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test x$XML_CONFIG = xno ; then
+        { echo "configure: error: ** Can't find xml-config.  Is libxml installed? **" 1>&2; exit 1; }
+fi
+echo $ac_n "checking for xml C flags""... $ac_c" 1>&6
+echo "configure:1986: checking for xml C flags" >&5
+XML_CFLAGS="`$XML_CONFIG --cflags`"
+CFLAGS="$CFLAGS $XML_CFLAGS"
+echo "$ac_t""$XML_CFLAGS" 1>&6
+echo $ac_n "checking for xml libs""... $ac_c" 1>&6
+echo "configure:1991: checking for xml libs" >&5
+XML_LIBS="`$XML_CONFIG --libs`"
+LIBS="$LIBS $XML_LIBS"
+echo "$ac_t""$XML_LIBS" 1>&6
+
+# Extract the first word of "glib-config", so it can be a program name with args.
+set dummy glib-config; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1999: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_GLIB_CONFIG'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$GLIB_CONFIG" in
+  /*)
+  ac_cv_path_GLIB_CONFIG="$GLIB_CONFIG" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_GLIB_CONFIG="$GLIB_CONFIG" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_GLIB_CONFIG="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_path_GLIB_CONFIG" && ac_cv_path_GLIB_CONFIG="no"
+  ;;
+esac
+fi
+GLIB_CONFIG="$ac_cv_path_GLIB_CONFIG"
+if test -n "$GLIB_CONFIG"; then
+  echo "$ac_t""$GLIB_CONFIG" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test x$GLIB_CONFIG = xno ; then
+        { echo "configure: error: ** Can't find glib-config.  Is glib installed? **" 1>&2; exit 1; }
+fi
+echo $ac_n "checking for glib C flags""... $ac_c" 1>&6
+echo "configure:2036: checking for glib C flags" >&5
+GLIB_CFLAGS="`$GLIB_CONFIG --cflags glib`"
+CFLAGS="$CFLAGS $GLIB_CFLAGS"
+echo "$ac_t""$GLIB_CFLAGS" 1>&6
+echo $ac_n "checking for glib libs""... $ac_c" 1>&6
+echo "configure:2041: checking for glib libs" >&5
+GLIB_LIBS="`$GLIB_CONFIG --libs glib`"
+LIBS="$LIBS $GLIB_LIBS"
+echo "$ac_t""$GLIB_LIBS" 1>&6
+
+#dnl *
+#dnl * Checks for lib5250 and lib5250 features.
+#dnl *
+#AC_PATH_PROG(TN5250_CONFIG,tn5250-config,no)
+#if test x$TN5250_CONFIG = xno ; then
+#        AC_MSG_ERROR(** Can't find tn5250-config.  Is tn5250 installed? **)
+#fi
+#AC_MSG_CHECKING(for lib5250 C flags)
+#TN5250_CFLAGS="`$TN5250_CONFIG --cflags`"
+#CFLAGS="$CFLAGS $TN5250_CFLAGS"
+#AC_MSG_RESULT($TN5250_CFLAGS)
+#AC_MSG_CHECKING(for lib5250 libs)
+#TN5250_LIBS="`$TN5250_CONFIG --libs`"
+#LIBS="$LIBS $TN5250_LIBS"
+#AC_MSG_RESULT($TN5250_LIBS)
+
 
 echo $ac_n "checking type of array argument to getgroups""... $ac_c" 1>&6
-echo "configure:1948: checking type of array argument to getgroups" >&5
+echo "configure:2064: checking type of array argument to getgroups" >&5
 if eval "test \"`echo '$''{'ac_cv_type_getgroups'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1952,7 +2068,7 @@ else
   ac_cv_type_getgroups=cross
 else
   cat > conftest.$ac_ext <<EOF
-#line 1956 "configure"
+#line 2072 "configure"
 #include "confdefs.h"
 
 /* Thanks to Mike Rendell for this test.  */
@@ -1977,7 +2093,7 @@ main()
 }
 
 EOF
-if { (eval echo configure:1981: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:2097: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
     ac_cv_type_getgroups=gid_t
 else
@@ -1991,7 +2107,7 @@ fi
 
 if test $ac_cv_type_getgroups = cross; then
         cat > conftest.$ac_ext <<EOF
-#line 1995 "configure"
+#line 2111 "configure"
 #include "confdefs.h"
 #include <unistd.h>
 EOF
@@ -2015,12 +2131,12 @@ EOF
 
 
 echo $ac_n "checking return type of signal handlers""... $ac_c" 1>&6
-echo "configure:2019: checking return type of signal handlers" >&5
+echo "configure:2135: checking return type of signal handlers" >&5
 if eval "test \"`echo '$''{'ac_cv_type_signal'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2024 "configure"
+#line 2140 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <signal.h>
@@ -2037,7 +2153,7 @@ int main() {
 int i;
 ; return 0; }
 EOF
-if { (eval echo configure:2041: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:2157: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_type_signal=void
 else
@@ -2056,7 +2172,7 @@ EOF
 
 
 echo $ac_n "checking for wait3 that fills in rusage""... $ac_c" 1>&6
-echo "configure:2060: checking for wait3 that fills in rusage" >&5
+echo "configure:2176: checking for wait3 that fills in rusage" >&5
 if eval "test \"`echo '$''{'ac_cv_func_wait3_rusage'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2064,7 +2180,7 @@ else
   ac_cv_func_wait3_rusage=no
 else
   cat > conftest.$ac_ext <<EOF
-#line 2068 "configure"
+#line 2184 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/time.h>
@@ -2095,7 +2211,7 @@ main() {
   }
 }
 EOF
-if { (eval echo configure:2099: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:2215: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   ac_cv_func_wait3_rusage=yes
 else
@@ -2120,12 +2236,12 @@ fi
 for ac_func in gettimeofday socket strerror strtoul
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:2124: checking for $ac_func" >&5
+echo "configure:2240: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2129 "configure"
+#line 2245 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -2148,7 +2264,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:2152: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2268: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -2173,12 +2289,12 @@ fi
 done
 
 
-subdirs="libsna snaconfig snatchd llcping sense \
+subdirs="libsna snaconfig snatchd sense \
 	libasuite asuite tn3270d tn5250d"
 
 
 echo $ac_n "checking for main in -ldl""... $ac_c" 1>&6
-echo "configure:2182: checking for main in -ldl" >&5
+echo "configure:2298: checking for main in -ldl" >&5
 ac_lib_var=`echo dl'_'main | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2186,14 +2302,14 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ldl  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2190 "configure"
+#line 2306 "configure"
 #include "confdefs.h"
 
 int main() {
 main()
 ; return 0; }
 EOF
-if { (eval echo configure:2197: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2313: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2380,6 +2496,8 @@ s%@RANLIB@%$RANLIB%g
 s%@LN_S@%$LN_S%g
 s%@LIBTOOL@%$LIBTOOL%g
 s%@CPP@%$CPP%g
+s%@XML_CONFIG@%$XML_CONFIG%g
+s%@GLIB_CONFIG@%$GLIB_CONFIG%g
 s%@subdirs@%$subdirs%g
 
 CEOF
@@ -2627,7 +2745,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  for ac_config_dir in libsna snaconfig snatchd llcping sense \
+  for ac_config_dir in libsna snaconfig snatchd sense \
 	libasuite asuite tn3270d tn5250d; do
 
     # Do not complain, so a configure script can configure whichever

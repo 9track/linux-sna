@@ -2,7 +2,7 @@
 #
 # snatch       Start the Linux-SNA Transaction Programs Attach Manager.
 #
-# Author:       Jay Schulist <jschlst@turbolinux.com>
+# Author:       Jay Schulist <jschlst@samba.org>
 #
 # chkconfig: 345 50 50
 #

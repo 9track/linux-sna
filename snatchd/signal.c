@@ -1,7 +1,7 @@
 /* signal.c: Signal handling.
  *
  * Author:
- * Jay Schulist         <jschlst@turbolinux.com>
+ * Jay Schulist         <jschlst@samba.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ void sig_block(void)
         if(blocked) 
 	{
             syslog(LOG_ERR, "internal error - signals already blocked\n");
-            syslog(LOG_ERR, "please report to jschlst@turbolinux.com\n");
+            syslog(LOG_ERR, "please report to jschlst@samba.org\n");
         }
         blocked = 1;
 }

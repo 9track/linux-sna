@@ -1,6 +1,6 @@
 /* mksense.c: SNA Sense Decoder Database Builder for Linux.
  *
- * Written by Jay Schulist <jschlst@turbolinux.com>
+ * Written by Jay Schulist <jschlst@samba.org>
  *
  * This software may be used and distributed according to the terms
  * of the GNU Public License, incorporated herein by reference.

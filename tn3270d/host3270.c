@@ -42,6 +42,10 @@
 #include <string.h>
 #include <ctype.h>
 
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 static char *mapname = MAP_DEFAULT;    
 
 Tn5250Host *tn5250_host_new(Tn5250Stream *This)
@@ -107,17 +111,13 @@ void appendBlock2Ebcdic(Tn5250Buffer * buff,
 
 void sendReadMDT(Tn5250Stream *This, Tn5250Buffer * buff)
 {
-  StreamHeader header;
-
   syslog(LOG_INFO, "Sending Read Modified command.");
-
-  memset(&header,0,sizeof(header));
 
   tn5250_buffer_init(buff);
   tn5250_buffer_append_byte(buff, CMD_3270_READ_MODIFIED);
   tn5250_stream_send_packet(This,
 			    tn5250_buffer_length(buff),
-			    header,
+			    0, 0, 0,
 			    tn5250_buffer_data(buff));
 }
 
@@ -186,13 +186,9 @@ setAttribute(Tn5250Host * This, unsigned short attr)
 void
 sendWrite(Tn5250Host *This)
 {
-  StreamHeader header;
-
-  memset(&header,0,sizeof(header));
-
   tn5250_stream_send_packet(This->stream,
 			    tn5250_buffer_length(&This->buffer),
-			    header,
+			    0, 0, 0,
 			    tn5250_buffer_data(&This->buffer));
 
 }
@@ -307,13 +303,9 @@ int
 cancelInvite(Tn5250Stream *This)
 {
    int statOK;
-   StreamHeader header;
 
-   header.h5250.flowtype = TN5250_RECORD_FLOW_DISPLAY;
-   header.h5250.flags    = TN5250_RECORD_H_NONE;
-   header.h5250.opcode   = TN5250_RECORD_OPCODE_CANCEL_INVITE;
-
-   tn5250_stream_send_packet(This, 0, header, NULL);
+   tn5250_stream_send_packet(This, 0, TN5250_RECORD_FLOW_DISPLAY, 
+		TN5250_RECORD_H_NONE, TN5250_RECORD_OPCODE_CANCEL_INVITE, NULL);
    if (This->record_count) {
       This->records = tn5250_record_list_destroy(This->records);
       This->record_count = 0;
@@ -407,11 +399,6 @@ void
 sendWriteErrorCode(Tn5250Host *This, char *msg, unsigned char opcode)
 {
    Tn5250Buffer tbuf;
-   StreamHeader header;
-
-   header.h5250.flowtype = TN5250_RECORD_FLOW_DISPLAY;
-   header.h5250.flags    = TN5250_RECORD_H_NONE;
-   header.h5250.opcode   = opcode;
 
    tn5250_buffer_init(&tbuf);
    tn5250_buffer_append_byte(&tbuf, ESC);
@@ -419,7 +406,7 @@ sendWriteErrorCode(Tn5250Host *This, char *msg, unsigned char opcode)
    hiliteString(&tbuf, msg, This->map);
    if (opcode==TN5250_RECORD_OPCODE_OUTPUT_ONLY) {
       tn5250_stream_send_packet(This->stream, tn5250_buffer_length(&tbuf),
-		header, 
+		TN5250_RECORD_FLOW_DISPLAY, TN5250_RECORD_H_NONE, opcode,
 		tn5250_buffer_data(&tbuf));
       tbuf.len = 0;
       opcode = TN5250_RECORD_OPCODE_INVITE;
@@ -518,16 +505,10 @@ hiliteString(Tn5250Buffer *buff, char *str, Tn5250CharMap *map)
 void 
 flushTN5250(Tn5250Host *This)
 {
-  StreamHeader header;
-
-  header.h5250.flowtype = TN5250_RECORD_FLOW_DISPLAY;
-  header.h5250.flags    = TN5250_RECORD_H_NONE;
-  header.h5250.opcode   = TN5250_RECORD_OPCODE_PUT_GET;
-
    if (tn5250_buffer_length(&This->buffer)>0) {
       tn5250_stream_send_packet(This->stream,
 		tn5250_buffer_length(&This->buffer),
-		header,
+		TN5250_RECORD_FLOW_DISPLAY, TN5250_RECORD_H_NONE, TN5250_RECORD_OPCODE_PUT_GET,
 		tn5250_buffer_data(&This->buffer));
       tn5250_buffer_free(&This->buffer);
    }
@@ -541,16 +522,12 @@ Tn5250Record
    Tn5250Buffer tbuf;
    Tn5250Record *trec;
    int statOK;
-   StreamHeader header;
-
-   header.h5250.flowtype = TN5250_RECORD_FLOW_DISPLAY;
-   header.h5250.flags    = TN5250_RECORD_H_NONE;
-   header.h5250.opcode   = TN5250_RECORD_OPCODE_SAVE_SCR;
 
    tn5250_buffer_init(&tbuf);
    tn5250_buffer_append_byte(&tbuf, ESC);
    tn5250_buffer_append_byte(&tbuf, CMD_SAVE_SCREEN);
-   tn5250_stream_send_packet(This, 2, header,
+   tn5250_stream_send_packet(This, 2, TN5250_RECORD_FLOW_DISPLAY, 
+	TN5250_RECORD_H_NONE, TN5250_RECORD_OPCODE_SAVE_SCR,
 	tbuf.data);
    tn5250_buffer_free(&tbuf);
    while (This->record_count>0) {
@@ -571,7 +548,6 @@ restoreScreen(Tn5250Stream *This, Tn5250Buffer *buff)
 {
    int len=tn5250_buffer_length(buff);
    unsigned char *bufp=tn5250_buffer_data(buff);
-   StreamHeader header;
    
    TN5250_ASSERT(buff->data!=NULL);
    TN5250_ASSERT(len>10);
@@ -580,12 +556,9 @@ restoreScreen(Tn5250Stream *This, Tn5250Buffer *buff)
    bufp += 10;
    len -= 10;
 
-   header.h5250.flowtype = TN5250_RECORD_FLOW_DISPLAY;
-   header.h5250.flags    = TN5250_RECORD_H_NONE;
-   header.h5250.opcode   = TN5250_RECORD_OPCODE_RESTORE_SCR;
-
    tn5250_stream_send_packet(This, len,
-	header, bufp);
+	TN5250_RECORD_FLOW_DISPLAY, TN5250_RECORD_H_NONE,
+	TN5250_RECORD_OPCODE_RESTORE_SCR, bufp);
 }
 
 void 

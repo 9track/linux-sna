@@ -1,5 +1,22 @@
 ChangeLog for net-fun patches and the sna-tools.
 
+1.00PRE18 - November 7, 2001.
+- fixed missing pr_ether symbol.
+- removed lar from kernel patch (now is in linux-llc, lard, lardb, etc).
+- added checking for libxml on configure.
+- fixed long standing libtool missing problem.
+- removed many references to my old turbolinux address.
+- changes snaconfig to not open socket(AF_SNA) until after reading config file.
+
+1.00pre17 - Sat October 27 2001
+- Added header files from the TN5250 project for the TN daemons.
+  - These still have compile problems at the moment.
+- Package build system improvements.
+- New kernel patch for linux-SNA.
+  - Removed old llc code.
+  - Completely #ifdef'd llc support.
+- Updated some text files to my new email.. loosing the battle.
+
 1.00pre16 - Tue Jun 26 2001
 - Updated INSTALL to give some information about patch-o-matic.
 - Added patch-o-matic support... yeah!

@@ -2,7 +2,7 @@
  * - main() and high level entrance into parsers.
  *
  * Author:
- * Jay Schulist         <jschlst@turbolinux.com>
+ * Jay Schulist         <jschlst@samba.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,14 +96,6 @@ int main(int argc, char **argv)
 {
 	int i, err;
 
-	sna_sk = socket(AF_SNA, SOCK_DGRAM, SOL_SNA_NOF);
-	if(sna_sk < 0)
-	{
-		perror("socket");
-		printf("snaconfig: did you load the sna modules?\n");
-		exit (1);
-	}
-
 	/* Find any options. */
   	(void)argc--;
 	(void)argv++;
@@ -154,9 +146,16 @@ wrap:
 		int err;
 		printf("here\n");
 		err = sna_print(NULL);
-		close(sna_sk);
 		exit(err < 0);
 	}
+
+	sna_sk = socket(AF_SNA, SOCK_DGRAM, SOL_SNA_NOF); 
+        if(sna_sk < 0)  
+        {               
+                perror("socket");
+                printf("snaconfig: did you load the sna modules?\n");
+                exit (1);
+        }       
 
 	if(!strcmp(*argv, "find"))
 	{

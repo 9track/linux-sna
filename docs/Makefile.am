@@ -1,1 +1,1 @@
-EXTRA_DIST = arch-notes confs history html-guides scripts tidbits
+EXTRA_DIST = arch-notes confs html-guides scripts tidbits

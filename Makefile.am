@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = 1.3e foreign
 
-BUILD_SUBDIRS = . include libsna libasuite snaconfig snatchd asuite llcping \
+BUILD_SUBDIRS = . include libsna libasuite snaconfig snatchd asuite \
 	sense tn3270d tn5250d docs 
 SUBDIRS = $(BUILD_SUBDIRS)
 DIST_SUBDIRS = $(BUILD_SUBDIRS) $(CONF_SUBDIRS)
@@ -13,11 +13,24 @@ CPPLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS= @LIBS@
 
-EXTRA_DIST = mkstamp BUGS isapplied patch-o-matic
+EXTRA_DIST = mkstamp BUGS isapplied chgver.sh patch-o-matic
 
 # Patch-o-matic happenings
 KERNEL_DIR=/usr/src/linux
 PENDING_PATCHES:=net-fun.patch
+
+# CVS happenings
+#ifndef CVS
+CVS="cvs"
+#endif
+
+# RPM happenings
+#ifndef RPM_BUILD_DIR
+RPM_BUILD_DIR="/usr/src/redhat"
+#endif
+#ifndef RPM_BUILD_TARGET
+RPM_BUILD_TARGET=`uname -m`
+#endif
 
 ################################################################
 ##
@@ -25,9 +38,13 @@ PENDING_PATCHES:=net-fun.patch
 ## to anybody else (snarfed from automake/Makefile.am).
 ##
 
+new-version:
+	find . \( -name configure.in \) -type f -exec ./chgver.sh {} $(RELEASE) \;
+
+
 # Tag before making distribution.  Also, don't make a distribution if
 # checks fail.  Also, make sure the NEWS file is up-to-date.
-cvs-dist: distcheck
+cvs-dist:
 	@if sed '1,2d;3q' $(srcdir)/NEWS | grep -e "$(VERSION)" > /dev/null; then :; else \
 	  echo "NEWS not updated; not releasing" 1>&2; \
 	  exit 1;				\
@@ -47,3 +64,23 @@ cvs-diff:
 
 pending-patches:
 	@cd patch-o-matic && KERNEL_DIR=$(KERNEL_DIR) ./runme $(PENDING_PATCHES)
+
+rpm-dist:
+	if ! test -f $(srcdir)/docs/$(PACKAGE).spec; then \
+		echo "RPM spec file '$(PACKAGE).spec' missing from '$(srcdir)/docs' directory; aborting rpm build" 1>&2; \
+		exit 1; \
+	fi; \ 
+	rm -f $(srcdir)/$(PACKAGE)-$(VERSION).tar.gz; \
+	rm -f $(srcdir)/$(PACKAGE)-$(VERSION)-1.src.rpm; \
+	rm -f $(srcdir)/$(PACKAGE)-$(VERSION)-1.$(RPM_BUILD_TARGET).rpm; \
+	cat $(srcdir)/docs/$(PACKAGE).spec | sed s/VERSION/$(VERSION)/g > $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
+	$(MAKE) dist; \
+	cp -f $(srcdir)/$(PACKAGE)-$(VERSION).tar.gz $(RPM_BUILD_DIR)/SOURCES/$(PACKAGE)-$(VERSION).tar.gz; \
+	rpm -ba --target=$(RPM_BUILD_TARGET) -v $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
+	cp -f $(RPM_BUILD_DIR)/RPMS/$(RPM_BUILD_TARGET)/$(PACKAGE)-$(VERSION)-1.$(RPM_BUILD_TARGET).rpm $(srcdir); \
+	cp -f $(RPM_BUILD_DIR)/SRPMS/$(PACKAGE)-$(VERSION)-1.src.rpm $(srcdir); \
+	rm -f $(RPM_BUILD_DIR)/RPMS/$(RPM_BUILD_TARGET)/$(PACKAGE)-$(VERSION)-1.$(RPM_BUILD_TARGET).rpm; \
+	rm -f $(RPM_BUILD_DIR)/SRPMS/$(PACKAGE)-$(VERSION)-1.src.rpm; \
+	rm -f $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
+	rm -f $(RPM_BUILD_DIR)/SOURCES/$(PACKAGE)-$(VERSION).tar.gz; \
+	rm -rf $(RPM_BUILD_DIR)/BUILD/$(PACKAGE)-$(VERSION)

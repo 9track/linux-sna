@@ -1,18 +1,11 @@
 ToDo list for sna-tools and net-fun kernel patch (never ending).
  - Maintained by Jay Schulist <jschlst@samba.org>
 
-- Test all code to gurantee no lose of functs.
-- Check into Changing LLC_UI code to a LLC netlink interface.
-- Finish LLC code before do anything else (or else)!
-
 Features that would be nice and are easy (but abit time consuming) to do:
-- Configuration file conversion. This could be done 2 ways, the obvious
-  is a tool that converts a given SNA implementations cfg file into a Linux-SNA
-  configuration file. The not so obvious is a snaconfig option that uses a
-  non-converted configuration file of another SNA server.
-
-  The first option is generally useful, though the second is a cool feature
-  though its usefulness could be debated.
+- milestones and roadmap.
+- xml configuration files for snaconfig and snatchd.
+- Configuration file conversion. A tool that converts a given SNA
+  implementations cfg file into a Linux-SNA configuration file.
 
 Goal:
 1. APING loopback test.

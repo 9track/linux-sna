@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to create configure.
 
 AC_INIT(asuitecommon.c)
-AM_INIT_AUTOMAKE(libasuite, 1.00pre15)
+AM_INIT_AUTOMAKE(libasuite, 1.00PRE18)
 
 AC_PROG_CC
 AC_EXEEXT

@@ -1,7 +1,4 @@
-Authors responsible for sna-tools:
+Authors responsible for maintaince of linux-sna:
+[kernel, user-space]	Jay Schulist <jschlst@samba.org>
 
-Snaconfig:
-Snatchd:
-Sense:
-Mksense:
-  Jay Schulist <jschlst@turbolinux.com>
+Check THANKS for credit to contributors and past maintainers.
