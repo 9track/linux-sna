@@ -1,0 +1,21 @@
+These are the tools that make up the Linux-SNA APPC application suite (Asuite).
+To compile these progams on Linux, you must first install the Linux-SNA 
+software.  After that simply unpack the source archive, cd into the resulting
+directory, and type make.  The tools should compile without any error or 
+warnings.  Please report any problems to either the mailing list, or myself.
+I can be reached as mmadore@turbolinux.com.  Bug reports and patches are both
+welcome.
+
+NOTE: While the tools will compile, the Linux-SNA stack is not quite ready to 
+actually run the tools.  If you would like to help develop, debug or test the
+tools, you will need to have access an SNA Unix environment.  The tools are 
+known to compile and run on IBM's Communications Server for UnixWare 7.1.1.
+
+It should also be possible to build and use the code on other Unix platforms
+that have an SNA stack.  This may require tweaking the Makefile.  In 
+particular, you will probably have to change the name of the SNA library you
+link to.
+
+Mike Madore
+Software Engineer
+mmadore@turbolinux.com

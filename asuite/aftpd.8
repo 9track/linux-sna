@@ -1,0 +1,85 @@
+.TH proftpd 8 "October 1998"
+.\" Process with
+.\" groff -man -Tascii proftpd.1 
+.\"
+.SH NAME
+proftpd \- Professional configurable, secure file transfer protocol server
+.SH SYNOPSIS
+.B proftpd
+[
+.B \-hlnv
+] [
+.BI \-d " debuglevel"  
+] [
+.BI \-c " config\-file"
+] [
+.BI \-p " 0|1"
+]
+.SH DESCRIPTION
+.B proftpd
+is the Professional File Transfer Protocol (FTP) server daemon.  The server 
+may be invoked by the Internet "super-server" inetd(8) each time a
+connection to the FTP service is made, or alternatively it can be run as a
+stand-alone daemon.
+
+When
+.B proftpd
+is run in standalone mode and it receives a SIGHUP then it will reread its
+config file.
+.SH OPTIONS
+.TP 12
+.B \-h,\--help
+Display a short usage description, including all available options.
+.TP
+.B \-n,\--nodaemon
+Runs the proftpd process in standalone mode (must be configured as such in
+the configuration file), but does not background the process or
+disassociate it from the controlling tty.  Additionally, all output (log
+or debug messages) are sent to stdout, rather than the syslog mechanism. 
+Most often used with the \fB-d option\fP for debugging. 
+.TP
+.B \-v,\--version
+Displays the version number of ProFTPD to stdout.
+.TP
+.BI \-d,--debug " debuglevel"
+Sets proftpd's internal debug level (normally 0).  The \fIdebuglevel\fP
+should be an integer value from 0 to 5, with higher numbers producing more
+debug output.  Normally, debug messages are sent to \fBsyslog\fP using the
+\fBDEBUG\fP facility, however if the \fB-n option\fP is used, all such
+output is sent to stdout.
+.TP
+.BI \-c,--config " config\-file"
+Specifies an alternate \fIconfig\-file\fP to be parsed at startup, rather
+than the default (typically found in \fB/etc/proftpd.conf\fP).
+.TP
+.BI \-p,--persistent " 0|1"
+Disables (0) or enables (1) the default persistent password support, which
+is determined at configure time for each platform.  This option \fBonly\fP
+affects the default support, it can still be overridden at run-time with
+the \fBPersistentPasswd\fP directive.
+.TP
+.BI \-l,--list
+Lists all modules compiled into proftpd.
+.SH FILES
+.PD 0
+.B /usr/sbin/proftpd
+.br
+.B /usr/bin/ftpwho
+.br
+.B /usr/bin/ftpcount
+.br
+.B /usr/sbin/ftpshut
+.br
+.B /var/log/xferlog
+.br
+.B /var/run/proftpd-[pid]
+.br
+.B /var/run/proftpd-inetd
+.PD
+.SH SEE ALSO
+.BR inetd(8), ftp(1), ftpwho(1), ftpcount(1), ftshut(8)
+.PP
+Documentation on proftpd configuration is available from
+http://www.proftpd.org.
+.PP
+Bug reports to: proftpd@proftpd.net

@@ -1,0 +1,82 @@
+.Dd June 19, 2000
+.Dt APING 8
+.Os "Linux-SNA"
+.Sh NAME
+.Nm aping
+.Nd Exchange
+.Tn data packates with a partner computer.
+.Sh SYNOPSIS
+.Nm aping
+.Op Fl v1
+.Op Fl c Ar count
+.Op Fl i Ar iterations
+.Op Fl s Ar size
+.Op Fl t Ar tp_name
+.Op Fl m Ar mode_name
+DESTINATION
+.Sh DESCRIPTION
+.Nm Aping
+uses the
+.Tn APPC Application Suite APINGD protocol. The remote system must
+support APING inorder to receive a response. The 
+.Nm DESTINATION
+identifies the partner computer on which the APINGD server program
+is running. The
+.Nm DESTINATION
+(partner LU name) can be a fully qualified partner LU name (FQPLU),
+a CPI-C symbolic destination aname, or an ANAME alias.
+Other options are:
+.Bl -tag -width Ds
+.It Fl c Ar count
+The number of consecutive packets sent by each side before giving the
+partner permission to send. For each iteration, each side sends this number
+of packets, with each one being of the specified packet size. Allowable
+values are 1 to 32767. The default number of consecutive packets is 1.
+.It Fl i Ar iterations
+The number of iterations made. The default number of iterations is 2. The
+number of iterations is shown in the output as the number of sets of
+timing information. You may want to increase this number to get a larger
+sample of timings. Allowable values are 1 to 32767.
+.It Fl s Ar size
+This option specifies the size, in bytes, of the packet to be transmitted.
+The default is 100 bytes.
+.It Fl t Ar tp_name
+The destination transaction program name. The default tp name is APINGD. 
+.It Fl m Ar mode_name
+The mode name. The default mode name is #INTER.
+.It Fl v
+Version and Aping maintainer information.
+.It Fl 1
+This option specifies that data be sent only from the source TP to the
+target TP (not in both directions). Note: This option is the numeral
+one (1), not the letter "L".
+.El
+.Pp
+Use
+.Nm aping
+to determine whether you can establish a session between two computers. If
+session allocation fails,
+.Nm APING
+displays externsive error information. You can also use
+.Nm APING
+to get an approximate measure of the session setup time between two
+computers, and of the throughput and turnaround time on that APPC
+session.
+
+This program is intended for use in network testing, measurement and
+management.
+Because of the load it can impose on the network, it is unwise to use
+.Nm aping
+during normal operations or from automated scripts.
+.Sh BUGS
+None known. :)
+.Sh SEE ALSO
+.Xr snaconfig 8 ,
+.Xr snatchd 8
+.Sh HISTORY
+The
+.Nm
+command appeared in
+the Ape-man by Edgar Rice Burroughs, 1997.
+.Sh AUTHORS
+Mike Madore <mmadore@turbolinux.com>

@@ -2,7 +2,7 @@ sna-tools:	A collection of programs that form the base set of the
 		Linux-SNA networking distribution for the Linux
 		operating system.
 
-Author/maintainter: Jay Schulist <jschlst@turbolinux.com>
+Author/maintainter: Jay Schulist <jschlst@samba.org>
 web: http://www.linux-sna.org
 ftp: ftp://ftp.linux-sna.org
 

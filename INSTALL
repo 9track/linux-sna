@@ -1,6 +1,14 @@
 Basic Installation
 ==================
 
+   Linux-SNA specific installation instructions.
+   The linux-sna package uses configure, see below. Users of Linux-SNA
+will need to apply various kernel patches. After running configure you
+need to run the following command and follow the prompts.
+
+make pending-patches
+
+
    These are generic installation instructions.
 
    The `configure' shell script attempts to guess correct values for

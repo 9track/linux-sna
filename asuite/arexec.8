@@ -1,0 +1,44 @@
+.Dd June 20, 2000
+.Dt AREXEC 8
+.Os "Linux-SNA"
+.Sh NAME
+.Nm arexec
+.Nd APPC
+.Tn remote execution client for an exec server.
+.Sh SYNOPSIS
+.Nm arexec
+.Op Fl v
+.Op Fl m Ar mode_name
+.Op Fl t Ar tp_name
+destination
+command
+.Sh DESCRIPTION
+.Nm Arexec
+uses the APPC Application Suite AREXECD protocol. The remote system
+must support AREXEC inorder to exectute a remote command. The DESTINATION 
+identifies the partner computer on which the AREXECD server program is running.
+The DESTINATION (partner LU name) can be a fully qualified partner LU
+name (FQPLU), a CPI-C symbolic destination aname, or an ANAME alias.
+Security parameters may also be required, depending on how your system
+is configued.
+
+Other options are:
+.Bl -tag -width Ds
+.It Fl command
+The command string to be executed on the remote computer. For example,
+if the userid is guest, then a comand of ls would list the contents of
+guest's home directory, /home/guest.
+.It Fl m Ar mode_name
+The mode name. The default mode name is #INTER.
+.It Fl t Ar tp_name
+The name of the partner TP. The default TP name is AREXECD.
+.It Fl v 
+Display version and maintainer information.
+.Sh BUGS
+No known bugs. :)
+.Sh SEE ALSO
+.Xr snaconfig 8 ,
+.Xr snatchd 8 ,
+.Xr rexec 3 ,
+.Sh AUTHORS
+Mike Madore <mmadore@turbolinux.com>

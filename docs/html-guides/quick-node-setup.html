@@ -1,0 +1,845 @@
+<HTML>
+<!-- saved from url=(0025)http://www.linux-sna.org/ -->
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Win">
+  <TITLE>Linux World Domination Through the Enterprise!</TITLE>
+  <META CONTENT="text/html; charset=windows-1252" HTTP-EQUIV="Content-Type">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><CENTER><TABLE WIDTH="100%" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="33%">
+    &nbsp;<IMG SRC="../images/small-lnx-sna.gif" WIDTH="83" HEIGHT="29"
+    ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+    <TD WIDTH="33%">
+    <P><CENTER><B><FONT FACE="Arial">Getting Started with Linux-SNA</FONT></B></CENTER></P>
+
+    <P><CENTER><FONT FACE="Arial">Quick configuration of your Linux-SNA
+    server</FONT></CENTER></TD>
+    <TD WIDTH="34%">
+    <P ALIGN=RIGHT>&nbsp;<IMG SRC="../images/small-lnx-sna.gif" 
+    WIDTH="83" HEIGHT="29" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+  </TR>
+</TABLE></CENTER></P>
+
+<P><B><FONT FACE="Arial">Copyright:</FONT></B><FONT FACE="Arial"><BR
+CLEAR="ALL">Copyright 2001 (c), All rights reserved. Jay Schulist
+&lt;<A HREF="mailto:jschlst@samba.org">jschlst@samba.org</A>&gt;</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>Written by:</B></FONT><BR CLEAR="ALL"><FONT FACE="Arial"><A
+HREF="mailto:jschlst@samba.org">Jay Schulist &lt;jschlst@samba.org&gt;</A></FONT></P>
+
+<P><FONT FACE="Arial">This is the third Linux-SNA Getting Started
+Guide in the series. This guide will assist you in the configuration
+process of a Linux-SNA server. This guide assumes the user does
+not know much about SNA, but a user that knows nothing about SNA
+will have a difficult time. Do not be discouraged if your Linux-SNA
+server does not work right away, please follow the instructions
+as close as possible and then if you have problems contact the
+Linux-SNA mailing list <A HREF="mailto:linux-sna@turbolinux.com">linux-sna@turbolinux.com</A>
+(archives and list info at <A HREF="http://www.turbolinux.com/mailman/listinfo/linux-sna">http://www.turbolinux.com/mailman/listinfo/linux-sna</A>)
+where someone or myself will be happy to help you solve your problem.</FONT></P>
+
+<P><FONT FACE="Arial">Snachers!</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>1.</B> Read the <A HREF="quick-sna.html">Quick installation
+of your Linux-SNA server</A> guide to get a Linux-SNA server installed
+and all the software in the correct places.</FONT></P>
+
+<P><B><FONT FACE="Arial">2.</FONT></B><FONT FACE="Arial"> If at
+all possible please verify your installation using the guide <A
+HREF="verify-sna.html">Verify correct installation of your Linux-SNA
+server</A> before proceeding to step 3.</FONT></P>
+
+<P><B><FONT FACE="Arial">3.</FONT></B><FONT FACE="Arial"> Please
+remember:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">Man pages are available on your local
+  system and <A HREF="index.html">online</A>; use these resources
+  first, if your problems still remain then email the <A HREF="http://www.turbolinux.com/mailman/listinfo/linux-sna">Linux-SNA
+  mailing list</A>.</FONT>
+  <LI><FONT FACE="Arial">The Snaconfig utility and SNA networks
+  in general are complex and operations must be done in a certain
+  order for a node to operate properly. Snaconfig performs the
+  proper checks to ensure that no operation happens in the wrong
+  order, but that does not mean it will be explicit and tell you
+  what you need to do to stop the error from happening. I recommend
+  first following the instructions below and then expanding on
+  them to create your own personalized SNA network.</FONT>
+  <LI><FONT FACE="Arial">Linux-SNA provides two means to configure
+  your Linux SNA node. You can configure the node using the Linux
+  command line or through the use of the Linux-SNA configuration
+  file. This guide will attempt to show you how to configure you
+  Linux-SNA node using both methods. Though it may be possible
+  only to use the configuration file method, it is highly recommended
+  that you become familiar with the snaconfig command line options
+  as it will only assist you in your quest to create a better Linux-SNA
+  node.</FONT>
+  <LI><FONT FACE="Arial">This guide was written using the IBM Communications
+  Server as the other node in a SNA Peer to Peer network. Although
+  this guide will refer directly to the IBM product, you should
+  be able to gather the general idea of how the other node in a
+  Linux-SNA network should be configured and act.</FONT>
+</UL>
+
+<P><B><FONT FACE="Arial">4.</FONT></B><FONT FACE="Arial"> What
+is Snaconfig?</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">You should already be familiar with using
+  Linux-SNA from the preview guide: <A HREF="verify-sna.html">Verify
+  correct installation of your Linux-SNA server</A>; but Snaconfig
+  is the Linux-SNA tool to configure and monitor a Linux-SNA node.
+  This tool has many many command line options along with a configuration
+  file interface.</FONT>
+</UL>
+
+<P><B><FONT FACE="Arial">5. </FONT></B><FONT FACE="Arial">Information
+required to setup a Linux-SNA server. Please use the following
+work-sheet to obtain all the necessary information then proceed
+to step 6. If you are not sure of what data is needed you may
+be able to click the name of the requested data (The name on the
+left side of the table) which will provide you with additional
+information. Not all information may be required, but if you can
+obtain it, all the better. You may need to define multiple Local
+and Remote LUs, Cost-Of-Service definitions, Modes or CPI-C Side
+information. Simply repeat entering the data on the same form
+or print out another for to use for the additional definitions.</FONT></P>
+
+<P><CENTER><TABLE WIDTH="700" BORDER="2" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><B><FONT FACE="Arial">Step</FONT></B></CENTER></TD>
+    <TD WIDTH="37%">
+    <P><CENTER><B><FONT FACE="Arial">Data Requested</FONT></B></CENTER></TD>
+    <TD WIDTH="57%">
+    <P><CENTER><B><FONT FACE="Arial">Data Required&nbsp;</FONT></B></CENTER></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">1 - Global Node Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#FQCP">Fully
+    Qualified CP Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Node Type</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Node ID">Node
+    ID</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">2 - Datalink and Port Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Local network device name</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Local port</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Role</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">4&nbsp;</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">BTU Size</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">5</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Outbound Activations</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">6</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Inbound Activations</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">3 - Link Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Link interface</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Port</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Byteswap">Byteswap</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">4</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Destination MAC address</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">5</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Destination port</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">6</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#FQCP">Partner
+    LU name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">7</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Retry on failure</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">8</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Number of retries</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">9</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Autoactivation">Autoactivation</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">10</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Autodeactivation</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">11</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Transmission Group Number">Transmission
+    group number</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">12</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Cost per byte</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">13</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Cost per connect</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">14</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Effective capacity</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">15</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Propagation delay</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">16</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Security</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">17</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">User 1</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">18</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">User 2</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">19</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">User 3</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">4 - Local LU Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#LU Name">Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Syncpoint Support">Syncpoint
+    support</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#LU Session Limit">Session
+    limit</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">5 - Remote LU Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#FQCP">Partner
+    LU name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#FQCP">Fully
+    Qualified CP Name of Partner</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">6 - Cost of Service Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#COS Name">Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Weight</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Transmit Priority</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">4</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Default COS if invalid</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">5</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Default COS if null</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">6</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Cost Per Connect</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">7</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Cost Per Connect</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">8</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Cost Per Byte</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">9</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Cost Per Byte</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">10</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Security</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">11</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Security</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">12</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Propagation Delay</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">13</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Propagation Delay</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">14</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Effective Capacity</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">15</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Effective Capacity</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">16</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum User 1</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">17</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum User 1</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">18</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum User 2</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">19</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum User 2</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">20</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum User 3</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">21</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum User 3</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">22</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Route Resitance</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">23</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Route Resitance</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">24</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Node Congestion</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">25</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Node Congestion</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">7 - Mode Parameters</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Mode Name">Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#COS Name">COS
+    Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#FQCP">Partner
+    LU Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">4</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Encryption</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">5</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Transmit Pacing</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">6</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Receive Pacing</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">7</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Transmit RU</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">8</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Receive RU</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">9</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Minimum Contenetion Winners</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">10</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Maximum Contention Winners</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">11</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Max Sessions</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">12</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial">Autoactivation</FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    &nbsp;</TD> 
+    <TD WIDTH="37%">
+    &nbsp;</TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+    <B><FONT FACE="Arial">8 - CPI-C Side Information</FONT></B></TD>
+     
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">1</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Symbolic Destination Name">Symbolic
+    Destination Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">2</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Mode Name">Mode
+    Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">3</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#FQCP">Parnter
+    LU Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="6%">
+    <P><CENTER><FONT FACE="Arial">4</FONT></CENTER></TD>
+    <TD WIDTH="37%">
+    <FONT FACE="Arial"><A HREF="quick-appendix-a.html#Transaction Program Name">Transaction
+    Program Name</A></FONT></TD> 
+    <TD WIDTH="57%">
+    &nbsp;</TD> 
+  </TR>
+</TABLE></CENTER></P>
+
+<P><B><FONT FACE="Arial">6.</FONT></B>
+
+</BODY>
+</HTML>

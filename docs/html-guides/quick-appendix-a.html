@@ -1,0 +1,227 @@
+<HTML>
+<!-- saved from url=(0025)http://www.linux-sna.org/ -->
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Win">
+  <TITLE>Linux World Domination Through the Enterprise!</TITLE>
+  <META CONTENT="text/html; charset=windows-1252" HTTP-EQUIV="Content-Type">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><CENTER><TABLE WIDTH="100%" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="33%">
+    &nbsp;<IMG SRC="../images/small-lnx-sna.gif" WIDTH="83" HEIGHT="29"
+    ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+    <TD WIDTH="33%">
+    <P><CENTER><B><FONT FACE="Arial">Getting Started with Linux-SNA</FONT></B></CENTER></P>
+
+    <P><CENTER><FONT FACE="Arial">Appendix A</FONT></CENTER></TD>
+    <TD WIDTH="34%">
+    <P ALIGN=RIGHT>&nbsp;<IMG SRC="../images/small-lnx-sna.gif" 
+    WIDTH="83" HEIGHT="29" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+  </TR>
+</TABLE></CENTER></P>
+
+<P><B><FONT FACE="Arial">Copyright:</FONT></B><FONT FACE="Arial"><BR
+CLEAR="ALL">Copyright 2001 (c), All rights reserved. Jay Schulist
+&lt;<A HREF="mailto:jschlst@samba.org">jschlst@samba.org</A>&gt;</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>Written by:</B></FONT><BR CLEAR="ALL"><FONT FACE="Arial"><A
+HREF="mailto:jschlst@samba.org">Jay Schulist &lt;jschlst@samba.org&gt;</A></FONT></P>
+
+<P><A NAME="FQCP"></A><B><FONT FACE="Arial">Fully Qualified CP
+Name</FONT></B><FONT FACE="Arial"><BR>
+The fully qualifier CP name is a 17-byte charater string. The
+fully qualified CP name consists of two parts: the network name
+and the CP name, concatenated with a period. The network name
+is a 1 to 8 byte SNA Type A character string. The CP name is a
+1 to 8 byte SNA Type A character string. The fully qualified CP
+name is also known as the network qualified CP name. For example
+a valid Fully qualified CP name would be: <B>lnxsna.demo1 or lnxsna.ehead.</B></FONT></P>
+
+<P><A NAME="LU Name"></A><B><FONT FACE="Arial">LU Name</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL">The LU_NAME parameter specifies
+the name of a type of network accessible unit (NAU) that enables
+end users to communicate with each other and gain access to network
+resources. LU_NAME is a 1- to 8-byte SNA Type A character string.
+Valid values are:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">The first character must be an uppercase
+  alphabetic character (A-Z) or a special character (@,#,$).</FONT>
+  <LI><FONT FACE="Arial">The remaining characters can be alphanumeric
+  characters (A-Z, 0-9) or special characters (@,#,$). <BR>
+  </FONT>
+</UL>
+
+<P><A NAME="LU Session Limit"></A><B><FONT FACE="Arial">LU Session
+Limit</FONT></B><FONT FACE="Arial"><BR CLEAR="ALL">The LU_SESSION_LIMIT
+parameter specifies the maximum number of sessions supported by
+the LU.</FONT></P>
+
+<P><FONT FACE="Arial">The value for the session limit is an integer
+in the range 0--65 535. Zero means no limit.</FONT></P>
+
+<P><A NAME="Syncpoint Support"></A><B><FONT FACE="Arial">Syncpoint
+Support</FONT></B><FONT FACE="Arial"><BR CLEAR="ALL">The SYNCPT_SUPPORT
+parameter specifies whether a sync point manager is available
+for this LU. Valid values are:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">off - A sync point manager is not available.</FONT>
+  <LI><FONT FACE="Arial">on - A sync point manager is available.
+<BR>
+  </FONT>
+</UL>
+
+<P><A NAME="Node ID"></A><B><FONT FACE="Arial">Node ID</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL">The ADJACENT_NODE_ID parameter specifies
+the node ID of the adjacent node. An adjacent node is directly
+connected to this node via this link definition.</FONT></P>
+
+<P><FONT FACE="Arial">Specify a block ID of 3 hexadecimal characters
+and a PU ID of 5 hexadecimal characters.</FONT></P>
+
+<P><A NAME="Autoactivation"></A><B><FONT FACE="Arial">Autoactivation</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL">The AUTO_ACTIVATE_SUPPORT parameter
+specifies whether the link is activated automatically when required
+by a session. Valid values are:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">off - The link is not activated automatically.</FONT>
+  <LI><FONT FACE="Arial">on - The link is activated automatically
+  when required by a session.</FONT>
+</UL>
+
+<P><A NAME="Link Station Role"></A><B><FONT FACE="Arial">Link
+Station Role</FONT></B><FONT FACE="Arial"><BR CLEAR="ALL">The
+LINK_STATION_ROLE parameter defines the responsibility that the
+link station has for controlling the communication with its adjacent
+link stations. Valid values are:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">NEGOTIABLE <BR>
+  When the connection is established, the local link station becomes
+  either a primary or secondary link station.</FONT>
+  <LI><FONT FACE="Arial">PRIMARY <BR>
+  The primary link station controls the conversation on the link.</FONT>
+  <LI><FONT FACE="Arial">SECONDARY <BR>
+  The secondary link station must wait to be polled by the primary
+  link station before data is sent.</FONT>
+</UL>
+
+<P><A NAME="Byteswap"></A><B><FONT FACE="Arial">Byteswap</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL">The BYTESWAP parameter specifies
+whether the bytes of the destination address are swapped at runtime.
+Many SNA devices, such as Ethernet routers, require that the destination
+address be byte-swapped before use. The destination address displayed
+remains the same regardless of the value of this field. Valid
+values are:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">off - Do not byte-swap the address.</FONT>
+  <LI><FONT FACE="Arial">on - Byte-swap the address at runtime.
+<BR>
+  </FONT>
+</UL>
+
+<P><A NAME="Transmission Group Number"></A><B><FONT FACE="Arial">Transmission
+group number</FONT></B><FONT FACE="Arial"><BR CLEAR="ALL">The
+TG_NUMBER parameter specifies a pre-assigned TG number. This field
+is only relevant if the link is to an adjacent APPN node and is
+otherwise ignored.</FONT></P>
+
+<P><FONT FACE="Arial">This parameter is optional. The default
+is 0.</FONT></P>
+
+<P><FONT FACE="Arial">Notes:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">If ADJACENT_NODE_TYPE is specified as
+  SUBAREA_LEN (Communications Server) or BACK_LEVEL_LEN_NODE (Personal
+  Communications), TG_NUMBER is ignored and assumed to be specified
+  as 1.</FONT>
+  <LI><FONT FACE="Arial">For links to adjacent APPN nodes, TG_NUMBER
+  must be set in the range 1-20. This number is used to represent
+  the link when the link is activated. Communications Server does
+  not accept any other number from the adjacent node during activation
+  of this link.</FONT>
+  <LI><FONT FACE="Arial">To avoid link-activation failure because
+  of a mismatch of pre-assigned TG numbers, the same TG number
+  must be defined by the adjacent node on the adjacent link station
+  (if using pre-assigned TG numbers).</FONT>
+  <LI><FONT FACE="Arial">If a preassigned TG number is specified,
+  the FQ_ADJACENT_CP_NAME must also be defined (and can not be
+  set to all zeros) and the ADJACENT_NODE_TYPE must be specified
+  as NETWORK_NODE or END_NODE.</FONT>
+  <LI><FONT FACE="Arial">If zero is entered, the TG number is not
+  pre-assigned and is negotiated when the link is activated.</FONT>
+</UL>
+
+<P><A NAME="COS Name"></A><B><FONT FACE="Arial">COS Name</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL">The COS_NAME parameter specifies
+the name of the class of service to request when activating sessions
+on this mode. The name is a 1- to 8-byte SNA Type A character
+string.</FONT></P>
+
+<P><A NAME="Mode Name"></A><B><FONT FACE="Arial">Mode Name</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL">The MODE_NAME parameter specifies
+the name of the mode to be used for the session. MODE_NAME is
+a 1- to 8-byte SNA Type A character string. You can specify one
+of the following:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">BLANK</FONT>
+  <LI><FONT FACE="Arial">#BATCH</FONT>
+  <LI><FONT FACE="Arial">#BATCHSC</FONT>
+  <LI><FONT FACE="Arial">#INTER</FONT>
+  <LI><FONT FACE="Arial">#INTERSC</FONT>
+  <LI><FONT FACE="Arial">QPCSUPP</FONT>
+  <LI><FONT FACE="Arial">SNASVCMG</FONT>
+  <LI><FONT FACE="Arial">A unique mode name for each mode you define.
+  If you define your own mode name, valid characters are:</FONT>
+  <UL>
+    <LI><FONT FACE="Arial">All blanks</FONT>
+    <LI><FONT FACE="Arial">The first character must be an uppercase
+    alphabetic character (A-Z) or a special character (@,#,$).</FONT>
+    <LI><FONT FACE="Arial">The remaining characters can be alphanumeric
+    characters (A-Z, 0-9) or special characters (@,#,$).</FONT>
+  </UL>
+</UL>
+
+<P><FONT FACE="Arial">The mode name is used by the initiator of
+the session to designate the characteristics for the session allocated
+for the conversation. The mode defines a set of characteristics
+that can apply to one or more sessions. These characteristics
+include traffic-pacing values, message-length limits, synchronization
+point and cryptography options, and the class of service within
+the transport network.</FONT></P>
+
+<P><A NAME="Symbolic Destination Name"></A><B><FONT FACE="Arial">Symbolic
+Destination Name</FONT></B><FONT FACE="Arial"><BR CLEAR="ALL">The
+SYM_DEST_NAME parameter specifies the 1-8 character symbolic destination
+name that identifies the side information entry.</FONT></P>
+
+<P><FONT FACE="Arial">The symbolic destination name is the name
+used by common programming interface for communications (CPI-C)
+applications to identify the side information definition and to
+access the network resources<BR>
+<BR>
+</FONT><A NAME="Transaction Program Name"></A><B><FONT FACE="Arial">Transaction
+Program Name</FONT></B><FONT FACE="Arial"><BR CLEAR="ALL">The
+TP_NAME parameter specifies the 1-64 character transaction program
+name that provides information about accepting incoming Attaches
+and optionally starting workstation programs. Valid characters
+are any locally displayable characters using the native encoding
+of the local system. The TP name may also refer to a service transaction
+program.</FONT></P>
+
+<P><FONT FACE="Arial">A transaction program (TP) uses the advanced
+program-to-program communications (APPC) system to communicate
+with a partner application program at the partner node.</FONT></P>
+
+<P>&nbsp;
+
+</BODY>
+</HTML>

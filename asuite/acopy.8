@@ -1,0 +1,101 @@
+.Dd June 20, 2000
+.Dt ACOPY 1
+.Sh NAME
+.Nm acopy
+.Nd APPC remote file copy.
+.Sh SYNOPSIS
+.Nm acopy
+.Op Fl v
+.Op Fl M Ar a|b|e
+.Op Fl m Ar mode_name
+.Op Fl t Ar tp_name
+.Op Fl n
+.Op Fl u Ar userid
+.Op Fl p Ar password 
+.Ar sourcefile destfile
+.Sh DESCRIPTION
+.Nm Acopy
+is an application that enabled you to send or receive a file between two
+computers (ACOPY does not support multiple file transfer). For a simple
+file transfer, ACOPY is quicker and easier to use than the transfer
+function included with AFTP.
+.Bl -tag -width flag
+.It Fl M Ar a
+This option specifies that data should be transfered in ASCII text format.
+This is the default file transfer mode, but you can configure the transfer
+mode to be either ASCII, binary or EBCDIC.
+.It Fl M Ar b
+This option specifies that the data should be transferred in binary format.
+.It Fl M Ar e
+This option specified that the data should be transfered in EBCIDC format.
+.It Fl m Ar mode_name
+The transfer mode name. The default mode name is #BATCH.
+.It Fl t Ar tp_name
+The TP name that runs on the remote system (target TP). The default
+tp name is AFTPD.
+.It Fl n
+This option overrides the security option. By default, ACOPY sends the
+userid of the running process to the remote system. If the remote system
+is not configured to require security, this option stops a userid from
+being sent. If the remote system is not configured to require security,
+use this option if you receive the error message CM_SECURITY_NOT_VALID.
+.It Fl u Ar userid
+Specifies the userid that is sent to the remote system. The userid can be
+one to eight characters in length. One indication that the remote transaction
+program requires security is if you receive the CPI-C error message
+CM_SECURITY_NOT_VALID when attempting to copy a cile. If you have
+conversation level security configured for your system, this option is
+required.
+.It Fl p Ar password
+Specifies the password that is sent to the remote system. This option is
+required when a userid has been specified or if you have security configured
+for your system. The password can be one to eight characters in length. If
+you do not enter a password after specifying a userid, ACOPY will prompt
+you to specify one.
+.It Fl v
+Display version and maintainer information.
+.El
+.Pp
+The following restrictions are applied to ACOPY:
+.Bl -tag -width Fl
+.It Ic o
+You can specify only one source file and one target file. To perform
+more complex copying operations, use AFTP.
+.It Ic o
+Either the source file or target file must be a remote file. It is not
+possible to copy files local-to-local or remote-to-remote.
+.It Ic o
+To use the system without specifying a userid and password, you must setup
+an anonymous account and disable conversation level security.
+.Sh EXAMPLES
+You use the same command to send and receive files. If the source file is on
+the local node, ACOPY sends it to the remote node. If the source file is
+on the remote node, ACOPY receives the file on the local node. Be sure
+that the parameter that identifies the remote file includes an identifier
+for the remote system.
+.Pp
+For example, to send a local file named foo.c to a remote system named
+CPINET.LUNAME and save is as filename bar.c, enter the following:
+.Pp
+acopy foo.c CPINET.LUNAME:bar.c
+.Pp
+In this example, CPINET.LUNAME (an identifier for the remote system)
+consists of an LUNAME on the CPINET network. The colon (:) following the
+LU name separates the remote system identifier from the file name. The
+identifier for the remote system can be a fully qualified partner LU name,
+a CPI-C symbolic destination name, or an alias stored in the APPC Name
+Server.
+.Pp
+Enter the following command to receive the same file from the same remote
+system:
+.Pp
+acopy CPINET.LUNAME:bar.c foo.c
+.Sh SEE ALSO
+.Xr snaconfig 8 ,
+.Xr snatchd 8 ,
+.Xr aftp 8 ,
+.Xr aftpd 8 ,
+.Sh BUGS
+No known bugs. :)
+.Sh AUTHORS
+Mike Madore <mmadore@turbolinux.com>

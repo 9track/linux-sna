@@ -1,0 +1,12 @@
+README: etc-sna compile and installation instructions.
+
+Author:
+ - Jay Schulist <jschlst@turbolinux.com>
+
+There is nothing to compile just install.
+
+In the etc-sna directory type 'make', this will install the Linux-SNA
+environment on your system.
+
+The configuration files /etc/sna.cfg and /etc/snatchd.conf need to be
+configured for your system.

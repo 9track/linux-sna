@@ -1,0 +1,107 @@
+/* COS definition flow */
+sna_nof_define_class_of_service
+  sna_cosm_define_cos
+    sna_cosm_find
+    sna_cosm_find_tg_weight
+    sna_cosm_find_node_weight
+
+/* Node startup flow */
+sna_nof_start_node
+  sna_asm_create
+    sna_asm_find
+    sna_asm_insert
+  sna_ss_create
+  sna_ds_create
+  sna_cs_create
+    sna_cs_find
+    sna_cs_insert_cs
+    sna_pc_init
+  sna_trs_create
+  sna_cpic_create
+  sna_attach_create
+  sna_tc_init
+  sna_mod_inc_use_count
+
+/* Link station creation */
+sna_cs_define_ls
+  sna_pc_init
+  sna_mod_inc_use_count
+
+/* Link station deletion */
+sna_cs_delete_ls
+  sna_pc_destroy
+  sna_mod_dec_use_count
+
+/* Port start-up flow */
+sna_cs_start_port
+  sna_tdm_tg_update
+    sna_rss_resource_updates
+
+/* Outgoing bind */
+sna_cs_start_ls
+  sna_rm_activate_session
+    sna_rm_session_activation_polarity
+    sna_rm_send_activate_session
+    sna_sm_process_activation_session
+      sna_rm_lu_mode_session_limit_exceeded
+      sna_get_fqpcid
+        sna_ss_assign_pcid
+      sna_sm_init_lulu_cb_act_sess
+      sna_sm_build_and_send_init_sig
+	sna_ss_process_init_signal
+	  sna_cosm_cos_tpf_vector
+          sna_rss_request_single_hop_route
+	    sna_tdm_request_tg_vectors
+	      sna_tdm_find_node_entry
+	  sna_cs_activate_route
+            sna_cs_connect_out
+	    sna_asm_activate_as
+	    sna_dlc_set_mode
+	    sna_tdm_tg_update
+	      sna_rss_resource_updates
+
+          sna_sm_process_cinit_signal
+            sna_sm_prepare_to_send_bind
+	    sna_sm_build_and_send_bind_rq
+	      sna_asm
+		sna_pc
+
+/* Outgoing attach processing flow */
+sna_cmallc
+  sna_ps_verb_router
+    sna_ps_conv
+      sna_ps_allocate
+        sna_rm_allocate_rcb
+        sna_rm_find_rcb_by_id
+	sna_ps_rcb_allocated
+          sna_ps_build_fmh5
+          sna_hs_process_lu_lu_session
+            sna_dfc_send_from_ps
+	      sna_dfc_send_fmd_mu
+                sna_dfc_init_th_rh
+		  sna_dfc_send_fsms
+		    sna_tc_send_mu
+
+/* Incomming attach processing flow */
+sna_tc_rcv
+  sna_dfc_rcv
+    sna_dfc_rcv_fsms
+      sna_dfc_generate_rm_ps_inputs
+        sna_dfc_process_ru_data
+          sna_rm_process_hs_to_rm
+            sna_rm_process_attach
+              sna_rm_create_ps
+                sna_cpic_create_tcb
+                sna_cpic_find_tcb_by_daf
+                sna_rm_allocate_rcb
+                  sna_rm_create_rcb
+                    sna_asm_assign_lfsid
+              sna_rm_send_attach_to_ps
+                sna_ps_process_fmh5
+                  sna_attach_execute_tp
+	            sna_attach_listen
+
+/* Node creation */
+sna_nof_define_node_chars
+  sna_tdm_define_node_chars
+    sna_tdm_find_node_entry

@@ -1,0 +1,636 @@
+<HTML>
+<!-- saved from url=(0025)http://www.linux-sna.org/ -->
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Win">
+  <TITLE>Linux World Domination Through the Enterprise!</TITLE>
+  <META CONTENT="text/html; charset=windows-1252" HTTP-EQUIV="Content-Type">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><CENTER><TABLE WIDTH="100%" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="33%">
+    &nbsp;<IMG SRC="../images/small-lnx-sna.gif" WIDTH="83" HEIGHT="29"
+    ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+    <TD WIDTH="33%">
+    <P><CENTER><B><FONT FACE="Arial">Getting Started with Linux-SNA</FONT></B></CENTER></P>
+
+    <P><CENTER><FONT FACE="Arial">Making Linux ready for SNA</FONT></CENTER></TD>
+    <TD WIDTH="34%">
+    <P ALIGN=RIGHT>&nbsp;<IMG SRC="../images/small-lnx-sna.gif" 
+    WIDTH="83" HEIGHT="29" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+  </TR>
+</TABLE></CENTER></P>
+
+<P>Getting Started with Linux-SNA - Making Linux ready for SNA<BR>
+Written by: Jay Schulist &lt;<A HREF="mailto:jschlst@samba.org">jschlst@samba.org</A>&gt;</P>
+
+<UL>
+  <LI><A HREF="#install kernel">Installing the Linux-SNA net-fun
+  patch.</A>
+  <LI><A HREF="#configure kernel">Configuring the new kernel with
+  the Linux-SNA patch applied.</A>
+  <LI><A HREF="#configure kernel">Specific SNA Networking Kernel
+  Section configuration.</A>
+  <LI>Compiling and Installing the new kernel and loadable modules.
+  <LI>Loading the Linux-SNA modules and verifying proper Linux-SNA
+  stack installation.
+</UL>
+
+<P>Linux-SNA is composed of many parts which consist of an SNA
+server. Linux-SNA contains two main parts; this is the net-fun
+kernel patch and the sna-tools package.</P>
+
+<P>SNA-Tools has all the user-space applications and libraries
+for using Linux-SNA.</P>
+
+<P>Before being able to use a Linux-SNA server you have to install
+the kernel patch and install the user-space applications. Please
+see below for specific information on how to obtain, compile and
+install the kernel patch and tools.</P>
+
+<P><A NAME="install kernel"></A><B>Installing the Linux-SNA net-fun
+patch:</B></P>
+
+<P>1). Obtain the latest net-fun patch from <A HREF="http://www.linux-sna.org/">www.linux-sna.org
+</A>or from <A HREF="ftp://ftp.linux-sna.org/">ftp.linux-sna.org</A>.</P>
+
+<P>2). Download the correct <A HREF="ftp://ftp.kernel.org/">Linux
+kernel</A> for which the net-fun patch was created for. This can
+be determined by the last 3 numbers in the net-fun patch; for
+example net-fun patch net-fun-0.008-2.3.39.diff.gz needs the Linux
+kernel linux-2.3.39.tar.gz.</P>
+
+<P>3). UnGzip and UnTar the linux kernel you downloaded (usually
+in /usr/src)<BR CLEAR="ALL"># cd /usr/src<BR CLEAR="ALL"># tar
+-zcvf linux-2.3.39.tar.gz</P>
+
+<P>4). UnGzip the net-fun patch which you downloaded<BR CLEAR="ALL">gzip
+-d net-fun-0.008-2.3.39.diff.gz</P>
+
+<P>5). Apply the net-fun patch to the Linux kernel; patch -p0
+&lt; net-fun-0.008-2.3.39.diff. The output of the patch command
+should apear something like this:</P>
+
+<PRE># patch -p0 &lt; net-fun-0.008-2.3.39.diff
+patching file /usr/src/linux/Documentation/Configure.help
+patching file /usr/src/linux/Documentation/networking/llc.txt
+patching file /usr/src/linux/Documentation/networking/sna/node-start.txt
+patching file /usr/src/linux/Documentation/networking/sna.txt
+patching file /usr/src/linux/MAINTAINERS
+patching file /usr/src/linux/drivers/net/Config.in
+patching file /usr/src/linux/drivers/net/Makefile
+patching file /usr/src/linux/drivers/net/channel/Config.in
+patching file /usr/src/linux/drivers/net/channel/Makefile
+patching file /usr/src/linux/include/asm-i386/errno.h
+patching file /usr/src/linux/include/linux/if_arp.h
+patching file /usr/src/linux/include/linux/interrupt.h
+patching file /usr/src/linux/include/linux/llc.h
+patching file /usr/src/linux/include/linux/netdevice.h
+patching file /usr/src/linux/include/linux/skbuff.h
+patching file /usr/src/linux/include/linux/socket.h
+patching file /usr/src/linux/include/linux/sysctl.h
+patching file /usr/src/linux/include/net/datalink.h
+patching file /usr/src/linux/include/net/llc.h
+patching file /usr/src/linux/include/net/llc_frame.h
+patching file /usr/src/linux/include/net/llc_name.h
+patching file /usr/src/linux/include/net/llc_state.h
+patching file /usr/src/linux/include/net/llccall.h
+patching file /usr/src/linux/include/net/netbeui.h
+patching file /usr/src/linux/include/net/p8022.h
+patching file /usr/src/linux/include/net/p8023.h
+patching file /usr/src/linux/include/net/sna/cpic.h
+patching file /usr/src/linux/include/net/sna/sna.h
+patching file /usr/src/linux/include/net/sna/sna_asm.h
+patching file /usr/src/linux/include/net/sna/sna_big_ru.h
+patching file /usr/src/linux/include/net/sna/sna_compression.h
+patching file /usr/src/linux/include/net/sna/sna_cosm.h
+patching file /usr/src/linux/include/net/sna/sna_cpic.h
+patching file /usr/src/linux/include/net/sna/sna_create.h
+patching file /usr/src/linux/include/net/sna/sna_cs.h
+patching file /usr/src/linux/include/net/sna/sna_dfc.h
+patching file /usr/src/linux/include/net/sna/sna_ds.h
+patching file /usr/src/linux/include/net/sna/sna_fm.h
+patching file /usr/src/linux/include/net/sna/sna_fs.h
+patching file /usr/src/linux/include/net/sna/sna_gds.h
+patching file /usr/src/linux/include/net/sna/sna_hpr.h
+patching file /usr/src/linux/include/net/sna/sna_hs.h
+patching file /usr/src/linux/include/net/sna/sna_ipc.h
+patching file /usr/src/linux/include/net/sna/sna_ipm.h
+patching file /usr/src/linux/include/net/sna/sna_isr.h
+patching file /usr/src/linux/include/net/sna/sna_ms.h
+patching file /usr/src/linux/include/net/sna/sna_mu.h
+patching file /usr/src/linux/include/net/sna/sna_nof.h
+patching file /usr/src/linux/include/net/sna/sna_pace.h
+patching file /usr/src/linux/include/net/sna/sna_pc.h
+patching file /usr/src/linux/include/net/sna/sna_ps.h
+patching file /usr/src/linux/include/net/sna/sna_rh.h
+patching file /usr/src/linux/include/net/sna/sna_rm.h
+patching file /usr/src/linux/include/net/sna/sna_rss.h
+patching file /usr/src/linux/include/net/sna/sna_ru.h
+patching file /usr/src/linux/include/net/sna/sna_scm.h
+patching file /usr/src/linux/include/net/sna/sna_sense.h
+patching file /usr/src/linux/include/net/sna/sna_sm.h
+patching file /usr/src/linux/include/net/sna/sna_ss.h
+patching file /usr/src/linux/include/net/sna/sna_tc.h
+patching file /usr/src/linux/include/net/sna/sna_tdm.h
+patching file /usr/src/linux/include/net/sna/sna_th.h
+patching file /usr/src/linux/include/net/sna/sna_trs.h
+patching file /usr/src/linux/include/net/sna/snacall.h
+patching file /usr/src/linux/include/net/sock.h
+patching file /usr/src/linux/include/net/trcall.h
+patching file /usr/src/linux/net/802/Makefile
+patching file /usr/src/linux/net/802/TODO
+patching file /usr/src/linux/net/802/cl2llc.c
+patching file /usr/src/linux/net/802/cl2llc.pre
+patching file /usr/src/linux/net/802/fc.c
+patching file /usr/src/linux/net/802/fddi.c
+patching file /usr/src/linux/net/802/hippi.c
+patching file /usr/src/linux/net/802/llc_macinit.c
+patching file /usr/src/linux/net/802/llc_sendpdu.c
+patching file /usr/src/linux/net/802/llc_utility.c
+patching file /usr/src/linux/net/802/p8022.c
+patching file /usr/src/linux/net/802/p8023.c
+patching file /usr/src/linux/net/802/pseudo/Makefile
+patching file /usr/src/linux/net/802/pseudo/actionnm.awk
+patching file /usr/src/linux/net/802/pseudo/actionnm.h
+patching file /usr/src/linux/net/802/pseudo/compile.awk
+patching file /usr/src/linux/net/802/pseudo/opcd2num.sed
+patching file /usr/src/linux/net/802/pseudo/opcodes
+patching file /usr/src/linux/net/802/pseudo/opcodesnm.h
+patching file /usr/src/linux/net/802/pseudo/pseudocode
+patching file /usr/src/linux/net/802/pseudo/pseudocode.h
+patching file /usr/src/linux/net/802/psnap.c
+patching file /usr/src/linux/net/802/sysctl_net_802.c
+patching file /usr/src/linux/net/802/tr.c
+patching file /usr/src/linux/net/802/transit/Makefile
+patching file /usr/src/linux/net/802/transit/compile.awk
+patching file /usr/src/linux/net/802/transit/pdutr.h
+patching file /usr/src/linux/net/802/transit/pdutr.pre
+patching file /usr/src/linux/net/802/transit/timertr.h
+patching file /usr/src/linux/net/802/transit/timertr.pre
+patching file /usr/src/linux/net/Config.in
+patching file /usr/src/linux/net/Makefile
+patching file /usr/src/linux/net/README
+patching file /usr/src/linux/net/appletalk/ddp.c
+patching file /usr/src/linux/net/core/dev.c
+patching file /usr/src/linux/net/core/skbuff.c
+patching file /usr/src/linux/net/devlink/Makefile
+patching file /usr/src/linux/net/devlink/fc.c
+patching file /usr/src/linux/net/devlink/fddi.c
+patching file /usr/src/linux/net/devlink/hippi.c
+patching file /usr/src/linux/net/devlink/p8023.c
+patching file /usr/src/linux/net/devlink/sysctl_net_devlink.c
+patching file /usr/src/linux/net/devlink/tr.c
+patching file /usr/src/linux/net/ipx/af_ipx.c
+patching file /usr/src/linux/net/llc/Makefile
+patching file /usr/src/linux/net/llc/af_llc.c
+patching file /usr/src/linux/net/llc/dl_llc.c
+patching file /usr/src/linux/net/llc/sysctl_net_llc.c
+patching file /usr/src/linux/net/netbeui/Makefile
+patching file /usr/src/linux/net/netbeui/af_netbeui.c
+patching file /usr/src/linux/net/netsyms.c
+patching file /usr/src/linux/net/protocols.c
+patching file /usr/src/linux/net/sna/Config.in
+patching file /usr/src/linux/net/sna/Makefile
+patching file /usr/src/linux/net/sna/af_sna.c
+patching file /usr/src/linux/net/sna/sna-cpic/Makefile
+patching file /usr/src/linux/net/sna/sna-cpic/sna_cpic.c
+patching file /usr/src/linux/net/sna/sna-dlu/Makefile
+patching file /usr/src/linux/net/sna/sna-dlu/sna_dlu.c
+patching file /usr/src/linux/net/sna/sna-dlu/sna_dlur.c
+patching file /usr/src/linux/net/sna/sna-dlu/sna_dlus.c
+patching file /usr/src/linux/net/sna/sna-hpr/Makefile
+patching file /usr/src/linux/net/sna/sna-hpr/sna_hprs.c
+patching file /usr/src/linux/net/sna/sna-lu/Makefile
+patching file /usr/src/linux/net/sna/sna-lu/sna-hs/Makefile
+patching file /usr/src/linux/net/sna/sna-lu/sna-hs/sna_dfc.c
+patching file /usr/src/linux/net/sna/sna-lu/sna-hs/sna_hsr.c
+patching file /usr/src/linux/net/sna/sna-lu/sna-hs/sna_tc.c
+patching file /usr/src/linux/net/sna/sna-lu/sna-ps/Makefile
+patching file /usr/src/linux/net/sna/sna-lu/sna-ps/sna_ps_conv.c
+patching file /usr/src/linux/net/sna/sna-lu/sna-ps/sna_ps_copr.c
+patching file /usr/src/linux/net/sna/sna-lu/sna-ps/sna_ps_main.c
+patching file /usr/src/linux/net/sna/sna-lu/sna-ps/sna_ps_mc.c
+patching file /usr/src/linux/net/sna/sna-lu/sna_rm.c
+patching file /usr/src/linux/net/sna/sna-lu/sna_sm.c
+patching file /usr/src/linux/net/sna/sna-mptn/Makefile
+patching file /usr/src/linux/net/sna/sna-mptn/sna_appletalk.c
+patching file /usr/src/linux/net/sna/sna-mptn/sna_ipv4.c
+patching file /usr/src/linux/net/sna/sna-mptn/sna_ipv6.c
+patching file /usr/src/linux/net/sna/sna-mptn/sna_ipxspx.c
+patching file /usr/src/linux/net/sna/sna_asm.c
+patching file /usr/src/linux/net/sna/sna_cosm.c
+patching file /usr/src/linux/net/sna/sna_cs.c
+patching file /usr/src/linux/net/sna/sna_dlc.c
+patching file /usr/src/linux/net/sna/sna_ds.c
+patching file /usr/src/linux/net/sna/sna_isr.c
+patching file /usr/src/linux/net/sna/sna_nof.c
+patching file /usr/src/linux/net/sna/sna_pc.c
+patching file /usr/src/linux/net/sna/sna_rss.c
+patching file /usr/src/linux/net/sna/sna_ss.c
+patching file /usr/src/linux/net/sna/sna_tdm.c
+patching file /usr/src/linux/net/sna/sna_trs.c
+patching file /usr/src/linux/net/sna/sysctl_net_sna.c
+patching file /usr/src/linux/net/snap/Makefile
+patching file /usr/src/linux/net/snap/psnap.c
+patching file /usr/src/linux/net/snap/sysctl_net_snap.c
+patching file /usr/src/linux/net/sysctl_net.c</PRE>
+
+<H4><A NAME="configure kernel"></A>Configuring the new kernel
+with the Linux-SNA patch applied.</H4>
+
+<P>1). The next step is to set all the options you require for
+your kernel. These options include selecting the correct processor
+type, drivers, and networking layers. To bring the Linux kernel
+configuration process at the command line enter:</P>
+
+<P># cd /usr/src/linux<BR CLEAR="ALL"># make menuconfig</P>
+
+<P>2). You will now enter the initial setup screen and it should
+look something like this:</P>
+
+<P>Enable the following options. I recommend configuring as many
+options as module if possible otherwise say Y. Below find no-default
+options to enable, not all options are required but are highly
+recommended and will work in all/most configurations.</P>
+
+<P><TABLE WIDTH="450" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="445">
+    <B>Code maturity level options</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Prompt for development and/or incomplete code/drivers</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Processor type and features</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Select the correct processor and enable SMP if needed.</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Loadable module support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Enable loadable module support</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    N - Set version information on all module symbols</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Kernel module loader</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>General setup</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Networking support</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Sysctl support</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any other options you require in the general setup</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Plug and Play configuration</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Block devices</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Networking Options</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    M - ANSI/IEEE 802.2 Data link layer protocol&nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    M - ANSI/IEEE 802.2 Data link layer User Interface SAPs</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - ANSI/IEEE 802.[3,4,5] Physical layer protocols</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    M - SNAP protocol layer</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Advanced Linux Network Buffers</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    M - SNA Networking (See section 3 for specific information)</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any other options you require such as Appletalk or IPX/SPX.</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Telephony Support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>SCSI Support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>I2O device support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Network device support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - Network device support (See section 3 for specific information)</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Amateur device support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>IrDA support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>ISDN Subsystem</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Old Cd-ROM drivers (not SCSI, not IDE)</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Character devices</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>USB support</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Misc devices</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Filesystems</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Y - /proc filesystem support</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any other options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Console drivers</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Sound</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    <B>Kernel hacking</B></TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    Enable any options you require</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="445">
+    &nbsp;</TD> 
+  </TR>
+</TABLE></P>
+
+<P>3). SNA Specific kernel considerations. Currently the SNA kernel
+configuration has many options to aid in the development process,
+in many cases it is safest to enable every SNA option though depending
+on the development stage of the specific code you may encounter
+compile time errors if you take this approch. Below is a description
+of each option and some common option sets to enable specific
+features. As the Linux-SNA development slows down on parts of
+the code more options will be combined and there will be less
+to enable at compile time.</P>
+
+<P>Most parts of sna can be enabled and disabled during run-time
+though again depending on the development stage your results may
+vary.</P>
+
+<P>Option: Y - &quot;SNA: Node Operator Facilities&quot;<BR CLEAR="ALL">Provides
+the interface to configure and operate the SNA layer from user-space.
+You should always say Y here. Without the option you will have
+no way to configure the Linux-SNA server.</P>
+
+<P>Option: Y - &quot;SNA: Configureation Services&quot;</P>
+
+<P>Option: Y - &quot;SNA: Topology and Routing Services&quot;</P>
+
+<P>Option: Y - &quot;SNA: Address Space Manager&quot;</P>
+
+<P>Option: Y - &quot;SNA: Cost of Service Manager&quot;</P>
+
+<P>Option: Y - &quot;SNA: Directory Services&quot;</P>
+
+<P>Option: Y - &quot;SNA: Route Selection Services&quot;</P>
+
+<P>Option: Y - &quot;SNA: Session Services&quot;</P>
+
+<P>Option: Y - &quot;SNA: Topology Database Manager&quot;</P>
+
+<P>Option: Y - &quot;SNA: Intermediate Session Routing&quot;</P>
+
+<P>Option: Y - &quot;SNA: Path Control&quot;</P>
+
+<P>Option: Y - &quot;SNA: Data Link Control&quot;</P>
+
+<P>Option: Y - &quot;SNA: IEEE 802.2 device support&quot;</P>
+
+<P>Option: Y - &quot;SNA: ATM device support (EXPERIMENTAL)&quot;</P>
+
+<P>Option: Y - &quot;SNA: IBM compliant channel device support
+(EXPERIMENTAL)&quot;</P>
+
+<P>Option: Y - &quot;SNA: SDLC device support (EXPERIMENTAL)&quot;</P>
+
+<P><B>Compiling and Installing the new kernel and loadable modules.</B></P>
+
+<P>&nbsp;</P>
+
+<P><B>Loading the Linux-SNA modules and verifying proper Linux-SNA
+stack installation.</B></P>
+
+<P>&nbsp;</P>
+
+<P><B>Compiling and Installing the SNA-Tools software</B></P>
+
+<P>&nbsp;</P>
+
+<P>For any additions or changes to this file please contact <A
+HREF="mailto:jschlst@samba.org">Jay Schulist</A>.&nbsp;
+
+</BODY>
+</HTML>

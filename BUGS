@@ -4,3 +4,6 @@ Please send bug reports to linux-sna@turbolinux.com.
 1. compiled static; define node; delete node; add node; get segfault / kpanic
 2. libnof sets errno.
 3. CPIC, not using a Symbolic destination name yeilds much pain.
+
+llcping:
+ - Add ability to specify sap.

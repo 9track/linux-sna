@@ -1,13 +1,19 @@
-INCLUDES=-I../include
+AUTOMAKE_OPTIONS = foreign
 
-bin_PROGRAMS = sense 
+EXTRA_DIST = $(man_MANS)
+INCLUDES=-I../include
+LIBS= -lgdbm
+
+bin_PROGRAMS = sense mksense
 
 sense_SOURCES = sense.c
 
-noinst_HEADERS = sense.h
+mksense_SOURCES = mksense.c
 
-pkgdata_DATA = SenseError-1.0.txt SenseError-1.0.db
+noinst_HEADERS = sense.h SenseError-1.0.txt SenseError-1.0.db
 
-man_MANS = sense.1
+man_MANS = sense.1 mksense.1
 
-EXTRA_DIST = $(man_MANS) $(pkgdata_DATA)
+$(OBJECTS): libtool
+libtool: $(LIBTOOL_DEPS)
+	$(SHELL) ./config.status --recheck

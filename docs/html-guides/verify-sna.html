@@ -1,0 +1,241 @@
+<HTML>
+<!-- saved from url=(0025)http://www.linux-sna.org/ -->
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Win">
+  <TITLE>Linux World Domination Through the Enterprise!</TITLE>
+  <META CONTENT="text/html; charset=windows-1252" HTTP-EQUIV="Content-Type">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><CENTER><TABLE WIDTH="700" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="33%" VALIGN="TOP">
+    &nbsp;<IMG SRC="../images/small-lnx-sna.gif" WIDTH="83" HEIGHT="29"
+    ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+    <TD WIDTH="33%" VALIGN="TOP">
+    <P><CENTER><B><FONT FACE="Arial">Getting Started with Linux-SNA</FONT></B></CENTER></P>
+
+    <P><CENTER><FONT FACE="Arial">Verify correct installation of
+    your Linux-SNA server</FONT></CENTER></TD>
+    <TD WIDTH="34%" VALIGN="TOP">
+    <P ALIGN=RIGHT>&nbsp;<IMG SRC="../images/small-lnx-sna.gif" 
+    WIDTH="83" HEIGHT="29" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+  </TR>
+</TABLE></CENTER></P>
+
+<P><B><FONT FACE="Arial">Copyright:</FONT></B><FONT FACE="Arial"><BR
+CLEAR="ALL">Copyright 2001 (c), All rights reserved. Jay Schulist
+&lt;<A HREF="mailto:jschlst@samba.org">jschlst@samba.org</A>&gt;</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>Written by:</B></FONT><BR CLEAR="ALL"><FONT FACE="Arial"><A
+HREF="mailto:jschlst@samba.org">Jay Schulist &lt;jschlst@samba.org&gt;</A></FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+For a while now people have been attempting to use Linux-SNA without
+a real lot of success, or at least not easily won success. This
+is the second document in the Linux-SNA Getting Started series
+which is attempting to make Linux-SNA a much easier protocol and
+application suite to use. If you feel anything is missing from
+this document or you would like to contribute please feel free.</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>1.</B> Read the <A HREF="quick-sna.html">Quick installation
+of your Linux-SNA server guide</A> to get a Linux-SNA server installed
+and all the software in the correct places.</FONT></P>
+
+<P><B><FONT FACE="Arial">2.</FONT></B><FONT FACE="Arial"> There
+are two ways in which one can verify the correct installation
+of a Linux-SNA server.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">LAR (Lan Address Resolution Protocol)</FONT>
+  <UL>
+    <LI><FONT FACE="Arial">LAR is a search and query protocol similar
+    to the TCP/IP ARP protocol. LAR <B>only</B> works with IEEE 802.2
+    hardware, such as Ethernet, Tokenring and FDDI. If you are on
+    a network other than those mentioned you will need to use the
+    Aping method.</FONT>
+    <LI><FONT FACE="Arial">Note: The LAR method is more useful with
+    the more LAR capable SNA machines you have.</FONT>
+  </UL>
+  <LI><FONT FACE="Arial">Aping (Advanced Peer to Peer Ping)</FONT>
+  <UL>
+    <LI><FONT FACE="Arial">Aping is a standard SNA Transaction Program
+    (TP) that is bundled with most SNA servers and will work over
+    most any network media.</FONT>
+    <LI><FONT FACE="Arial">More advanced configuration of the local
+    SNA node is required to use the Aping method. Because of this
+    I recommend using the LAR method and then the Aping method after
+    you have fully configured you Linux-SNA node.</FONT>
+  </UL>
+</UL>
+
+<P><B><FONT FACE="Arial">3. </FONT></B><FONT FACE="Arial">Basic
+configuration of local Linux-SNA node to verify installation via
+the LAR method.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">First you need to start the local node
+  like this</FONT>
+  <UL>
+    <LI><I><FONT FACE="Arial"># snaconfig lnxsna.ehead nodeid 01234567
+    appn start</FONT></I>
+    <UL>
+      <LI><I><FONT FACE="Arial">lnxsna.ehead</FONT></I><FONT FACE="Arial">
+      is the netid (lnxsna) and nodename (ehead), you should customize
+      this to your network.</FONT>
+      <LI><I><FONT FACE="Arial">nodeid 01234567</FONT></I><FONT FACE="Arial">
+      is a 8 character hex string that represents your local nodes
+      Block ID and Physical ID. If you do not know this just pretend
+      and make up something like the above.</FONT>
+      <LI><I><FONT FACE="Arial">appn</FONT></I><FONT FACE="Arial">
+      is the type of node you want. For Linux-SNA in its current state
+      I recommend only using appn.</FONT>
+      <LI><I><FONT FACE="Arial">start</FONT></I><FONT FACE="Arial">
+      is the command that will actually start the node.</FONT>
+    </UL>
+    <LI><FONT FACE="Arial">The commands above will need to be tailored
+    to your network setup. You can refer to the <A HREF="snaconfig.html">snaconfig
+    man page</A> for more information.</FONT>
+  </UL>
+  <LI><FONT FACE="Arial">Next you need to define a datalink and
+  port for the Linux-SNA node to use.</FONT>
+  <UL>
+    <LI><I><FONT FACE="Arial"># snaconfig lnxsna.ehead dlc eth0 0x04
+    pri</FONT></I>
+    <LI><FONT FACE="Arial">The commands above should not need to
+    be changed unless you are using an interface other than eth0.
+    You will though need to have the netid and nodename to reflect
+    what you choose when you started the node.</FONT>
+  </UL>
+  <LI><FONT FACE="Arial">Finally you need to start the datalink
+  which you just defined.</FONT>
+  <UL>
+    <LI><I><FONT FACE="Arial"># snaconfig lnxsna.ehead dlc eth0 0x04
+    start</FONT></I>
+    <LI><FONT FACE="Arial">This command will place the datalink and
+    port into a RUNNING state.</FONT>
+  </UL>
+  <LI><FONT FACE="Arial">Using ifconfig you need to turn on the
+  allmulti option for the interface you are configuring to use
+  with Linux-SNA.</FONT>
+  <UL>
+    <LI><I><FONT FACE="Arial"># ifconfig eth0 allmulti</FONT></I>
+  </UL>
+</UL>
+
+<P><B><FONT FACE="Arial">4. </FONT></B><FONT FACE="Arial">Check
+the output of snaconfig to ensure everything is configured and
+in a running state from step 3.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">To check the status of the local node
+  run the following command</FONT>
+  <UL>
+    <LI><I><FONT FACE="Arial"># snaconfig</FONT></I>
+  </UL>
+  <LI><FONT FACE="Arial">If you followed the instructions in step
+  3 correctly the output of snaconfig should be very similar to
+  the following:</FONT>
+</UL>
+
+<PRE><FONT FACE="Arial">         LNXSNA.EHEAD  nodeid:0x01234567  nodetype:Appn_En  RUNNING</FONT>
+<FONT FACE="Arial">               datalink:eth0  type:llc2  numports:1  RUNNING</FONT>
+<FONT FACE="Arial">               port:0x04  role:pri  numls:0 mia:0 moa:0 mtu:0 RUNNING</FONT>
+<FONT FACE="Arial">               datalink:lo  type:loopback  numports:0 RUNNING</FONT></PRE>
+
+<P><B><FONT FACE="Arial">5. </FONT></B><FONT FACE="Arial">Running
+LAR to verify correct installation of Linux-SNA.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">You are now ready to use LAR to verify
+  that your installation is correct.</FONT>
+  <LI><FONT FACE="Arial">Using snaconfig you now perform a search
+  of all SNA nodes on the network</FONT>
+  <UL>
+    <LI><I><FONT FACE="Arial"># snaconfig find lnxsna IROUTSNA appn</FONT></I>
+    <UL>
+      <LI><I><FONT FACE="Arial">lnxsna</FONT></I><FONT FACE="Arial">
+      is the netid or network which you want to search for other sna
+      nodes in. You will want to change this to the netid you configured
+      your node to in step 3.</FONT>
+      <LI><I><FONT FACE="Arial">IROUTSNA</FONT></I><FONT FACE="Arial">
+      is the routing capabilities of the node you are searching for,
+      this option is best left alone.</FONT>
+      <LI><I><FONT FACE="Arial">appn</FONT></I><FONT FACE="Arial">
+      is the type of node you are looking for, this option is fine
+      left alone also.</FONT>
+    </UL>
+    <LI><FONT FACE="Arial">The commands above will need to be tailored
+    to your network setup. You can refer to the <A HREF="snaconfig.html">snaconfig
+    man page</A> for more information.</FONT>
+  </UL>
+</UL>
+
+<P><B><FONT FACE="Arial">6.</FONT></B><FONT FACE="Arial"> Viewing
+the results of the LAR query.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">After issuing the command in step 5 you
+  if your node is configured correctly and you searched for a node
+  with the netid the same as you searched for (in our example lnxsna).
+  You will at least have one node listed. That is the local node.
+  This verifies the node is working locally and the interface is
+  correctly working.</FONT>
+  <LI><FONT FACE="Arial">If you have other SNA nodes on your network
+  those should also appear in the list displayed after running
+  the command in step 5. If you have more than one node listed
+  your installation is working.</FONT>
+  <LI><FONT FACE="Arial">If you attempted to configure your Linux-SNA
+  node to show the other SNA nodes on you network and nothing shows
+  in the list there may be a few reasons why</FONT>
+  <UL>
+    <LI><FONT FACE="Arial">The other SNA nodes are in a different
+    network (netid)</FONT>
+    <LI><FONT FACE="Arial">The other SNA nodes do not have the group
+    of IROUTSNA and you should try IGO2HOST or IGIVNAME.</FONT>
+    <LI><FONT FACE="Arial">The other SNA nodes do not have the routing
+    capabilities of a appn node you should try subarea or nameserver.</FONT>
+    <LI><FONT FACE="Arial">The Linux-SNA node is setup wrong (review
+    steps 1 - 5 again, if problem persists email the <A HREF="mailto:linux-sna@turbolinux.com">Linux-SNA
+    mailing list</A>)</FONT>
+  </UL>
+</UL>
+
+<P><B><FONT FACE="Arial">7.</FONT></B><FONT FACE="Arial"> Viewing
+your new Linux-SNA node from other LAR capable SNA servers.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">Most SNA servers are LAR capable though
+  each SNA implementation has a diferent way to perform this task.
+  I will describe how to do this using IBM's Communication Server
+  on WindowsNT, though the examples are very similar for IBM's
+  CS on UnixWare also.</FONT>
+  <LI><FONT FACE="Arial">First open the Communications Server Node
+  Operations application.</FONT>
+  <LI><FONT FACE="Arial">Second the node should be running if not
+  start it.</FONT>
+  <LI><FONT FACE="Arial">Third go to the connections leaf on the
+  node tree.</FONT>
+  <LI><FONT FACE="Arial">Fourth select the pop-up menu option to
+  Create a new link. (<A HREF="../images/ibm-cs-create-link.gif">Follow
+  link to see screen shot</A>)</FONT>
+  <LI><FONT FACE="Arial">Fifth press the discover network address
+  button.</FONT>
+  <LI><FONT FACE="Arial">Next leave the default options alone and
+  select seach.</FONT>
+  <LI><FONT FACE="Arial">This will now search for all nodes, if
+  your node is setup correctly it will then be displayed in the
+  list. (<A HREF="../images/ibm-cs-search-finish.gif">See example
+  screen shot</A>)</FONT>
+</UL>
+
+<P><B><FONT FACE="Arial">8. </FONT></B><FONT FACE="Arial">Your
+Linux-SNA node now should be installed correctly and you can proceed
+to actually setting up the Linux-SNA box to perform more useful
+functions. I recommend using the other Getting Started Guides
+for this.</FONT>
+
+</BODY>
+</HTML>

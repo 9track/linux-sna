@@ -1,0 +1,203 @@
+.Dd June 20, 2000
+.Dt ANAME 8 
+.Os Linux-SNA
+.Sh NAME
+.Nm aname
+.Nd simplify naming in an SNA network
+.Sh SYNOPSIS
+.Nm aname
+.Op Ar reg|del|qry
+.Op Fl u Ar username
+.Op Fl g Ar groupname
+.Op Fl t Ar tpname
+.Op Fl f Ar luname
+.Op Fl d
+.Op Fl h
+.Op Fl v
+.Op Fl s Ar destination
+.Op Fl a Ar userid
+.Op Fl p Ar password
+.Sh DESCRIPTION
+.Ic Aname
+the APPC Name application is a program that simplifies naming in an SNA
+network. Although it is necessary to use LU names to identify a partner
+in a transaction program, it can be difficult to associate LU names with
+the names of the people or resources using those LUs. ANAME eliminates
+the user's need to know LU names by mapping the names to more usable
+nicknames (user name) that are accessible across the network. For example
+rather than using a fully qualified LU name, such as ABCDEFG.NR10691, you
+can map it to a simpler user name such as PrintServer.
+.Pp
+You can also use the group membership function of ANAME to categorize LUs
+according to common function or group association. Users can also be
+associated with the transaction programs they user.
+.Pp
+The ANAME program provides the following fucntions, which are referred to 
+collectively as "Name Services:"
+.Bl -tag -width Fl
+.It Ic o
+Add a name to the ANAME database.
+.It Ic o
+Remove a name from the ANAME database.
+.It Ic o
+View records in the ANAME database.
+.El
+.Pp
+An ANAME network includes one server that maintains the database and provides
+the services, and one or many clients that request the service. Other options
+are:
+.Bl -tag -width Fl
+.It Ic reg
+Registers a name in the ANAME database.
+.It Ic del
+Removes a name from the ANAME database.
+.It Ic qry
+Enables you to view records in the ANAME database. You may use wildcards to
+broaden the query criteria.
+.It Fl u Ar username
+Specifies a user name.
+.It Fl g Ar groupname
+Specifies a group name.
+.It Fl t Ar tpname
+Specifies a TP name.
+.It Fl f Ar luname
+ Specifies an LU name. Only the system administrator (as defined in the anamed
+configuration file) has authorization to use this option.
+.It Fl d
+Duplicates a user record with a different LU name. Only the system administrator
+ (as defined in the anamed configuration file) has authorization to use this
+option.
+.It Fl h
+Provides help for the aname command options.
+.It Fl v
+Display version and maintainer information.
+.It Fl s Ar destination
+Identifies the LU on which ANAMED is running. By default, the destination is
+the LU identified in the CPI-C side information record stored on each machine.
+The destination can be either a CPI-C symbolic destination name or a fully
+qualified LU name.
+.It Fl a Ar userid
+Specifies the userid to be sent to the partner computer. This option should be
+used if conversation level security is required for the link.
+.It Fl p Ar password
+Sepcifies the user's password. This option is required if the -a option is
+used. Only use this option if conversation level security is active on the
+link.
+.El
+.Sh NAMING CONVENTIONS
+Names registered with ANAME should be values that are easy to remember and
+will not change over time. When selecting names to register with ANAME,
+consider how the names will be used as the ANAME network grows and changes.
+.Pp
+.Bl -tag -width Fl
+.It Ic o
+Use names that will remain unique within a specific domain. For example, avoid
+using first names and initials.
+.It Ic o
+Use defined and understood domains as group names, such as team or department
+names.
+.It Ic o
+Use names that are easily associated with the person or entity using the name,
+such as local area networks (LANs) or host IDs.
+.It Ic o
+Choose names that can be used for a veriety of purposes throughout APPC. For
+example, because APPC partner aliases must be eight characters or less in
+length, an ANAME user name that is also used as an alias should meet this
+size limitation.
+.El
+.Sh ADDING A RECORD
+It is not necessary to enter information in all four fields when adding a
+record. What you enter depends on your situation.
+.Bl -tag -width Fl
+.It Ic User name
+The simplest way to register a user name in the ANAME database is to
+associate a name you select with a fully qualified LU name. To do so, enter
+the following:
+.Pp
+.Ic aname reg -u username
+.Pp
+A record is created in the dtabase associating the username with the 
+fully qualified LU name from which the command was issued. The username must
+be unique to the fully qualified LU name.
+.It Ic Group name or names
+If you belong to any group or groups in the ANAME network, add the group
+names to the database so that others on the network can find you. (You can
+use the same user name if you are using the same fully qualified LU name). For
+example, if you belong to a team and to a department, you can register both by entering the following:
+.Pp
+.Ic aname reg -u username -g teamname
+.Pp
+.Ic aname reg -u username -g departmentname
+.It Ic Transaction program names
+If you want other users on the ANAME network to know what transaction programs
+are installed on your computer, you can register the program names in the
+database. For example, to register the ATELLD program in the database and
+associate it with your fully qualified LU name, enter the following commands:
+.Pp
+.Ic aname reg -t ATELLD
+.Pp
+Because it is possible to have more than one user name for each fully
+qualified LU name, you can make the assocaiation more specific by adding a user
+name to the command:
+.Pp
+.Ic aname reg -u username -t ATELLD
+.El
+.Sh DELETING A RECORD
+The delete function enables you to remove a record or records containing the
+fully qualified LU name from the ANAME database. For example, to delete all
+the records with the specified user name and that client's fully qualified
+LU name, enter:
+.Pp
+.Ic aname del -u username
+.Pp
+To delete a record with a specified user name and group name, enter:
+.Pp
+.Ic aname del -u username -g groupname
+.Sh VIEWING RECORDS
+You can use the query function to view a single record or multiple records in
+the ANAME database. For example, to view the record of a group called
+LnxHouse, enter:
+.Pp
+.Ic aname qry -g LnxHouse
+.Pp
+To view multiple records that contain a common field value, use wildcard
+searches. For example, to view all the records for a particular user name,
+enter:
+.Pp
+.Ic aname qry -u username
+.Pp
+To view all the records that match a specific user name and group name, enter:
+.Pp
+.Ic aname qry -u username -g groupname
+.Pp
+To view all the records that match a specific group name and tp name, enter:
+.Pp
+.Ic aname qry -g groupname -t tpname
+.Pp
+When searching the database for a specific value, only TP names are case
+sensitive. Matches for the other three fields are found by alphabetic value
+only.
+.Sh WILDCARDS
+The following set of wildcards is recognized by ANAME:
+.Bl -tag -width Fl
+.It Ic Full wildcard
+Use the asterisk (*) to view or delete all records in a particular field. For
+example, -u "*" indicates all user names.
+.It Ic Partial wildcard
+Use the asterisk (*) following a value to indicate that you want to view or
+delete all the values that contain the characters you specify. For example,
+-u "J*" indicates all the values that begin with the letter "J".
+.It Ic Placeholder wildcard
+Use the question mark (?) to indicate a placeholder. A question mark between
+characters causes a search on the specified characters and any unspecified
+character that falls in between. For example, -u "J??n" would match values
+such as "John", "Jean", and "Joan".
+.El
+.Sh SEE ALSO
+.Xr snaconfig 8 ,
+.Xr snatchd 8 ,
+.Xr anamed 8 ,
+.Sh BUGS
+Not implemented yet. ;)
+.Sh AUTHORS
+Mike Madore <mmadore@turbolinux.com>

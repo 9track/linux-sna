@@ -1,0 +1,134 @@
+<HTML>
+<!-- saved from url=(0025)http://www.linux-sna.org/ -->
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Win">
+  <TITLE>Linux World Domination Through the Enterprise!</TITLE>
+  <META CONTENT="text/html; charset=windows-1252" HTTP-EQUIV="Content-Type">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<P><CENTER><TABLE WIDTH="100%" BORDER="0" CELLSPACING="2" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="33%">
+    &nbsp;<IMG SRC="../images/small-lnx-sna.gif" WIDTH="83" HEIGHT="29"
+    ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+    <TD WIDTH="33%">
+    <P><CENTER><B><FONT FACE="Arial">Getting Started with Linux-SNA</FONT></B></CENTER></P>
+
+    <P><CENTER><FONT FACE="Arial">Quick installation of your Linux-SNA
+    server</FONT></CENTER></TD>
+    <TD WIDTH="34%">
+    <P ALIGN=RIGHT>&nbsp;<IMG SRC="../images/small-lnx-sna.gif" 
+    WIDTH="83" HEIGHT="29" ALIGN="BOTTOM" BORDER="0" NATURALSIZEFLAG="3"></TD> 
+  </TR>
+</TABLE></CENTER></P>
+
+<P><B><FONT FACE="Arial">Copyright:</FONT></B><FONT FACE="Arial"><BR
+CLEAR="ALL">No Copyright at all, Just keep a list of people who
+modify the document. And<BR>
+of course keep me informed. (i can then improve my server) hehehehe
+:-)</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>Written by:</B></FONT><BR CLEAR="ALL"><FONT FACE="Arial"><A
+HREF="mailto:jorge_blat@yahoo.com">Jorge Blat Palacios &lt;jorge_blat@yahoo.com&gt;</A></FONT></P>
+
+<P><B><FONT FACE="Arial">Modified/updated by:</FONT></B><FONT
+ FACE="Arial"><BR CLEAR="ALL"><A HREF="mailto:jschlst@samba.org">Jay
+Schulist &lt;jschlst@samba.org&gt;</A></FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+Most of the people doesn't want to read the whole HOWTO'S and
+manuals. They<BR>
+normally prefer to install things in a fast way. After that is
+when they<BR>
+start studying and undertanding what they are running. I am one
+of them. ;-)</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+Quick installation of your Linux-SNA server (you dont even need
+to read about SNA) but<BR>
+dont be blindows minded, please! :P</FONT></P>
+
+<P><FONT FACE="Arial"><BR>
+<B>1.</B> Get all the files shown in <A HREF="http://www.linux-sna.org/">www.linux-sna.org</A>.</FONT></P>
+
+<P><B><FONT FACE="Arial">2.</FONT></B><FONT FACE="Arial"> Please
+remember:</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">Linux kernel (same version as your Kernel
+  Patch) from <A HREF="http://www.linuxkernel.org/">www.linuxkernel.org</A></FONT>
+  <LI><FONT FACE="Arial">Kernel Patch: net-fun-0.0XX-2.X.XX.diff.gz
+  where 2.X.XX is the kernel<BR>
+  version it uses.-Library (really important files) libsna-0.00X.tar.gz</FONT>
+  <LI><FONT FACE="Arial">sna-tools-0.0XX.tar.gz A collection of
+  programs that form the base set of<BR>
+  the Linux-SNA networking distribution for the Linux operating
+  system.</FONT>
+  <LI><FONT FACE="Arial">asuite-0.0X.tar.gz is a suite containing
+  the tools aping, aftp and some<BR>
+  other a- please refer (at least) to <A HREF="http://pclt.cis.yale.edu/pclt/COMM/SNA.HTM">http://pclt.cis.yale.edu/pclt/COMM/SNA.HTM</A>.</FONT>
+  <LI><FONT FACE="Arial">etc-sna-0.00X.tar.gz this will install
+  the Linux-SNA environment on your system<BR>
+  </FONT>
+</UL>
+
+<P><B><FONT FACE="Arial">3.</FONT></B><FONT FACE="Arial"> How
+to set up all this.</FONT></P>
+
+<UL>
+  <LI><FONT FACE="Arial">tar -zxvf linux-2.X.XX.tar.gz</FONT>
+  <LI><FONT FACE="Arial">gzip -d net-fun-0.0XX-2.X.XX.diff.gz-patch
+  -p0 &lt; net-fun.0.0XX-2.X.XX.diff</FONT>
+  <LI><FONT FACE="Arial">now go to usr/src/linux and type make
+  menuconfig</FONT>
+  <LI><FONT FACE="Arial">configure your kernel activating this
+  options:</FONT>
+  <UL>
+    <LI><FONT FACE="Arial">ANSI/IEEE 802.2 Data link layer protocol</FONT>
+    <LI><FONT FACE="Arial">ANSI/IEEE 802.[3,4,5] Physical layer protocols</FONT>
+    <LI><FONT FACE="Arial">SNAP protocol layer</FONT>
+    <LI><FONT FACE="Arial">Advanced Linux Network Buffers</FONT>
+    <LI><FONT FACE="Arial">Common Programming Interface Communications
+    (CPI-C)</FONT>
+    <LI><FONT FACE="Arial">Advanced Program-to-Program Communications
+    (APPC)</FONT>
+    <LI><FONT FACE="Arial">SNA Networking</FONT>
+    <LI><FONT FACE="Arial">SNA: IEEE 802.2 device support</FONT>
+    <LI><FONT FACE="Arial">SNA: LAN Address Resolutions</FONT>
+    <LI><FONT FACE="Arial">SNA: Loopback device support</FONT>
+  </UL>
+  <LI><FONT FACE="Arial">the rest of your kernel settings you are
+  supposed to know. If not,Kernel-HOWTO</FONT>
+  <LI><FONT FACE="Arial">Once your kernel is ready, type make dep,
+  (you can also clean it with make<BR>
+  mrproper and make clean) then type make bzfile (remember to put
+  an empty<BR>
+  floppy in your floppy drive so that you can boot from the floppy
+  and see how<BR>
+  good your kernel is. Remember to test all before you boot this
+  kernel from<BR>
+  the HD. Actually you can also do a make bzlilo. (it is the easiest
+  way to<BR>
+  run your SNA kernel) But remember that bzlilo will use the kernel
+  even if it<BR>
+  is the wrong one. Only use bzlilo at home!!!</FONT>
+  <LI><FONT FACE="Arial">Now that the kernel is done, our next
+  step is to configure the<BR>
+  etc-sna-0.00X.tar.gz so tar -zxvf etc-sna-0.00X.tar.gz and then
+  go to the<BR>
+  folder and type make.</FONT>
+  <LI><FONT FACE="Arial">Next step, gzip -zxvf asuite-0.0X.tar.gz
+  and then (in the new folder) typemake.</FONT>
+  <LI><FONT FACE="Arial">sna-tools-0.0XX.tar.gz is the next one.
+  so tar -zxvf sna-tools-0.0XX.tar.gz<BR>
+  and the same with libsna-0.00X.tar.gz then copy the files lar.h
+  and nof.h<BR>
+  from libsna-0.00X folder to the sna-tools.0.0XX/include. In libsna-0.00X
+  you<BR>
+  will have to type ./configure and then type make. The same withsna-tools.0.0XX</FONT>
+</UL>
+
+</BODY>
+</HTML>

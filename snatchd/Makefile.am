@@ -1,12 +1,19 @@
-INCLUDES=-I../include
+AUTOMAKE_OPTIONS = no-dependencies foreign
 
-bin_PROGRAMS = snatchd 
-
-snatchd_SOURCES = snatchd.c signal.c util.c parsecfg.c
-
-noinst_HEADERS = snatchd.h util.h pathnames.h parsecfg.h attach.h
-
-man_MANS = snatchd.8
+INCLUDES=-I../include -I../libsna
+CFLAGS=-Wall
 
 EXTRA_DIST = $(man_MANS)
 
+sbin_PROGRAMS = snatchd
+
+snatchd_LDADD = ../libsna/libattach.la
+snatchd_SOURCES = snatchd.c signal.c util.c parsecfg.c
+
+include_HEADERS = snatchd.h util.h parsecfg.h pathnames.h
+
+man_MANS = snatchd.8
+
+$(OBJECTS): libtool
+libtool: $(LIBTOOL_DEPS)
+	$(SHELL) ./config.status --recheck

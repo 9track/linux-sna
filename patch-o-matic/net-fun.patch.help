@@ -1,0 +1,15 @@
+Author: Jay Schulist <jschlst@samba.org>
+Status: Various levels of stability depending on feature used.
+
+Systems Network Architecture (SNA) is a data communication protocol
+established by IBM to specify common conventions for communication among
+the wide array of IBM hardware and software data communications products.
+
+Linux-SNA is the Linux supported version of the IBM SNA protocol
+specifications. To learn more about Linux-SNA point your web browser
+to http://www.linux-sna.org
+
+Many of the Linux-SNA protocol options can be compiled as (M)odules
+or staticly in the kernel. Please follow the proper Linux-SNA FAQs
+and HOWTOs in order to select the appropriate options for your SNA
+enviroment

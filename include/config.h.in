@@ -46,9 +46,6 @@
 /* Define if you have the <fcntl.h> header file.  */
 #undef HAVE_FCNTL_H
 
-/* Define if you have the <linux/cpic.h> header file.  */
-#undef HAVE_LINUX_CPIC_H
-
 /* Define if you have the <strings.h> header file.  */
 #undef HAVE_STRINGS_H
 
@@ -67,17 +64,8 @@
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
-/* Define if you have the attach library (-lattach).  */
-#undef HAVE_LIBATTACH
-
-/* Define if you have the gdbm library (-lgdbm).  */
-#undef HAVE_LIBGDBM
-
-/* Define if you have the lar library (-llar).  */
-#undef HAVE_LIBLAR
-
-/* Define if you have the nof library (-lnof).  */
-#undef HAVE_LIBNOF
+/* Define if you have the dl library (-ldl).  */
+#undef HAVE_LIBDL
 
 /* Name of package */
 #undef PACKAGE

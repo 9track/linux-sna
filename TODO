@@ -1,5 +1,9 @@
-ToDo list for sna-tools and net-fun kernel patch.
- - Many todos are found in the ChangeLog file.
+ToDo list for sna-tools and net-fun kernel patch (never ending).
+ - Maintained by Jay Schulist <jschlst@samba.org>
+
+- Test all code to gurantee no lose of functs.
+- Check into Changing LLC_UI code to a LLC netlink interface.
+- Finish LLC code before do anything else (or else)!
 
 Features that would be nice and are easy (but abit time consuming) to do:
 - Configuration file conversion. This could be done 2 ways, the obvious
@@ -9,6 +13,29 @@ Features that would be nice and are easy (but abit time consuming) to do:
 
   The first option is generally useful, though the second is a cool feature
   though its usefulness could be debated.
+
+Goal:
+1. APING loopback test.
+2. Docs for APING loopback test.                2/9/2001
+3. APING outside world test.
+4. Docs for APING outside test.                 2/13/2001
+5. Docs for setting up an LU6.2 Peer node.      2/15/2001
+
+Short term todo(s):
+- Update Hardware and Software sections of linux-sna.org.
+- Loopback TPs should work swimmingly using full code paths.
+- Build generic BIND processing engine.
+- Build generic BIND build engine.
+- Complete loopback (intranode) bind negotiation.
+- Complete attach processing, using lfsid properly.
+
+- Fix NodeID in XID header.
+- Link station stop command sends out a DISC command to the partner and
+  does a structured link teardown
+- Complete internode bind.
+- Expand handling of bind and unbind conditions.
+- snaconfig-file occasional flakiness.
+
 
 Stuff that I will probably (never?) end up doing:
 - Move guts of sna_nof.c to sna_ps_copr.c

@@ -1,0 +1,430 @@
+.Dd June 20, 2000 
+.Dt AFTP 1
+.Os Linux-SNA
+.Sh NAME
+.Nm aftp
+.Nd
+.Tn APPC
+file transfer program
+.Sh SYNOPSIS
+.Nm aftp
+[
+.Ar destination
+]
+.Sh DESCRIPTION
+.Nm Aftp
+(APPC File Transfer Protocol) provides file manipulation and transfer
+services to application programs and end users. With AFTP, you can copy
+ASCII and binary files between your computer and any computer running an
+AFTP server.
+.Pp
+The AFTP application provides a common naming convention for files, a
+common directory structure, and a common set of file attributes. This
+common format enables you to locate and transfer files without knowing
+how the fiels are actually named and stored on the server. If the format
+of your files is supported by the operating system on each platform, you
+can share and store files among different platforms that support AFTP.
+.Pp
+If either the source or the destination is an EBCDIC computer, the EBCDIC
+computer performs ASCII-to-EBCDIC translation when it receives a file from
+the ASCII computer, and the EBCDIC-to-ASCII translation when it sends a file
+in the opposite direction.
+.Pp
+In addition to transfer commands, the AFTP application has subcommands that
+help you locate the files with which you want to work. These subcommands
+enable you to:
+.Bl -tag -width Fl
+.It Ic o
+Set and query the current directory setting at the server and at the client.
+.It Ic o
+List files in a selected directory at the server and at the client.
+.It Ic o
+Set file transfer options.
+.El
+.Bl -tag -width flag
+.Pp
+The client host with which
+.Nm aftp
+is to communicate may be specified on the command line.
+If this is done,
+.Nm aftp
+will immediately attempt to establish a connection to an
+.Tn AFTP
+server on that host; otherwise,
+.Nm ftp
+will enter its command interpreter and await instructions
+from the user.
+When
+.Nm aftp
+is awaiting commands from the user the prompt
+.Ql aftp>
+is provided to the user.
+The following commands are recognized
+by
+.Nm aftp  :
+.Bl -tag -width Fl
+.It Ic alloc Op Ar allocate-size
+Sets the allocation size to use when writing files on a server that uses
+record oriented files, such as Virtual Machine (VM), Multiple Virtual
+Storage (MVS), and Application System (AS)/400 systems. The default setting
+is 0, indicating that the server should use its own default setting.
+.It Ic ascii
+Set the file transfer
+.Ic type
+to network
+.Tn ASCII .
+This is the default type.
+.It Ic binary
+Set the file transfer
+.Ic type
+to support binary image transfer.
+.It Ic block Op Ar block-size
+Sets the block size to use when writing files. This value is used only on
+systems that use record oriented files, such as VM, MVS, and AS/400 systems.
+The default setting is 0, indicating that the storing computer should use
+its own default setting.
+.It Ic bye
+Terminate the
+.Tn AFTP
+session with the remote server
+and exit
+.Nm aftp  .
+An end of file will also terminate the session and exit.
+.It Ic \&cd Ar remote-directory
+Change the working directory on the remote machine
+to
+.Ar remote-directory  .
+.It Ic close
+Terminate the
+.Tn AFTP
+session with the remote server, and
+return to the command interpreter.
+.It Xo
+.Ic date
+.Op Ar old | new
+.Xc
+Sets how the file date is handled during file transfers. If you set the old
+option (the default), all files you create inherit the date from the source
+file. If you set the new option, all files you create are time-stamped with
+the current date and time. If you specify date without an option, the current
+date setting is displayed.
+.It Ic delete Ar remote-file
+Delete the file
+.Ar remote-file
+on the remote machine.
+.It Xo
+.Ic dir
+.Op Ar remote-directory
+.Op Ar local-file
+.Xc
+Print a listing of the directory contents in the
+directory,
+.Ar remote-directory  ,
+and, optionally, placing the output in
+.Ar local-file  .
+If interactive prompting is on,
+.Nm aftp
+will prompt the user to verify that the last argument is indeed the
+target local file for receiving
+.Ic dir
+output.
+If no directory is specified, the current working
+directory on the remote machine is used.
+If no local
+file is specified, or
+.Ar local-file
+is
+.Fl  ,
+output comes to the terminal.
+.It Ic disconnect
+A synonym for
+.Ar close  .
+.It Ic exit
+A synonym for
+.Ar close  .
+.It Ic get Ar remote-file Op Ar local-file
+Retrieve the
+.Ar remote-file
+and store it on the local machine.
+If the local
+file name is not specified, it is given the same
+name it has on the remote machine, subject to
+alteration by the current
+.Ic case  ,
+.Ic ntrans ,
+and
+.Ic nmap
+settings.
+The current settings for
+.Ic type  ,
+.Ic form ,
+.Ic mode  ,
+and
+.Ic structure
+are used while transferring the file.
+.It Ic help Op Ar command
+Print an informative message about the meaning of
+.Ar command  .
+If no argument is given,
+.Nm ftp
+prints a list of the known commands.
+.It Ic lcd Op Ar directory
+Change the working directory on the local machine.
+If
+no
+.Ar directory
+is specified, the user's home directory is used.
+.It Ic lpwd
+Displays the current working directory of the local client computer.
+.It Ic lrecl Op Ar record-length
+Sets the record length to use when writing files. This value is used only on
+systems the use record oriented files, such as VM, MVS, and AS/400 systems.
+The default setting is 0, indicating that the storing computer should use
+its own default setting.
+.It Xo
+.Ic \&ls
+.Op Ar remote-directory
+.Op Ar local-file
+.Xc
+Print a listing of the contents of a
+directory on the remote machine.
+The listing includes any system-dependent information that the server
+chooses to include; for example, most
+.Ux
+systems will produce
+output from the command
+.Ql ls \-l .
+(See also
+.Ic nlist . )
+If
+.Ar remote-directory
+is left unspecified, the current working directory is used.
+If interactive prompting is on,
+.Nm ftp
+will prompt the user to verify that the last argument is indeed the
+target local file for receiving
+.Ic \&ls
+output.
+If no local file is specified, or if
+.Ar local-file
+is
+.Sq Fl ,
+the output is sent to the terminal.
+.It Ic lsd Op Ar file-spec
+Provides a short directory list from the server that contains only directories.
+Use file-spec to specify the directories you want displayed on the server. You
+can use wildcards to generate a list of files. If you specify a directory, all
+subdirectories within that directory are displayed.
+.It Ic mkdir Ar directory
+Creates a new directory on the server.
+.It Ic modename Op Ar appc-modename
+Sets the APPC mode name used in the transfer of files. The appc-modename
+parameter is one to eight characters long. The default APPC mode name is
+#BATCH.
+.It Ic open Ar host Op Ar port
+Establish a connection to the specified
+.Ar host
+.Tn AFTP
+server.
+An optional port number may be supplied,
+in which case,
+.Nm aftp
+will attempt to contact an
+.Tn AFTP
+server at that port.
+If the
+.Ic auto-login
+option is on (default),
+.Nm aftp
+will also attempt to automatically log the user in to
+the
+.Tn AFTP
+server (see below).
+.It Ic prompt
+Toggle interactive prompting.
+Interactive prompting
+occurs during multiple file transfers to allow the
+user to selectively retrieve or store files.
+.It Ic put Ar local-file Op Ar remote-file
+Store a local file on the remote machine.
+If
+.Ar remote-file
+is left unspecified, the local file name is used
+after processing according to any
+.Ic ntrans
+or
+.Ic nmap
+settings
+in naming the remote file.
+File transfer uses the
+current settings for
+.Ic type  ,
+.Ic format ,
+.Ic mode  ,
+and
+.Ic structure  .
+.It Ic pwd
+Print the name of the current working directory on the remote
+machine.
+.It Ic quit
+A synonym for
+.Ic bye  .
+.It Ic recfm Op Ar record-format
+Sets the record format to use when writing files. This value is used only on
+systems that use record oriented files, such as VM, MVS and AS/400 systems.
+Following are the allowable values: 0, V, VA, VB, VM, VS, VBA, VBM, VBS,
+VSA, VSM, VBSA, VBSM, F, FA, FB, FM, FBA, FBM, FBS, FBSM, FBSA, U, and UA.
+The default setting is 0, indicating that the storing computer should use its
+own default setting.
+.It Ic recv Ar remote-file Op Ar local-file
+A synonym for get.
+.It Xo
+.Ic rename
+.Op Ar from
+.Op Ar to
+.Xc
+Rename the file
+.Ar from
+on the remote machine, to the file
+.Ar to  .
+.It Ic rmdir Ar directory-name
+Delete a directory on the remote machine.
+.It Ic send Ar local-file Op Ar remote-file
+A synonym for put.
+.It Ic status
+Show the current status of
+.Nm ftp  .
+.It Ic system
+Show the type of operating system running on the remote machine.
+.It Ic type Op Ar type-name
+Set the file transfer
+.Ic type
+to
+.Ar type-name  .
+If no type is specified, the current type
+is printed.
+The default type is network
+.Tn ASCII .
+.It Ic umask Op Ar newmask
+Set the default umask on the remote server to
+.Ar newmask  .
+If
+.Ar newmask
+is ommitted, the current umask is printed.
+.It Ic version
+Display the version and maintainer information for AFTP.
+.It Ic ? Op Ar command
+A synonym for help.
+.El
+.Pp
+Command arguments which have embedded spaces may be quoted with
+quote `"' marks.
+.Sh ABORTING A FILE TRANSFER
+To abort a file transfer, use the terminal interrupt key
+(usually Ctrl-C).
+Sending transfers will be immediately halted.
+Receiving transfers will be halted by sending a ftp protocol
+.Dv ABOR
+command to the remote server, and discarding any further data received.
+The speed at which this is accomplished depends upon the remote
+server's support for
+.Dv ABOR
+processing.
+If the remote server does not support the
+.Dv ABOR
+command, an
+.Ql ftp>
+prompt will not appear until the remote server has completed
+sending the requested file.
+.Pp
+The terminal interrupt key sequence will be ignored when
+.Nm ftp
+has completed any local processing and is awaiting a reply
+from the remote server.
+A long delay in this mode may result from the ABOR processing described
+above, or from unexpected behavior by the remote server, including
+violations of the ftp protocol.
+If the delay results from unexpected remote server behavior, the local
+.Nm ftp
+program must be killed by hand.
+.Sh FILE NAMING CONVENTIONS
+Files specified as arguments to
+.Nm ftp
+commands are processed according to the following rules.
+.Bl -enum
+.It
+If the file name
+.Sq Fl
+is specified, the
+.Ar stdin
+(for reading) or
+.Ar stdout
+(for writing) is used.
+.It
+If the first character of the file name is
+.Sq \&| ,
+the
+remainder of the argument is interpreted as a shell command.
+.Nm Ftp
+then forks a shell, using
+.Xr popen 3
+with the argument supplied, and reads (writes) from the stdout
+(stdin).
+If the shell command includes spaces, the argument
+must be quoted; e.g.
+\*(Lq" ls -lt"\*(Rq.
+A particularly
+useful example of this mechanism is: \*(Lqdir more\*(Rq.
+.It
+Failing the above checks, if ``globbing'' is enabled,
+local file names are expanded
+according to the rules used in the
+.Xr csh  1  ;
+c.f. the
+.Ic glob
+command.
+If the
+.Nm ftp
+command expects a single local file (.e.g.
+.Ic put  ) ,
+only the first filename generated by the "globbing" operation is used.
+.It
+For
+.Ic mget
+commands and
+.Ic get
+commands with unspecified local file names, the local filename is
+the remote filename, which may be altered by a
+.Ic case  ,
+.Ic ntrans ,
+or
+.Ic nmap
+setting.
+The resulting filename may then be altered if
+.Ic runique
+is on.
+.It
+For
+.Ic mput
+commands and
+.Ic put
+commands with unspecified remote file names, the remote filename is
+the local filename, which may be altered by a
+.Ic ntrans
+or
+.Ic nmap
+setting.
+The resulting filename may then be altered by the remote server if
+.Ic sunique
+is on.
+.El
+.Sh SEE ALSO
+.Xr snaconfig 8 ,
+.Xr snatchd 8 ,
+.Xr acopy 8 ,
+.Xr aftpd 8 ,
+.Sh BUGS
+Correct execution of many commands depends upon proper behavior
+by the remote server.
+.Sh AUTHORS
+Mike Madore <mmadore@turbolinux.com>
