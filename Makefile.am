@@ -3,8 +3,8 @@
 AUTOMAKE_OPTIONS = 1.3e foreign
 
 BUILD_SUBDIRS = . include libsna libasuite snaconfig snatchd asuite \
-	sense docs 
-# 	tn3270d tn5250d
+	sense docs libtnX tn3270d
+# 	tn5250d
 SUBDIRS = $(BUILD_SUBDIRS)
 DIST_SUBDIRS = $(BUILD_SUBDIRS) $(CONF_SUBDIRS)
 
@@ -94,6 +94,9 @@ ftp-dist:
                 exit 1; \
         fi; \
         ncftpput -R -u jschlst ftp.linux-sna.org /home/ftp/pub/$(PACKAGE)/v0.1/ $(srcdir)/build.tmp/*
+
+announce:
+	$(srcdir)/announce.sh $(VERSION)
 
 clean-dist:
 	rm -rf $(srcdir)/build.tmp

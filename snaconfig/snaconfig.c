@@ -26,30 +26,46 @@
 #include <net/if_arp.h>
 #include <net/ethernet.h>
 
+/* required for linux-SNA. */
+#include <asm/byteorder.h>
 #include <linux/sna.h>
 #include <linux/cpic.h>
-
-#include "snaconfig.h"
-#include "paths.h"
-
-#include <version.h>
 #include <nof.h>
 
-int sna_sk;
-int sna_debug = 10;
+/* our stuff. */
+#include "sna_list.h"
+#include "snaconfig.h"
 
-int opt_a = 0;
+char 	version_s[]            	= VERSION;
+char 	name_s[]                = "snaconfig";
+char 	desc_s[]                = "Linux-SNA configuration interface";
+char 	maintainer_s[]          = "Jay Schulist <jschlst@linux-sna.org>";
+char 	company_s[]             = "linux-SNA.ORG";
+char 	web_s[]			= "http://www.linux-sna.org";
+int 	sna_debug_level		= 1;
+global_info *sna_config_info	= NULL;
 
 #ifndef SOL_SNA_NOF
-#define SOL_SNA_NOF	278
+#define SOL_SNA_NOF     278
 #endif
 
 int help(void)
 {
-	printf("Information available at: http://www.linux-sna.org\n");
-	printf("Usage: snaconfig\n"); 
+	printf("Usage: %s [-h] [-v] [-d level] ACTION <SERVICE> <NAME>\n", name_s);
+	printf("   ACTION := [ find | load | reload | unload | start | stop | show ]\n");
+	printf("   SERVICE:= [ file | node | dlc | link | lu | all ]\n");
+	printf("   NAME   := [ name assigned to component in config_file ]\n");
+	printf("\n");
+	printf("Examples:\n");
+	printf("	find   := [<netid> <group_name> [appn | subarea | nameserver]]\n");
+	printf("	load   := [<config_file>]\n");
+	printf("	unload := [<config_file>]\n"); 
+	printf("	start  := [SERVICE NAME]\n");
+	printf("	stop   := [SERVICE NAME]\n");
+	printf("	show   := [<SERVICE NAME>]\n");
+#ifdef NOT	
+	printf("\n");	
 	printf("	[find <netid> <group_name> [appn|subarea|nameserver]]\n"); 
-	printf("	[-f config_file] [-a] [-d <level>] [-h] [-V]\n"); 
 	printf("	<NetID.Node> [nodeid <X'blknpuid>] [<len|appn|nn>]\n");
 	printf("	[dlc <dev> <port> [pri|sec|neg] [btu <NN>] [mia <NN>] [moa <NN>]]\n");
 	printf("	[link <dev> <port> <plu_name> <dstaddr> <dstport> [[-]byte_swap]\n");
@@ -79,74 +95,101 @@ int help(void)
 	printf("	  [min_user2 <NN>] [max_user2 <NN>]\n");
 	printf("	  [min_user3 <NN>] [max_user3 <NN>]]\n");
 	printf("	[start|stop|delete] ... \n");
+#endif
 	exit (1);
 }
 
 int version(void)
 {
-	printf("snaconfig v%s\n", ToolsVersion);
-	printf("%s\n", ToolsMaintain);
-	exit (1);
+	printf("%s: %s %s\n%s %s\n%s\n", name_s, desc_s, version_s,
+                company_s, maintainer_s, web_s);
+	exit(1);
+}
+
+int matches(const char *cmd, char *pattern)
+{
+        int len = strlen(cmd);
+        if (len > strlen(pattern))
+                return -1;
+        return memcmp(pattern, cmd, len);
+}
+
+int sna_nof_connect(void)
+{
+	int sk;
+
+	sk = socket(AF_SNA, SOCK_DGRAM, SOL_SNA_NOF);
+        if (sk < 0) {
+		sna_debug(1, "unable to open connection to NOF.\n");
+		sna_debug(1, "did you load the sna modules?\n");
+	}
+	return sk;
+}
+
+int sna_nof_disconnect(int sk)
+{
+	return close(sk);
 }
 
 int main(int argc, char **argv)
 {
-	int i, err, from_file = 0;
-	char cfg_file[120];
-	
-	/* Find any options. */
-  	(void)argc--;
-	(void)argv++;
-  	while(argc && *argv[0] == '-')
-	{
-		/* Display status on All nodes. */
-    		if(!strcmp(*argv, "-a"))
-		{
-			opt_a = 1;
-			goto wrap;
-		}
-
-		/* Set the debug level. */
-                if(!strcmp(*argv, "-d"))
-		{
-			if(*++argv == NULL) help();
-                        sna_debug = atoi(*argv);
-			argc--;
-			goto wrap;
-		}
-
-		/* Display author and version */
-    		if(!strcmp(*argv, "-V") || !strcmp(*argv, "-version")
-        		|| !strcmp(*argv, "--version") || !strcmp(*argv, "-v")) 
-			version();
-
-		/* Display useless help information. */
-    		if(!strcmp(*argv, "-?") || !strcmp(*argv, "-h")
-        		|| !strcmp(*argv, "-help") || !strcmp(*argv, "--help"))
+	/* parse flags. */
+	next_arg(argv, argc);
+	while (argc) {
+		char *opt = *argv;
+		if (opt[0] != '-')
+			break;
+		if (opt[1] == '-')
+			opt++;
+		if (!matches(opt, "h") || !matches(opt, "-help"))
 			help();
-
-		/* Parse a Linux-SNA configuration file. */
-		if(!strcmp(*argv, "-f")) {
-			if(*++argv == NULL) help();
-			argc--;
-			strcpy(cfg_file, *argv);
-			from_file = 1;
-			goto wrap;
+		if (!matches(opt, "v") || !matches(opt, "-version"))
+			version();
+		if (!matches(opt, "d") || !matches(opt, "-debug")) {
+			opt = next_arg_fail(argv, argc, help);
+			sna_debug_level = atoi(opt);
+			next_arg(argv, argc);
+			continue;
 		}
+		next_arg(argv, argc);
+	}
 
-wrap:
-    		(void)argv++;
-    		(void)argc--;
-  	}
-
-	sna_sk = socket(AF_SNA, SOCK_DGRAM, SOL_SNA_NOF); 
-        if(sna_sk < 0)  
-        {               
-                perror("socket");
-                printf("snaconfig: did you load the sna modules?\n");
-                exit (1);
-        }       
-
+	/* parse actions. */
+	if (argc < 1)
+		help();
+	if (!matches(*argv, "find")) {
+		next_arg(argv, argc);
+		return sna_find(argc, argv);
+	}
+	if (!matches(*argv, "load")) {
+		next_arg(argv, argc);
+		return sna_load(argc, argv);
+	}
+	if (!matches(*argv, "reload")) {
+		next_arg(argv, argc);
+		return sna_reload(argc, argv);
+	}
+	if (!matches(*argv, "unload")) {
+		next_arg(argv, argc);
+		return sna_unload(argc, argv);
+	}
+	if (!matches(*argv, "start")) {
+		next_arg(argv, argc);
+		return sna_start(argc, argv);
+	}
+	if (!matches(*argv, "stop")) {
+		next_arg(argv, argc);
+		return sna_stop(argc, argv);
+	}
+	if (!matches(*argv, "show")) {
+		next_arg(argv, argc);
+		return sna_show(argc, argv);
+	}
+	help();
+	exit(0);
+}
+	
+#ifdef NOT	
 	/* Show current SNA configuration for all nodes. */
         if(!from_file && (argc == 0 || opt_a))
         {
@@ -198,10 +241,5 @@ wrap:
 	}
 #endif
 
-	if (from_file)
-		sna_load_cfg_file(cfg_file);
-	else	
 		sna_load_cfg_stdin(argv);
-	close(sna_sk);
-	exit (0);
-}
+#endif

@@ -1,19 +1,16 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS)
-INCLUDES=-I../include
-LIBS= -lgdbm
+EXTRA_DIST = $(man_MANS) sense.data
+INCLUDES   = -I../include
+LIBS	   =
 
-bin_PROGRAMS = sense mksense
+bin_PROGRAMS = getsense
 
-sense_SOURCES = sense.c
+getsense_SOURCES = getsense.c
 
-mksense_SOURCES = mksense.c
+install-data-local:
+	$(INSTALL_DATA) -D $(srcdir)/sense.data $(prefix)/lib/getsense/sense.data
 
-noinst_HEADERS = sense.h SenseError-1.0.txt SenseError-1.0.db
+noinst_HEADERS =
 
-man_MANS = sense.1 mksense.1
-
-$(OBJECTS): libtool
-libtool: $(LIBTOOL_DEPS)
-	$(SHELL) ./config.status --recheck
+man_MANS = getsense.1

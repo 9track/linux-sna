@@ -1,4 +1,160 @@
-ChangeLog for net-fun patches and the sna-tools.
+ChangeLog for linux-SNA net-fun patches and tools.
+
+0.1.27 - July 22, 2002.
+- new net-fun kernel patch in patch-o-matic.
+- move sna specific structures in skb to end of structure to work with
+  existing binary modules.  Per Mariusz Lewandowski request.
+- add MODULE_LICENSE("GPL"), Mariusz Lewandowski.
+- display client cpic/tp information in /proc/net/sna/cpic_conversations.
+- removed aftp.faq file, as not really needed.
+- updated default sna.xml file, set debug level to 0, set mode for AFTP to #BATCH.
+- fixed a number of errors with send/rcv chain fsms.
+- updated README file.
+- completed all cpic set functions.
+- proper mapped/basic conversation handling for cmrcv.
+- change cpic return codes for functions we don't support to
+  CM_CALL_NOT_SUPPORTED from CM_OK.
+- allow user to call cminit with a blank symbolic cpic name.
+- made cmsend handle mapped/basic conversation ll records properly.
+- implemented proper cpic state machine.
+- added support for cmsct call.
+- added aftp.faq file to document aftp compatability and other quarks.
+- changed bind session instance number from jiffies to hs_index.
+- added nonce structured data field to bind requests.
+- use more of the mode settings specificed by the user in the bind.
+- queue outbound attaches until change direction happens.
+- added -I../libsna to tn3270d, reported/fixed by Carlos G. Mendioroz.
+- added attach snf field to fmh5.
+- added luw and cnv_correlator to fmh5 outbound header builder.
+- make init_rh_th conform to spec.
+- improved lustat processing.
+- add /proc/net/transaction_programs to display registered tps.
+- removed snatchd.conf file.
+- updated sna.xml file to include all tps.
+- rewrote a large part of snatchd to simply many things.
+- fixed bug with cpic fd use counting not being decremented.
+- cleaned up attach structures.
+- moved guts of old sna_stub_attach.c into sna_attach.c.
+- add syscall support for alpha, arm, cris, ia64, m68k, mips, mips64, 
+  parisc, ppc, s390, s390x, sh, sparc, sparc64  
+- all syscalls use generic unix syscall function, portable.
+- removed syscall_pic functions.
+- new sense code program and sense data file.
+- cvs cleanup of dynamic files that shouldn't be in archive.
+- simplified the linux-sna package configure/build process greatly.
+- removed file docs/arch-notes/CommandTests, not revelant.
+- removed file docs/arch-notes/last-hand-patch.txt, not needed.
+- incremented version number.
+
+0.1.26 - July 12, 2002.
+- new net-fun patch in patch-o-matic.
+- updated todo list.
+- added appc2cpic error code translater to cpic (better cpic return codes).
+- new logical record handling for tx and rx presentation services.
+- major presentation services cleanup.
+- started to comment all the functions in the sna stack. dfc and tc done.
+- lots of new dfc code.
+- added updated instructions to build linux-sna from source, in INSTALL.
+- make sna_ru_sig use bit fields properly.
+- added and updated menuconfig help entries for linux-SNA.
+- allow appc/cpic to be compiled out of kernel.
+- export stub symbols right from file instead of netsyms.
+- renamed appc, attach and cpic stubs to sna_stub_appc/attach/cpic.c
+- moved APPC and CPIC menu config options under SNA section.
+- make fmh7 use bit fields properly.
+- apply patch from Mariusz Lewandowski to fix big-endian struture 
+  problems in sna_formats.h sna_xid3.
+- apply libsna/appc.h patch from Mariusz Lewandowski, fixes some typos.
+- make dfc fsms much more robust.
+- make tc do segment rebuilding proper.
+- cleaned up tc send path.
+- incremented version number.
+
+0.1.25 - June 30, 2002.
+- new net-fun patch in patch-o-matic.
+- incremented version number.
+
+0.1.24 - June 30, 2002.
+- wrote a better description for the asuite rpm.
+- updated start.sh and stop.sh to use new snaconfig syntax.
+- moved hello tp examples up one directory level.
+- new net-fun patch in patch-o-matic.
+- updated docs/sna.xml file.
+- display tn3270 client time since connected.
+- display tn3270 client source port.
+- provided tn3270 xml option to limit number of server connections.
+- provided tn3270 xml option to put server in test mode.
+- added named pipe to each tn3270 server so an administrator can easily
+  list connections just by catting a file.
+- handle all client connections for a server in a single daemon process.
+- support many tn3270 servers on a single linux-sna server.
+- added tn3270d configuration to /etc/sna.xml file.
+- added tn3270d rpm package.
+- added libtnX directory for generic TN3270/TN5250 server code.
+- made fmh5 header user bit fields properly.
+- added simple atest program to verify functionality of cpic api.
+- fixed makefile.am cflag problem.
+- moved all possible code out of static cpic kernel stub into module stack.
+- create a generic start_tp entrance for all the SNA APIs.
+- new fsm_rcb state machine.
+- cleaned up resource control block.
+- cleaned up transaction program control block.
+- more inbound bind processing.
+- incremented version number.
+
+0.1.23 - June 23, 2002.
+- new net-fun patch in patch-o-matic.
+- added stop remote lu command to test unbind flow.
+- added use_name/alias support to lu's.
+- added start remote lu command to test bind flow.
+- implemented a new bind state machine.
+- make bind processing use generic control vector functions.
+- cleaned up mode_cb, create hs_cb.
+- cleaned up asm assign lfsid function.
+- cleaned up half sesion router.
+- new bind structures which use proper bit fields.
+- asm now checking incoming mu against list of request codes we can handle.
+- added better incomming asm mu router.
+- cleaned up asm lfsid structures.
+- added some basic error checking in incomming mu.
+- cleaned up pc message router.
+- made rh header use bit fields correctly.
+- made th headers use bit fields correctly.
+- complete tg number processing with state.
+- allow the user to define the tg number proper.
+- set network_node bit approriately in xid3, instead of forced default.
+- handle remote link disconnect properly.
+- tested direction - in, out, both - all work fine.
+- support backlevel LEN node xids.
+- stop dlc and link by name via snaconfig.
+- proper disconnect of link stations.
+- add ability to specify the partner node id.
+- add ability to specify link station activation direction.
+- snaconfig tool now uses -d flag to display user command debug.
+- kernel now uses /proc/sys/net/sna/debug_level for debug output.
+- make debug level in xml file be used as kernel debug level.
+- use a three part version number string in kernel version.
+- incremented version number.
+
+0.1.22 - June 16, 2002.
+- updated todo list.
+- new net-fun kernel patch-o-matic patch.
+- new generic dlc layer to support other devices than llc. ie sdlc.
+- complete xid rewrite.
+- new show sna infrastucture.
+- cleaned up makefiles.
+- added support to name dlc and link stations.
+- fixed memory leak in libcpic.
+- libsna library cleanups.
+- massive cleanup of nof communications.
+- new command syntax for snaconfig tool.
+- moved old test based configuration file to xml.
+- added xml based sna configuration file.
+- relocated snatchd.conf file.
+- added sna.init for automatic sna node activation.
+- removed old configuration file formats no longer valid.
+- added make command to generate release announcement.
+- incremented version number.
 
 0.1.21 - June 9, 2002.
 - new net-fun patch-o-matic kernel patch.
@@ -25,6 +181,7 @@ ChangeLog for net-fun patches and the sna-tools.
 - changed to better version number format.
 - added version number support to libraries.
 
+0.1.19
 1.00PRE19 - November 8, 2001.
 - removed old lar code from linux-sna tools.
 

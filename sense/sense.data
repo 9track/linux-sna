@@ -1,0 +1,4587 @@
+APPC SENSE DATA -- version 1.06 -- May 27, 1994
+C0801
+!0801xxxx  Resource Not Available
+!
+!Explanation:  The LU, PU, link station, or link specified in an
+!RU is not available.  For example, this sense data can occur when
+!a workstation is executing both of the following:
+!
+! - A 3270 network connection directly to the host
+!
+! - A link to an SNA gateway which is configured to support that
+!  workstation.
+!
+!If the gateway sends an ACTPU to the workstation before the host,
+!the workstation will reject the ACTPU from the host with this
+!sense data. The 3270 emulator component logs this error as type
+!0042, subtype 000002B2 in the OS/2 Communications Manager error
+!log.  Unless this situation is corrected, the host will continue
+!to send the ACTPU and each negative response will cause an error
+!to be logged.
+!
+!Operator Response:  To correct this problem, do one of the
+!following:
+!
+! - Change the configuration at the SNA gateway so that it no
+!  longer supports the workstation.
+!
+! -   Change the configuration at the workstation so that its 3270
+!  network connection is to the gateway.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+! - On CINIT:  a destination LU rejected the CINIT because it
+!  could not support the logical unit type (such as an LU type 2)
+!  of the originating LU.
+!
+! - On INIT_SELF:  a destination LU rejected an INIT_SELF of the
+!  SNASVCMG session.  The SNASVCMG mode session was being
+!  activated with an INIT_SELF because the partner LU definition
+!  in the OS/2 Communication Manager node definition file for a
+!  dependent LU partner was set with
+!  parallel_session_support(YES).  Changing to
+!  parallel_session_support(NO) fixes this.
+!
+D0009
+!0009
+!
+!The LU is not available because it is not ready to accept
+!sessions. That LU is still in pending-delete state because it has
+!active sessions with one or more partners.  However, no new
+!sessions can be started.
+!
+D0012
+!0012
+!
+!An APPN connection cannot be established because the local node
+!has no available integers to represent a new transmission group
+!(TG). This error is associated with XID processing.
+!
+!
+C0805
+!0805xxxx  Session Limit Exceeded
+!
+!Explanation:  The requested session cannot be activated because
+!one of the network addressable units (NAUs) has reached its
+!session limit (such as the LU-LU session limit or the LU-mode
+!session limit).  This sense code applies to SNA ACTCDRM, INIT,
+!BIND, and CINIT requests.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+!For example, when VTAM is re-IPLed, all of its session limits are
+!set to zero, pending an Initialize Change-Number-of-Sessions
+!(CNOS) operation.  Connected nodes may see this sense data if
+!they were previously connected to VTAM and have not issued the
+!CNOS operation again after it re-IPLed.
+!
+D0001
+!0001
+!
+!If accepted, the BIND request would prevent either the receiving
+!LU or the sending LU from activating the number of contention
+!winner sessions to the partner LU that were agreed on during a
+!CNOS procedure.
+!
+!It is possible that two different LUs with the same name in the
+!network attempted to set up sessions with the same third, target
+!LU.  The target LU rejects the BIND request issued by the later,
+!duplicate named LU with this sense data.  Each LU across every
+!computer in an SNA network must have a unique, fully-qualified LU
+!name.
+!
+!Operator Response:  Ensure that each LU has a unique, fully-
+!qualified LU name in the same network.
+!
+D0002
+!0002
+!
+!If the BIND request had been accepted, it would have caused the
+!XRF-backup session limit to be exceeded.
+!
+D0003
+!0003
+!
+!If the BIND request had been accepted, it would have caused the
+!XRF-active session limit to be exceeded.  The session limit for
+!XRF-active sessions is 1.  An XRF-active BIND is valid only if
+!there are no XRF-active or XRF-backup sessions with the receiving
+!secondary LU (SLU).
+!
+D0004
+!0004
+!
+!For an independent LU, if the BIND request had been accepted, it
+!would have caused the system-defined maximum number of sessions
+!allowed for any LU to be exceeded for this LU.
+!
+D0005
+!0005
+!
+!The intermediate session router is unable to create a session
+!connector control block.  The pool of session connectors is
+!saturated with active sessions and with pending active sessions
+!for which the queue bit was set in the BIND request; the BIND
+!should not be retried.
+!
+D0006
+!0006
+!
+!The intermediate session router is unable to create a session
+!connector control block.  The pool of session connectors is
+!saturated with active sessions and with pending active sessions
+!for which the queue bit was not set in the BIND request; the BIND
+!should be retried.
+!
+D0008
+!0008
+!
+!For a dependent LU, if accepted, the BIND request would cause the
+!session limit to be exceeded.
+!
+D0009
+!0009
+!
+!If the request had been accepted, it would have caused the
+!primary logical unit (PLU) session limit to be exceeded.
+!
+D000A
+!000A
+!
+!If the request had been accepted, it would have caused the
+!secondary logical unit (SLU) session limit to be exceeded.
+!
+D000B
+!000B
+!
+!The request was rejected because a session already exists between
+!the same LU pair, and at least one of the LUs does not support
+!parallel sessions.
+!
+D000C
+!000C
+!
+!An LU-LU session was not set up because a session already exists
+!between the SLU and the session-controller PLU.
+!
+!
+C0806
+!0806xxxx  Resource Unknown
+!
+!Explanation:  The request contained a name or address not
+!identifying a PU, LU, SSCP, link, or link station known to the
+!receiver or the sender.
+!
+!In an interconnected network environment, this sense code may be
+!set by an SSCP in whose subnetwork and domain the LU was expected
+!to reside. It is not set by an SSCP that is only an intermediary
+!on the session-setup path.  A gateway SSCP examines the Resource
+!Identifier control vector in a session setup request (for
+!example, CD-Initiate), to determine whether the LU is in the
+!SSCP's subnetwork and domain.
+!
+!If bytes 2 and 3 appear to be out of range, they correspond to a
+!CICS DFH message number.  See entry 'yyyy' below.  Otherwise,
+!bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The resources identified in an SNA Address List (X'04')
+!management services (MS) common subvector are unknown to the PU
+!receiving the request.
+!
+!When this sense data flows in a -RSP(NMVT), the referenced X'04'
+!subvector is the one that was present in the corresponding
+!request NMVT. When this sense data flows in a Sense Data (X'7D')
+!management services (MS) common subvector, the referenced X'04'
+!subvector is present with the X'7D' subvector in the same major
+!vector.
+!
+D0002
+!0002
+!
+!Set aside for implementation-specific use, and will not be
+!otherwise defined in SNA; see implementation documentation for
+!details of usage.
+!
+D0004
+!0004
+!
+!The indicated resources in the accompanying Name List (X'06')
+!subvector are unknown to the control point to which the request
+!containing the subvector was routed.  Names in the hierarchy
+!below the level of the first unknown resource are not examined by
+!the control point.
+!
+D0006
+!0006
+!
+!For a dynamic reconfiguration DELETE, MOVE, or REPLACE operation,
+!the resource to be dynamically reconfigured could not be found.
+!
+D0007
+!0007
+!
+!The LU address in bytes 8-9 of the Request Network Address
+!Assignment (RNAA) request unit type X'4' is already in the free
+!pool.
+!
+D0008
+!0008
+!
+!For a dynamic reconfiguration DELETE, MOVE, or REPLACE operation,
+!the network addressable unit (NAU) name in the Request Network
+!Address Assignment (RNAA) request unit does not correspond to the
+!resource identified by the element address in the RNAA.
+!
+D0009
+!0009
+!
+!The SSCP(OLU) cannot identify the SSCP(DLU), and default SSCP
+!rerouting is not enabled.
+!
+D000A
+!000A
+!
+!The configuration identifier specified in a management services
+!command is not recognized by the DLC manager at the receiving
+!node.
+!
+D0011
+!0011
+!
+!An unknown OLU name was specified in the request.  For example,
+!this situation can occur when a local node is using an LU that is
+!unknown to the subarea.  Ensure that all local LUs that set up
+!sessions with a subarea host are configured at the host.
+!
+!With the OS/2 Communications Manager, this can occur when using
+!CPI-C, but failing to set the APPCLLU environment variable to the
+!correct local LU name.  The host will do CNOS to negotiate the
+!session limits for the LU it is supposed to be using.  The APPC
+!software in the local OS/2 computer then sends a BIND request
+!with the wrong workstation LU name, and the host replies with
+!this sense data.
+!
+D0012
+!0012
+!
+!An unknown destination logical unit (DLU) name was specified in
+!the request.
+!
+D0013
+!0013
+!
+!An unknown secondary logical unit (SLU) name was specified in the
+!request.
+!
+D0014
+!0014
+!
+!An unknown primary logical unit (PLU) name was specified in the
+!request.
+!
+D0015
+!0015
+!
+!An unknown origin logical unit (OLU) address was specified in the
+!request.
+!
+D0016
+!0016
+!
+!An unknown destination logical unit (DLU) address was specified
+!in the request.
+!
+D0017
+!0017
+!
+!An unknown secondary logical unit (SLU) address was specified in
+!the request.
+!
+D0018
+!0018
+!
+!An unknown primary logical unit (PLU) address was specified in
+!the request.
+!
+D0021
+!0021
+!
+!The session-initiation request specified that the receiving SSCP
+!is the SSCP having the DLU in its domain, but the DLU is unknown
+!to the receiving SSCP.
+!
+!For VTAM, this sense data indicates that a link with a downstream
+!node is defined incorrectly.  For example, this can occur when
+!VTAM thinks it link to an adjacent node is an APPN-level link,
+!but the adjacent node is treating the link as a LEN-level link.
+!If the adjacent node had treated the link as APPN-level, it would
+!have sent an APPN Locate to VTAM prior to sending its BIND
+!request.  The result would have been that the RSCV used to route
+!the BIND request would include an additional "Interchange TG"
+!hop, which indicates to VTAM that the destination LU is actually
+!located in the subarea network.
+!
+!If VTAM receives a BIND request over an APPN-level link and the
+!RSCV ends on that VTAM (indicating that the DLU should be on that
+!VTAM), then VTAM will reject the BIND request if the DLU is not
+!owned locally. However, prior to rejecting the BIND request, VTAM
+!will send a DSRLST into the subarea.  If the DLU is found in the
+!subarea, this this sense data is set to inform the OLU that the
+!DLU does not reside on this node.
+!
+D0022
+!0022
+!
+!The originator of the request is unknown to the receiver.
+!
+D0023
+!0023
+!
+!The destination of the request or response is unknown to the
+!sender.
+!
+D0024
+!0024
+!
+!An unknown LU1 name was specified in the request.
+!
+D0025
+!0025
+!
+!An unknown LU2 name was specified in the request.
+!
+D0026
+!0026
+!
+!The SSCP does not have a session with the boundary function PU of
+!an independent LU.
+!
+D0027
+!0027
+!
+!The PU associated with a switched secondary logical unit (SLU) is
+!unknown.  Session setup processing for the switched SLU cannot
+!proceed.
+!
+D0028
+!0028
+!
+!NAU1 network address is unknown.
+!
+D0029
+!0029
+!
+!NAU2 network address is unknown.
+!
+D002A
+!002A
+!
+!The NAU name in the CONTACT or ACTLU does not correspond to the
+!resource at the target address.
+!
+D002B
+!002B
+!
+!The TG (link) being activated is unknown.  The local or network
+!APPN topology information may be incorrect.  This can occur
+!because of one of the following conditions:
+!
+! - The local node is trying to use an "activatable on demand"
+!  link, but could not activate the link.  This could happen for
+!  any of the reasons a link activation can fail:  the link was
+!  defined wrong, the remote node is not powered on, and so on.
+!
+! - An "activatable on demand" link is defined in the reverse
+!  direction from where the local node is trying to go.  To
+!  correct this, either make your local link "activatable on
+!  demand", or change the configuration at the remote node so
+!  that it is not "activatable on demand".
+!
+! - There is an inconsistency among the APPN topology databases of
+!  the network nodes in the APPN network.  One way to spot
+!  inconsistencies, using the OS/2 Communications Manager for
+!  example, is to issue the DISPLAY_APPN verb, requesting
+!  Topology Information.  See if there are any links shown as
+!  active that are not actually active.  To correct this
+!  condition in the local workstation, stop and re-start the OS/2
+!  Communications Manager.  If this condition persists, there may
+!  be an internal APPN software error somewhere in the network.
+!
+D002C
+!002C
+!
+!The identification in either the Node Identification field or the
+!control point (CP) name in a received XID3 is different from what
+!the local node was configured to expect.  The CP name configured
+!in the link definition does not match what was expected. This
+!error is associated with XID processing.
+!
+D002F
+!002F
+!
+!The destination resource was not found on this node during a
+!session activation attempt.
+!
+D0030
+!0030
+!
+!The adjacent node was not identified during CP-CP session
+!activation.
+!
+Dyyyy
+!yyyy
+!
+!If bytes 2 and 3 appear to be out of range, these two bytes
+!correspond to a CICS DFH message number.  An Allocate call failed
+!when trying to BIND request to a CICS application through VTAM.
+!VTAM has not yet acquired the local LU.  The BIND request should
+!succeed after forcing an acquire.  Assure that your local LU has
+!a corresponding TCT entry.
+!
+!
+C0809
+!0809xxxx  Mode Inconsistency
+!
+!Explanation:  The requested function cannot be performed in the
+!present state of the receiver.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+!Note:  VTAM APPC will erroneously reject an inbound BIND request
+!with this sense data if this is the first session for this LU (no
+!CNOS yet) and the mode name is not SNASVCMG.  Some APPC resources
+!will not react properly (for example, they will hang) when
+!receiving this sense data. The expected sense data is
+!X'08050000'.
+!
+!For VTAM, apply JR06063 plus the appropriate VTAM fix:
+!
+!Release 301:  UY82095
+!Release 303:  UY82094
+!Release 401:  UY82096
+!Release 431:  UY82097
+!
+D0001
+!0001 - 000D
+!
+!Set aside for implementation-specific use, and will not be
+!otherwise defined in SNA.  See the platform documentation for
+!details of usage.
+!
+D000A
+!000A
+!
+!The partner data link control (DLC) is not activated.  In the
+!OS/2 Communications Manager a long timeout (for example, 30
+!seconds) occurs before the verb returns.  Possible reasons this
+!occurs are:
+!
+! - The target computer is not powered on.
+!
+! - The target data link control (DLC) is not activated.
+!
+! - The target MAC address is wrong.
+!
+! - The maximum number of links is exceeded.
+!
+! - All links configured in the local workstation are incoming.
+!
+! - Different service access points (SAPs) are defined.
+!
+D0039
+!0039
+!
+!CP Transaction Error.  A CP Capabilities (X'12C1') generalized
+!data stream (GDS) variable request was sent indicating
+!conversation complete or without change direction (for example,
+!CEB or ^CD) or CP Capabilities reply was sent indicating
+!conversation not yet complete (for example, ^CEB).
+!
+!Generically, this sense data value is issued whenever the LU 6.2
+!transaction to request and provide a CP Capabilities GDS variable
+!does not take place as designed.  This is most easily detected by
+!looking at the CEB and CD bits.  The SNA APPN Architecture
+!Reference document is a bit more general; it tells implementers
+!that this sense data is also to be used when any other
+!transaction-related errors are discovered.  In reality, the
+!REQ_CP_CAP_TP internal transaction program issues some
+!RECEIVE_AND_WAIT verbs, and once everything is received, it
+!checks for a primary return code of DEALLOCATE_NORMAL and a verb
+!count of 2.  If either one is not true, it issues the 08090039
+!sense data value.
+!
+D003A
+!003A
+!
+!A null XID was received when a link activation XID3 was expected.
+!Specifically, a null XID was received when an XID3 with its
+!Exchange State indicators set to "prenegotiation", "negotiation
+!proceeding", or "Exchange State indicators not supported" was
+!expected. This error is associated with XID processing.
+!
+D003B
+!003B
+!
+!A null XID was received when a nonactivation XID3 was expected.
+!This error is associated with XID processing.
+!
+D003C
+!003C
+!
+!An XID3 with the Exchange State indicators set to
+!"prenegotiation" was received when either of the values
+!"negotiation proceeding" or "Exchange State indicators not
+!supported" was expected. This error is associated with XID
+!processing.
+!
+D003D
+!003D
+!
+!A nonactivation XID3 was received when a null XID or link
+!activation XID3 was expected. This error is associated with XID
+!processing.
+!
+D003E
+!003E
+!
+!A link activation XID3 was received when a null XID or
+!nonactivation XID3 was expected. This error is associated with
+!XID processing.
+!
+D003F
+!003F
+!
+!A secondary link station attempted to initiate a nonactivation
+!XID exchange when this option is not supported on the TG. This
+!error is associated with XID processing.
+!
+D0040
+!0040
+!
+!A mode-setting command was received and was either not expected
+!or invalid for the receiving node.  For example, SNRME was
+!received when SNRM was expected. This error is associated with
+!XID processing.
+!
+D0041
+!0041
+!
+!Negotiation-proceeding XID3 was received when prenegotiation XID3
+!was expected. This error is associated with XID processing.
+!
+D0042
+!0042
+!
+!On an asynchronous balanced mode (ABM) TG on which secondary-
+!initiated nonactivation exchanges are supported, the adjacent
+!node initiated a nonactivation exchange without explicitly
+!indicating that it was doing so in the ABM Nonactivation XID
+!Initiator indicator in XID3. This error is associated with XID
+!processing.
+!
+D0045
+!0045
+!
+!An XID3, indicating that the sender does not support the Exchange
+!State indicators, was received when the sender had previously
+!indicated support for this field in XID3. This error is
+!associated with XID processing.
+!
+D0046
+!0046
+!
+!An XID3, indicating that the sender supports the Exchange State
+!indicators, was received when the sender had previously indicated
+!that it does not support this field in XID3. This error is
+!associated with XID processing.
+!
+D0047
+!0047
+!
+!An XID was received after receipt of a mode-setting command, but
+!before the completion of the mode-setting sequence, that is,
+!before RR, RNR, or an I-frame with the Poll bit set has been sent
+!by the node with the primary link station after it has received
+!UA in response to its mode-setting command.  Once a node sends
+!one of these mode-setting commands, no additional XIDs may be
+!sent. This error is associated with XID processing.
+!
+D0048
+!0048
+!
+!An NRM primary link station received an unsolicited XID from an
+!NRM secondary link station. This error is associated with XID
+!processing.
+!
+D0049
+!0049
+!
+!An XID3 containing the XID Negotiation Error (X'22') was received
+!by this node. This error is associated with XID processing.
+!
+!For example, when using the OS/2 Communications Manager in the
+!local node, this can occur when there are no link stations
+!available on the local DLC adapter to connect a link to the
+!adjacent computer.  In one scenario, a user had the "max link
+!stations" on their DLC profile set to 2, with the percentage
+!reserved for incoming sessions equal to 50%.  Only one link
+!station was reserved for connecting out, and once that was
+!already in use, subsequent requests by other partners were
+!rejected with this sense data.  Increasing the number of link
+!stations higher than 3 corrected the situation.
+!
+D004E
+!004E
+!
+!A node with an NRM secondary link station attempted to initiate a
+!nonactivation XID exchange with an XID. This error is associated
+!with XID processing.
+!
+D0054
+!0054
+!
+!The adjacent node is not the node type (that is, network node or
+!end node) that the receiving node was configured to expect.  The
+!received negotiation-proceeding XID3 indicated that the adjacent
+!node is an APPN end node while this node expected the adjacent
+!node to be an APPN network node, or vice versa. This error is
+!associated with XID processing.
+!
+D0055
+!0055
+!
+!The virtual routing node named in the received XID3 in the TG
+!Identifier (X'80') subfield of the TG Descriptor (X'46') control
+!vector is not defined on the receiving port. This error is
+!associated with XID processing.
+!
+!
+!
+C080A
+!080Axxxx  Permission Rejected
+!
+!Explanation:  The receiver has denied an implicit or explicit
+!request of the sender.
+!
+!When sent in response to a BIND request, it implies either that
+!the secondary LU will not notify the SSCP when a BIND request can
+!be accepted, or that the SSCP does not recognize the NOTIFY
+!vector X'0C'.  (See the X'0845' sense code for a contrasting
+!response.)
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!An SSCP has denied permission to establish a session through its
+!gateway resources; the receiving SSCP should not attempt to
+!reroute the request to another SSCP.
+!
+D0002
+!0002
+!
+!An SSCP has denied permission to establish a session through its
+!gateway resources; the receiving SSCP should not attempt to
+!reroute the request to another SSCP.
+!
+!
+C080C
+!080Cxxxx  Procedure Not Supported
+!
+!Explanation:  A internal SNA procedure (Test, Trace, IPL, REQMS
+!type, MS major vector key) specified in a request/response unit
+!(RU) is not supported by the receiver.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0005
+!0005
+!
+!The management services (MS) major vector key is not supported by
+!the receiver.  This may occur for one of these reasons:
+!
+! - The local node sent an NMVT to the host using its active SSCP-
+!  PU session.  At the host, one of two things occurred:
+!
+!   -No network management application available (such as
+!     NetView) to handle the NMVT.
+!
+!   -The network management application on the host does not
+!     support the management services (MS) major vector key sent
+!     by APPC.
+!
+!     When the host replied that it could not handle the NMVT,
+!     APPC on the local computer recorded this sense data.
+!
+! - NetView or a NetView application on the host sent an NMVT
+!  request to local node, but it was not recognized by the local
+!  node.
+!
+!  For more information about NS headers for NMVT, refer to SNA
+!  Formats, IBM document number GA27-3136.
+!
+D0006
+!0006
+!
+!The management services (MS) major vector is identified as one
+!that contains a command, but the receiver does not recognize or
+!support the command subvector.  A control subvector is missing or
+!not supported. Products that are not MS focal point products, do
+!not know how to process a X'63', so they send an SNACR rather
+!than a X'64' reject.
+!
+!If the command subvector is identified, but an additional
+!required subvector is missing, refer to X'086C' sense code in SNA
+!Formats, IBM document number GA27-3136.
+!
+D0012
+!0012
+!
+!Application generalized data stream (GDS) variable in a Multiple-
+!Domain Support Message Unit (MDS_MU) not supported.
+!
+D0013
+!0013
+!
+!MDS message type not supported.  Receiving node does not support
+!the MDS message type in this MDS_MU.
+!
+D01xx
+!01xx
+!
+!A subvector in a management services (MS) major vector is
+!identified as one inside which the receiver requires one of
+!several supported subfields, but none of these subfields is
+!present.  Byte 3 contains the key (xx) of the subvector.
+!
+!
+C080E
+!080Exxxx  NAU Not Authorized
+!
+!Explanation:  The requesting network addressable unit (NAU) does
+!not have access to the requested resource.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0002
+!0002
+!
+!A gateway Type 4 (T4) node received a dynamic dump request from
+!an SSCP that is not in the native network of the gateway T4 node.
+!
+D0006
+!0006
+!
+!An APPN network node received a Register from an unauthorized
+!APPN end node.
+!
+D0009
+!0009
+!
+!An APPN network node received an APPN Delete request from an
+!unauthorized APPN end node.
+!
+D000B
+!000B
+!
+!A Locate/CDINIT was received from a node that is not defined as a
+!client APPN end node.  This can be detected by either APPN
+!directory services or session services.  For example, a BIND
+!request came into an APPN network node that is not the APPN
+!network node server of the BIND-sending EN.  The APPN network
+!node is unable to handle this type of request.
+!
+!Operator Response:  Define that APPN network node as your NN
+!server, or send the BIND request to the currently defined NN
+!server.
+!
+!
+C080F
+!080Fxxxx  Security Mismatch
+!
+!There is mismatch with the supplied used ID or password and what
+!was expected by the partner.  This can indicate an attempt at a
+!security violation.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!End User Not Authorized Explanation:  This indicates that the
+!BIND request is correct, but the primary LU has not been
+!authorized to activate the requested session.
+!
+D6051
+!6051
+!
+!Access Security Information Invalid. The request specifies an
+!Access Security Information field that is unacceptable to the
+!receiver; for security reasons, no further detail on the error is
+!provided.  This sense data is sent in FMH-7 or UNBIND.
+!
+!The partner LU rejected the user ID or password received on an
+!incoming Attach, or there is a mismatch in the LU-LU security.
+!
+!For example:
+!
+! - The remote location is using OS/2 Communications Manager and
+!  the TP definition specifies conversation_security(YES).  The
+!  remote Attach Manager searched its list of valid user IDs and
+!  passwords, but did not find the received combination.
+!
+! - When an application sends an Attach to the AS/400 with
+!  security(NONE) (that is, with no user ID and password), the
+!  AS/400 looks for a default user profile to assign the request
+!  to.  If the default user profile is not set up, the AS/400
+!  rejects the request.
+!
+! - For mismatches in LU-LU security, trace the line flows and
+!  look in the BIND for the presence of structured data subfield
+!  X'11'.
+!
+!  1.If subfield X'11' is present, then the workstation is
+!     attempting to do LU-LU verification and the host is
+!     rejecting it.  This is probably due to either 1) being
+!     configured to not accept LU-LU verification from the
+!     workstation, or 2) not being able to access the LU-LU
+!     password.
+!
+!     Check the VTAM definitions to see if LU-LU verification is
+!     allowed. To do this, check if the VTAM APPL statement has
+!     SECACPT=NONE, which says "don't allow security fields in
+!     incoming Attaches".  If the application (LU) really wants
+!     RACF to check a user ID from a partner, this value should be
+!     SECACPT=(ALREADYV or CONV or AVFV or PERSISTV).
+!
+!     If LU-LU verification is allowed, check the ACF2 definitions
+!     for a resource named vtamnetid.vtamlu.cm2lu in class APPCLU.
+!     Also, make sure that the class is active.  Or, turn off LU-
+!     LU verification at the workstation.
+!
+!  2.If subfield X'11' is not present, then the workstation is
+!     not attempting LU-LU verification and the host is requiring
+!     it.  In this case, VTAM is probably configured to require LU-
+!     LU verification and workstation is not configured for LU-LU
+!     verification.
+!
+!     Once, again check the VTAM definition.
+!
+!Programmer Response:  The Allocate call issued by the local
+!program has a wrong user ID or password parameter, or the remote
+!configuration needs to be changed.  Look at the verb control
+!block being used for this verb.  Verify that it specifies valid
+!user ID and password parameters.
+!
+!Operator Response:  If the problem is with the remote
+!configuration, assure that the user ID and password combination
+!has been correctly defined there.  User IDs and passwords are two
+!of the few APPC configuration fields that are case-sensitive.  Be
+!sure that the combination of uppercase and lowercase letters
+!matches those specified in the program.
+!
+!Also assure that if these are required (see the partner's TP
+!definition), they will be accepted by the partner LU (see the
+!remote location's definition of its partner LU).
+!
+!If the partner is using the OS/2 Communications Manager, look at
+!its error log.  Find an error log of type 001A; its subtype
+!indicates why this Attach was rejected.
+!
+!
+C0812
+!0812xxxx  Insufficient Resource
+!
+!Explanation:  Receiver cannot act on the request because of a
+!temporary lack of resources.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0006
+!0006
+!
+!A local LEN node is acting as a independent LU, but the target LU
+!supports only dependent logical units (LUs).
+!
+D0007
+!0007
+!
+!Insufficient resources are available for LU address allocation.
+!
+D000A
+!000A
+!
+!An APPN network node does not have adequate resources to perform
+!the Register.  For example, the available APPN directory capacity
+!is exceeded.
+!
+D000D
+!000D
+!
+!Insufficient buffers exist to activate a session.
+!
+D0010
+!0010
+!
+!The control point (CP) does not have adequate resources to
+!process a Locate generalized data stream (GDS) variable request.
+!The contention loser's CP-CP session is deactivated.
+!
+D0019
+!0019
+!
+!Insufficient storage to conduct an XID exchange.
+!
+D001A
+!001A
+!
+!Insufficient storage to activate a TG or a link.
+!
+D001B
+!001B
+!
+!Insufficient storage to activate a token-ring connection.
+!
+!
+C0813
+!08130000  Bracket Bid Reject--No RTR Forthcoming
+!
+!Explanation:  BID (or BB) was received while the first speaker
+!was in the in-bracket state, or while the first speaker was in
+!the between-brackets state and the first speaker denied
+!permission.  RTR will not be sent.  For LU 6.2, this is the only
+!setting defined.
+!
+!
+C0814
+!08140000  Bracket Bid Reject--RTR Forthcoming
+!
+!Explanation:  BID (or BB) was received while the first speaker
+!was in the in-bracket state, or while the first speaker was in
+!the between-brackets state and the first speaker denied
+!permission.  RTR will be sent.  For LU 6.2, this is the only
+!setting defined.
+!
+!
+C0815
+!0815xxxx  Function Active
+!
+!Explanation:  A request to activate a network element or
+!procedure was received, but the element or procedure was already
+!active.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0004
+!0004
+!
+!A BIND request was received from a Type 2.1 node when the session
+!is already active.  For example, the LFSID is in use.  The
+!receiver rejects the BIND request.
+!
+D0007
+!0007
+!
+!A session activation request was received by an APPN network node
+!or an APPN end node to activate a CP-CP session that was already
+!active.
+!
+!
+C0817
+!0817xxxx  TG Not Activated
+!
+!Explanation:  The TG (link) could not be activated.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!The TG requires operator intervention to activate it.  For
+!example, the link station is not defined to support automatic
+!activation. This error is associated with ACTIVATE_ROUTE
+!processing.
+!
+D0002
+!0002
+!
+!The TG number has been changed by a nonactivation XID3 from the
+!TG number negotiated during link activation. This error is
+!associated with ACTIVATE_ROUTE processing.
+!
+!
+C0819
+!08190000  RTR Not Required
+!
+!Explanation:  The receiver of Ready-To-Receive has nothing to
+!send.
+!
+!
+C081C
+!081Cxxxx  Request Not Executable
+!
+!Explanation:  The requested function cannot be executed, because
+!of a permanent error condition in the receiver.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0103
+!0103
+!
+!The remote node is not responding to polling requests.  The
+!remote node may be powered off or the hardware may be functioning
+!incorrectly.
+!
+!
+C081E
+!081E0000  Session Reference Error
+!
+!Explanation:  The request contained reference to a half-session
+!that either could not be found or was not in the expected state
+!(generally applies to network services requests).
+!
+!
+C0821
+!0821xxxx  Invalid Session Parameters
+!
+!Explanation:  Session parameters were not valid or not supported
+!by the half-session whose activation was requested.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0002
+!0002
+!
+!indicates that the specified mode name was not recognized by the
+!control point (CP).  If VTAM generates this sense data, it means
+!the VTAM logmode table for the LU in question does not have the
+!mode name defined.  If the LU has been dynamically created by
+!VTAM, then the default logmode table (ISTINCLM) does not contain
+!the mode entry.
+!
+!
+C0824
+!0824xxxx  Logical Unit of Work Terminated
+!
+!Explanation:  The current unit of work has been terminated; when
+!sync point protocols are in use, both sync point managers are to
+!revert to the previously committed sync point.  For LU 6.2, this
+!sense data is sent only on FMH-7.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!indicates for LU 6.2, Backout Initiated--No Resync in Progress. A
+!transaction program or its LU has initiated backout.  The
+!protected resources for the distributed logical unit of work are
+!to be restored to the previously committed sync point.  When sent
+!in reply to a PS header, no resync in progress means that all
+!resources in the transaction subordinate to the backout sender
+!have backed out.
+!
+!
+C0826
+!08260000  FM Function Not Supported
+!
+!Explanation:  Function management request not supported.  A
+!function requested in an FMD RU is not supported by the receiver.
+!
+!For example, given a connection from APPC/MVS to OS/2, VTAM or
+!APPC/MVS is requesting the OS/2 Communications Manager to do
+!something it doesn't support.  All the reasons for this should be
+!reported via sense code 1003nnnn instead.  Get a trace of the
+!OS/2 Communications Manager side to see the details of that sense
+!data.
+!
+!
+C0835
+!0835xxxx  Invalid Parameter (with Pointer Only)
+!
+!Explanation:  The request contained a fixed- or variable-length
+!field whose contents are invalid or not supported by the network
+!addressable unit (NAU) that received the request.
+!
+Dxxxx
+!xxxx
+!
+!Bytes 2 and 3 contain a two-byte binary count that indexes (0-
+!origin) the first byte of the fixed- or variable-length field
+!having invalid contents.
+!
+!The error usually indicates that the BIND request was rejected by
+!APPC because of a syntax, state, or semantic error and points to
+!an offset in the RU field of the invalid parameter.  If possible,
+!look at the BIND request in a trace or message; the partner LU is
+!wrong, or the spelling of the partner LU or mode name is wrong.
+!
+!For example, if a BIND request is rejected with a sense data of
+!X'08350045', it implies that the field at offset X'45' is in
+!error.  If the field at this offset is an LU name, is could
+!indicate that duplicate LU names are present in the network.  If
+!the field is a mode name, it could indicate a misspelled mode
+!name was supplied on an Allocate call, or mode name definition
+!was missing or misspelled at either the local or remote computer.
+!
+!With the OS/2 Communications Manager, you can make a simple fix
+!by specifying inbound_plu(YES), allowing any incoming partner LU
+!name.
+!
+D0018
+!0018
+!
+!The partner LU rejected the value for "sync level" or "parallel
+!session support".  For example, if you are connecting to IMS, it
+!is likely that the problem is the parallel session support bit.
+!To solve this, define a partner LU for use with the IMS adapter,
+!and specify no parallel session support.
+!
+!This sense data is not used to report an invalid value in a
+!management services (MS) major vector.  If the invalid value
+!occurs in a formatted management services (MS) subvector, sense
+!code X'086B' is used. If it occurs in an unformatted subvector,
+!sense code X'0870' is used.
+!
+!
+C0839
+!0839xxxx  LU-LU Session Being Taken Down or LU Being Deactivated
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!During session-initiation processing, a session-termination
+!request has caused the LU-LU session to be taken down.
+!
+D0002
+!0002
+!
+!A Request Network Address Assignment (RNAA) request unit (type 3)
+!was received for a session during the process of session
+!deactivation.  The RNAA should be retried.
+!
+D0003
+!0003
+!
+!SSCP detected that this session should no longer exist and
+!requested its termination.  For example, a BFSESSINFO was
+!received reporting a subject LU address that the SSCP believed
+!already belonged to an other-domain resource.
+!
+D0004
+!0004
+!
+!CP Architected-TP Send Failure.  This can occur, for example,
+!when an APPN network node attempts to issue a broadcast search to
+!a particular node and the node does not respond within a timeout
+!period.  An UNBIND request is sent to the problem node and the
+!session is deactivated.
+!
+!Deactivate both conwinner and conloser CP-CP sessions.
+!
+!
+C083A
+!083Axxxx  LU Not Enabled
+!
+!Explanation:  At the time an LU-LU session initiation request is
+!received at the SSCP, at least one of the two LUs (although
+!having an active session with its SSCP) is not ready to accept
+!CINIT or BIND requests.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The primary logical unit (PLU) is not enabled.
+!
+D0002
+!0002
+!
+!The secondary logical unit (SLU) is not enabled.
+!
+!This sense data is set when VTAM has activated the LU (that is,
+!the SSCP-LU session exists), but the device is not enabled.  The
+!means the PU that supports the dependent LU is active, but the
+!terminal itself has not powered on yet.  (For emulated dependent
+!LUs, this probably means the LU itself has not initialized
+!itself.)  You should recycle the dependent LU.
+!
+!
+C083B
+!083Bxxxx  Invalid PCID
+!
+!Explanation:  The received procedure correlation identification
+!(PCID) for a new session duplicated the PCID assigned to another
+!session, or the received PCID intended as an identifier for an
+!existing session could not be associated with such an existing
+!session, or an error was detected in the format of the received
+!PCID.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The PCID contained in CDINIT (Initiate or Queue), INIT-OTHER-CD,
+!or CDTAKED duplicates a PCID received previously in one of these
+!requests.
+!
+D0002
+!0002
+!
+!The received fully-qualified PCID duplicated one assigned to
+!another session.
+!
+!
+C083E
+!083Exxxx  Implementation-Defined Retry Limit Exhausted
+!
+!Explanation:  The implementation-defined limit on XID exchanges
+!was exceeded before link activation completed.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!Limit for link activation XID exchanges exceeded.
+!
+!For example, the maximum BTU (MAX_BTU) size of the host is less
+!that the MAX_BTU size of a connected workstation.  The MAX_BTU
+!size is the largest segment of data that can be sent or received
+!over a link.  The host will keep trying to go into
+!Negotiation_Proceeding when the two sides are in disagreement
+!over the MAX_BTU size.
+!
+D0002
+!0002
+!
+!Limit for nonactivation XID exchanges exceeded.
+!
+!
+C0840
+!0840xxxx  Procedure Invalid for Resource
+!
+!Explanation:  The received RU is not supported in the receiver
+!for this type of resource.  For example:
+!
+! - SETCV specifies boundary function support for a type 1 node
+!  but the capability is not supported by the receiving node.
+!
+! - The PU receiving an EXECTEST or TESTMODE is not the primary PU
+!  for the target link.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0007
+!0007
+!
+!Resource Not Found.  An APPN directory request (Delete or Find)
+!could not be satisfied because the specified entry does not exist
+!in the receiver's directory and the resource cannot be found in
+!the network.
+!
+!The target LU may be owned by an APPN network node server that
+!cannot be contacted, or it might not exist in the network at all.
+!For example,
+!
+! - The network node server has lost its links to the other
+!  network nodes in its APPN network.
+!
+! - A second NN has connected to an EN that already has an NN
+!  server. If the second connection to the EN had been defined as
+!  a LEN connection, or the EN's connection to the second NN had
+!  been defined so that CP-CP session support had not been
+!  requested, the CP LU would have been put in the APPN directory
+!  when the link came up.  However, since it is a multi-tail EN,
+!  the second NN did not put it in its directory; it will not
+!  answer network broadcast searches for the EN positively.  You
+!  want only the NN server to answer so that all the EN's links
+!  are returned and considered for route calculation.  If your
+!  node had any connectivity to the NN server, the Allocate call
+!  would have worked from your NN, probably going across the
+!  direct link.
+!
+!  Since ENs do not have to worry about answering network
+!  broadcasts, it puts any contacted CP LU in its directory
+!  database, so it could find the NN when it did an Allocate
+!  call.  Of course, the NN then used the existing session to do
+!  its Allocate call.
+!
+D0008
+!0008
+!
+!Directory Entry Cannot Be Deleted.  An APPN network node received
+!an APPN Delete request with a delete entry condition indicating
+!that the entry can be deleted only if it has no subordinate
+!entries.  Since the entry does have subordinate entries, the
+!Delete is rejected.
+!
+D000C
+!000C
+!
+!Conflicting Entry Type on Delete.  The APPN Delete request
+!attempted to delete a home entry.  For example, one defined at
+!the receiver by its own network operator facility (NOF).
+!
+!
+C0846
+!08460000  ERP Message Forthcoming
+!
+!Explanation:  The received request was rejected for a reason to
+!be specified in a forthcoming request.
+!
+!
+C084B
+!084Bxxxx  Requested Resources Not Available
+!
+!Explanation:  Resources named in the request, and required to
+!honor it, are not currently available.  It is not known when the
+!resources will be made available.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D6031
+!6031
+!
+!Transaction Program Not Available--Retry Allowed.  The Attach
+!request (FMH-5) -- sent because of an Allocate by the local
+!program -- specifies a transaction program that the receiver is
+!unable to start.  Either the program is not authorized to run or
+!the resources to run it are not available now.  The condition is
+!temporary.  The sender is responsible for subsequent retry.  This
+!sense data is sent only in FMH-7.
+!
+!The partner LU rejected the incoming Attach because it could not
+!start the specified program immediately.
+!
+!If the partner LU is associated with the APPC Attach Manager in
+!the OS/2 Communications Manager, some possible causes of this
+!sense data are:
+!
+! - The Attach Manager associated with the partner LU is stopped.
+!
+! - The incoming_allocate_timeout defined in the TP definition at
+!  the partner LU is zero or is too short.  This only applies if
+!  the partner TP is configured as Queued.
+!
+! - The incoming_allocate_queue_depth configured in the TP
+!  definition at the partner LU is too small.  This only applies
+!  if the partner TP is configured as Queued.
+!
+! - At the remote location, the incoming Attach was queued,
+!  waiting to be processed.  The intended program was remotely
+!  started, but ended before it could process the queued incoming
+!  Attach.
+!
+!Programmer Response:  Retry the allocation request.  However, to
+!avoid congesting the network with attempted allocation requests,
+!your local program should pause or wait for a keystroke before
+!retrying the conversation.
+!
+!Operator Response:  Start the APPC Attach Manager, increase the
+!incoming_allocate_timeout, increase the
+!incoming_allocate_queue_depth in the configuration at the remote
+!location, if appropriate.
+!
+!At the remote location, the remote program may have ended before
+!issuing an Accept_Conversation (CMACCP) call (or equivalent) to
+!receive the queued Attach.  If this action is unexpected, check
+!the following conditions in the remote location:
+!
+! - The remote program might be failing to issue the
+!  Accept_Conversation (CMACCP) calls correctly.
+!
+! - The remote program might be issuing Accept_Conversation
+!  (CMACCP) calls with an incorrect tp_name.
+!
+! - The filespec field configured at the remote location could be
+!  incorrect.
+!
+!If the remote location is using the OS/2 Communications Manager,
+!look at its error log.  Find an error log of type 0020; its
+!subtype indicates why this Attach was rejected.
+!
+!
+C084C
+!084C0000  Transaction Program Not Available--No Retry
+!
+!Explanation:  The partner LU rejected the incoming Attach because
+!it could not start the specified program.  Receiver cannot act on
+!the request because resources required to honor the request are
+!permanently unavailable.  The sender should not retry immediately
+!because the situation is not transient.
+!
+!For LU 6.2, an Attach request (FMH-5) -- sent because of an
+!Allocate by the local program -- specifies a transaction program
+!that the receiver is unable to start.  The condition is not
+!temporary. The sender should not retry immediately.  This sense
+!data is sent only in FMH-7.
+!
+!Examples:
+!
+! - The intended program does not exist at the remote location.
+!
+! - If the remote location is using the OS/2 Communications
+!  Manager, its TP definition may be configured with the wrong
+!  filespec parameter, or the filespec for the TP may be spelled
+!  wrong.
+!
+! - The operating system or communications subsystem at the remote
+!  location has exhausted its available resources and is unable
+!  to start the remotely attachable program.
+!
+!  If the remote location is using the OS/2 Communications
+!  Manager, the APPC Attach Manager at the remote location may
+!  have failed to start the program because of an OS/2 error on
+!  its internal DosExecPgm or DosStartSession function call.  Any
+!  of the non-zero OS/2 return codes from these function calls
+!  may cause this situation.  For example, the remote location is
+!  running OS/2 Communications Manager and the remotely
+!  attachable program is attach-manager-started.  If there is
+!  insufficient memory for the Attach Manager to start the
+!  program, the incoming Attach will be rejected with this sense
+!  data.  This could similarly occur if the remote location has
+!  used all of its processes or screen groups.
+!
+!Programmer Response:  Do not retry the allocation request.
+!
+!Operator Response:  Ensure that the intended program is defined
+!correctly at the remote location, and that it is compiled and
+!linked correctly for its operating system.  If the remote
+!location is using the OS/2 Communications Manager, look at its
+!error log for more information.
+!
+!
+C0850
+!08500001  Link Activation Limit Reached
+!
+!Explanation:  The specified TG was not activated because the
+!maximum number of active link stations allowed on this port has
+!already been reached.  For example, this can be caused when no
+!ports are available for a connection network.
+!
+!
+C0852
+!08520001  Duplicate Session Activation Request
+!
+!Explanation:  A second BIND request has been received from a
+!peripheral node PLU while the session was still in the activation
+!process.
+!
+!
+C0857
+!0857xxxx  SSCP-LU Session Not Active
+!
+!Explanation:  The SSCP-LU session, required for the processing of
+!a request, is not active; for example, in processing REQECHO, the
+!SSCP did not have an active session with the target LU named in
+!the REQECHO RU.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information. Settings allowed are:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The SSCP-SLU session is in the process of being reactivated.
+!
+D0002
+!0002
+!
+!The SSCP-PLU session is inactive.
+!
+D0003
+!0003
+!
+!The SSCP-SLU session is inactive.  If this sense data is received
+!from VM/VTAM, it indicates that the LU is inactive.  If it is
+!received from APPC/VM LUs, it means that the gateway is inactive.
+!
+!This sense data is returned when AVS is not running on VM.
+!Restarting AVS will generally correct this problem.
+!
+D0004
+!0004
+!
+!The SSCP-PLU session is in the process of being reactivated.
+!
+D0005
+!0005
+!
+!The SSCP lost connectivity with the primary logical unit (PLU)
+!after the LU-LU session was started, and has no other way to
+!learn that the session has ended; the SSCP either never had a
+!session to a gateway node in the LU-LU session path, or had
+!previously lost connectivity to it.
+!
+D0006
+!0006
+!
+!The SSCP lost connectivity with the secondary logical unit (SLU)
+!after the LU-LU session was started, and has no other way to
+!learn that the session has ended; the SSCP either never had a
+!session to a gateway node in the LU-LU session path, or had
+!previously lost connectivity to it.
+!
+D0007
+!0007
+!
+!The selected ALS for the OLU is not in a state permitting LU-LU
+!sessions to be set up using it.  The condition is detected when
+!the session request (BFINIT) was received, but, when the request
+!was processed, the ALS was no longer in an active state.  The
+!session request is rejected.
+!
+D0008
+!0008
+!
+!The selected ALS for the DLU is not in a state permitting LU-LU
+!sessions to be set up using it.  The condition is detected when
+!the session request was being processed in the DLU domain and the
+!ALS selected for the DLU is no longer in an active state.  The
+!session request is rejected.
+!
+!
+C0860
+!0860xxxx  Function Not Supported--Continue Session
+!
+!Explanation:  The function requested is not supported; the
+!function may have been specified by a request code or some other
+!field, control character, or graphic character in an RU.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information. Settings allowed are:
+!
+Dnnnn
+!nnnn
+!
+!Bytes 2 and 3 contain a 2-byte binary count that indexes (0-
+!origin) the first byte in which an error was detected.  This
+!sense data is used to request that the session continue, thereby
+!ignoring the error.
+!
+!
+C0861
+!0861xxxx  Invalid COS Name
+!
+!Explanation:  The class-of-service (COS) name, either specified
+!by the independent LU (ILU) or generated by the SSCP of the
+!secondary LU (SLU) from the mode table is not in the "COS name to
+!VR identifier list" table used by the SSCP of the primary LU
+!(PLU).
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information. Settings allowed are:
+!
+D0000
+!0000
+!
+!The class-of-service (COS) name was generated by the SSCP.
+!
+D0001
+!0001
+!
+!The class-of-service (COS) name was generated by the independent
+!LU (ILU).
+!
+D0002
+!0002
+!
+!The class-of-service (COS) name generated by the Type 2.1 control
+!point (CP) local to, or the Type 2.1 NNCP server for, the
+!initiating logical unit is not in the class-of-service name
+!definition table.
+!
+!For example, this sense data occurs when VTAM sends a BIND
+!request with a COS name that is not defined in an APPN network
+!node on the route.
+!
+D0003
+!0003
+!
+!The CD-Initiate (CDINIT) request or response contains a Session
+!Initiation control vector that has class-of-service (COS) name
+!fields that have not been properly specified.
+!
+!
+C0864
+!0864xxxx  Function Terminated
+!
+!Explanation:  The conversation was terminated abnormally.  Other
+!terminations may occur after repeated executions; the request
+!sender is responsible to detect such a loop.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information.
+!
+D0000
+!0000
+!
+!Premature Conversation Termination.  An active conversation was
+!terminated abnormally.  This sense data is sent only in FMH-7 or
+!UNBIND. The partner program may have issued a Deallocate
+!type(ABEND) call, or the partner program may have terminated
+!(normally or abnormally) without explicitly terminating the
+!conversation.
+!
+!If the partner program is running on OS/2, this sense data would
+!be seen locally if the partner program ended unexpectedly because
+!of a protection fault.
+!
+!On the AS/400, this sense data can be caused by the absence of a
+!valid routing entry in a subsystem.  If no specific subsystem
+!device or remote location name has been entered, check to see if
+!the subsystem QCMN is active.  If QCMN is active, be sure the
+!routing entry for APPC programs (PGMEVOKE) is present in the
+!subsystem.  If a subsystem other than QCMN is being used and a
+!specific communications entry or remote location name entry is
+!being used, be sure a routing entry with PGMEVOKE is specified in
+!the same subsystem.  In both cases, the fix is to add a routing
+!entry in a subsystem.
+!
+!When a routing entry is not available on the AS/400, this sense
+!data is written to QSYSOPR.  There may be a job log produced, but
+!it will not have any program information or CL statements
+!printed.
+!
+D0001
+!0001
+!
+!System Logic Error--No Retry.  A system logic error has been
+!detected.  No retry of the conversation should be attempted.
+!This sense data is sent only in FMH-7 or UNBIND.
+!
+D0002
+!0002
+!
+!Excessive Elapsed Time--No Retry.  Excessive time has elapsed
+!while waiting for a required action or event.  For example, a
+!transaction program has failed to issue a conversation-related
+!protocol boundary verb.  No retry of the conversation should be
+!attempted.  This sense data is sent in UNBIND when there is no
+!chain to respond to; otherwise, it is sent in FMH-7.
+!
+!
+C086C
+!086Cxxxx  Required Control Vector or Subvector Missing
+!
+!Explanation:  One or more control vectors or management services
+!(MS) subvectors that are required by the receiver to perform some
+!function are missing from the received messages, or are not
+!present in the required position.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+Dxx00
+!xx00
+!
+!Byte 2 following the sense code contains the key (xx) of one of
+!the control vectors or subvectors that is missing, or improperly
+!positioned. Byte 3 is reserved (00).
+!
+!See the X'080C0006' sense data for the condition in which the
+!major vector key is recognized, but a subvector representing the
+!function to be performed cannot be identified.
+!
+!
+C086D
+!086Dxxxx  Required Subfield Missing
+!
+!Explanation:  A control vector or management services (MS)
+!subvector lacks one or more subfield keys that are required by
+!the receiver to perform the function requested.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+Dxxyy
+!xxyy
+!
+!Byte 2 following the sense code contains the subvector key (xx)
+!of the subvector lacking a required subfield, and byte 3 contains
+!the subfield key (yy) of a missing subfield.
+!
+!
+C086F
+!086Fxxxx  Length Error
+!
+!Explanation:  A length field within an management services (MS)
+!major vector structure is invalid, or two or more length fields
+!are incompatible.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!Control vector length field is invalid or control vector fields
+!are incompatible.
+!
+D0002
+!0002
+!
+!The sum of the management services (MS) subvector lengths is
+!incompatible with the MS major vector length.
+!
+Dxx05
+!xx05
+!
+!Management services (MS) subvector length invalid.  Byte 2
+!following the sense code contains the relevant subvector key
+!(xx).  (This is specified only if the sum of the subvector
+!lengths is compatible with the major vector length.)
+!
+Dxx06
+!xx06
+!
+!Subfield length invalid.  Byte 2 following the sense code
+!contains the subvector key (xx) of the management services (MS)
+!subvector containing the invalid subfield length.  (This is
+!specified only if the sum of the subfield lengths is compatible
+!with the subvector length.)
+!
+D0007
+!0007
+!
+!Invalid or Incompatible length fields in an MDS_MU.  The length
+!field of an MDS_MU is incompatible with the sum of the lengths of
+!the imbedded generalized data stream (GDS) variables, or one of
+!the imbedded GDS variables has a length field with a value of
+!less than 4.
+!
+!
+C0870
+!0870xxyy  Unformatted Subvector Value Invalid
+!
+!Explanation:  A value in an unformatted management services (MS)
+!subvector, or in an unformatted portion of a partially formatted
+!MS subvector, is invalid.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+Dxxyy
+!xxyy
+!
+!Byte 2 following the sense code contains the subvector key (xx)
+!of the management services (MS) subvector containing the invalid
+!value.  Byte 3 contains a one-byte binary count that index the
+!first byte which the invalid value falls.
+!
+!
+C0876
+!0876xxxx  Nonreversible Explicit Route Requested
+!
+!Explanation:  The explicit route number (ERN) used by the NC-
+!ACTVR does not use the same sequence of transmission groups (in
+!reverse order) as the ERN that should be used for the RSP(NC-
+!ACTVR).
+!
+D0001
+!0001
+!
+!Subarea Could Not Locate LU (?)
+!
+!
+C0877
+!0877xxxx  Resource Mismatch
+!
+!Explanation:  The receiver of a request detected a mismatch
+!between two of the following:
+!
+! - The definition of an affected resource
+!
+! - The actual configuration
+!
+! - The definition of the resource as implied in the request.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D002A
+!002A
+!
+!A session cannot be activated because the node does not support
+!segment generation and the maximum link basic transmission unit
+!(BTU) size is too small to satisfy a requirement on the minimum
+!send RU size as defined for the session mode.
+!
+D002B
+!002B
+!
+!A session cannot be activated because the node does not support
+!segment reassembly and the maximum link basic transmission unit
+!(BTU) size is too small to satisfy a requirement on the minimum
+!receive RU size as defined for the session mode.
+!
+D002C
+!002C
+!
+!A BFINIT session request was received from a primary logical unit
+!(PLU) that is not in the same network as this SSCP, or a
+!BFSESSINFO was received reporting a subject LU in another
+!network.  A likely cause is a NETID mismatch with your subarea.
+!
+!
+C087D
+!087Dxxxx  Session Services Path Error
+!
+!Explanation:  A session services request cannot be rerouted along
+!a path of SSCP-SSCP sessions.  This capability is required, for
+!example, to set up a cross-network LU-LU session.
+!
+!Bytes 2 and 3 contain sense-code-specific information that
+!indicates the specific reason for not rerouting the request.
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!VTAM has searched all the SSCPs in the subarea network, but the
+!fully-qualified LU name specified as the destination in the BIND
+!request cannot be found.  The sense data means "routing
+!exhausted", which implies that VTAM looked everywhere it could in
+!the subarea and did not find the LU.  For example, this can occur
+!if the wrong NETID or partner LU name is defined in the local
+!node.  If the destination is more than one hop away, VTAM's
+!adjsscp search will not find it.
+!
+!There are many possible causes, but the most likely are:
+!
+! - The LU name specified in the BIND request is incorrect (in
+!  other words, the LU just doesn't exist in the subarea).
+!
+! - A VTAM adjacent SSCP table is wrong and the SSCP that actually
+!  owns the LU was not searched because it did not appear in the
+!  correct table.
+!
+! - A cross-domain resource management (CDRM) path is down and
+!  that prevented the search from reaching the SSCP that actually
+!  owns the LU.
+!
+! - This sense data is frequently seen when the host is
+!  unavailable for a 3270 emulation session.
+!
+!An SSCP has attempted unsuccessfully to reroute a session
+!services request to its destination via one or more adjacent
+!SSCPs; this value is sent by a gateway SSCP when it has exhausted
+!trial-and-error rerouting.
+!
+!This code is used when SSCP rerouting fails completely.  The
+!remaining codes are used for failures to reroute to a particular
+!SSCP.  For example, they are associated with specific SSCPs when
+!information about a rerouting failure is displayed in the node
+!that was trying to reroute.
+!
+!The sense data is generic, but VTAM typically generates a message
+!with message number 894I or 895I that will contain additional
+!sense data information about the real cause of the problem.
+!
+!
+C0888
+!0888xxxx  Name Conflict
+!
+!Explanation:  A name specified in an RU conflicts with a previous
+!usage, or is unknown, or is known and does not have the required
+!capabilities, or is a duplicate resource for the specified
+!resource type.  When a name conflict is detected, further name
+!checking ceases; multiple name conflicts are not reported or
+!detected.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information.  Settings allowed are:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The specified DLU real network name is known, but identifies a
+!resource that is not LU-LU session capable.
+!
+D0002
+!0002
+!
+!The specified DLU alias network name is known, but identifies a
+!resource that is not LU-LU session capable.
+!
+D0003
+!0003
+!
+!The specified OLU real network name is known, but identifies a
+!resource that is not LU-LU session capable.
+!
+D0004
+!0004
+!
+!The specified OLU alias network name is known, but identifies a
+!resource that is not LU-LU session capable.
+!
+D0005
+!0005
+!
+!Name translation was invalid; that is, a different LU name was
+!returned with the same network ID as the original LU name.
+!
+D0006
+!0006
+!
+!The specified DLU real network name is known, but is a duplicate
+!resource.
+!
+D0007
+!0007
+!
+!The specified DLU alias network name is known, but is a duplicate
+!resource.
+!
+D0008
+!0008
+!
+!The specified OLU real network name is known, but is a duplicate
+!resource.
+!
+D0009
+!0009
+!
+!The specified OLU alias network name is known, but is a duplicate
+!resource.
+!
+D000B
+!000B
+!
+!A cross-network DLU name is defined as a shadow resource, but
+!shadow resources are not supported for cross-network sessions.
+!
+D000C
+!000C
+!
+!Set aside for implementation-specific use, and will not be
+!otherwise defined here.  See implementation documentation for
+!details of usage.
+!
+D000D
+!000D
+!
+!When processing a session initiation RU, an SSCP has found two
+!different resource definitions for the OLU, one with the real OLU
+!name and one with the alias OLU name.
+!
+D000E
+!000E
+!
+!When processing a session initiation RU, an SSCP has found two
+!different resource definitions for the DLU, one with the real DLU
+!name and one with the alias DLU name.
+!
+D000F
+!000F
+!
+!The specified DLU network name is defined as a generic resource.
+!The session should be re-initiated using the name of an LU.
+!
+D0010
+!0010
+!
+!The LU 6.2 partner returned a name in the User Data field of its
+!RSP(BIND) that differs from the name it returned in the User Data
+!field of its RSP(BIND) for a previous BIND request.  Either the
+!partner changed its name or name changes in the network have
+!caused delivery of the latest BIND request to a different
+!partner.
+!
+D0011
+!0011
+!
+!The LU 6.2 partner receiving a BIND request carrying one specific
+!target secondary logical unit (SLU) name returned a name in the
+!User Data field of its RSP(BIND) that is the same as it returned
+!in response to a previous BIND carrying a different target SLU
+!name.  Name changes in the network name allowed two names to
+!resolve to the same LU.
+!
+D0012
+!0012
+!
+!The network qualifier of the name returned in the User Data field
+!of a RSP(BIND) is not equal to the network identifier provided by
+!the application that is using network qualified names.  Name
+!changes in the network have caused alteration of the network
+!identifier.
+!
+!
+C0889
+!0889xxxx  Transaction Program Error
+!
+!Explanation:  The transaction program has detected an error, and
+!issued a Send_Error call.  This sense code is sent only in FMH-7.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!Occurs for either of the following reasons:
+!
+! - Program Error--No Data Truncation.  The transaction program
+!  sending data detected an error but did not truncate a logical
+!  record.
+!
+! - Program Error--Purging.  The transaction program receiving
+!  data detected an error.  All remaining information, if any,
+!  that the receiving program had not yet received, and that the
+!  sending program had sent before being notified of the error,
+!  is discarded.
+!
+D0001
+!0001
+!
+!Program Error--Data Truncation.  The transaction program sending
+!data detected an error and truncated the logical record it was
+!sending.
+!
+D0100
+!0100
+!
+!Occurs for either of the following reasons:
+!
+! - Service Transaction Program Error--No Data Truncation.  The
+!  service transaction program sending data detected an error and
+!  did not truncate a logical record.
+!
+! - Service Transaction Program Error--Purging.  The service
+!  transaction program receiving data detected an error.  All
+!  remaining information, if any, that the receiving service
+!  transaction program had not yet received, and that the sending
+!  service transaction program had sent before being notified of
+!  the error, is discarded.
+!
+D0101
+!0101
+!
+!Service Transaction Program Error--Data Truncation.  The service
+!transaction program sending data detected an error and truncated
+!the logical record it was sending.
+!
+!
+C088B
+!088B0000  BB Not Accepted--BIS Reply Requested
+!
+!Explanation:  Sent in response to a Begin Bracket Request (BB),
+!either an LUSTAT bid or an Attach, to indicate that the receiver
+!has sent a BIS request and wants to terminate the session without
+!processing any more conversations, but without sending an UNBIND.
+!A BIS reply is requested so that the negative response sender may
+!send a normal UNBIND.  This sense data is sent only by logical
+!units (LUs) not supporting CNOS protocols.
+!
+!
+C088C
+!088Cxxyy  Missing Control Vector
+!
+!Explanation:  The RU or XID did not contain a required control
+!vector.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+Dxxyy
+!xxyy
+!
+!Byte 2 contains the key (xx) of the required control vector that
+!is missing.  If more than one control vector is missing, only the
+!first omission is reported.
+!
+D0Eyy
+!0Eyy
+!
+!Network Name (X'0E') control vector of type yy missing. Values
+!for Network name type are:
+!
+!X'F1'
+!
+!     PU name (not network qualified)
+!X'F3'
+!
+!     LU name
+!X'F4'
+!
+!     CP name
+!X'F5'
+!
+!     SSCP name
+!X'F6'
+!
+!     NNCP name
+!X'F7'
+!
+!     link station name (not network qualified)
+!
+D1000
+!1000
+!
+!Product Set ID (X'10') control vector missing.
+!
+D3200
+!3200
+!
+!Short-hold mode (X'32') control vector missing.
+!
+!
+C088F
+!088F0000  XRF Procedure Error
+!
+!Explanation:  A request was received for an XRF-active or XRF-
+!backup session and was not acted on.
+!
+!
+C0890
+!0890xxxx  Search Failure
+!
+!Explanation:  An error occurred while performing an APPN
+!directory search for a resource.
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0010
+!0010
+!
+!Routing Error during a Directed Search.  A Locate generalized
+!data stream (GDS) variable for a directed search was received by
+!an intermediate NNCP and could not be successfully routed to the
+!destination control point.
+!
+D0020
+!0020
+!
+!Resource Not Found during a Directed Search.  A Locate
+!generalized data stream (GDS) variable for a directed search was
+!received by the named destination control point (CP) and the
+!search argument resource is not a local resource.
+!
+D0022
+!0022
+!
+!Destination of search not served by this control point (CP).
+!
+D0024
+!0024
+!
+!A search request or BIND request was received from an
+!unauthorized end node identifying an origin LU not represented in
+!the APPN network node server's directory, and thus could not be
+!authenticated.
+!
+D0028
+!0028
+!
+!Resource Not Found, Broadcast Required.  The resource was not
+!found on a directed Locate search, and a restricted broadcast was
+!executed at the destination and failed; a broadcast should be
+!tried.
+!
+D0030
+!0030
+!
+!Resource Deleted, No Broadcast Required.  A Locate generalized
+!data stream (GDS) variable for a directed search was received by
+!the named destination control point (CP) and the search argument
+!resource was deleted.
+!
+D0038
+!0038
+!
+!Too Many Directed Search Subprocedures.  A Locate search exceeded
+!the maximum height of the search tree; too many directed search
+!subprocedures were tried; no retry.
+!
+D0040
+!0040
+!
+!Resource Not Found during a Broadcast Search.  A Locate
+!generalized data stream (GDS) variable for a broadcast search was
+!received by a control point (CP) that does not provide network
+!services for the search argument resource and neither do any of
+!the CPs searched in its broadcast subtree.  This condition is
+!detected by crossing search requests (a CP sends and receives a
+!search request with the same FQPCID and the same search argument
+!resource) or by a local search failure and all CPs in the
+!broadcast subtree returning this sense data.
+!
+D0048
+!0048
+!
+!Neutral Reply Received from an APPN end node.  A Locate reply
+!with no Found and no Extended Sense Data (X'35') control vector
+!was received from an APPN end node.
+!
+D0050
+!0050
+!
+!Quiesced CP.  A control point (CP) in the broadcast search tree
+!is in a quiescent state and, therefore, not receiving Locate
+!generalized data stream (GDS) variables.  This condition is
+!detected when a CP in the search subtree is quiesced and no other
+!CP in the subtree found the requested resource.
+!
+D0060
+!0060
+!
+!Storage Not Available.  A control point (CP) in the broadcast
+!search tree does not have sufficient storage to participate in
+!the search and no other CP in the search subtree found the
+!requested resource.
+!
+D0070
+!0070
+!
+!Session Outage.  A control point (CP) in the search tree has lost
+!its CP-CP session with a CP that had been sent a Locate
+!generalized data stream (GDS) variable and no reply had been
+!received.
+!
+D0080
+!0080
+!
+!Duplicate Fully-Qualified PCID.  A control point (CP) in the
+!search tree detected a duplicate fully-qualified PCID for a
+!different session request from the session request that first
+!used the fully-qualified PCID.
+!
+!
+C0891
+!0891xxxx  Invalid or Missing Invalid Network ID (NETID)
+!
+!Explanation:  The SNA Network ID (NETID) is invalid or missing.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!PLU NETID Invalid:  The NETID of the primary logical unit (PLU)
+!is not the same as that of the SSCP(PLU).
+!
+D0002
+!0002
+!
+!Invalid NETID:  The NETID field in CONNOUT does not match the
+!NETID defined in the link station receiving the CONNOUT.
+!
+D0003
+!0003
+!
+!Invalid NETID:  The NETID field in the Request Network Address
+!Assignment (RNAA) request unit is not the same as the native
+!NETID. There is a mismatch between the system definitions of the
+!SSCP and the type 4 node.
+!
+D0004
+!0004
+!
+!Invalid Network ID (NETID) in the Network Name (X'0E', CP name)
+!control vector.  This sense data indicates that the Network Name
+!control vector appended to the received XID3 does not contain a
+!valid NETID. The NETID, preceding the control point (CP) name,
+!must be from 1 to 8 bytes in length.  This sense data may also
+!indicate that the NETID has a valid length, but that the NETID is
+!invalid for some other reason.  For example, two adjacent APPN
+!network nodes should not be configured with different NETIDs.
+!
+!Note:  When using the OS/2 Communications Manager, the NETID is
+!also refered to as the "network name".
+!
+D0005
+!0005
+!
+!Invalid control point (CP) name in the Network Name (X'0E', CP
+!name) control vector.
+!
+!
+C0895
+!0895xxxx  Control Vector Error
+!
+!Explanation:  The RU or XID contained a control vector that was
+!in error.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+Dxxyy
+!xxyy
+!
+!The control vector with key xx at byte yy in XID3 is in error.
+!Byte 2 (xx) contains the key of the control vector first detected
+!in error.  If more than one control vector is in error, only the
+!first erroneous one is reported.  Byte 3 (yy) of the sense-code-
+!specific data contains the (0-origin) byte offset of the error
+!within the control vector.
+!
+!
+C0897
+!0897xxxx  System Definition Mismatch
+!
+!Explanation:  The requested function is not supported by the
+!receiver, or there is a mismatch between the sending and
+!receiving system definitions.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D000A
+!000A
+!
+!The PU of an independent primary LU named in BFINIT does not have
+!the same element address as the one in the adjacent link station
+!(ALS) field of BFINIT.  For example, when VTAM saw the BIND
+!request (that is, NCP packaged it into a BFINIT), the PU2 element
+!address that NCP told VTAM that the resource was located under
+!was not found by VTAM.  This could be a timing condition where
+!the NCP has been taken down and reactivated.
+!
+!This condition is referred to as "non-adjacent CP-CP sessions".
+!Many APPN implementations are dependent on the partner CP being
+!adjacent.  The requirement stems from CP-CP session activation
+!having XID exchange dependencies.  In order to support the
+!proposed configuration, the local node would need to provide new
+!function to support non-adjacent CP-CP sessions.
+!
+D000D
+!000D
+!
+!Resource type not defined in receiver.
+!
+D0011
+!0011
+!
+!APPN end node does not support locate.  CP-CP sessions are being
+!unbound because the adjacent node indicated that it does support
+!CP-CP sessions but does not support receipt of LOCATE/CDINIT
+!search requests.
+!
+D0015
+!0015
+!
+!The origin LU (OLU) is represented using a dynamically defined
+!resource, but the adjacent link station (ALS) selected to provide
+!its services does not permit dynamic definitions.  The condition
+!is detected when a session initiation request is received for an
+!independent LU and no predefinition is found for the OLU
+!resource.  The session initiation is rejected.
+!
+!For example, this can occur when VTAM receives a session request
+!from a workstation (such as the OS/2 Communications Manager), but
+!the LU name of the originating LU (that is, your workstation) was
+!not predefined to VTAM --and-- the DYNLU parameter in VTAM
+!specified that VTAM was not allowed to dynamically define the
+!resource for you.  If you want to use dynamic definition in VTAM,
+!you need to get your VTAM system programmer to permit this.
+!
+!
+C0898
+!0898xxxx  Session Reset:  The XRF Session is Being Reset
+!
+!Explanation:  The Extended Recovery Facility (XRF) session is
+!being reset.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The XRF-active session has been reset because the XRF-backup
+!primary LU (PLU) forced a takeover.
+!
+D0002
+!0002
+!
+!XRF-backup Hierarchical Reset:  The identified XRF-active LU-LU
+!session is being deactivated because the related XRF-active
+!session terminated normally.  The LU sending this sense data is
+!resetting its half-session before receiving the response from the
+!partner LU.  (See UNBIND type X'12'.)
+!
+D0003
+!0003
+!
+!XRF-active Hierarchical Reset:  The identified XRF-active LU-LU
+!session is being deactivated because the related XRF-backup
+!session performed a forced takeover of this session (via SWITCH).
+!The LU sending this sense data is resetting its half-session
+!before receiving the response from the partner LU.  (See UNBIND
+!type X'13'.)
+!
+!
+C08A0
+!08A0xxxx  Session Reset
+!
+!Explanation:  An LU or PU is resetting an LU-LU session.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The LU is sending an UNBIND type X'0A' (SSCP gone); the
+!identified LU-LU session had to be deactivated because of a
+!forced deactivation of the associated SSCP-PU or SSCP-LU session,
+!for example, because of a DACTPU, DACTLU, or DISCONTACT.
+!
+D0002
+!0002
+!
+!The LU or SCM is sending UNBIND type X'0F' (cleanup).
+!
+D0003
+!0003
+!
+!The gateway node is sending UNBIND type X'11' (gateway node
+!cleanup); a gateway node is cleaning up the session because a
+!gateway SSCP has directed the gateway node (via NOTIFY) to
+!deactivate the session, for example, a session setup error or
+!session takedown failure had occurred.
+!
+D0004
+!0004
+!
+!Reversed FRSN values.  The control point (CP) is sending an
+!UNBIND type X'0F' (cleanup); the value in the Last FRSN Sent
+!field is greater than the value in the Current FRSN field.  (no
+!retry)
+!
+D0005
+!0005
+!
+!Topology Database Update (TDU) sent out of order.  The control
+!point (CP) is sending an UNBIND type X'0F' (cleanup); the value
+!in the Last FRSN Sent field of the current TDU generalized data
+!stream (GDS) variable is not equal to the value of the Current
+!FRSN field in the TDU generalized data stream (GDS) variable that
+!immediately preceded it.  (no retry)
+!
+D0006
+!0006
+!
+!Invalid FRSN Value.  In CP Capabilities, the adjacent node
+!indicated receipt of a Topology Database Update (TDU) with a FRSN
+!value greater than the last one sent.
+!
+!
+C08A8
+!08A8xxxx  Multiple-Domain Support Routing Exception
+!
+!Explanation:  The MDS router in the reporting network addressable
+!unit (NAU) is unable to perform the required routing for an
+!MDS_MU.
+!
+!When this SNA report code is used in an SNA condition report
+!(X'1532') generalized data stream (GDS) variable, the destination
+!NAU name is included in the Reported on Location Name (X'09')
+!subvector and the destination management services (MS)
+!application name is included in the Reported On Agent (X'04')
+!subvector of the condition report.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!Destination NAU name unknown.  Directory services could not
+!locate the requested destination name.
+!
+D0002
+!0002
+!
+!Directory services unavailable.  No routing possible.
+!
+D0003
+!0003
+!
+!Management services (MS) application name not recognized.
+!
+D0004
+!0004
+!
+!Use of the CPSVCMG session not permitted.  The reporting APPN
+!network node has received an MDS_MU over a CPSVCMG session from
+!another network node.  These sessions are used for MDS_MUs only
+!between an APPN network node and its served APPN end nodes.
+!
+D0005
+!0005
+!
+!Function not supported by EN destination.  The APPN end node
+!destination does not support receipt of management services (MS)
+!messages (reported by the serving APPN network node).
+!
+D0006
+!0006
+!
+!Function not supported by APPN network node destination.  The
+!APPN network node destination does not support receipt of
+!management services (MS) messages other than MS Capabilities and
+!Alert (reported by the APPN network node performing routing).
+!
+D0007
+!0007
+!
+!Function not supported by serving APPN network node.  The serving
+!network node of the APPN end node destination does not support
+!routing of management services (MS) messages (reported by the
+!APPN network node performing routing).
+!
+D0008
+!0008
+!
+!Function not supported by EN.  The reporting APPN end node has
+!received an MDS_MU with a destination other than itself.
+!
+D0009
+!0009
+!
+!Destination not supported by reporting APPN network node.  An
+!APPN network node has received an MDS_MU from another network
+!node that cannot be routed.  The destination is not the reporting
+!network node itself nor is it one of the served APPN end nodes.
+!
+!If the MDS_MU was routed based on unverified directory
+!information (as indicated by the Routing verification indicator
+!in the MDS Routing Information), the MDS_MU will be returned to
+!the routing APPN network node along with the SNA condition
+!report.
+!
+D000A
+!000A
+!
+!Unrecoverable session failure.  The MDS_SEND TP in the reporting
+!node was unable to send the message because of an allocation
+!error.  Retries have been exhausted.
+!
+D000B
+!000B
+!
+!Unrecoverable TP failure in remote node.  The MDS_SEND TP in the
+!reporting node was unable to send the message because of a TP
+!failure in a remote node.  Retries have been exhausted.
+!
+D000C
+!000C
+!
+!Management services (MS) Application failure.  The MDS router in
+!the destination network addressable unit (NAU) is unable to
+!communicate with the destination management services (MS)
+!application program.
+!
+D000D
+!000D
+!
+!Unrecoverable transaction program (TP) failure in reporting node.
+!The MDS router in the reporting node was unable to send the
+!message because of a local TP failure.
+!
+D000E
+!000E
+!
+!Correlation error.  An MDS_MU has been received that is not the
+!first for a unit of work (First MDS Message indicator in the MDS
+!Routing Information Message is OFF), but the unit of work
+!correlator is unknown (does not match any active MDS
+!transaction).
+!
+D000F
+!000F
+!
+!Management services (MS) application congestion.  The MDS router
+!in the destination NAU is unable to communicate with the
+!destination management services (MS) application because of local
+!congestion (implementation buffer space for queuing additional
+!MDS_MUs has been exhausted).
+!
+!
+C08A9
+!08A9xxxx  Multiple-Domain Support Transaction Failure
+!
+!Explanation:  The reporting MDS router or management services
+!(MS) application has detected a condition that has impacted an
+!outstanding unit of work (identified by the unit-of-work
+!correlator of the MDS Error message) or MDS_MU.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!Failure caused by outage of a CPSVCMG session.
+!
+D0002
+!0002
+!
+!Failure caused by outage of an SNASVCMG session.  All retries
+!have been exhausted.
+!
+D0003
+!0003
+!
+!Unit of work canceled by reporting management services (MS)
+!application program.  The unit of work was canceled because of a
+!timeout in the reporting management services (MS) application
+!program.
+!
+D0004
+!0004
+!
+!Unit of work canceled by reporting MDS Router.  The unit of work
+!was canceled by a garbage-collection timeout in the reporting MDS
+!router.
+!
+D0005
+!0005
+!
+!MDS router internal failure.  The unit of work was canceled
+!because of an internal failure in the reporting MDS router.
+!
+D0006
+!0006
+!
+!MS Application internal error.  The unit of work has been
+!canceled either because the reporting MS application program was
+!terminated or because another application program served by it
+!was terminated.  The type of program termination (normal or
+!abnormal) is not indicated.
+!
+D0007
+!0007
+!
+!MS Application router re-initialization.  The unit of work has
+!been canceled by the reporting MDS router because of a
+!reinitialization of the application-level router.
+!
+!
+C08AA
+!08AAxxxx  Required GDS Variable Missing
+!
+!Explanation:  The management services (MS) MDS_MU is missing a
+!required generalized data stream (GDS) variable.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+Dxxxx
+!xxxx
+!
+!Bytes 2 and 3 following the sense code contain the ID of the
+!missing GDS variable.
+!
+!
+C08B4
+!08B40000  CP-CP Sessions Not Required
+!
+!Explanation:  This sense data is sent from one APPN control point
+!to another to deactivate CP-CP session between them, because the
+!sender does not currently need CP-CP sessions, and the TG
+!carrying the sessions is a limited resource.
+!
+!This sense data is carried within the control vector (CV) X'35'
+!portion of the UNBIND request (type X'01').
+!
+!
+C08B5
+!08B50000  Network Node Server Not Required
+!
+!Explanation:  This sense data is sent by an APPN end node control
+!point (1) to deactivate CP-CP sessions with the NNCP, or (2) to
+!reject a CP-CP session BIND request from the NNCP.  The APPN end
+!node no longer requires APPN network node services from the
+!receiver.
+!
+!This sense data is carried within the control vector (CV) X'35'
+!portion of the UNBIND request (type X'01') for case (1) above, or
+!on an UNBIND request (type X'FE') for case (2).
+!
+!
+C08B6
+!08B60000  CP-CP Sessions Not Supported
+!
+!Explanation:  This sense data is sent by an APPN network node
+!control point to reject a CP-CP session BIND from another APPN
+!control point; support for CP-CP sessions on that TG was removed
+!since the time when the TG was first activated.
+!
+!This sense data is carried within the control vector (CV) X'35'
+!portion of the UNBIND request (type X'01').
+!X'10' Request Error
+!
+!This category indicates that the RU was delivered to the intended
+!network addressable unit (NAU) component, but could not be
+!interpreted or processed.  This condition represents a mismatch
+!of NAU Capabilities.
+!
+!
+C1001
+!1001xxxx  RU Data Error
+!
+!Explanation:  Data in the request RU is not acceptable to the
+!receiving component.  For example, a character code is not in the
+!set supported, a formatted data field is not acceptable to
+!presentation services, or a value specified in the length field
+!(LL) of a structured field is invalid.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0003
+!0003
+!
+!Isolated Pacing Message (IPM) Format Error.  An incorrectly
+!formatted IPM was received.
+!
+D0024
+!0024
+!
+!A BIND request was received that was not for LU 6.2 and not in
+!extended format.  The BIND request is rejected.
+!
+D0025
+!0025
+!
+!Unable to Extend BIND Request.  An attempt made to add control
+!vectors to a BIND request would have exceeded the maximum BIND
+!length.  The BIND is rejected.
+!
+!
+C1002
+!1002xxxx  RU Length Error
+!
+!Explanation:  The request RU was too long or too short.
+!
+D0000
+!0000
+!
+!Indicates that no specific code applies.
+!
+!
+C1003
+!1003xxxx  Function Not Supported
+!
+!Explanation:  The function requested is not supported.  The
+!function may have been specified by a formatted request code, a
+!field in an RU, or a control character.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D000D
+!000D
+!
+!The function identified in the request is not supported by the
+!processing application transaction program.
+!
+D0014
+!0014
+!
+!Cryptography is not supported, but a non-zero length was
+!specified for the cryptography key.
+!
+D0021
+!0021
+!
+!Mismatch between the session initiation request type and the LU
+!type (independent or dependent).
+!
+!This can occur if a local LU (defined as an independent LU)
+!attempts to connect to a partner LU that is incorrectly defined
+!as a dependent LU in the subarea node.  There are other causes,
+!but in every case, the cause involves a "session initiation type
+!mismatch".  Your LU used dependent LU session initiation
+!protocols (ACTLU, INIT_SELF) and the partner was expecting
+!independent LU protocols, or your LU used independent LU session
+!initiation protocols (BIND) and the partner expected dependent LU
+!protocols.
+!
+!For example, using CPI-C and the OS/2 Communications Manager,
+!your program may choose to use a dependent local LU, instead of
+!the default LU (which is the CP LU, an independent LU).  To use
+!an alternate local LU, set the "APPCLLU" environment variable to
+!the name of the local LU before starting the CPI-C program.
+!
+D0022
+!0022
+!
+!BIND Received by an APPN end node which is not destination.  A
+!BIND was received which contained an Route Selection control
+!vector (RSCV) specifying a destination other than this node.  As
+!this node is configured as an APPN end node, the BIND is
+!rejected.
+!
+!
+C1005
+!10050000  Parameter Error
+!
+!Explanation:  A parameter modifying a control function is
+!invalid, or outside the range allowed by the receiver.
+!
+!
+C1007
+!10070000  Category Not Supported
+!
+!Explanation:  DFC, SC, NC, or FMD request was received by a half-
+!session not supporting any requests in that category; or an NS
+!request byte 0 was not set to a defined value, or byte 1 was not
+!set to an NS category supported by the receiver.
+!
+!
+C1008
+!1008xxxx  Invalid FM Header
+!
+!Explanation:  The FM header was not understood or translatable by
+!the receiver, or an FM header was expected but not present.  For
+!LU 6.2, this sense code is sent in FMH-7 or UNBIND.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D200E
+!200E
+!
+!Invalid Concatenation Indicator.  The concatenation indicator is
+!on, but concatenation is not allowed.
+!
+D201D
+!201D
+!
+!FM Header and Associated Data Mismatch.  The FM header indicated
+!associated data would or would not follow (for example, FM header
+!7 followed by log data, or FM header 5 followed by program
+!initialization parameters), but this indication was in error; or
+!a previously received RU (for example, -RSP(X'0846')) implied
+!that an FM header would follow, but none was received.
+!
+D4001
+!4001
+!
+!Invalid FM Header Type for this LU.  The type of the FM header is
+!other than 5, 7, or 12.
+!
+D6000
+!6000
+!
+!FM Header Length Not Correct.  The value in the FM header Length
+!field differs from the sum of the lengths of the subfields of the
+!FM header.
+!
+D6005
+!6005
+!
+!Access Security Information Length Field Not Correct.  The value
+!in the Access Security Information Length field differs from the
+!sum of the lengths of the Access Security Information subfields.
+!
+D6009
+!6009
+!
+!Invalid Parameter Length.  The field that specifies the length of
+!fixed-length parameters has an invalid setting.
+!
+D600B
+!600B
+!
+!Unrecognized FM Header Command Code.  The partner LU received an
+!FM header command code that it does not recognize.  For LU 6.2,
+!this sense data is sent only in FMH-7.
+!
+D6011
+!6011
+!
+!Invalid Logical Unit of Work (LUW).  The LUW Length field (in a
+!Compare States generalized data stream (GDS) variable or an FMH-
+!5) is incorrect, or the length field is invalid, or an LUW ID is
+!not present but is required by the setting of the synchronization
+!level field.
+!
+D6021
+!6021
+!
+!Transaction Program Name Not Recognized.  The Attach request (FMH-
+!5) -- sent because of an Allocate by the local program --
+!specifies a transaction program name that the receiver does not
+!recognize.  This sense data is sent only in FMH-7.
+!
+!The partner LU rejected the incoming Attach because the local
+!transaction program specified a TP name that the partner LU does
+!not recognize.
+!
+!This sense data can also indicate that the partner LU recognized
+!the TP name, but could not start the program.  One reason for
+!this may be authorization problems.  Some implementations of APPC
+!(such as VM) check that three things match up:  LU name, mode
+!name, and TP name.  These computers check the incoming user_id
+!and password of each specific TP, and reject the Attach with this
+!sense data if your program is not authorized to start the
+!corresponding program on the remote computer.
+!
+!Examples:
+!
+! - If the remote location is using the OS/2 Communications
+!  Manager, its TP definition may have the TP name spelled wrong
+!  or be using the wrong combination of uppercase and lowercase
+!  characters.  The TP name configured at the remote location
+!  must exactly match the tp_name specified on the Allocate call
+!  in your local program.
+!
+!  The TP name field in the TP definition is one of the few APPC
+!  configuration fields that is case-sensitive.  Be sure that the
+!  combination of uppercase and lowercase letters matches those
+!  specified in the program.
+!
+! - If the remote location is running the VM operating system,
+!  this sense data will be received if the remote VM AVS is not
+!  authorized via the *IDENT control statements in VM to send
+!  information to the TP Program.  This sense data is saying that
+!  there is no way to get to the TP Program on VM from the local
+!  node.
+!
+!Programmer Response:  Check the validity of the TP name, and the
+!designated partner LU and mode names.
+!
+!Operator Response:  On the remote computer, check the list of TP
+!names to be recognized.  Ensure that they match the values
+!supplied for the tp_name values on the Allocate call in the local
+!computer.
+!
+!If this checks out (that is, the partner TP is correctly defined
+!on the remote computer), make sure the remote TP is properly
+!authorized for the user_id and password sent on the Attach.
+!
+D6031
+!6031
+!
+!PIP Not Allowed.  The Attach request (FMH-5) -- sent because of
+!an Allocate by the local program -- specifies program
+!initialization parameter (PIP) data, but the receiver does not
+!support PIP data for the specified transaction program.  This
+!sense data is sent only in FMH-7.
+!
+!Explanation:  The partner LU rejected the Attach because the
+!local transaction program specified program initialization
+!parameters (PIP data) and either the partner LU does not support
+!PIP data or the partner transaction program has no PIP variables
+!defined.
+!
+!Programmer Response:  Do not use PIP data when communicating with
+!this remote transaction program.  For example, APPC on the OS/2
+!Communications Manager does not accept incoming PIP data.
+!
+D6032
+!6032
+!
+!PIP Not Specified Correctly.  The Attach request (FMH-5) -- sent
+!because of an Allocate by the local program -- specifies a
+!transaction program name that requires program initialization
+!parameter (PIP) data, and either the FMH-5 specifies PIP data is
+!not present or the number of PIP subfields present does not agree
+!with the number required for the program.  This sense data is
+!sent only in FMH-7.
+!
+!Explanation:  The partner LU rejected the incoming Attach because
+!the partner transaction program has one or more PIP variables
+!defined and either the local transaction program has specified
+!that no PIP variables are to be used, or the number of PIP
+!variables defined by the local transaction program is different
+!from the number specified by the remote transaction program.
+!
+!Programmer Response:  Specify that PIP data is to be used in the
+!Allocate call, and make sure that the number of PIP variables
+!agrees with the number required by the remote transaction
+!program.
+!
+D6034
+!6034
+!
+!Conversation Type Mismatch.  The Attach request (FMH-5) -- sent
+!because of an Allocate by the local program -- specifies a
+!conversation type that the receiver does not support for the
+!specified transaction program.  This sense data is sent only in
+!FMH-7.
+!
+!Explanation:  The partner LU rejected the incoming Attach because
+!it or the partner transaction program does not support the
+!specified conversation type.
+!
+!Programmer Response:  Change the transaction program so it uses
+!the proper conversation type (basic or mapped).
+!
+!Operator Response:  Alternatively, have the TP definition partner
+!changed to reflect the conversation type used by the program.
+!
+D6040
+!6040
+!
+!Invalid Attach Parameter.  An Attach request (FMH-5) -- sent
+!because of an Allocate by the local program -- specifies a
+!parameter that conflicts with the statement of LU capability
+!previously provided in the BIND negotiation.
+!
+D6041
+!6041
+!
+!Synchronization Level Not Supported.  The Attach request (FMH-5)
+!-- sent because of an Allocate by the local program -- specifies
+!a synchronization level that the receiver does not support for
+!the specified transaction program.  This sense data is sent only
+!in FMH-7.
+!
+!Explanation:  The partner LU rejected the incoming Attach because
+!the local transaction program specified an unacceptable
+!sync_level parameter.  For example, the local transaction program
+!issued an Allocate call with sync_level(CONFIRM), but at the
+!remote computer it was configured as sync_level(NONE).
+!
+!Programmer Response:  Change the sync_level parameter on the
+!Allocate call.
+!
+!Operator Response:  Alternatively, have the TP definition at the
+!partner changed to reflect the sync_level used by the local
+!transaction program.
+!
+D6042
+!6042
+!
+!Reconnection Not Supported.  The Attach request (FMH-5) -- sent
+!because of an Allocate by the local program -- specifies
+!reconnection support but the receiver does not support
+!reconnection for the specified transaction program.  This sense
+!data is sent only in FMH-7.
+!
+D6043
+!6043
+!
+!Unable to Reconnect Transaction Program--No Retry.  The Attach
+!request (FMH-5) -- sent because of an Allocate by the local
+!program -- specifies the conversation correlator of a transaction
+!program to which the receiver cannot reconnect.  The condition is
+!not temporary. This sense data is sent only in FMH-7.
+!
+D6044
+!6044
+!
+!Unable to Reconnect Transaction Program--Retry Allowed.  The
+!Attach request (FMH-5) -- sent because of an Allocate by the
+!local program -- specifies the conversation correlator of a
+!transaction program to which the receiver cannot reconnect.  The
+!condition is temporary.  This sense data is sent only in FMH-7.
+!
+!
+C1010
+!1010xxxx  Error on Locate Search or CP Capabilities Message
+!Detected
+!
+!Explanation:  An error was detected during an APPN directory
+!search or CP Capabilities exchange processing.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!Unrecoverable error, such as a duplicate control vector, was
+!detected. This can be caused when another computer is using your
+!control point LU name (CP LU), and has registered it with your
+!network node (NN) server.
+!
+D0001
+!0001
+!
+!A broadcast search resulted in two or more conflicting positive
+!replies that differ on the control point (CP) owning the target
+!resource. Multiple positive replies are acceptable, as long as
+!all indicate the same owning CP.
+!
+D0004
+!0004
+!
+!Unrecoverable error on CP Capabilities GDS variable exchange
+!prevented its initiation or completion on a contention-winner CP-
+!CP session.
+!
+D1000
+!1000
+!
+!Length error in CP Capabilities generalized data stream (GDS)
+!variable.
+!
+D1002
+!1002
+!
+!Identifier error in CP Capabilities GDS variable.
+!
+D4004
+!4004
+!
+!Incomplete negative or neutral reply received on a search, or
+!reservation indicated on Broadcast, or "All" specified on a
+!directed search.
+!
+D5000
+!5000
+!
+!Length error in CD-Initiate GDS variable.
+!
+D5002
+!5002
+!
+!No CD-Initiate (CDINIT) generalized data stream (GDS) variable
+!returned on a search request.
+!
+D5006
+!5006
+!
+!Session polarity or initiate type value received in CD-Initiate
+!(CDINIT) generalized data stream (GDS) variable not supported.
+!
+D500A
+!500A
+!
+!Mode name length error in CD-Initiate GDS variable.
+!
+DA002
+!A002
+!
+!Find generalized data stream (GDS) variable not present on Locate
+!search request.
+!
+DB080
+!B080
+!
+!Command Parameters (X'80') control vector not present on Found
+!generalized data stream (GDS) variable.
+!
+!
+C1014
+!1014xxxx  Control Vector Error on a Directory Services GDS
+!Variable
+!
+!Explanation:  An error was detected on one of the following
+!generalized data stream (GDS) variables:  Locate, Find, Found,
+!CDINIT, Register, or Delete.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D003C
+!003C
+!
+!Missing Associated Resource Entry (X'3C') control vector.
+!
+D003D
+!003D
+!
+!Missing Directory Entry (X'3D') control vector.
+!
+D0080
+!0080
+!
+!Invalid control vector.
+!
+D023C
+!023C
+!
+!Conflicting APPN directory entry or invalid Associated Resource
+!Entry (X'3C') control vector.
+!
+D502B
+!502B
+!
+!No Route Selection control vector (RSCV) was received from an
+!APPN network node server.
+!
+D502C
+!502C
+!
+!No COS/TPF control vector received from an APPN network node
+!server.
+!
+D5046
+!5046
+!
+!TG vectors not present in a CD-Initiate (CDINIT) GDS variable
+!from an APPN end node OLU or DLU.
+!
+DA082
+!A082
+!
+!Missing Search Argument Directory Entry (X'82') control vector on
+!Find.
+!
+DB280
+!B280
+!
+!A Found from an APPN end node indicated the directory entry for a
+!located resource was a wildcard entry.
+!
+!
+C1015
+!1015xxxx  XID Length Error
+!
+!Explanation:  The XID3 was too long or too short.
+!
+D0001
+!0001
+!
+!Too few bytes in XID3.
+!
+D0002
+!0002
+!
+!The length specified in the Length field in the XID3 is different
+!from the number of bytes received.  There is a mismatch between
+!the number of bytes specified in the Length field of XID3 and the
+!actual length of the received XID3.
+!
+!
+C1016
+!1016xxxx  XID Format 3 Parameter Error
+!
+!Explanation:  Data in the XID3 is not acceptable to the receiving
+!component because the value in the received XID3 field, whose
+!byte and bit offset is specified by the XID Negotiation Error
+!(X'22') control vector (which also carries this sense code), is
+!inconsistent with the corresponding field in the sent XID3.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!The field in the received XID3 that specifies the Maximum number
+!of I-frames that the sender can receive before acknowledgment is
+!set to zero.
+!
+D0002
+!0002
+!
+!The adjacent node has been inconsistent in its request for ACTPU.
+!In a nonactivation XID3 exchange, it has changed the value of the
+!ACTPU Suppression indicator sent in the previous XID3 exchange.
+!
+D0003
+!0003
+!
+!The field in the received XID3 that specifies the maximum basic
+!transmission unit (BTU) length that the sender can receive is set
+!to less than 99 bytes, which is the minimum required.
+!
+D0004
+!0004
+!
+!The received XID was not XID format 3 when XID format 3 was
+!expected.
+!
+D0005
+!0005
+!
+!The adjacent node does not support BIND segment generation but
+!does support receipt of BIND segments.  Any Type 2.1 node
+!supporting receipt of BIND segments must also support generation
+!of BIND segments.
+!
+D0006
+!0006
+!
+!The adjacent node is an APPN end node, does not support BIND
+!segment receipt, and has a maximum basic transmission unit (BTU)
+!size of less than 265, the minimum required here.
+!
+!Here's an anecdote: "I ran and formatted an OS/2 Communications
+!Manager trace at the OS/2 network node and discovered that the NN
+!was receiving a Sense data X'10160006'.  I looked it up, and
+!found out that the Macintosh SNA*ps 5250 was using a maximum BTU
+!size of less than 265 (the minimum) and that the XID of the
+!partner should be the NN instead of the AS/400. I increased the
+!size and changed the XID and everything works fine now".
+!
+D0007
+!0007
+!
+!The adjacent node is an APPN network node, does not support BIND
+!segment receipt, and has a maximum basic transmission unit (BTU)
+!size of less than 521, the minimum size required here.
+!
+D0008
+!0008
+!
+!The adjacent node has changed from an APPN network node to an end
+!node, or vice versa.
+!
+D0009
+!0009
+!
+!The adjacent node is an APPN network node, does not provide
+!control point (CP) services, and supports CP-CP sessions on this
+!TG, a combination not allowed.
+!
+D000A
+!000A
+!
+!During a nonactivation XID exchange, the adjacent node has
+!changed the TG number that was negotiated during the link
+!activation exchange.
+!
+D000B
+!000B
+!
+!The adjacent node is the TG number negotiation winner and
+!designates a TG number that the receiving node cannot allocate to
+!this connection. When parallel TGs are supported between the two
+!nodes, 0 is always such a number.
+!
+D000C
+!000C
+!
+!The adjacent node is an APPN network node that does not support
+!BIND segment generation, and this node's maximum basic
+!transmission unit (BTU) size is less than 521.
+!
+!Operator response:  Increase the node BTU size to at least 521.
+!
+D000D
+!000D
+!
+!The adjacent node is does not support the SDLC command response
+!profile.
+!
+!Operator response:  The only defined value for this profile is
+!X'0'.  Make sure that the platform correctly sets that value
+!(bits 4-7 of byte 12 of the XID).
+!
+D000E
+!000E
+!
+!Two different Product Set ID (X'10') control vectors have been
+!received from the adjacent node.
+!
+!Operator response:  There can be only one provided on the XID.
+!Verify that the platform specifies only one Product Set ID on the
+!XID.
+!
+D000F
+!000F
+!
+!The link station roles specified in the sent and received
+!negotiation-proceeding XID3s are not compatible.  To activate a
+!connection, one node must contain a primary link station; the
+!other, a secondary link station.
+!
+D0010
+!0010
+!
+!The support of combined asynchronous balanced mode (ABM) link
+!stations indicated in the sent and received negotiation
+!proceeding XID3s is not in agreement.
+!
+D0011
+!0011
+!
+!This can occur for one of the following reasons:
+!
+! - The adjacent node is attempting to activate parallel TGs, when
+!  parallel TGs are not supported between these two nodes.
+!
+! - The link cannot be activated because the adjacent node does
+!  not support parallel TGs, and another link is active (or
+!  pending-active) to that node.
+!
+D0012
+!0012
+!
+!(Retired)
+!
+!The adjacent node has sent the Network Name (X'0E', CP name)
+!control vector, but does not support the Exchange State
+!indicators.
+!
+D0013
+!0013
+!
+!The DLC Type field in the sent and received XID3s are not the
+!same.
+!
+D0014
+!0014
+!
+!The adjacent NRM link station sent an XID3, indicating that it
+!contains a negotiable link station, after having indicated that
+!it contained a link station with a nonnegotiable role.
+!
+D0015
+!0015
+!
+!The adjacent node supports adaptive BIND pacing as a sender, but
+!not as a receiver.
+!
+D0016
+!0016
+!
+!The local node is attempting to activate a TG with a predefined
+!number, but the adjacent node has attempted to use a non-zero
+!number that is different from the one the local node used to
+!represent the TG.
+!
+D0017
+!0017
+!
+!After two negotiation proceeding XID exchanges, two negotiable
+!link stations still have equal values in the Node Identification
+!fields of their XID3s.
+!
+D0018
+!0018
+!
+!The adjacent node is an APPN node but does not support adaptive
+!BIND pacing as a sender and receiver.
+!
+D001A
+!001A
+!
+!On two different TGs, the adjacent node has been inconsistent in
+!its support of parallel TGs.
+!
+D001B
+!001B
+!
+!The adjacent node provides or requests CP services, but does not
+!support CP-CP sessions on this TG.
+!
+D001C
+!001C
+!
+!The adjacent node sent a reserved value in the XID3 field
+!defining its link station role.
+!
+D001D
+!001D
+!
+!The adjacent node has only two-way alternating transmit-receive
+!capability, but the local node supports only two-way
+!simultaneous.
+!
+D001E
+!001E
+!
+!The adjacent node does not include the Network Node (X'0E', CP
+!name) control vector in its XID3, but indicates support of CP-CP
+!sessions.
+!
+D0020
+!0020
+!
+!The value sent in the Type of the XID Sending Node in XID3
+!indicates a node type with which the receiving node cannot
+!activate a TG, for example, Type 2.1 nodes cannot activate TGs
+!with Type 1 nodes.
+!
+!
+C101A
+!101A0000  Invalid Control Vector Sequence
+!
+!Explanation:  A control vector was found containing a key that
+!was invalid for the position of the control vector within a
+!Topology Database Update (TDU).
+!X'20' State Error
+!
+!This category indicates a sequence number error, or an RH or RU
+!that it is not allowed for the receiver's current session control
+!or data flow control state.  These errors prevent delivery of the
+!request to the intended component.
+!
+!
+C2001
+!20010000  Sequence Number
+!
+!Explanation:  Sequence number received on normal-flow request was
+!not 1 greater than the last.
+!
+!
+C2002
+!20020000  Chaining
+!
+!Explanation:  Error in the sequence of the chain indicator
+!settings (BCI, ECI), such as first, middle, first.
+!
+!
+C2003
+!20030000  Bracket
+!
+!Explanation:  Error resulting from failure of sender to enforce
+!bracket rules for session.  (This error does not apply to
+!contention or race conditions.)
+!
+!
+C2004
+!20040000  Direction
+!
+!Explanation:  Error resulting from a normal-flow request received
+!while the half-duplex flip-flop state was not Receive.
+!
+!
+C2008
+!20080000  No Begin Bracket
+!
+!Explanation:  An FMD request specifying BBI=BB was received after
+!the receiver had previously received a BRACKET INITIATION STOPPED
+!request.
+!
+!
+C200A
+!200A0000  Immediate Request Mode Error
+!
+!Explanation:  The immediate request mode protocol has been
+!violated by the request.
+!
+!
+C200E
+!200E0000  Response Correlation Error
+!
+!Explanation:  A response was received that cannot be correlated
+!to a previously sent request.
+!
+!
+C2010
+!20100000  BIS Protocol Error
+!
+!Explanation:  A BIS protocol error was detected; for example, a
+!BIS request was received after a previous BIS was received and
+!processed.
+!
+!
+C2011
+!2011xxxx  Pacing Protocol Error
+!
+!Explanation:  A violation of pacing protocols was detected.
+!
+D0000
+!0000
+!
+!A normal-flow or BIND request was received after the pacing count
+!had been reduced to zero and before a pacing response had been
+!sent.
+!
+D0001
+!0001
+!
+!Unexpected Isolated Pacing Message (IPM) Received.  An IPM was
+!received when the receiver was in a state that did not allow it.
+!
+D0002
+!0002
+!
+!Unexpected Pacing Request Received.  A request with the pacing
+!indicator set was received when the receiver was in a state that
+!did not allow it.
+!
+D0003
+!0003
+!
+!Pacing Response Indicator incorrectly set.  The pacing indicator
+!was set in a non-IPM response received while adaptive pacing was
+!being used.
+!
+!
+C2012
+!20120000  Invalid Sense Code Received
+!
+!Explanation:  A negative response was received that contains an
+!SNA-defined sense code that cannot be used for the sent request.
+!X'40' RH Usage Error
+!
+!This category indicates that the value of a field or combination
+!of fields in the RH violates architectural rules or previously
+!selected BIND options.  These errors prevent delivery of the
+!request to the intended component and are independent of the
+!current states of the session.  They may result from the failure
+!of the sender to enforce session rules.  Detection by the
+!receiver of each of these errors is optional.
+!
+!
+C4003
+!40030000  BB Not Allowed
+!
+!Explanation:  The Begin Bracket indicator (BBI) was specified
+!incorrectly; for example, BBI=BB with BCI=^BC.
+!
+!
+C4007
+!40070000  Definite Response Not Allowed
+!
+!Explanation:  Definite response was requested when not permitted.
+!
+!
+C4011
+!40110000  Incorrect Specification of RU Category
+!
+!Explanation:  The RU Category indicator was specified
+!incorrectly; for example, an expedited-flow request or response
+!was specified with RU Category indicator = FMD.
+!
+!
+C4012
+!40120000  Incorrect Specification of Request Code
+!
+!Explanation:  The request code on a response does not match the
+!request code on its corresponding request.
+!
+!
+C4013
+!40130000  Incorrect Specification of (SDI, RTI)
+!
+!Explanation:  The Sense Data Included indicator (SDI) and the
+!Response Type indicator (RTI) were not specified properly on a
+!response.  The proper value pairs are (SDI=SD, RTI=negative) and
+!(SDI=^SD, RTI=positive).
+!
+!
+C4014
+!40140000  Incorrect Use of (DR1I, DR2I, ERI)
+!
+!Explanation:  The Definite Response 1 indicator (DR1I), Definite
+!Response 2 indicator (DR2I), and Exception Response indicator
+!(ERI) were specified incorrectly; for example, a SIGNAL request
+!was not specified with DR1I=DR1, DR2I=^DR2, and ERI=^ER.
+!
+!
+C4015
+!40150000  Incorrect Use of QRI
+!
+!Explanation:  The Queued Response indicator (QRI) was specified
+!incorrectly; for example, QRI=QR on an expedited-flow request.
+!
+!
+C4019
+!40190000  Incorrect Indicators with Last-In-Chain Request
+!
+!Explanation:  A last-in-chain request has specified incompatible
+!RH settings; for example, RQE*, CEBI=^CEB, and CDI=^CD.
+!X'80' Path Error
+!
+!This category indicates that the request could not be delivered
+!to the intended receiver, because of a path outage, an invalid
+!sequence of activation requests, or one of the listed path
+!information unit (PIU) errors.  Some PIU errors fall into other
+!categories; for example, sequence number errors are sense code
+!category X'20'.  A path error received while the session is
+!active generally indicates that the path to the session partner
+!no longer exists.
+!
+!
+C8001
+!80010000  Intermediate Node Failure
+!
+!Explanation:  There has been been a failure, such as a hardware
+!failure or program check, in a node providing intermediate
+!routing function.  A response may or may not be possible.
+!
+!
+C8002
+!80020000  Link Failure
+!
+!Explanation:  Data link failure.  It is possible that the APPC
+!subsystem is not active on the partner computer.
+!
+!
+C8003
+!8003xxxx  NAU Inoperative
+!
+!Explanation:  The network addressable unit (NAU) is unable to
+!process requests or responses; for example, the NAU has been
+!disrupted by an abnormal termination.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!Hierarchical Reset.  The identified LU-LU session is being
+!deactivated; an ACTLU/ACTPU(Cold) or DACTLU/DACTPU was received,
+!or the PU has failed.
+!
+D0003
+!0003
+!
+!Unrecoverable LU Failure.  The identified LU-LU session had to be
+!deactivated because of an abnormal termination of the PLU or SLU;
+!recovery from the failure was not possible.
+!
+D0004
+!0004
+!
+!Recoverable LU Failure.  The identified LU-LU session had to be
+!deactivated because of an abnormal termination of one of the LUs
+!of the session; recovery from the failure may be possible.
+!
+!
+C8004
+!8004xxxx  Unrecognized Destination
+!
+!Explanation:  A node in the path has no routing information for
+!the destination specified either by the secondary logical unit
+!(SLU) name in a BIND request or by the transmission header (TH).
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!The partner LU name was not recognized.  This can occur if you
+!did not have the LU name specified in the BIND secondary logical
+!unit (SLU) name field defined.  For example, your program issues
+!an Allocate call that uses a fully-qualified partner LU name, but
+!includes the partner LU name only--without the NETID.
+!
+!Note:  When using the OS/2 Communications Manager, the NETID is
+!also referred to as the "network name".
+!
+D0001
+!0001
+!
+!A request was received by a gateway function that could not be
+!rerouted because of invalid or incomplete routing information.
+!
+!
+C8005
+!8005xxxx  No Session
+!
+!Explanation:  No half-session is active in the receiving APPN end
+!node for the indicated origination-destination pair, or no
+!boundary function session connector is active for the origin-
+!destination pair in a node providing the boundary function.  A
+!session activation request is needed.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The receiver received a request other than a session control
+!request when no LU-LU session was active.
+!
+D0002
+!0002
+!
+!The receiver received a request other than a session control
+!request when no LU-SSCP session was active.
+!
+D0003
+!0003
+!
+!The receiver received a session control request other than
+!BIND/UNBIND when no LU-LU session was active.
+!
+D0004
+!0004
+!
+!The receiver received an UNBIND when no LU-LU session was active.
+!
+D0005
+!0005
+!
+!The receiver received a session control request other than
+!ACTLU/DACTLU for the LU-SSCP session when no LU-SSCP session was
+!active.
+!
+D0006
+!0006
+!
+!The receiver received DACTLU when no LU-SSCP session was active.
+!
+!
+C8007
+!8007xxxx  Segmenting Error
+!
+!Explanation:  First BIU segment had less than 10 bytes; or
+!Mapping field sequencing error, such as first, last, middle; or
+!segmenting not supported and Mapping field not set to BBIU, EBIU.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!The node does not support receipt of segments, and a Mapping
+!field value other than BBIU, EBIU was received.  Sent in UNBIND.
+!
+D0002
+!0002
+!
+!Interleaved BIND Segments Not Allowed:  A BIND receiver that is
+!in the middle of receiving segments of one BIND receives a
+!segment from a different BIND; the receiver rejects both BINDs
+!and disconnects the link.
+!
+!
+C8008
+!80080000  PU Not Active
+!
+!Explanation:  The SSCP-PU secondary half-session in the receiving
+!node has not been activated and the request was not ACTPU for
+!this half-session.  For example, the request was ACTLU from an
+!SSCP that does not have an active SSCP-PU session with the PU
+!associated with the addressed LU.
+!
+!
+C8009
+!80090000  LU Not Active
+!
+!Explanation:  The destination address specifies an LU for which
+!the SSCP-LU secondary half-session has not been activated, and
+!the request was not ACTLU.
+!
+!
+C800A
+!800A0000  Too-long PIU
+!
+!Explanation:  Transmission was truncated by a receiving node
+!because the path information unit (PIU) exceeded a maximum length
+!or sufficient buffering was not available.
+!
+!
+C800B
+!800B0000  Incomplete TH
+!
+!Explanation:  Transmission received was shorter than a
+!transmission header (TH).
+!
+!
+C800C
+!800C0000  DCF Error
+!
+!Explanation:  Data Count Field (DCF) was inconsistent with
+!transmission length.
+!
+!
+C800D
+!800D0000  Lost Contact
+!
+!Explanation:  Contact with the link station for which the
+!transmission was intended has been lost, but the link has not
+!failed.  If the difference between link failure and loss of
+!contact is not detectable, link failure (X'8002') is sent.
+!
+!
+C800E
+!800E0000  Unrecognized Origin
+!
+!Explanation:  The origin address specified in the transmission
+!header (TH) was not recognized.
+!
+!
+C800F
+!800Fxxxx  Invalid Address Combination
+!
+!Explanation:  The address combination is invalid.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!The (DAF', OAF') (FID2) combination or the LSID (FID3) specified
+!an invalid type of session, for example, a PU-LU combination.
+!
+!For example, this sense data may be seen when a computer attempts
+!to set up a session (by sending a BIND) to a version of VTAM
+!(probably a version before 3.2) that does not support independent
+!sessions on the link being used.  This may be observed as a
+!single SNASVCMG session being established, but not the usual pair
+!of them.
+!
+D0001
+!0001
+!
+!The FID2 ODAI setting in a received BIND is incorrect; the BIND
+!is rejected.
+!
+!
+C8010
+!80100000  Segmented RU Length Error
+!
+!Explanation:  An RU was found to exceed a maximum length, or
+!required buffer allocation that might cause future buffer
+!depletion.
+!
+!
+C8014
+!8014xxxx  No Path Exists to the Destination Node
+!
+!Explanation:  Route Selection services in the control point (CP)
+!has determined from the APPN topology database that no path
+!exists to the destination node.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0001
+!0001
+!
+!No route to the destination node exists for the specified class
+!of service (COS).  This can occur when using one of the modes
+!that specifies a particular COS, such as #BATCHSC, that cannot be
+!achieved along any route through the network.  The implication is
+!that a path does exist, but not a path with the required
+!characteristics.
+!
+!With the OS/2 Communications Manager, for example, examine
+!whether the DEFINE_PARTNER_LU_LOCATION fq_owning_cp_name for the
+!host LU matches the adjacent_node_cp_name returned on your
+!display of the active link.  If it does not, the NN cannot find a
+!route to the CP name you specified on the
+!DEFINE_PARTNER_LU_LOCATION.
+!
+D0002
+!0002
+!
+!Invalid class-of-service (COS) name received.
+!
+D0003
+!0003
+!
+!The APPN topology database indicates that the destination node is
+!not available now; the node either has inconsistent data or is
+!quiescing.
+!
+D0004
+!0004
+!
+!The APPN topology database indicates that the endpoint resources
+!are depleted; the node is out of either half-session control
+!blocks or message buffers.
+!
+D0005
+!0005
+!
+!The Route Selection control vector (RSCV) specifying the route to
+!the destination node was truncated.  The length of the generated
+!RSCV exceeds the maximum allowed.
+!
+!
+C8020
+!8020xxxx  Session Reset
+!
+!Explanation:  The LU-LU session identified in the UNBIND is being
+!deactivated because of a reset condition.
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0000
+!0000
+!
+!No specific code applies.
+!
+D0001
+!0001
+!
+!Virtual Route Inoperative.  The virtual route used by the LU-LU
+!session has become inoperative, thus forcing the deactivation of
+!the identified LU-LU session.
+!
+D0003
+!0003
+!
+!Virtual Route Deactivated.  The identified LU-LU session had to
+!be deactivated because of a forced deactivation of the virtual
+!route being used by the LU-LU session.
+!
+D0004
+!0004
+!
+!Route Extension Failure.  The route extension used by the LU-LU
+!session has become inoperative, thus forcing the deactivation of
+!the identified LU-LU session.
+!
+D0007
+!0007
+!
+!Third Party Termination.  The network operator cause the forced
+!or cleanup termination of the LU-LU session.
+!X'FF' Product Unique Errors
+!
+!This category indicates a condition was detected by the node that
+!is not defined in SNA.  The sense code defined is unique to a
+!platform implementation.
+!
+!
+CFFFE
+!FFFExxxx  OS/2 Communications Manager:  Unable to Obtain Session
+!
+!Bytes 2 and 3 following the sense code contain sense-code-
+!specific information:
+!
+D0011
+!0011
+!
+!CNOS Negotiation in Progress.  An Allocate call was attempted
+!while CNOS contention winner negotiation is occurring in another
+!process or thread, from the same local LU to the same partner LU.
+!Session limits are currently being negotiated with your partner,
+!because of a previous allocation attempt or a CNOS verb.  This
+!condition will continue until the previous session limit
+!negotiation is completed.
+!
+!Programmer Response:  Retry the operation.  This condition is
+!timing related.
+!
+D0012
+!0012
+!
+!APPC Not Started.  An Allocate call attempted while APPC has not
+!been started.
+!
+!Programmer Response:  Retry the operation.  This condition is
+!timing related.
+!
+D0013
+!0013
+!
+!A mode, other than CPSVCMG or SNASVCMG, is pending a delete.  A
+!program is unable to issue an Allocate call for this mode while
+!the mode is in pending delete state.  With the OS/2
+!Communications Manager, pending delete state is attained by
+!issuing DEFINE_MODE with changes, or DELETE_MODE.  These verbs do
+!not go into effect until all sessions using this mode are
+!inactive.
+!
+D0014
+!0014
+!
+!The CPSVCMG mode is pending a delete.  APPC is unable to
+!internally issue an Allocate call for this mode while the mode is
+!in pending delete state.
+!
+D0015
+!0015
+!
+!The SNASVCMG mode is pending a delete.  APPC is unable to
+!internally issue an Allocate call for this mode while the mode is
+!in pending delete state.  Pending delete state is attained by
+!issuing DEFINE_MODE with changes, or DELETE_MODE.  These verbs do
+!not take affect until all sessions using this mode are inactive.
+!
+D0016
+!0016
+!
+!Session unavailable on a mode other than CPSVCMG or SNASVCMG.  An
+!Allocate call with return_control(WHEN_SESSION_FREE) was
+!attempted, but no pending or bindable sessions are available.
+!
+D0017
+!0017
+!
+!A session is unavailable on a CPSVCMG mode.  APPC issued an
+!internal Allocate call with return_control(WHEN_SESSION_FREE),
+!but no pending or bindable sessions are currently available.
+!
+D0018
+!0018
+!
+!A session is unavailable on a SNASVCMG mode.  APPC issued an
+!internal Allocate call with return_control(WHEN_SESSION_FREE),
+!but no pending or bindable sessions are currently available.
+!
+D0019
+!0019
+!
+!Partner CNOS race condition.  APPC issued an internal CNOS verb.
+!Although its primary return was PARTNER_REJECT and the secondary
+!return code was CNOS_RACE, no sense data associated with the
+!returned verb was generated.
+!
+!Programmer Response:  Retry the operation.  This condition is
+!timing related.
+!
+D001A
+!001A
+!
+!This code is returned when a second ACTLU or a DACTPU is received
+!on a session that is pending activation.  This occurs only during
+!sub-area session activation.
+!
+D0101
+!0101
+!
+!Last session deactivated on a mode other than CPSVCMG or
+!SNASVCMG.  This code is returned on an Allocate call when
+!return_control is WHEN_SESSION_ALLOCATED, or WHEN_SESSION_FREE.
+!A queued session request is rejected because the last session on
+!the requested mode was deactivated.  Therefore, the Allocate call
+!returns without being fulfilled, with this sense data.
+!
+D0102
+!0102
+!
+!Last session deactivated on a CPSVCMG Mode.  APPC issued an
+!internal Allocate call with
+!return_control(WHEN_SESSION_ALLOCATED) or
+!return_control(WHEN_SESSION_FREE).  A queued session request is
+!rejected because the last session on the requested mode was
+!deactivated. Therefore the Allocate call is returned without
+!being fulfilled, with this sense data.
+!
+D0103
+!0103
+!
+!Last session deactivated on an SNASVCMG mode.  APPC issued an
+!internal Allocate call with
+!return_control(WHEN_SESSION_ALLOCATED) or
+!return_control(WHEN_SESSION_FREE).  A queued session request is
+!rejected because the last session on the requested mode was
+!deactivated. Therefore the Allocate call is returned without
+!being fulfilled, with this sense data.
+!
+D0104
+!0104
+!
+!Last contention winner session is deactivated on a mode other
+!than CPSVCMG or SNASVCMG.  This code is returned on an Allocate
+!call when return_control(WHEN_CONWINNER_ALLOCATED).  A queued
+!session request is rejected because the last session on the
+!requested mode was deactivated. Therefore, the Allocate call
+!returns without being fulfilled, with this sense data.
+!
+D0105
+!0105
+!
+!Last contention winner session is deactivated on a CPSVCMG mode.
+!APPC issued an internal Allocate call with
+!return_control(WHEN_CONWINNER_ALLOCATED).  A queued session
+!request is rejected because the last session on the requested
+!mode was deactivated. Therefore the Allocate call is returned
+!without being fulfilled, with this sense data.
+!
+D0106
+!0106
+!
+!Last contention winner session is deactivated on an SNASVCMG
+!mode.  APPC issued an internal Allocate call with
+!return_control(WHEN_CONWINNER_ALLOCATED).  A queued session
+!request is rejected because the last session on the requested
+!mode was deactivated. Therefore the Allocate call is returned
+!without being fulfilled, with this sense data.
+!
+D0107
+!0107
+!
+!Associated session for a conversation group is deactivated.  This
+!code is returned on an Allocate call when
+!return_control(WHEN_CONV_GROUP_ALLOC).  A queued session request
+!is rejected because the last session on the requested mode was
+!deactivated. Therefore, the Allocate call returns without being
+!fulfilled, with this sense data.
+!
+D0108
+!0108
+!
+!Associated Session for Conversation Group is Not Defined.  An
+!Allocate call was issued, with
+!return_control(WHEN_CONV_GROUP_ALLOC) was specified, and no
+!session is available.  A likely cause of this sense data is that
+!your program supplied an invalid conversation_group_id parameter
+!on an Allocate call.  In OS/2 Communications Manager, a list of
+!valid conversion group IDs can be found by issuing the DISPLAY
+!verb, requesting Active TP Information.
+!
+D0109
+!0109
+!
+!Contention winner session never available on a mode other than
+!CPSVCMG or SNASVCMG.  An Allocate call with
+!return_control(WHEN_CONWINNER_ALLOCATED) was specified and the
+!mode's minimum contention winner value is zero and no session is
+!available.
+!
+D010A
+!010A
+!
+!Contention winner session never available on CPSVCMG mode.  APPC
+!issued an internal Allocate call with
+!return_control(WHEN_CONWINNER_ALLOCATED) and the mode's minimum
+!contention winner value is zero and no session is available.
+!
+D010B
+!010B
+!
+!Contention winner session never available on SNASVCMG mode.  APPC
+!issued an internal Allocate call with
+!return_control(WHEN_CONWINNER_ALLOCATED) and the mode's minimum
+!contention winner value is zero and no session is available.
+!
+D010C
+!010C
+!
+!Session never available on a mode other than CPSVCMG or SNASVCMG.
+!This sense data can be caused by one of the following conditions:
+!
+! - An Allocate call with return_control(WHEN_SESSION_ALLOCATED)
+!  or return_control(WHEN_SESSION_FREE) was issued.  The mode's
+!  session limit is zero and no session is available.
+!
+! - An Allocate call with return_control(WHEN_SESSION_ALLOCATED)
+!  or return_control(WHEN_SESSION_FREE) was issued.  The target
+!  computer has set the mode session limit for this mode to zero.
+!
+! - The BIND for a subarea session was successful, but APPC
+!  changed the number of sessions to zero before ACTLU arrived.
+!
+D010D
+!010D
+!
+!Session never available on a CPSVCMG mode.  This sense data can
+!be caused by one of the following conditions:
+!
+! - APPC issued an internal Allocate call verb with
+!  return_control(WHEN_SESSION_ALLOCATED) or
+!  return_control(WHEN_SESSION_FREE).  The mode's session limit
+!  is zero and no session is available.
+!
+! - APPC issued an internal Allocate call with
+!  return_control(WHEN_SESSION_ALLOCATED) or
+!  return_control(WHEN_SESSION_FREE).  The target computer has
+!  set the mode session limit for this mode to zero.
+!
+! - The BIND for a subarea session was successful, but APPC
+!  changed the number of sessions to zero before ACTLU arrived.
+!
+D010E
+!010E
+!
+!Session never available on an SNASVCMG mode.  This sense data can
+!be caused by one of the following conditions:
+!
+! - APPC issued an internal Allocate call with
+!  return_control(WHEN_SESSION_ALLOCATED) or
+!  return_control(WHEN_SESSION_FREE).  The mode's session limit
+!  is zero and no session is available.
+!
+! - APPC issued an internal Allocate call with
+!  return_control(WHEN_SESSION_ALLOCATED) or
+!  return_control(WHEN_SESSION_FREE).  The target computer has
+!  set the mode session limit for this mode to zero.
+!
+! - The BIND for a subarea session was successful, but APPC
+!  changed the number of sessions to zero before ACTLU arrived.
+!
+D010F
+!010F
+!
+!The SNASVCMG mode does not exist.  If the SNASVCMG mode does not
+!exist, and APPC is executing its internal CNOS transaction
+!program to control parallel sessions, this sense data will occur.
+!Since the SNASVCMG mode should always be defined, this signals an
+!error condition.
+!
+D0110
+!0110
+!
+!A remote mode, other than CPSVCMG or SNASVCMG, is closed or does
+!not exist.  Usually, this means that the mode is not defined
+!correctly at the partner, or the number of sessions was changed
+!to zero.
+!
+!APPC issued an internal CNOS verb, and its primary return was
+!PARTNER_REJECT and the secondary return code was MODE_CLOSED or
+!BAD_MODE, and there was no sense data.
+!
+D0111
+!0111
+!
+!A remote CPSVCMG mode is closed or does not exist.  APPC issued
+!an internal CNOS verb.  Its primary return was PARTNER_REJECT and
+!the secondary return code was MODE_CLOSED or BAD_MODE.  There was
+!no sense data associated with the returned verb.
+!
+!Usually, this means that the mode is not defined correctly at the
+!partner, or the number of sessions was changed to zero.
+!
+D0112
+!0112
+!
+!A remote SNASVCMG mode is closed or does not exist.  APPC issued
+!an internal CNOS verb, and its primary return was PARTNER_REJECT
+!and the secondary return code was MODE_CLOSED or BAD_MODE, and
+!there was no sense data associated with the returned verb.
+!
+!Usually this means that the mode is not defined correctly at the
+!partner, or the number of sessions was changed to zero.
+!
+D0113
+!0113
+!
+!Link is defined as a Subarea Only.  The network addressable unit
+!(NAU) was configured as non-zero; this link can only be used for
+!dependent logical units (LUs).
+!
+D0114
+!0114
+!
+!Path Control ID is Mismatched for Subarea.  Mismatch between the
+!PC IDs in the ACTLU and the INITSELF RUs.
+!
+D0115
+!0115
+!
+!The CNOS TP on the target node provided an invalid response.
+!This sense data indicates an internal SNA error on the target
+!node.
+!
+!This sense data may be returned (in error) if your program is
+!attempting to BIND non-CP sessions with a VTAM control point LU.
+!VTAM may reject the BIND request with this sense data.
+!
+!
+CFFFF
+!FFFFxxxx  OS/2 Communications Manager:  Directory Function Error
+!
+!Explanation:  An error occurred while performing an APPN
+!directory search or directory delete.
+!
+!Note:  Products use the X'FFFF' prefix on sense codes that are
+!product dependent and, more importantly, are never sent.  They
+!are only returned on an API crossing when the architected primary
+!and secondary return codes do not provide adequate information
+!and there is no architected sense code with the required
+!definition.
+!
+D0002
+!0002
+!
+!Multiple Resources Found; Resource Must be Unique.  A network
+!search for a resource required to have a unique name has returned
+!multiple positive replies from different owners.  Only one
+!resource should have that name. The other resources should be
+!renamed or deleted, otherwise the first resource found in the
+!search will be returned.
+!
+D0003
+!0003
+!
+!No link is available to an APPN network node server.  No NNCP
+!server was found when a local program issued an Allocate call to
+!get a session with its associated partner LU.
+!
+!This sense data indicates that a session activation failed
+!because APPC could not find any link to connect it to the partner
+!node.  If your node is serviced by an APPN network node, this
+!sense data means that your node could not contact that network
+!node (probably because the link is down or defined incorrectly).
+!
+!For example, when using the OS/2 Communications Manager in your
+!local node, check to see that it is serviced by an APPN network
+!node.  If not, it means that you have not provided a valid
+!DEFINE_PARTNER_LU_LOCATION together with a DEFINE_LOGICAL_LINK
+!verb which specifies the link to use.  Assure that the
+!DEFINE_LOGICAL_LINK verb contains a valid fq_adjacent_cp_name
+!parameter and the link is either active, or is defined as
+!activate_at_startup(NO) (which brings it up right away, as
+!opposed to when the OS/2 Communications Manager is started).
+!
+!Summary:  either
+!
+! - Your node does not have a link to an APPN network node; thus
+!  it has no place to send the Locate RU.
+!
+! - Your node does not have a link to the target node, where the
+!  searched-for LU is located.
+!
+!Examples of how this can happen:
+!
+! - The target MAC address for the APPN network node is wrong.
+!
+! - The data link control (DLC) was deactivated on either
+!  computer.
+!
+! - APPC is not fully started yet on your local computer, and the
+!  links have not yet been activated.
+!
+! - The partner LU name is just wrong.  The partner LU name is
+!  spelled wrong or does not exist.  If the application is using
+!  CPI-C, check the CPI-C side information table to assure that
+!  the correct partner LU name is specified.
+!
+!If you had this session working before, it is likely that your
+!link to your partner or network node has gone down.  Thus you
+!could have failures now even though you have not changed your
+!configuration.  If the network node goes down and comes back up,
+!your link is not automatically re-established.  (Look for the
+!NNLINK package for a tool to keep that link up).
+!
+!To check this out, go to the Logical Link Services, and see if
+!your link is displayed as inactive.  If it is, re-activate it
+!using the same panel.  (If it's not, there's some other problem -
+!- probably a configuration problem.)
+!
+D0006
+!0006
+!
+!Cannot delete a local node directory entry.  An APPN end node
+!sent a Delete generalized data stream (GDS) variable, requesting
+!that the CP LU be deleted.  This cannot be performed.
+!
+D0007
+!0007
+!
+!Address space unknown.  The node has received data or is trying
+!to send data on a link station which is not in its local address
+!space.  The node has canceled processing of the data.
+C0000

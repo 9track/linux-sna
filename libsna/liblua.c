@@ -14,4 +14,5 @@
 #include <config.h>
 #endif
 
-#include <syscall_pic.h>
+#include <linux/unistd.h>
+#include <sys/syscall.h>

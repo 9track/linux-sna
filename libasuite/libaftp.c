@@ -253,25 +253,25 @@ aftp_connect(unsigned char AFTP_PTR connection_id,
     cmallc(conv_id, &cm_rc);
 
     if(cm_rc != CM_OK) {
-      *rc = AFTP_RC_COMM_FAIL_NO_RETRY;
-      return;
+      	*rc = AFTP_RC_COMM_FAIL_NO_RETRY;
+      	return;
     } else {
-      asuiterecord_settype(sessions[index]->record, AFTP_TOWER_REQUEST);
-      ftp_rc = send_asuiterecord(sessions[index]->conversation_ID,
+      	asuiterecord_settype(sessions[index]->record, AFTP_TOWER_REQUEST);
+      	ftp_rc = send_asuiterecord(sessions[index]->conversation_ID,
 				 sessions[index]->record);
-      if(ftp_rc != AFTP_RC_OK) {
-	*rc = ftp_rc;
-	return;
-      }
+      	if(ftp_rc != AFTP_RC_OK) {
+		*rc = ftp_rc;
+		return;
+      	}
 	    
-      ftp_rc = get_asuiterecord(sessions[index]->conversation_ID,
+      	ftp_rc = get_asuiterecord(sessions[index]->conversation_ID,
 				sessions[index]->record);
-      if(ftp_rc != AFTP_RC_OK) {
-	*rc = ftp_rc;
-	return;
-      }
+      	if(ftp_rc != AFTP_RC_OK) {
+		*rc = ftp_rc;
+		return;
+      	}
       
-      *rc = AFTP_RC_OK;
+      	*rc = AFTP_RC_OK;
     }
   
   } else {
@@ -536,7 +536,7 @@ aftp_dir_open(unsigned char AFTP_PTR connection_id,
       *rc = ftp_rc;
       return;
     }
-	
+    
     receive_length = get_received_len(sessions[index]->record);
     major_code = get_major_code(sessions[index]->record);
     curpos = 2;
@@ -547,7 +547,6 @@ aftp_dir_open(unsigned char AFTP_PTR connection_id,
 	do {
 	  param_len = get_param_len(sessions[index]->record, curpos);
 	  key = get_key(sessions[index]->record, curpos);
-	    
 	  switch(key) 
 	    {
 	    case AFTP_STATUS_RETURN_CODE:

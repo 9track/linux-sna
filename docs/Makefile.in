@@ -63,9 +63,11 @@ host_triplet = @host@
 AS = @AS@
 CC = @CC@
 DLLTOOL = @DLLTOOL@
+EXEEXT = @EXEEXT@
 GLIB_CONFIG = @GLIB_CONFIG@
 LD = @LD@
 LIBTOOL = @LIBTOOL@
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
@@ -74,7 +76,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XML_CONFIG = @XML_CONFIG@
 
-EXTRA_DIST = $(man_MANS) linux-sna.spec arch-notes confs html-guides scripts tidbits 	modules.conf.sna snatchd.init tn3270d.init tn5250d.init
+EXTRA_DIST = $(man_MANS) linux-sna.spec arch-notes html-guides scripts tidbits 	modules.conf.sna snatchd.init tn3270d.init tn5250d.init sna.xml 	sna.init
 
 
 man_MANS = sna.7
@@ -204,6 +206,7 @@ clean-am:  clean-generic mostlyclean-am
 clean: clean-am
 
 distclean-am:  distclean-generic clean-am
+	-rm -f libtool
 
 distclean: distclean-am
 

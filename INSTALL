@@ -8,8 +8,44 @@ need to run the following command and follow the prompts.
 
 make pending-patches
 
+==>> To build linux-sna from source:
 
-   These are generic installation instructions.
+I am sure the quick installation is out of date, basically do the 
+following:
+
+1. download linux-sna-0.1.26.tar.gz
+2. download linux-2.4.18.tar.gz from kernel.org
+3. untar the linux-2.4.18 kernel in /usr/src/
+3. untar the linux-sna package in /usr/src/
+4. cd to linux-sna sources
+5. ./configure --prefix=/usr
+6. make pending-patches
+7. answer yes to all the questions, patch will then be applied
+8. cd to linux kernel sources
+9. configure, compile and install your kernel, reboot too.
+10. cd linux-sna sources
+11. make
+12. make install
+
+Now you will need to install the configuration file by hand for all the 
+applications, the two files are docs/sna.xml and docs/snatchd.conf those 
+both go in /etc/
+
+Be sure to edit the sna.xml file for you environment, or you can just 
+leave it the way it is to see the stack run.
+
+You can then load the linux-sna node and start it using the following 
+commands:
+
+snaconfig load /etc/sna.xml
+snaconfig start dlc dlc_sna1
+snaconfig start link link_winnt
+
+Now you will have a link established with the APPN peer and you can run 
+applications, etc.
+
+
+==>> These are generic installation instructions.
 
    The `configure' shell script attempts to guess correct values for
 various system-dependent variables used during compilation.  It uses

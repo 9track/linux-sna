@@ -1,45 +1,119 @@
-ToDo list for sna-tools and net-fun kernel patch (never ending).
- - Maintained by Jay Schulist <jschlst@linux-sna.org>
+Todo list (in no special order) for linux-sna user-space and kernel.
+ - list maintained by Jay Schulist <jschlst@linux-sna.org>
 
+last updated: July 22, 2002.
+
+Purchase:
+0. get copy of System/370 Principles of Operation, GA22-7000.
+
+Execute:
+0. compile linux-sna kernel staticly to see if it works.
+1. perform proper stop of node components.
+2. perform proper delete of ls, dlc, node components.
+3. allow reload of configuration file.
+4. provide better output of show command.
+5. xid error checking (2.9.6).
+6. xid retry timers
+7. let user choose what xid type to send with link station.
+8. store all fields of xid for adjacent ls and use them.
+9. validate xid protocol flow/conformance.
+10. cleanup tdm proc output.
+11. validate all incomming bind options.
+12. set lu structure information proper.
+13. show lu information nicely via /proc.
+14. inbound bind processing.
+15. send unbind and unbind processing.
+16. add intranode path control support back.
+17. complete inbound attach processing in rm.
+18. go through all code and compare with functional specs.
+19. Add comments and use proper sense codes for everything.
+20. cleanup fscking defines that are like 60+ characters long!
+21. implement sna_ps_conv_process_fmh7_log_data_proc when not lazy.
+22. validate xml file input.
+23. cpic extract calls.
+24. make appc api values same as cpic
+25. use cpic defined variable sizes
+26. ensure that mode name is validated on allocate call
+27. add parallel session option to mode.
+28. add security to aftp and mode
+29. make bind and attach process all dynamic (remove remaining hard codes).
+30. do deallocate
+31. finish testing data tx/rx paths.
+32. Perform pacing better.
+
+finish following cpic calls:
+#define CM_CMACCI               (CM_CALL_ID) 1
+#define CM_CMACCP               (CM_CALL_ID) 2
+#define CM_CMCANC               (CM_CALL_ID) 4
+#define CM_CMCFM                (CM_CALL_ID) 5
+#define CM_CMCFMD               (CM_CALL_ID) 6
+#define CM_CMCNVI               (CM_CALL_ID) 7
+#define CM_CMCNVO               (CM_CALL_ID) 8
+#define CM_CMDEAL               (CM_CALL_ID) 9
+#define CM_CMDFDE               (CM_CALL_ID) 10
+#define CM_CMEACN               (CM_CALL_ID) 11
+#define CM_CMEAEQ               (CM_CALL_ID) 12
+#define CM_CMEAPT               (CM_CALL_ID) 13
+#define CM_CMECS                (CM_CALL_ID) 14
+#define CM_CMECT                (CM_CALL_ID) 15
+#define CM_CMECTX               (CM_CALL_ID) 16
+#define CM_CMEID                (CM_CALL_ID) 17
+#define CM_CMEMBS               (CM_CALL_ID) 18
+#define CM_CMEMN                (CM_CALL_ID) 19
+#define CM_CMEPID               (CM_CALL_ID) 20
+#define CM_CMEPLN               (CM_CALL_ID) 21
+#define CM_CMESI                (CM_CALL_ID) 22
+#define CM_CMESL                (CM_CALL_ID) 23
+#define CM_CMESRM               (CM_CALL_ID) 24
+#define CM_CMESUI               (CM_CALL_ID) 25
+#define CM_CMETC                (CM_CALL_ID) 26
+#define CM_CMETPN               (CM_CALL_ID) 27
+#define CM_CMFLUS               (CM_CALL_ID) 28
+#define CM_CMINCL               (CM_CALL_ID) 29
+#define CM_CMINIC               (CM_CALL_ID) 30
+#define CM_CMPREP               (CM_CALL_ID) 32
+#define CM_CMPTR                (CM_CALL_ID) 33
+#define CM_CMRCVX               (CM_CALL_ID) 35
+#define CM_CMRLTP               (CM_CALL_ID) 36
+#define CM_CMRTS                (CM_CALL_ID) 37
+#define CM_CMSERR               (CM_CALL_ID) 51
+#define CM_CMSLTP               (CM_CALL_ID) 55
+#define CM_CMSNDX               (CM_CALL_ID) 57
+#define CM_CMTRTS               (CM_CALL_ID) 72
+#define CM_CMWAIT               (CM_CALL_ID) 73
+#define CM_CMWCMP               (CM_CALL_ID) 74
+
+attach mgr:
+- non-queued support (run many copies of each tp).
+- full queue support.
+
+when link station is disconnected:
+- destroy as
+- destroy pc
+- tg_update
+
+tn3270 related todos:
+- validate incomming clients by user defined allowed ip ranges.
+- better signal handling.
+- better cleanup on daemon shutdown.
+- cleanup all the tn3270 code.
+- display more output in the user tables.
+  - bytes tx/rx.
+- better debugging.
+
+general todos:
+- create homepage for linux-sna software setup
+- create development rpms.
+
+old list, probably not revalent anymore.
 - milestones and roadmap.
-- xml configuration files for snaconfig and snatchd.
-- configuration file conversion. A tool that converts a given SNA
-  implementations cfg file into a Linux-SNA configuration file.
-- make single sna interface via command `sna`, like iproute2.
 - create libebcdic which works with international character sets.
-- Talk to kernel stack with only ebcdic.
-- Do full Xid.
-- Handle APPN.
-- Do basic LU6.2 so Aping test works.
-
-xml:
- - read xml config file in.
- - display structures for debug
- - write xml config file out.
-
-Goal:
-1. APING loopback test.
-2. Docs for APING loopback test.                2/9/2001
-3. APING outside world test.
-4. Docs for APING outside test.                 2/13/2001
-5. Docs for setting up an LU6.2 Peer node.      2/15/2001
-
-Short term todo(s):
-- Loopback TPs should work swimmingly using full code paths.
-- Build generic BIND processing engine.
-- Build generic BIND build engine.
-- Complete loopback (intranode) bind negotiation.
-- Complete attach processing, using lfsid properly.
-
-- Fix NodeID in XID header.
-- Link station stop command sends out a DISC command to the partner and
-  does a structured link teardown
-- Complete internode bind.
-- Expand handling of bind and unbind conditions.
-
-Stuff that I will probably (never?) end up doing:
-- Move guts of sna_nof.c to sna_ps_copr.c
-- Code LUA interface for LU 0, 1, 2, 3
-- Port Bus-Tech Channel Driver
-- Code full SNA stack support for Channel
-- Get Channel hardware
+- Docs for APING test.                 
+- Docs for setting up an LU6.2 Peer node.      
+- Move guts of sna_nof.c to sna_ps_copr.c.
+- Code LUA interface for LU 0, 1, 2, 3.
+- Port Bus-Tech Channel Driver.
+- Code full SNA stack support for Channel.
+- Get Channel hardware.
+- Link Service Architecure (LSA).
+- CDLC.

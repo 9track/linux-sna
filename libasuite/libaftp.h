@@ -138,18 +138,3 @@ void get_code_string(codemap * map,
 		     AFTP_LENGTH_TYPE string_size,
 		     AFTP_LENGTH_TYPE AFTP_PTR returned_length,
 		     AFTP_RETURN_CODE_TYPE AFTP_PTR rc);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

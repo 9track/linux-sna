@@ -14,16 +14,100 @@
 #include <config.h>
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
-#include <syscall_pic.h>
-#include <linux/unistd.h>
-#include <linux/attach.h>
+#include <unistd.h>
+#include <sys/types.h>
 
+#include <linux/unistd.h>
+#include <sys/syscall.h>
+
+#include <linux/attach.h>
 #include "attach.h"
 
-_syscall2_pic(int, tp_register, int, a, struct tp_info *, tp);
-_syscall2_pic(int, tp_unregister, int, a, int, b);
-_syscall4_pic(int, tp_correlate, int, s, pid_t, pid, unsigned long, tcb_id, char *, tp_name);
-_syscall0(int, attach_open);
-_syscall4_pic(int, attach_listen,int,s,void *,buf,int,len,unsigned int,flags);
-_syscall1_pic(int, attach_close, int, s);
+/**
+ * @afd: attach file descriptor.
+ */
+int tp_register(int afd, struct tp_info *tp)
+{
+	int opcode = ATTACH_TP_REGISTER;
+	attach_args *args;
+	int err;
+	
+	aargo4(args, &opcode, &err, &afd, tp);
+	syscall(__NR_attachcall, args);
+	free(args);
+	return err;
+}
+
+/**
+ * @afd: attach file descriptor.
+ */
+int tp_unregister(int afd, int tp_index)
+{
+	int opcode = ATTACH_TP_UNREGISTER;
+	attach_args *args;
+	int err;
+	
+	aargo4(args, &opcode, &err, &afd, &tp_index);
+	syscall(__NR_attachcall, args);
+	free(args);
+	return err;
+}
+
+/**
+ * @afd: attach file descriptor.
+ */
+int tp_correlate(int afd, pid_t pid, unsigned long tcb_id, char *tp_name)
+{
+	int opcode = ATTACH_TP_CORRELATE;
+	attach_args *args;
+	int err;
+	
+	aargo6(args, &opcode, &err, &afd, &pid, &tcb_id, tp_name);
+	syscall(__NR_attachcall, args);
+	free(args);
+	return 0;
+}
+
+int attach_open(void)
+{
+	int opcode = ATTACH_OPEN;
+	attach_args *args;
+	int err;
+	
+	aargo2(args, &opcode, &err);
+	syscall(__NR_attachcall, args);
+	free(args);
+	return err;
+}
+
+/**
+ * @afd: attach file descriptor.
+ */
+int attach_listen(int afd, void *buf, int len, unsigned int flags)
+{
+	int opcode = ATTACH_LISTEN;
+	attach_args *args;
+        int err;
+
+	aargo6(args, &opcode, &err, &afd, buf, &len, &flags);
+	syscall(__NR_attachcall, args);
+	free(args);
+	return err;
+}
+
+/**
+ * @afd: attach file descriptor.
+ */
+int attach_close(int afd)
+{
+	int opcode = ATTACH_CLOSE;
+	attach_args *args;
+        int err;
+
+	aargo3(args, &opcode, &err, &afd);
+	syscall(__NR_attachcall, args);
+	free(args);
+	return err;
+}

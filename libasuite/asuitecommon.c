@@ -378,7 +378,7 @@ send_asuiterecord(unsigned char * conv_id, asuiterecord * record)
   CM_INT32 cm_rc;
 
   CM_INT32 length = record->position;
-
+  
   cmsend(conv_id, record->buffer, &length, 
 	 &rts_received, &cm_rc);
 
@@ -476,7 +476,3 @@ safe_get_cwd()
 
   return final;
 }
-
-
-
-

@@ -1,4 +1,4 @@
-/* libappc.c: APPC call mapping for Linux-SNA
+/* libappc.c: APPC system call wrappers.
  *
  * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
  *
@@ -14,16 +14,18 @@
 #include <config.h>
 #endif
 
-#include <syscall_pic.h>
-#include <linux/unistd.h>
-#include <linux/appc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
 
-/* Single APPC system call into the kernel. */
-_syscall5_pic(void, appcall, unsigned short, opcode, unsigned char, opext,
-        unsigned short, rcpri, unsigned long, rcsec, void *, uaddr);
+#include <linux/unistd.h>
+#include <sys/syscall.h>
+
+#include <linux/appc.h>
 
 void appc(unsigned short opcode, unsigned char opext,
         unsigned short rcpri, unsigned long rcsec, void *uaddr)
 {
-	appcall(opcode, opext, rcpri, rcsec, uaddr);
+	syscall(__NR_appcall, opcode, opext, rcpri, rcsec, uaddr);
 }

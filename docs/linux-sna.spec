@@ -1,7 +1,7 @@
 %define name linux-sna
 %define ver  VERSION
 %define rel  1
-%define vendor linux-SNA Project
+%define vendor linux-SNA.ORG
 %define distro linux-SNA Enterprise Multiprotocol Suite
 %define packager jschlst@linux-sna.org
 
@@ -28,10 +28,10 @@ Summary: linux-SNA sense error code message decoder.
 Group: Networking
 Requires: linux-sna
 
-#%package tn3270
-#Summary: TN3270 related software.
-#Group: Networking
-#Requires: linux-sna
+%package tn3270
+Summary: TN3270 related software.
+Group: Networking
+Requires: linux-sna
 
 #%package tn5250
 #Summary: TN5250 related software.
@@ -43,14 +43,19 @@ Various user-space software configuration files and base applications
 to enable linux-SNA communications.
 
 %description asuite
-APPC application suite, contains such programs as acopy, aftp, aname,
-aping, arexec and atell.
+The APPC Application Suite is a common set of applications for all
+APPC and APPN platforms. It consists of a file transfer program,
+a directory server, and other valuable utilities.  These applications
+not only provide valuable function, but set new standards for APPC
+applications commonly available across platforms. The APPC Application
+Suite utilities are written in the C programming language and use CPI-C.
+Other APPC applications included are acopy, aftp, aname, aping, arexec, atell.
 
 %description sense
 linux-SNA sense error code message decoder.
 
-#%description tn3270
-#TN3270 related software.
+%description tn3270
+TN3270 gateway and related software.
 
 #%description tn5250
 #TN5250 related software.
@@ -67,11 +72,9 @@ linux-SNA sense error code message decoder.
 make
 
 %install
-install -D -m 644 docs/confs/sna.xml $RPM_BUILD_ROOT/etc/sna.xml
-install -D -m 644 docs/confs/sna.cfg $RPM_BUILD_ROOT/etc/sna.cfg
-install -D -m 644 docs/confs/snatchd.conf $RPM_BUILD_ROOT/etc/snatchd.conf
+install -D -m 644 docs/sna.xml $RPM_BUILD_ROOT/etc/sna.xml
 install -D -m 755 docs/snatchd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/snatchd.init
-#install -D -m 755 docs/tn3270d.init $RPM_BUILD_ROOT/etc/rc.d/init.d/tn3270d.init
+install -D -m 755 docs/tn3270d.init $RPM_BUILD_ROOT/etc/rc.d/init.d/tn3270d.init
 #install -D -m 755 docs/tn5250d.init $RPM_BUILD_ROOT/etc/rc.d/init.d/tn5250d.init
 make mandir=$RPM_BUILD_ROOT/usr/share/man install
 
@@ -96,8 +99,8 @@ fi
 
 chkconfig --add snatchd.init
 
-#%post tn3270d
-#chkconfig --add tn3270d.init
+%post tn3270
+chkconfig --add tn3270d.init
 
 #%post tn5250d 
 #chkconfig --add tn5250d.init
@@ -123,8 +126,8 @@ fi
 
 chkconfig --del snatchd.init
 
-#%preun tn3270d
-#chkconfig --del tn3270d.init
+%preun tn3270
+chkconfig --del tn3270d.init
 
 #%preun tn5250d
 #chkconfig --del tn5250d.init
@@ -174,18 +177,17 @@ fi
 
 %files sense
 %defattr(-, root, root)
-/usr/bin/sense
-/usr/bin/mksense
-/usr/share/man/man1/sense.1.gz
-/usr/share/man/man1/mksense.1.gz
+/usr/bin/getsense
+/usr/lib/getsense/sense.data
+/usr/share/man/man1/getsense.1.gz
 
-#%files tn3270
-#%defattr(-, root, root)
-#/etc/rc.d/init.d/tn3270d.init
-#/usr/sbin/tn3270d
-#/usr/include/host3270.h
-#/usr/include/codes3270.h
-#/usr/include/tn3270d.h
+%files tn3270
+%defattr(-, root, root)
+/etc/rc.d/init.d/tn3270d.init
+/usr/sbin/tn3270d
+/usr/lib/libtnX*
+/usr/include/libtnX.h
+/usr/include/tnX_codes.h
 
 #%files tn5250
 #%defattr(-, root, root)
@@ -196,9 +198,7 @@ fi
 
 %files
 %defattr(-, root, root)
-%config /etc/sna.cfg
 %config /etc/sna.xml
-%config /etc/snatchd.conf
 /etc/rc.d/init.d/snatchd.init
 /usr/sbin/snaconfig
 /usr/sbin/snatchd
@@ -217,7 +217,7 @@ fi
 /usr/share/man/man8/snatchd.8.gz
 %doc BUGS COPYING AUTHORS ChangeLog INSTALL NEWS TODO README THANKS
 %doc docs/linux-sna.spec docs/modules.conf.sna
-%doc docs/confs/sna.cfg docs/confs/sna.xml docs/confs/snatchd.conf
+%doc docs/sna.xml
 %doc docs/html-guides/begin_snaconfig.html docs/html-guides/get_started.html
 %doc docs/html-guides/quick-appendix-a.html
 %doc docs/html-guides/quick-node-setup.html

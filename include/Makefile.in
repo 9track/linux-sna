@@ -63,9 +63,11 @@ host_triplet = @host@
 AS = @AS@
 CC = @CC@
 DLLTOOL = @DLLTOOL@
+EXEEXT = @EXEEXT@
 GLIB_CONFIG = @GLIB_CONFIG@
 LD = @LD@
 LIBTOOL = @LIBTOOL@
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
@@ -74,7 +76,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XML_CONFIG = @XML_CONFIG@
 
-include_HEADERS = syscall_pic.h 
+include_HEADERS = 
 noinst_HEADERS = version.h tn5250.h tn5250
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
@@ -233,6 +235,7 @@ clean-am:  clean-hdr clean-tags clean-generic mostlyclean-am
 clean: clean-am
 
 distclean-am:  distclean-hdr distclean-tags distclean-generic clean-am
+	-rm -f libtool
 
 distclean: distclean-am
 
