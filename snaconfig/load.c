@@ -29,7 +29,6 @@
 #include <linux/cpic.h>
 #include <version.h>
 #include <nof.h>
-#include <lar.h>
 
 #include "snaconfig.h"
 #include "paths.h"

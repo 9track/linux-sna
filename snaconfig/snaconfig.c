@@ -34,7 +34,6 @@
 
 #include <version.h>
 #include <nof.h>
-#include <lar.h>
 
 int sna_sk;
 int sna_debug = 10;
@@ -157,6 +156,7 @@ wrap:
                 exit (1);
         }       
 
+#ifdef OLD_LAR_CODE
 	if(!strcmp(*argv, "find"))
 	{
 		char name[SNA_RESOURCE_NAME_LEN];
@@ -196,6 +196,7 @@ wrap:
 		lar_search(sna_sk, net, name, rtcap);
 		exit (0);
 	}
+#endif
 
 	sna_load_cfg_stdin(argv);
 

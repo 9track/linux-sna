@@ -81,7 +81,7 @@ CFLAGS = -Wall
 
 sbin_PROGRAMS = snaconfig
 
-snaconfig_LDADD = ../libsna/libappc.la ../libsna/libattach.la 	../libsna/libcpic.la ../libsna/liblar.la ../libsna/liblua.la 	../libsna/libnof.la
+snaconfig_LDADD = ../libsna/libappc.la ../libsna/libattach.la 	../libsna/libcpic.la ../libsna/liblua.la 	../libsna/libnof.la
 
 snaconfig_SOURCES = snaconfig.c display.c utility.c parse.c load.c 	parse_file.c parse_stdin.c
 
@@ -103,8 +103,7 @@ LIBS = @LIBS@
 snaconfig_OBJECTS =  snaconfig.o display.o utility.o parse.o load.o \
 parse_file.o parse_stdin.o
 snaconfig_DEPENDENCIES =  ../libsna/libappc.la ../libsna/libattach.la \
-../libsna/libcpic.la ../libsna/liblar.la ../libsna/liblua.la \
-../libsna/libnof.la
+../libsna/libcpic.la ../libsna/liblua.la ../libsna/libnof.la
 snaconfig_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

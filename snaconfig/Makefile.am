@@ -7,7 +7,7 @@ CFLAGS=-Wall
 sbin_PROGRAMS = snaconfig
 
 snaconfig_LDADD = ../libsna/libappc.la ../libsna/libattach.la \
-	../libsna/libcpic.la ../libsna/liblar.la ../libsna/liblua.la \
+	../libsna/libcpic.la ../libsna/liblua.la \
 	../libsna/libnof.la
 snaconfig_SOURCES = snaconfig.c display.c utility.c parse.c load.c \
 	parse_file.c parse_stdin.c

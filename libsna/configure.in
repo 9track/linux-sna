@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to create configure.
 
 AC_INIT(libnof.c)
-AM_INIT_AUTOMAKE(libsna, 1.00PRE18)
+AM_INIT_AUTOMAKE(libsna, 1.00PRE19)
 
 AC_PROG_CC
 AC_EXEEXT

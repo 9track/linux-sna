@@ -1,5 +1,8 @@
 ChangeLog for net-fun patches and the sna-tools.
 
+1.00PRE19 - November 8, 2001.
+- removed old lar code from linux-sna tools.
+
 1.00PRE18 - November 7, 2001.
 - fixed missing pr_ether symbol.
 - removed lar from kernel patch (now is in linux-llc, lard, lardb, etc).
