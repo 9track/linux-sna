@@ -52,6 +52,7 @@ extern struct servtab *servtab;
 
 struct servtab *find_service_by_fd(int fd);
 struct servtab *find_service_by_pid(pid_t pid);
+struct servtab *find_service_by_name(char *name, int len);
 void restart_services(void);
 const char *service_name(struct servtab *sep);
 

@@ -13,6 +13,7 @@
  * This material is provided "as is" and at no charge.
  */
 
+#include <config.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
@@ -61,6 +62,19 @@ static struct wordmap sync_levels[] = {
 	{ "confirm",	2	},
 	{ NULL,		-1	}
 };
+
+struct servtab *find_service_by_name(char *name, int len)
+{
+	struct servtab *sep;
+	for(sep = servtab; sep; sep = sep->se_next)
+	{
+		printf("%s - %s\n", sep->se_service, name);
+		if(!strncmp(sep->se_service, name, len))
+			return (sep);
+	}
+
+	return (NULL);
+}
 
 struct servtab *find_service_by_fd(int fd)
 {
@@ -482,11 +496,9 @@ static void loadconfigent(struct servtab *cp)
         }
         sep->se_checked = 1;
 
-        switch (sep->se_family) {
-        case AF_UNIX:
-                if (sep->se_fd != -1)
-                        break;
-                (void)unlink(sep->se_service);
+        if (sep->se_fd != -1)
+		return;
+	(void)unlink(sep->se_service);
                 n = strlen(sep->se_service);
                 if (n > sizeof(sep->se_ctrladdr_un.sun_path) - 1)
                         n = sizeof(sep->se_ctrladdr_un.sun_path) - 1;
@@ -496,50 +508,7 @@ static void loadconfigent(struct servtab *cp)
                 sep->se_ctrladdr_un.sun_family = AF_UNIX;
                 sep->se_ctrladdr_size = n +
                         sizeof sep->se_ctrladdr_un.sun_family;
-                setup(sep);
-                break;
-        case AF_INET:
-                sep->se_ctrladdr_in.sin_family = AF_INET;
-                sep->se_ctrladdr_size = sizeof sep->se_ctrladdr_in;
-                if (isrpcservice(sep)) {
-                        struct rpcent *rp;
-
-                        sep->se_rpcprog = atoi(sep->se_service);
-                        if (sep->se_rpcprog == 0) {
-                                rp = getrpcbyname(sep->se_service);
-                                if (rp == 0) {
-                                        syslog(LOG_ERR,
-                                               "%s: unknown service",
-                                               sep->se_service);
-                                        return;
-                                }
-                                sep->se_rpcprog = rp->r_number;
-                        }
-                        if (sep->se_fd == -1)
-                                setup(sep);
-                }
-                else {
-                        u_short port = htons(atoi(sep->se_service));
-
-                        if (!port) {
-                                struct servent *sp;
-                                sp = getservbyname(sep->se_service,
-                                                   sep->se_proto);
-                                if (sp == 0) {
-                                        return;
-                                }
-                                port = sp->s_port;
-                        }
-                        if (port != sep->se_ctrladdr_in.sin_port) {
-                                sep->se_ctrladdr_in.sin_port = port;
-                                if (sep->se_fd != -1) {
-                                        closeit(sep);
-                                }
-                        }
-                        if (sep->se_fd == -1)
-                                setup(sep);
-                }
-        }
+	setup(sep);
 }
 
 void config(int signum)

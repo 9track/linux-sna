@@ -1,0 +1,424 @@
+.TH SNACONFIG 8 "7 June 2000" "sna-tools" "Linux Programmer's Manual"
+.SH NAME
+snaconfig \- configure a Linux-SNA network
+.SH SYNOPSIS
+.B "snaconfig <NetID.Node>"
+.br
+.B "snaconfig <NetID.Node> options ..."
+.br
+.B "snaconfig -f config_file
+.br
+.B "snaconfig find <netid> <group_name> [appn|subarea|nameserver]
+.SH DESCRIPTION
+.B Snaconfig
+is used to configure the kernel-resident sna network interfaces and stack.  
+It is used at boot time to set up datalinks, linkstations, local and remote
+lus, modes, and cpi-c side information as necessary.  After that, it
+is usually only needed when debugging or when system tuning is needed.
+.LP
+If no arguments are given,
+.B snaconfig
+displays the status of the currently active sna nodes.  If
+a single
+.B node name
+argument is given, it displays the status of the given node
+only; if a single
+.B -a
+argument is given, it displays the status of all nodes, even
+those that are down.  Otherwise, it configures sna node.
+.LP
+.B Snaconfig 
+may also load all configuration information from a configuration
+file located on the local file system. \fB-f config_file\fP will load a
+configuration file. Consult \fBsna.conf(5)\fP for more information on the
+format of this file.
+.LP
+.B Snaconfig 
+also includes a utility to locate adjacent SNA nodes on a LLC
+based network. One must have the local SNA node started up the the link level
+before the \fBfind\fP command will locate any nodes. Consult the
+\fBFIND OPTIONS\fP below for more information on the specific options.
+.SH OPTIONS
+.TP
+.B NetID.Node
+The fully qualifier CP name of the local node. The fully qualifier CP
+name is a 17-byte charater string. The fully qualified CP name consists
+of two parts: the network name and the CP name, concatenated with a period.
+The network name is a 1 to 8 byte SNA Type A character string. The CP
+name is a 1 to 8 byte SNA Type A character string. The fully qualified CP
+name is also known as the network qualified CP name. 
+.TP
+.B start
+This flag causes the dlc, link, lu_local, remote_lu, mode, cpic or node
+to start operations.
+.TP
+.B stop
+This flag causes the dlc, link, lu_local, remote_lu, mode, cpic or node
+to stop operations in an orderly manner.
+.TP
+.B delete
+This flag causes the immediate deactivation and deletion of dlc, link
+lu_local, remote_lu, mode, cpic or node.
+.SH NODE OPTIONS
+.TP
+.B "[\-]len"
+Enable or disable the node as a low-entry network (LEN) node.
+.TP
+.B "[\-]appn"
+Enable or disable the node as an Advanced Peer to Peer Networking (APPN) node.
+.TP
+.B "[\-]nn"
+Enable or disable the node as a Network Node (NN).
+.TP
+.B "[\-]lu_seg"
+.TP
+.B "[\-]bind_seg"
+.TP
+.B "[\-]max_lus <NN>"
+Specify the maximum number of independent LU sessions allowed per LU. The
+default max LU value is 0, which is unlimited. A value of 0 - 65535 may be
+specified.
+.SH DLC OPTIONS
+.B "dlc <dev> <port> [pri|sec|neg]"
+.TP
+.B dev
+The device name (dev) specifies the communications adapter or protocol you
+are using. This is device and protocol specific. For example the first
+Ethernet card would be \fBeth0\fP.
+.TP
+.B port
+The port is a DLC dependent indentifier over which the connection will
+be established. For example a common Ethernet DLC port for SNA is 0x04.
+.TP
+.B "[pri|sec|neg]"
+The link station role defines the responsibility that the link station has
+for controlling the communication with its adjacent link stations. Valid
+values are:
+.IP
+.IP o
+\fBpri\fP The primary link station controls the conversation on the link.
+.IP
+.IP o
+\fBsec\fP The secondary link station must wait to be polled by the primary
+link station before data is sent.
+.IP
+.IP o
+\fBneg\fP When the connection is estabilished, the local link stations becomes
+either a primary or secondary link station.
+.TP
+.B btu <NN>
+The maximum btu specified the max BTU size that can be received. If
+implicit HPR-capable links are not supported on the port, this must
+be set to a value greater than or equal to 99. If implicit HPR capable
+links are supported on the port, this must be set to a value greater
+than or equal to 768. If this port is for the AnyNet DLC, you must use
+9216. A value within 99 - 32767 must be specified.
+.TP
+.B mia <NN>
+The maximum number of incomming activation attempts; the number of retry
+attempts allowed when the remote node is not responding or the port is
+inactive. The attempts include both automatic retries and application
+driven activation attempts. When this limit is reached, no further activation
+retries are attempted. The number of retries attempted is reset by a
+successful activation, or when a link station, port or DLC is deactivated.
+A value within 0 - 127 is valid, 0 means no limit.
+.TP
+.B moa <NN>
+The maximum number of outgoing activation attempts: the number of retry
+attempts allowed when the remote node is not responding or the port is
+inactive. The attempts include both automatic retries and application
+driven activation attempts. When this limit is reached, no further activation
+retries are attempted. The number of retries attempted is reset by a
+successful activation, or when a link station, port or DLC is deactivated.
+A value within 0 - 127 is valid, 0 means no limit.
+.SH LINK OPTIONS
+.B "link <dev> <port> <dstaddr> <dstport>"
+.TP
+.B dev
+The device name (dev) specifies the communications adapter or protocol you
+are using. This is device and protocol specific. For example the first
+Ethernet card would be \fBeth0\fP.
+.TP
+.B port
+The port is a DLC dependent indentifier over which the connection will
+be established. For example a common Ethernet DLC port for SNA is 0x04.
+.TP
+.B dstaddr
+The destination address specifies the DLC specific address for the partner
+link station.
+.TP
+.B dstport
+The destination port is a DLC dependent indentifier over which the connection
+will be established. For example a common Ethernet DLC port for SNA is 0x04.
+.TP
+.B "[\-]byte_swap"
+Enable or disable byte swapping of the destination address at runtime. Many
+SNA devices, such as Ethernet routers, require that the destination address
+be byte-swapped before use. The destination address displayed remains the
+same reguardless of whether byte-swapping is enabled or not.
+.TP
+.B "[\-]auto_act"
+.TP
+.B "[\-]auto_deact"
+.SH LOCAL LU OPTIONS
+.B "lu local <name>"
+.TP
+.B name
+The lu name specifies the name of a type of network accessible unit (NAU)
+that enables end users to communicate with each other and gain access to
+network resources. A lu name is a 1 to 8 byte SNA Type A character string.
+.TP
+.B "[\-]dlu"
+Enable or disable dependent LU support.
+.TP
+.B "[\-]sync_point"
+Enable or disable sync point services for this LU.
+.TP
+.B lu_sess_limit <NN>
+The lu session limit specifies the maximum number of sessions supported by
+the LU. A value of 0 - 65535 or 0 for unlimited is required.
+.SH REMOTE LU OPTIONS
+.B "lu remote <NetID.Node> <FqCP.Name>"
+.TP
+.B NetID.Node
+.TP
+.B FqCP.Name
+.TP
+.B "[\-]parallel_ss"
+.TP
+.B "[\-]cnv_security"
+.SH MODE OPTIONS
+.PP
+.B "mode <name> <plu_name>"
+.TP
+.B name
+The mode name is used by the initiator of the session to designate the
+charateristics for thee session allocated for the conversation. The mode
+defines a set of characteristics that can apply to one or more sessions.
+These characteristics include traffic pacing values, message-length limits,
+synchronization point and cryptography options, and the class of service
+within the transport network.
+
+The mode name is a 1 to 8 byte SNA Type A character string. You can specifiy
+one of the following:
+.IP
+.IP o
+.B "BLANK"
+.IP
+.IP o
+.B "#BATCH"
+.IP
+.IP o
+.B "#BATCHSC"
+.IP
+.IP o
+.B "#INTER"
+.IP
+.IP o
+.B "#INTERSC"
+.IP
+.IP o
+.B "QPCSUPP"
+.IP
+.IP o
+.B "SNASVCMSG"
+.IP
+.IP o
+A unique mode name for each mode you define. If you define your own mode
+name, valid characters are:
+
+- All blanks.
+
+- The first character must be an uppercase alphabetic character (A-Z) or a
+special character (@,#,$).
+
+- The remaining characters can be alphanumeric characters (A-Z, 0-9) or
+special characters (@,#,$).
+.PP
+.TP
+.B plu_name
+The Partner LU name is the fully qualified CP name of the partner node.
+.TP
+.B "[\-]high_pri"
+.TP
+.B tx_pacing <NN>
+The transmit pacing window indicates to the partner logival unit (LU) how
+many request units (RUs) it can transmit before sending a pacing request.
+The value is in the range of 1 - 63, the default is 1.
+.TP
+.B rx_pacing <NN>
+The receive pacing window indicates to the partner logical unit (LU) how
+many request units (RUs) it can send before receiving a pacing response.
+The value is in the range of 1 - 63, the default is 1.
+.TP
+.B max_tx_ru <NN>
+Maximum size of the request/response unit (RU) sent on the sessions in this
+mode and is negotiated during session activation. A value of 256 - 61440 may
+be specified. Default is 4096 bytes.
+.TP
+.B max_rx_ru <NN>
+Maximum size of the request/response unit (RU) received on the sessions in this
+mode and is negotiated during session activation. A value of 256 - 61440 may
+be specified. Default is 4096 bytes.
+.TP
+.B auto_act_limit <NN>
+.TP
+.B min_con_win_limit <NN>
+.TP
+.B ptr_min_con_win_limit <NN>
+.TP
+.B parallel_sess_limit <NN>
+.TP
+.B "[\-]encryption"
+Enable or disable session-level cryptography.
+.TP
+.B "[\-]tx_comp"
+Enable or disable compression of data transmission on the specified mode.
+.TP
+.B "[\-]rx_comp"
+Enable or disable compression of incomming data on the specified mode.
+.TP
+.B "[\-]rle"
+Enable or disable RLE decompression for the specified mode.
+.TP
+.B "[\-]lz9"
+Enable or disable RLE and LZ9 decompression for the specified mode.
+.TP
+.B "[\-]lz10"
+Enable or disable RLE, LZ9 and LZ10 decompression for the specified mode.
+.SH CPI-C OPTIONS
+.B "cpic <sym_dest_name> <mode> <plu_name> <tp_name>"
+.TP
+.B sym_dest_name
+The symbolic destination name specifies the 1 - 8 character symbolic
+destination name that identifies the side information entry. The symbolic
+destination name is the name used by common programming interface for
+communications (CPI-C) applications to identify the side information
+definition and to access the network resources.
+.TP
+.B mode
+The mode name is a 1 to 8 byte SNA Type A character string. You can specifiy
+one of the following:
+.IP
+.IP o
+.B "BLANK"
+.IP
+.IP o
+.B "#BATCH"
+.IP
+.IP o
+.B "#BATCHSC"
+.IP
+.IP o
+.B "#INTER"
+.IP
+.IP o
+.B "#INTERSC"
+.IP
+.IP o
+.B "QPCSUPP"
+.IP
+.IP o
+.B "SNASVCMSG"
+.IP
+.IP o
+A unique mode name for each mode you define. If you define your own mode
+name, valid characters are:
+
+- All blanks.
+
+- The first character must be an uppercase alphabetic character (A-Z) or a
+special character (@,#,$).
+
+- The remaining characters can be alphanumeric characters (A-Z, 0-9) or
+special characters (@,#,$).
+.TP
+.B plu_name
+The partner LU name specified the fully qualified name of the partner LU. 
+The fully qualified name is a 17 byte character string. The fully 
+qualified name consists of two parts: the network name and the LU name, 
+concatenated with a period. The network name is a 1 - 8 byte SNA Type A 
+character string. The LU name is a 1 - 8 byte SNA Type A character string.
+.TP
+.B tp_name
+The TP name specifies a 1 - 64 character transaction program name that
+provides information about accepting incoming Attaches and optionally
+starting workstation programs. Valid characters are any locally displayable
+characters using the native encoding of the local system. The TP name may
+also refer to a service transaction program.
+.TP
+.B "[\-]srvc_tp"
+Indicate that the transaction program name supplied is a service transaction
+program. All characters except the first specified in the transaction program
+name must be valid characters in the locally displayable character set. The
+first character must be a hexadecimal digit in the range of 0x01 - 0x3F,
+excluding 0x0E and 0x0F.
+.TP
+.B "[\-]secure"
+Enable or disable conversation level security.
+.TP
+.B "[\-]same"
+Enable or disable \fBsame\fP security: Attach manager sends the partner
+LU an allocation request that includes the same level of access security
+information as that in the request received from the partner LU.
+.TP
+.B "[\-]program"
+Enable or disable \fBprogram\fP security: Attach manager sends the partner
+LU an allocation request that includes a security user ID and security
+password that you define.
+.TP
+.B "[\-]strong"
+Enabel or disable \fBstrong\fP security: Attach manager sends the partner
+LU an allocation request that includes a password substitution created by
+using the password you defined. This enables a more secure conversation. The
+password substitution must be supported on both ends.
+.TP
+.B userid
+The userid parameter specifies the 1 - 10 charater user ID used to enforce
+conversation level security.
+.TP
+.B password
+The password parameter specified the 1 - 20 character password used to 
+enforce conversation level security.
+.SH FIND OPTIONS
+.B find <netid> <group_name> [appn|subarea|nameserver]
+.TP
+.B netid
+The netid specified the network ID (NetID) to search for nodes on. For
+example a valid netid would be \fBlnxsna\fP.
+.TP
+.B group_name
+The group name is a permanent identifier assigned to each of a collection of
+Network Entities. For a Network Entity assigned both an Individual Name and
+a Group Name, the entity is often referred to as a member of the Group Name.
+Group names use the character set 01134, ie uppercase letters A through Z
+and numerals 0 - 9. Common group names are \fBIGO2HOST\fP, \fBIROUTSNA\fP
+and \fBIGIVNAME\fP.
+.TP
+.B "[appn|subarea|nameserver]"
+Specifies the routing capabilities of the node for which you are looking for.
+.SH FILES
+.I /proc/net/sna/virtual_nodes
+.br
+.I /proc/net/sna/devices
+.br
+.I /proc/net/sna/ports
+.br
+.I /proc/net/sna/link_stations
+.br
+.I /proc/net/sna/modes
+.br
+.I /proc/net/sna/local_lus
+.br
+.I /proc/net/sna/remote_lus
+.br
+.I /etc/init.d/network
+.SH SEE ALSO
+sna.conf(5), snatchd(8)
+.SH BUGS
+snaconfig attempts to do many things, though it is purely a user-interface
+command translation program for the kernel SNA stack. Report any bugs
+found to the author(s) below.
+.SH AUTHORS
+Jay Schulist, <jschlst@turbolinux.com>
+.br

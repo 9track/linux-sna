@@ -6,6 +6,7 @@
  * of the GNU Public License, incorporated herein by reference.
  */
 
+#include <config.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <strings.h>
@@ -72,14 +73,8 @@ int main(int argc, char *argv[])
                 {
 			case 'a':
 				pall = 1;
-				len = strlen(sense);
-				if(len < 10 && len != 0)
-                                {
-                                        printf("Usage: sense -d database [-s code|-a]\n");
-                                        printf("  Must choose [-s code] or [-a], but not both.\n");
-                                        exit(1);
-                                }
 				break;
+
                         case 's':
                                 strncpy(sense, argv[optind++], 9);
 				if(pall)

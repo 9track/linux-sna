@@ -1,25 +1,18 @@
 ToDo list for sna-tools and net-fun kernel patch.
+ - Many todos are found in the ChangeLog file.
 
-/*
- * Critical Todo(s)
- */
-1. CPI-C and APPC libraries.
-2. kfree_s bad obj on node delete.
-3. Finish XID changes, so one can build links again.
+Features that would be nice and are easy (but abit time consuming) to do:
+- Configuration file conversion. This could be done 2 ways, the obvious
+  is a tool that converts a given SNA implementations cfg file into a Linux-SNA
+  configuration file. The not so obvious is a snaconfig option that uses a
+  non-converted configuration file of another SNA server.
 
-/*
- * Hardware Todo(s)
- */
-1. TwinAx drivers.
+  The first option is generally useful, though the second is a cool feature
+  though its usefulness could be debated.
 
-
-/*
- * Non-Critical Todo(s)
- */
-- snaconfig tool (always)
-  - Configuration file support.
-    The option exists but there is no backend support, a good
-    configuration file design and parser is needed.
-  - Case Sensativity
-    It may be nice to allow case insensative options.
-- API libraries. (CPI-C, APPC, LUA)
+Stuff that I will probably (never?) end up doing:
+- Move guts of sna_nof.c to sna_ps_copr.c
+- Code LUA interface for LU 0, 1, 2, 3
+- Port Bus-Tech Channel Driver
+- Code full SNA stack support for Channel
+- Get Channel hardware

@@ -1,4 +1,6 @@
 Please send bug reports to linux-sna@turbolinux.com.
 
+0. cpic.h file needs to be in /usr/include installed by libsna
 1. compiled static; define node; delete node; add node; get segfault / kpanic
-2. fix llcping
+2. libnof sets errno.
+3. CPIC, not using a Symbolic destination name yeilds much pain.

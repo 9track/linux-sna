@@ -6,6 +6,7 @@
  * of the GNU Public License, incorporated herein by reference.
  */
 
+#include <config.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <strings.h>

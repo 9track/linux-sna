@@ -13,6 +13,7 @@
  * This material is provided "as is" and at no charge.
  */
 
+#include <config.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

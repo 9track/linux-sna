@@ -1,0 +1,272 @@
+.TH "sna\&.conf " "5" "20 April 2000" "Linux-SNA" "Linux-SNA"
+.PP
+.SH "NAME"
+sna\&.conf \- The configuration file for the Linux-SNA suite
+.PP
+.SH "SYNOPSIS"
+.PP
+\fBsna\&.conf\fP The \fBsna\&.conf\fP file is a configuration file for the
+Linux-SNA suite\&. \fBsna\&.conf\fP contains runtime configuration information
+for the Linux-SNA stack\&. The complete description of the file format and 
+possible parameters held within are here for reference purposes\&.
+.PP
+.SH "FILE FORMAT"
+.PP
+The file consists of sections and parameters\&. A section begins with
+the name of the section in square brackets and continues until the
+next section begins\&. Sections contain parameters of the form
+.PP
+\f(CW\'name = value\'\fP
+.PP
+The file is line-based - that is, each newline-terminated line
+represents either a comment, a section name or a parameter\&.
+.PP
+Section and parameter names are not case sensitive\&.
+.PP
+Only the first equals sign in a parameter is significant\&. Whitespace
+before or after the first equals sign is discarded\&. Leading, trailing
+and internal whitespace in section and parameter names is
+irrelevant\&. Leading and trailing whitespace in a parameter value is
+discarded\&. Internal whitespace within a parameter value is retained
+verbatim\&.
+.PP
+Any line beginning with a semicolon (\';\') or a hash (\'#\') character is
+ignored, as are lines containing only whitespace\&.
+.PP
+Any line ending in a \f(CW\'\e\'\fP is "continued" on the next line in the
+customary UNIX fashion\&.
+.PP
+The values following the equals sign in parameters are all either a
+string (no quotes needed) or a boolean, which may be given as yes/no,
+0/1 or true/false\&. Case is not significant in boolean values, but is
+preserved in string values\&. Some items such as create modes are
+numeric\&.
+.PP
+.SH "SECTION DESCRIPTIONS"
+.PP
+Each section in the configuration file (except for the \fB[global]\fP section)
+is order independent and describes a particular function or capbability to
+be configured for the Linux-SNA node.
+.PP
+.IP
+.IP "\fBThe [global] section\fP"
+.IP
+Parameters in this section apply to the node as a whole\&. See the notes 
+under \fB\'PARAMETERS\'\fP for more information\&.
+.IP
+.IP "\fBThe [dlc] section\fP"
+.IP
+Parameters in the section apply to only the individual interface or datalink\&.
+See the notes under \fB\'PARAMETERS\'\fP for more information\&.
+
+.IP
+.IP "\fBThe [link] section\fP"
+.IP
+Parameters in the section apply to only the individual link\&.
+See the notes under \fB\'PARAMETERS\'\fP for more information\&.
+
+.IP
+.IP "\fBThe [lu_local] section\fP"
+.IP
+Parameters in the section apply to only the individual local lu specified\&.
+See the notes under \fB\'PARAMETERS\'\fP for more information\&.
+
+.IP
+.IP "\fBThe [lu_remote] section\fP"
+.IP
+Parameters in the section apply to only the individual remote lu specified\&.
+See the notes under \fB\'PARAMETERS\'\fP for more information\&.
+
+.IP
+.IP "\fBThe [mode] section\fP"
+.IP
+Parameters in the section apply to only the individual mode specified\&.
+See the notes under \fB\'PARAMETERS\'\fP for more information\&.
+
+.IP
+.IP "\fBThe [cpic] section\fP"
+.IP
+Parameters in the section apply to only the individual cpic side information\&.
+See the notes under \fB\'PARAMETERS\'\fP for more information\&.
+
+.IP
+.PP
+.SH "PARAMETERS"
+.PP
+Parameters define the specific attributes of sections\&.
+.PP
+
+.IP
+.PP
+.SH "COMPLETE LIST OF GLOBAL PARAMETERS"
+.PP
+Here is a list of all global parameters\&. See the section of each
+parameter for details\&.  Note that some are synonyms\&.
+.PP
+.IP
+.IP o
+\fBfq_node_name\fP
+.PP
+The Fully Qualified Node Name of the node that will be created. The name
+takes the form of \fBNETNAME.NODENAME\fP. For example lnxsna.ehead would
+be valid, the \fBNETNAME\fP may be 1-8 characters, the \fBNODENAME\fP may
+be 1-8 characters long.
+.IP
+.IP o
+\fBnode_type\fP
+.PP
+The Node Type specified what type of node is being created. The posible
+options are \fBappn\fP an APPN Node; \fBnn\fP a Network Node; or \fBlen\fP
+a Logical End Node.
+.IP
+.IP o
+\fBdebug_level\fP
+The Debug Level specifies the amount of debuging information for the kernel
+stack and tools to display. 0 = none, 20 = lots.
+.IP
+.PP
+.SH "COMPLETE LIST OF DLC PARAMETERS"
+.PP
+Here is a list of all dlc parameters\&. See the section of each
+parameter for details\&. Note that some are synonyms\&.
+.IP
+.IP o
+\fBinterface\fP
+.IP
+.IP o
+\fBport\fP
+.IP
+.IP o
+\fBrole\fP
+.IP
+.IP o
+\fBbtu\fP
+.IP
+.IP o
+\fBmia\fP
+.IP
+.IP o
+\fBmoa\fP
+.IP
+.IP o
+\fBmode\fP
+.IP
+.PP
+.SH "COMPLETE LIST OF LINK PARAMETERS"
+.PP
+Here is a list of all link parameters\&. See the section of each
+parameter for details\&. Note that some are synonyms\&.
+.IP
+.IP o
+\fBinterface\fP
+.IP
+.IP o
+\fBport\fP
+.IP
+.IP o
+\fBdstaddr\fP
+.IP
+.IP o
+\fBdstport\fP
+.IP
+.IP o
+\fBautoact\fP
+.IP
+.IP o
+\fBautodeact\fP
+.IP
+.IP o
+\fBmode\fP
+.IP
+.PP
+.SH "COMPLETE LIST OF LOCAL LU PARAMETERS"
+.PP
+Here is a list of all local lu parameters\&. See the section of each
+parameter for details\&. Note that some are synonyms\&.
+.IP
+.IP o
+\fBname\fP
+.IP
+.IP o
+\fBsyncpoint\fP
+.IP
+.IP o
+\fBlu_sess_limit\fP
+.IP
+.PP
+.SH "COMPLETE LIST OF REMOTE LU PARAMETERS"
+.PP
+Here is a list of all remote lu parameters\&. See the section of each
+parameter for details\&. Note that some are synonyms\&.
+.IP
+.IP o
+\fBplu_name\fP
+.IP
+.IP o
+\fBfqcp_name\fP
+.IP
+.PP
+.SH "COMPLETE LIST OF MODE PARAMETERS"
+.PP
+Here is a list of all mode parameters\&. See the section of each
+parameter for details\&. Note that some are synonyms\&.
+.IP
+.IP o
+\fBname\fP
+.IP
+.IP o
+\fBplu_name\fP
+.IP
+.IP o
+\fBtx_pacing\fP
+.IP
+.IP o
+\fBrx_pacing\fP
+.IP
+.IP o
+\fBmax_tx_ru\fP
+.IP
+.IP o
+\fBmax_rx_ru\fP
+.IP
+.PP
+.SH "COMPLETE LIST OF CPIC SIDE INFORMATION PARAMETERS"
+.PP
+Here is a list of all cpic parameters\&. See the section of each
+parameter for details\&. Note that some are synonyms\&.
+.IP
+.IP o
+\fBsym_dest_name\fP
+.IP
+.IP o
+\fBmode\fP
+.IP
+.IP o
+\fBplu_name\fP
+.IP
+.IP o
+\fBtp_name\fP
+.IP
+.PP
+.SH "WARNINGS"
+.PP
+Although the configuration file permits service names to contain
+spaces, your client software may not\&. Spaces will be ignored in
+comparisons anyway, so it shouldn\'t be a problem - but be aware of the
+possibility\&.
+.PP
+.SH "VERSION"
+.PP
+This man page is correct for version 1\&.0 of the Linux-SNA suite\&.
+.PP
+.SH "SEE ALSO"
+.PP
+\fBsnaconfig(8)\fP.
+.PP
+.SH "AUTHOR"
+.PP
+Jay Schulist <jschlst@turbolinux.com>\&.
+.PP
+See \fBwww.linux-sna.org\fP to find out how to get a full
+list of contributors and details on how to submit bug reports,
+comments etc\&.

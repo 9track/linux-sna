@@ -1,5 +1,191 @@
 ChangeLog for net-fun patches and the sna-tools.
 
+Goal:
+1. APING loopback test.
+2. Docs for APING loopback test.
+3. APING outside world test.
+4. Docs for APING outside test.
+5. Docs for setting up an LU6.2 Peer node.
+
+Short term todo(s):
+- Loopback TPs should work swimmingly using full code paths.
+- Fix NodeID in XID header.
+- Link station stop command sends out a DISC command to the partner and
+  does a structured link teardown
+- Build generic BIND processing engine.
+- Build generic BIND build engine.
+- Complete loopback (intranode) bind negotiation.
+- Complete internode bind.
+- Complete attach processing, using lfsid properly.
+- Expand handling of bind and unbind conditions.
+- snaconfig-file occasional flakiness.
+
+Release 1.00pre13:
++ Fixed a problem with LAR which responded to any query frame, even for networks
+  that we are not on.
++ Fixed a display problem when LAR returns from a query.
++ Fixed LAR query to only return results with exact match, 
+  see /proc/net/sna/lan_address_discovery to view the entire LAR list.
++ Put a stop to snatchd and it's oopsen. This required fixing a good number of
+  file descriptor and inode problems in the attach static stub.
++ Fixed the file descriptor handling for CPI-C sockets.
++ Fixed parse bug of snaconfig for -a and -d options, no more core dump.
++ Fixed CPI-C string handling problems and miss match in cpic.h (user/kernel).
++ Fixed string use/display problems with CPIC symbolic destination name.
++ Fixed display error of MAC address of adj-node of link station define.
++ Verified integrity of all common snaconfig-stdin commands.
++ Verified integrity of snaconfig configuration file usage.
++ Verified snaconfig input debugging interface as acurate.
++ Fixed problem with defination of mode partner lu.
+
+Release 1.00pre12:
++ Fixed bug with stdin input which stoped one from defining most parameters.
++ Fix Lan Address Resolution in snaconfig, problem with netid translation.
++ Fixed system wide interrupt block on LAR search/query.
++ Fixed problem with LAR using any random entry for local MAC when doing query.
++ Fixed problem with responding to remote query frames.
+
+Release 1.00pre11:
++ Added the configure options for CPI-C and APPC back.
++ Fixed a problem with setting the debugging level when using stdin-snaconfig.
++ Fixed a bug in sna_tdm_define_node_chars which was freeing a struct it did
+  not own.
++ Fixed af_ipx.c not being updated to use the new llc code.
++ Fixed a Makefile proble not compiling in the 802.3 code in devlink.
+
+Release 1.00pre10:
++ Completed the snaconfig make-over. Finished all the stdin() cmd 
+  stop/start/delete commands. Also basic testing of all commands.
+
+Release 1.00pre9:
++ Incomming I data packets are now properly routed and distributed into the
+  sna protocol machine (Session and Nonsession traffic take different code
+  paths).
++ Bind function flow is correct.
++ Fixed the displaying of Netids by proc which was breaking snaconfig.
++ Cleaned up printks so that they are now on only when debugging is on.
++ Added generic facility to handle output of debug messages.
++ Cleaned up alot of the compile time warnings
++ Massive snaconfig cleanup including: single/generic backend command
+  block processor, uniform front-end api to allow easy addition of new
+  command file/input formats.
++ Added debug function to display all the information in a snaconfig input
+  control block.
++ Cleaned up snaconfig display so all information is now either shown as
+  short or long, depending on the option choosen, short by default.
++ Removed some redundant display structures.
++ Added display of COS information through snaconfig.
++ Mode, CPIC side, and COS information is only shown with the -a option.
++ Fixed nodeid input problem in snaconfig.
+
+Release 1.00pre8:
++ Activate route now can detect if the connection is already active and if
+  the connection is a loopback.
++ Activate route now returns a pcid after a successful XID negotiation.
++ Added /proc/net/sna/path_controls to display pc instances.
++ Added /proc/net/sna/asm_active_address_space
++ Added /proc/net/sna/asm_active_lfsids
++ Made ASM do things a bit more proper with all the new information available,
+  massive sna_asm.c cleanup.
++ Fixed assign_lfsid to use proper address space associated with a pc_id.
+
+Release 1.00pre7:
++ Fixed NULL XID handling.. it is not a PN XID
++ Fixed LLC event handling for SABME needs to change XID state to ACTIVE.
++ Fixed LLC DISC command handling.
++ Removed XID direction indicators from the Xid processor and moved them
+  in to the proper connect_in/_out function.
++ Now answer RR P/F properly.
++ Reliable XID communications with most any LLC SNA partner in both directions.
+
+Release 1.00pre6:
++ Added Stop Link Station command... it can be rather helpful at times.
++ Fixed a silly problem of the Destination MAC address not being passed
+  in binary form.
++ Created generic XID information structure for both Tx and Rx XIDs.
++ Built generic XID processing engine for both Tx and Rx XIDs.
++ Overhauled and completed Tx/Rx XID build engine.
++ XID flow and handling is now reasonably correct and extensive.
++ XID control vectors are so dynamic it is silly.
++ Fixed some very annoying white-space padding problems with FQCP records.
++ Outgoing XID/Link activation should be easily done by all.
+
+Release 1.00pre5:
++ Added /proc/net/sna/cos_tg_characteristics
++ Added /proc/net/sna/cos_node_characteristics
++ Added information to /proc/net/sna/transmission_groups
++ Added information to /proc/net/sna/node_map
++ Combined net/cpic.h linux/cpic.h into one file for user apps.
++ Merged Mike's real automake for Linux-SNA... very nice.
++ We now test for a host's existance over LLC before sending any XIDs.
+
+Release 1.00pre4:
++ Added Cost Of Service Manager.
++ Added Topology DataBase Manager.
++ Added Route Selection Services.
++ One can define COS levels from snaconfig now.
++ Added lots more Link station and mode options.
++ Fixed non-recognition of debug-level parameter in conf file.
++ Now when one starts a link the XID and BIND are retried on failure if
+  specified until X number of times.
++ /proc interface to view all COS levels
++ /proc interface to view all TDM records.
+
+Release 1.00pre2:
+- Fixed all the char length problems.
+- Fixed IPX dependency problem
+- Added a configurable NODE_ID verses the static version before.
+
+Release 0.024:
+- Created real man page for snaconfig(8)
+
+Release 0.023:
+- Moved llcping into its own package
+- Fixed a number of bugs with User space LLC saps.
+
+Release 0.022:
+- Got XID working again, though full dynamicity is yet to come.
+
+Release 0.021:
+- Added functionality to Snatchd to allow many TPs to exec at once.
+- Reliable loopback execution of tps (cmallc, cmaccp, cmsend, cmrcv).
+
+Release 0.020:
+- Fixed ugly kfree_bad_obj message on module unload.
+- Fixed a LLC unregister_client mod counting error.
+- Fixed a problem with cs_destroy that would lose ports of other local sna nodes
+- Fixed stack so now everything mod counts correctly
+- Fixed stack so one can start/stop/delete a node and all its sub-parts without
+  ever having to reload the sna.o module.
+
+Release 0.019:
+- Merged all the sna headers into 4 seperate .h files.
+- Removed most of the excess debugging output not if'd
+- Moved net-fun patch to kernel 2.3.99-pre6
+- Moved etc files to a seperate tar ball, which has an intellegint install.
+
+Release 0.018:
+- Forced CPIC apps to work ;)
+
+Release 0.017:
+- Added attach manager library service calls.
+- Added LUA library service calls.
+- Coded snatchd to work with new attach library.
+- Fixed a number of CPI-C side info bugs.
+- Added the loopback interface for Linux-SNA.
+- Snatchd now launches server side TPs.
+
+Release 0.016:
+- Completed configuration file support. Load works now. (sample sna.conf file
+  is located in etc.sample/sysconfig/sna/sample.sam-sna.conf)
+
+Release 0.015:
+- Added ability to add/delete/query CPI-C side information.
+- Added cpic_side_information file to /proc/net/sna/
+- Completed user-side APPC library.
+- Removed all a* direcories as those are now available as a seperate package.
+- Removed all libraries and created a libsna distro.
+
 Release 0.014:
 - Created appc.h with all the Linux-SNA APPC definitions.
 - Added FEATURES file for list of needed 1.0 release features.

@@ -13,6 +13,7 @@
  * This material is provided "as is" and at no charge.
  */
 
+#include <config.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -38,16 +39,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifndef __linux__
-#ifndef RLIMIT_NOFILE
-#define RLIMIT_NOFILE   RLIMIT_OFILE
-#endif
-#endif
-
 #include "pathnames.h"
 #include "snatchd.h"
 #include "parsecfg.h"
 #include "util.h"
+
+#include <linux/attach.h>
+#include "attach.h"
+static int afd = 0;		/* SNA Attach Session FD */
 
 static void logpid(void);
 static int bump_nofile(void);
@@ -67,11 +66,8 @@ static fd_set           allsock;
 static int              options;
 static int              timingout;
 
-static long rlim_ofile_cur = OPEN_MAX;
-
-#ifdef RLIMIT_NOFILE
+static long rlim_ofile_cur = FOPEN_MAX;
 struct rlimit   rlim_ofile;
-#endif
 
 static void discard_stupid_environment(void)
 {
@@ -196,13 +192,11 @@ static void exec_child(struct servtab *sep)
         }
 #endif
 
-#ifdef RLIMIT_NOFILE
         if (rlim_ofile.rlim_cur != rlim_ofile_cur) {
                 if (setrlimit(RLIMIT_NOFILE, &rlim_ofile) < 0) {
                         syslog(LOG_ERR,"setrlimit: %m");
                 }
         }
-#endif
 
         /*
          * Transfer stdout to stderr. This is not with the other dup2's
@@ -261,36 +255,37 @@ static pid_t fork_child(struct servtab *sep)
         return pid;
 }
 
-static void launch(struct servtab *sep)
+static void launch(struct servtab *sep, struct tp_attach *tp)
 {
         char buf[50];
         int ctrl, dofork;
+	pid_t pid;
 
         if (debug) {
                 fprintf(stderr, "launching: %s\n", sep->se_service);
         }
 
-        if (!sep->se_wait && sep->se_socktype == SOCK_STREAM) {
-                /* Do nonblocking accept, just in case */
-                fcntl(sep->se_fd, F_SETFL, O_NDELAY);
-                ctrl = accept(sep->se_fd, NULL, NULL);
-                fcntl(sep->se_fd, F_SETFL, 0);
-
-                if (debug) {
-                        fprintf(stderr, "accept: new socket %d\n", ctrl);
-                }
-
-                if (ctrl < 0) {
-                        if (errno != EINTR && errno != EWOULDBLOCK) {
-                                syslog(LOG_WARNING, "accept (for %s): %m",
-                                       sep->se_service);
-                        }
-                        return;
-                }
-        }
-        else {
-                ctrl = sep->se_fd;
-        }
+        ctrl = sep->se_fd;
+        pid = fork_child(sep);
+        if (pid < 0) 
+	{
+		if (ctrl != sep->se_fd)
+                	close(ctrl);
+                sleep(1);
+                return;
+	}
+        if (pid==0) 
+	{
+		/* child */
+                dup2(ctrl, 0);
+                close(ctrl);
+                dup2(0, 1);
+                /* don't do stderr yet */
+                exec_child(sep);
+                _exit(1);
+	}
+	syslog(LOG_ERR, "Correlating this thing %d %ld\n", pid, tp->tcb_id);
+        tp_correlate(afd, pid, tp->tcb_id, tp->tp_name);
 }
 
 int main(int argc, char *argv[], char *envp[])
@@ -357,6 +352,18 @@ int main(int argc, char *argv[], char *envp[])
         openlog(progname, LOG_PID | LOG_NOWAIT, LOG_DAEMON);
         logpid();
 
+	if (getrlimit(RLIMIT_NOFILE, &rlim_ofile) < 0)
+                syslog(LOG_ERR, "getrlimit: %m");
+        else 
+	{
+                rlim_ofile_cur = rlim_ofile.rlim_cur;
+                if (rlim_ofile_cur == RLIM_INFINITY)    /* ! */
+                        rlim_ofile_cur = FOPEN_MAX;
+        }
+
+	/* Open the SNA Attach Channel */
+	afd = attach_open();
+
 	config(0);
 
         sig_init();
@@ -364,47 +371,31 @@ int main(int argc, char *argv[], char *envp[])
 
         for(;;)
 	{
-                /*
-                 * If there are no live sockets, hold until we have some.
-                 * (Is this necessary? Wouldn't the select just wait until
-                 * it got signaled?)
-                 */
-                if(nsock == 0)
-		{
-                        while(nsock == 0)
-                                sig_wait();
-                }
+		struct tp_attach tp;
 
                 readable = allsock;
-
                 sig_unblock();
-                n = select(maxsock + 1, &readable, NULL, NULL, NULL);
+		memset(&tp, 0, sizeof(struct tp_attach));
+		n = attach_listen(afd, &tp, sizeof(struct tp_attach), 0);
                 sig_block();
 
                 if(n <= 0)
 		{
                         if(n < 0 && errno != EINTR)
 			{
-                                syslog(LOG_WARNING, "select: %m");
+                                syslog(LOG_WARNING, "attach_listen: %m");
                                 sleep(1);
                         }
                         continue;
                 }
 
-                for(i = 3; i <= maxsock; i++) 
+		sep = find_service_by_name(tp.tp_name, tp.tp_len);
+		if(sep == NULL)
 		{
-                        if(FD_ISSET(i, &readable))
-			{
-                                sep = find_service_by_fd(i);
-                                if(sep == NULL || sep->se_fd < 0)
-				{
-                                        syslog(LOG_ERR,
-                                               "selected closed socket!?");
-                                        continue;
-                                }
-                                launch(sep);
-                        }
-                }
+			syslog(LOG_ERR, "can't find service");
+			continue;
+		}
+		launch(sep, &tp);
         }
 
 	return (0);
@@ -472,8 +463,9 @@ void goaway(int signum)
         register struct servtab *sep;
 
         (void)signum;
-        for (sep = servtab; sep; sep = sep->se_next) {
-                if (sep->se_fd == -1)
+        for(sep = servtab; sep; sep = sep->se_next) 
+	{
+                if(sep->se_fd == -1)
                         continue;
 
                 switch (sep->se_family) {
@@ -481,9 +473,11 @@ void goaway(int signum)
                         (void)unlink(sep->se_service);
                         break;
                 }
-                (void)close(sep->se_fd);
+		tp_unregister(afd, sep->se_fd);
         }
         (void)unlink(_PATH_SNATCHDPID);
+
+	attach_close(afd);		/* Close Attach Session */
         exit(0);
 }
 
@@ -498,20 +492,15 @@ void closeit(struct servtab *sep)
 void setup(struct servtab *sep)
 {
         int on = 1;
+	struct tp_info *tp = (struct tp_info *)malloc(sizeof(struct tp_info));
 
-        if ((sep->se_fd = socket(sep->se_family, sep->se_socktype, 0)) < 0) {
-                syslog(LOG_ERR, "%s: socket: %m", service_name(sep),
+	strcpy(tp->tp_name, sep->se_service);
+	if((sep->se_fd = tp_register(afd, tp)) < 0)
+	{
+                syslog(LOG_ERR, "%s: tp_register: %m", service_name(sep),
                     sep->se_service, sep->se_proto);
                 return;
         }
-#define turnon(fd, opt) \
-setsockopt(fd, SOL_SOCKET, opt, (char *)&on, sizeof (on))
-        if (strcmp(sep->se_proto, "tcp") == 0 && (options & SO_DEBUG) &&
-            turnon(sep->se_fd, SO_DEBUG) < 0)
-                syslog(LOG_ERR, "setsockopt (SO_DEBUG): %m");
-        if (turnon(sep->se_fd, SO_REUSEADDR) < 0)
-                syslog(LOG_ERR, "setsockopt (SO_REUSEADDR): %m");
-#undef turnon
         if (bind(sep->se_fd, &sep->se_ctrladdr, sep->se_ctrladdr_size) < 0) {
                 syslog(LOG_ERR, "%s: bind: %m", service_name(sep),
                     sep->se_service, sep->se_proto);
@@ -563,8 +552,6 @@ static void logpid(void)
 
 static int bump_nofile(void)
 {
-#ifdef RLIMIT_NOFILE
-
 #define FD_CHUNK        32
 
         struct rlimit rl;
@@ -588,11 +575,6 @@ static int bump_nofile(void)
 
         rlim_ofile_cur = rl.rlim_cur;
         return 0;
-
-#else
-        syslog(LOG_ERR, "bump_nofile: cannot extend file limit");
-        return -1;
-#endif
 }
 
 #ifdef MULOG
