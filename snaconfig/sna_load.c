@@ -684,16 +684,19 @@ int sna_execute_config_info(int sna_sk, global_info *g)
 	node_n->bind_seg	= g->bind_seg;
 	err = nof_define_node(sna_sk, node_n);
 	if (err < 0) {
-		sna_debug(1, "define node failed `%d'.\n", err);
-		return err;
-	}
-	err = nof_start_node(sna_sk, node_n);
-	free(node_n);
-	if (err < 0) {
-		sna_debug(1, "start node failed `%d'.\n", err);
+		sna_debug(1, "define node failed `%d: %s'.\n", err, strerror(errno));
 		return err;
 	}
 	
+#ifdef START_NODE_DEFAULT
+	err = nof_start_node(sna_sk, node_n);
+	free(node_n);
+	if (err < 0) {
+		sna_debug(1, "start node failed `%d: %s'.\n", err, strerror(errno));
+		return err;
+	}
+#endif
+
 	/* define dlc. */
 	list_for_each(le, &g->dlc_list) {
 		dlc_i = list_entry(le, dlc_info, list);
@@ -709,7 +712,7 @@ int sna_execute_config_info(int sna_sk, global_info *g)
 		err = nof_define_port(sna_sk, dlc_n);
 		free(dlc_n);
 		if (err < 0) {
-			sna_debug(1, "define port failed `%d'.\n", err);
+			sna_debug(1, "define port failed `%d: %s'.\n", err, strerror(errno));
 			return err;
 		}
 	}
@@ -745,7 +748,7 @@ int sna_execute_config_info(int sna_sk, global_info *g)
 		err = nof_define_link_station(sna_sk, link_n);
 		free(link_n);
 		if (err < 0) {
-			sna_debug(1, "define ls failed `%d'.\n", err);
+			sna_debug(1, "define ls failed `%d: %s'.\n", err, strerror(errno));
 			return err;
 		}
 	}
@@ -783,7 +786,7 @@ int sna_execute_config_info(int sna_sk, global_info *g)
 		err = nof_define_class_of_service(sna_sk, cos_n);
                 free(cos_n);
                 if (err < 0) {
-                        sna_debug(1, "define cos failed `%d'.\n", err);
+                        sna_debug(1, "define cos failed `%d: %s'.\n", err, strerror(errno));
                         return err;
                 }
 	}
@@ -809,7 +812,7 @@ int sna_execute_config_info(int sna_sk, global_info *g)
                 err = nof_define_mode(sna_sk, mode_n);
                 free(mode_n);
                 if (err < 0) {
-                        sna_debug(1, "define mode failed `%d'.\n", err);
+                        sna_debug(1, "define mode failed `%d: %s'.\n", err, strerror(errno));
                         return err;
                 }
 	}
@@ -838,7 +841,7 @@ int sna_execute_config_info(int sna_sk, global_info *g)
                 	free(llu_n);
 		}
                 if (err < 0) {
-                        sna_debug(1, "define lu failed `%d'.\n", err);
+                        sna_debug(1, "define lu failed `%d: %s'.\n", err, strerror(errno));
                         return err;
                 }
 	}
@@ -856,7 +859,7 @@ int sna_execute_config_info(int sna_sk, global_info *g)
                 err = nof_define_cpic_side_info(sna_sk, cpic_n);
                 free(cpic_n);
                 if (err < 0) {
-                        sna_debug(1, "define cpic side info failed `%d'.\n", err);
+                        sna_debug(1, "define cpic side info failed `%d: %s'.\n", err, strerror(errno));
                         return err;
                 }
 	}

@@ -1,11 +1,4 @@
-/* libnof.c: Linux-SNA NOF wraper library. 
- *
- * Notes:
- * - Hopefully this will someday go away, but until Linus lets
- *   me add new system calls into the kernel we will be stuck
- *   wrapping socket calls within the SNA calls for ever.
- * - The getsockopt() call will block if necessary and we don't care what
- *   the user things about us blocking.
+/* libnof.c: linux-SNA nof wraper library. 
  *
  * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
  *
@@ -447,457 +440,216 @@ out:	free(sc.snac_buf);
 
 int nof_define_adjacent_node(int sk, struct sna_nof_adjacent_node *node)
 {
-	int err;
-
 	node->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ADJACENT_NODE, 
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ADJACENT_NODE, 
 		node, sizeof(*node));
-        if (err < 0) {
-                perror("nof_define_adjacent_node setsockopt");
-                return (err);
-        }
-        return (0);
 }
 
 int nof_define_class_of_service(int sk, struct sna_nof_cos *cos)
 {
-	int err;
-
 	cos->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_COS, cos, sizeof(*cos));
-        if (err < 0) {
-                perror("nof_define_class_of_service setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_COS, cos, sizeof(*cos));
 }
 
 int nof_define_connection_network(int sk, struct sna_nof_connection_network *cn)
 {
-	int err;
-
 	cn->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_CONNECTION_NETWORK,
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_CONNECTION_NETWORK,
                 cn, sizeof(*cn));
-        if (err < 0) {
-                perror("nof_define_connection_network setsockopt");
-                return (err);
-        }
-        return (0);
 }
 
 int not_define_directory_entry(int sk, struct sna_nof_directory_entry *dir)
 {
-	int err;
-
 	dir->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_DIRECTORY_ENTRY, dir, sizeof(*dir));
-        if (err < 0) {
-                perror("not_define_directory_entry setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_DIRECTORY_ENTRY, dir, sizeof(*dir));
 }
 
 int nof_define_isr_tuning(int sk, struct sna_nof_isr_tuning *isr)
 {
-	int err;
-
 	isr->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ISR_TUNING, isr, sizeof(*isr));
-        if (err < 0) {
-                perror("nof_define_isr_tuning setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ISR_TUNING, isr, sizeof(*isr));
 }
 
 int nof_define_link_station(int sk, struct sna_nof_ls *ls)
 {
-        int err;
-
 	ls->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
-        if (err < 0) {
-                perror("nof_define_link_station setsockopt");
-                return (err);
-        }
-	return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
 }
 
 int nof_define_local_lu(int sk, struct sna_nof_local_lu *lu)
 {
-	int err;
-
 	lu->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LOCAL_LU, lu, sizeof(*lu));
-        if (err < 0) {
-                perror("nof_define_local_lu setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LOCAL_LU, lu, sizeof(*lu));
 }
 
 int nof_define_cpic_side_info(int sk, struct sna_nof_cpic *cs)
 {
-	int err;
-
 	cs->action = SNA_NOF_DEFINE;
-	err = setsockopt(sk, SOL_SNA_CPIC, SNA_NOF_CPIC,
+	return setsockopt(sk, SOL_SNA_CPIC, SNA_NOF_CPIC,
 		cs, sizeof(struct sna_nof_cpic));
-	if (err < 0) {
-		perror("nof_define_cpic_side_info");
-		return (err);
-	}
-	return (0);
 }
 
 int nof_define_mode(int sk, struct sna_nof_mode *mode)
 {
-	int err;
-
 	mode->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_MODE, mode, sizeof(*mode));
-        if (err < 0) {
-                perror("nof_define_mode setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_MODE, mode, sizeof(*mode));
 }
 
 int nof_define_node(int sk, struct sna_nof_node *node)
 {
-	int err;
-
 	node->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
-        if (err < 0) {
-                perror("nof_define_node_chars setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
 }
 
 int nof_stop_remote_lu(int sk, struct sna_nof_remote_lu *lu)
 {
-        int err;
-
         lu->action = SNA_NOF_STOP;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
-        if (err < 0) {
-                perror("nof_sop_remote_lu setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
 }
 
 int nof_start_remote_lu(int sk, struct sna_nof_remote_lu *lu)
 {
-	int err;
-
 	lu->action = SNA_NOF_START;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
-        if (err < 0) {
-                perror("nof_define_partner_lu setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
 }
 
 int nof_define_partner_lu(int sk, struct sna_nof_remote_lu *lu)
 {
-	int err;
-
 	lu->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
-        if (err < 0) {
-                perror("nof_define_partner_lu setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
 }
 
 int nof_define_port(int sk, struct sna_nof_port *port)
 {
-        int err;
-
 	port->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
-        if (err < 0) {
-                perror("nof_define_port setsockopt");
-                return err;
-        }
-        return 0;
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
 }
 
 int nof_define_tp(int sk, struct sna_nof_tp *tp)
 {
-	int err;
-
 	tp->action = SNA_NOF_DEFINE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_TP, tp, sizeof(*tp));
-        if (err < 0) {
-                perror("nof_define_tp setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_TP, tp, sizeof(*tp));
 }
 
 int nof_delete_adjacent_node(int sk, struct sna_nof_adjacent_node *node)
 {
-	int err;
-
 	node->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ADJACENT_NODE,
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ADJACENT_NODE,
 		node, sizeof(*node));
-        if (err < 0) {
-                perror("nof_delete_adjacent_node setsockopt");
-                return (err);
-        }
-        return (0);
 }
 
 int nof_delete_class_of_service(int sk, struct sna_nof_cos *cos)
 {
-	int err;
-
 	cos->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_COS, cos, sizeof(*cos));
-        if (err < 0) {
-                perror("nof_delete_class_of_service setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_COS, cos, sizeof(*cos));
 }
 
 int nof_delete_connection_network(int sk, struct sna_nof_connection_network *cn)
 {
-	int err;
-
 	cn->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_CONNECTION_NETWORK,
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_CONNECTION_NETWORK,
                 cn, sizeof(*cn));
-        if (err < 0) {
-                perror("nof_delete_connection_network setsockopt");
-                return (err);
-        }
-        return (0);
 }
 
 int nof_delete_directory_entry(int sk, struct sna_nof_directory_entry *dir)
 {
-	int err;
-
 	dir->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_DIRECTORY_ENTRY, dir, sizeof(*dir));
-        if (err < 0) {
-                perror("nof_delete_directory_entry setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_DIRECTORY_ENTRY, dir, sizeof(*dir));
 }
 
 int nof_delete_isr_tuning(int sk, struct sna_nof_isr_tuning *isr)
 {
-	int err;
-
 	isr->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ISR_TUNING, isr, sizeof(*isr));
-        if (err < 0) {
-                perror("nof_delete_isr_tuning setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_ISR_TUNING, isr, sizeof(*isr));
 }
 
 int nof_delete_link_station(int sk, struct sna_nof_ls *ls)
 {
-	int err;
-
 	ls->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
-        if (err < 0) {
-                perror("nof_delete_link_station setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
 }
 
 int nof_delete_local_lu(int sk, struct sna_nof_local_lu *lu)
 {
-	int err;
-
 	lu->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LOCAL_LU, lu, sizeof(*lu));
-        if (err < 0) {
-                perror("nof_delete_local_lu setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LOCAL_LU, lu, sizeof(*lu));
 }
 
 int nof_delete_mode(int sk, struct sna_nof_mode *mode)
 {
-	int err;
-
 	mode->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_MODE, mode, sizeof(*mode));
-        if (err < 0) {
-                perror("nof_delete_mode setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_MODE, mode, sizeof(*mode));
 }
 
 int nof_delete_partner_lu(int sk, struct sna_nof_remote_lu *lu)
 {
-	int err;
-
 	lu->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
-        if (err < 0) {
-                perror("nof_delete_partner_lu setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_REMOTE_LU, lu, sizeof(*lu));
 }
 
 int nof_delete_port(int sk, struct sna_nof_port *port)
 {
-	int err;
-
 	port->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
-        if (err < 0) {
-                perror("nof_delete_port setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
 }
 
 int nof_delete_cpic_side_info(int sk, struct sna_nof_cpic *dc)
 {
-	int err;
-
 	dc->action = SNA_NOF_DELETE;
-	err = setsockopt(sk, SOL_SNA_CPIC, SNA_NOF_CPIC,
+	return setsockopt(sk, SOL_SNA_CPIC, SNA_NOF_CPIC,
 		dc, sizeof(struct sna_nof_cpic));
-	if (err < 0) {
-		perror("nof_delete_cpic_side_info");
-		return (err);
-	}
-	return (0);
 }
 
 int nof_delete_tp(int sk, struct sna_nof_tp *tp)
 {
-	int err;
-
 	tp->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_TP, tp, sizeof(*tp));
-        if (err < 0) {
-                perror("nof_delete_tp setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_TP, tp, sizeof(*tp));
 }
 
 int nof_start_link_station(int sk, struct sna_nof_ls *ls)
 {
-	int err;
-
 	ls->action = SNA_NOF_START;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
-        if (err < 0) {
-                perror("nof_start_link_station setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
 }
 
 int nof_start_node(int sk, struct sna_nof_node *node)
 {
-	int err;
-
 	node->action = SNA_NOF_START;
-	err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
-        if (err < 0) {
-                perror("nof_start_node setsockopt");
-                return (err);
-        }
-        return (0);
+	return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
 }
 
 int nof_stop_node(int sk, struct sna_nof_node *node)
 {
-        int err;
-
 	node->action = SNA_NOF_STOP;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
-        if (err < 0) {
-                perror("nof_stop_node setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
 }
 
 int nof_delete_node(int sk, struct sna_nof_node *node)
 {
-        int err;
-
 	node->action = SNA_NOF_DELETE;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
-        if (err < 0) {
-                perror("nof_delete_node setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_NODE, node, sizeof(*node));
 }
 
 int nof_start_port(int sk, struct sna_nof_port *port)
 {
-	int err;
 	port->action = SNA_NOF_START;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
-	errno = err;
-        return (err);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
 }
 
 int nof_start_tp(int sk, struct sna_nof_tp *tp)
 {
-	int err;
-
 	tp->action = SNA_NOF_START;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_TP, tp, sizeof(*tp));
-        if (err < 0) {
-                perror("nof_start_tp setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_TP, tp, sizeof(*tp));
 }
 
 int nof_stop_link_station(int sk, struct sna_nof_ls *ls)
 {
-	int err;
-
 	ls->action = SNA_NOF_STOP;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
-        if (err < 0) {
-                perror("nof_stop_link_station setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_LS, ls, sizeof(*ls));
 }
 
 int nof_stop_port(int sk, struct sna_nof_port *port)
 {
-	int err;
-
 	port->action = SNA_NOF_STOP;
-        err = setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
-        if (err < 0) {
-                perror("nof_stop_port setsockopt");
-                return (err);
-        }
-        return (0);
+        return setsockopt(sk, SOL_SNA_NOF, SNA_NOF_PORT, port, sizeof(*port));
 }

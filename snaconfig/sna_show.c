@@ -29,6 +29,7 @@
 #include <asm/byteorder.h>
 #include <sys/socket.h>
 #include <linux/netdevice.h>
+#include <linux/if_arp.h>
 #include <linux/sna.h>
 #include <linux/cpic.h>
 #include <nof.h>
@@ -55,14 +56,57 @@ char *sna_pr_state(unsigned short s)
         static char buff[20];
 
         if (s & SNA_DOWN)
-                sprintf(buff, "%s ", "DOWN");
+                sprintf(buff, "%s", "DOWN");
         if (s & SNA_UP)
-                sprintf(buff, "%s ", "UP");
+                sprintf(buff, "%s", "UP");
         if (s & SNA_STOPPED)
-                sprintf(buff, "%s ", "STOPPED");
+                sprintf(buff, "%s", "INACTIVE");
         if (s & SNA_RUNNING)
-                sprintf(buff, "%s ", "RUNNING");
+                sprintf(buff, "%s", "ACTIVE");
         return buff;
+}
+
+char *sna_pr_link_type(unsigned short type)
+{
+	static char buff[20];
+
+	switch (type) {
+		case ARPHRD_ETHER:
+			sprintf(buff, "%s", "ether");
+			break;
+		case ARPHRD_LOOPBACK:
+			sprintf(buff, "%s", "loop");
+			break;
+	}
+	return buff;	
+}
+
+char *sna_pr_ls_status(struct lsreq *ls)
+{
+	static char buff[20];
+
+	if (ls->state == SNA_LS_STATE_DEFINED) {
+		sprintf(buff, "%s", "OFFLINE");
+		goto out;
+	}
+
+	if (ls->state == SNA_LS_STATE_ACTIVATED) {
+		if (ls->co_status == CO_FAIL)
+			sprintf(buff, "%s", "FAILED");
+		else {
+			if (ls->direction == SNA_LS_DIR_IN)
+				sprintf(buff, "%s", "INCOMING");
+			else
+				sprintf(buff, "%s", "PENDING");
+		}
+		goto out;
+	}
+
+	if (ls->state == SNA_LS_STATE_ACTIVE) {
+		sprintf(buff, "%s", "ONLINE");
+		goto out;
+	}
+out:	return buff;
 }
 
 static int sna_show_print(struct sna_all_info *sna)
@@ -77,16 +121,16 @@ static int sna_show_print(struct sna_all_info *sna)
         struct cosreq   *cos;
 
 	sna_debug(5, "init\n");
-	printf("%-s.%-s  ", sna->net, sna->name);
-        printf("nodeid:%s  ", sna_pr_nodeid(sna->nodeid));
-        printf("nodetype:");
-        if (sna->type & SNA_LEN_END_NODE) printf("Len  ");
-        if (sna->type & SNA_APPN_END_NODE) printf("Appn_En  ");
-        if (sna->type & SNA_APPN_NET_NODE) printf("Appn_Nn  ");
-        printf("%s ", sna_pr_state(sna->node_status));
+	printf("%-s.%-s ", sna->net, sna->name);
+	printf("<%s> ", sna_pr_state(sna->node_status));
+        printf("nodeid %s ", sna_pr_nodeid(sna->nodeid));
+        printf("nodetype/");
+        if (sna->type == SNA_LEN_END_NODE) printf("Len ");
+        if (sna->type == SNA_APPN_END_NODE) printf("Appn_En ");
+        if (sna->type == SNA_APPN_NET_NODE) printf("Appn_Nn ");
         printf("\n");
 
-        printf("     ");
+        printf("  ");
         printf("maxlus:%ld ", sna->max_lus);
         printf("curlus:%d ", 0);
         printf("luseg:%s ", xword_pr_word(on_types, sna->lu_seg));
@@ -94,61 +138,65 @@ static int sna_show_print(struct sna_all_info *sna)
         printf("\n");
 
         for (dl = sna->dl; dl != NULL; dl = dl->next) {
-                printf("     ");
-                printf("datalink:%s  ", dl->devname);
-                printf("type:");
-                if (!strncmp(dl->devname, "eth", 3)
-                        || !strncmp(dl->devname, "tr", 2))
-                        printf("llc2  ");
-                else {
-                        if (!strncmp(dl->devname, "lo", 2))
-                                printf("loopback  ");
-                        else
-                                printf("unknown  ");
-                }
-                printf("numports:%ld  ", dl->port_qlen);
-                printf("%s ", sna_pr_state(dl->flags));
+                printf("  ");
+                printf("device:%s ", dl->dev_name);
+		printf("<%s> ", sna_pr_state(dl->flags));
+		printf("mtu %d ", dl->mtu);
+		printf("link/%s %s ", sna_pr_link_type(dl->type), 
+			sna_pr_ether(dl->dev_addr));
                 printf("\n");
 
                 for (port = dl->port; port != NULL; port = port->next) {
-                        printf("     ");
-                        printf("port:0x%02X  ", port->saddr[0]);
-                        printf("role:");
-                        if(port->role & SNA_PORT_ROLE_PRI)
-                                printf("pri  ");
-                        if(port->role & SNA_PORT_ROLE_SEC)
-                                printf("sec  ");
-                        if(port->role & SNA_PORT_ROLE_NEG)
-                                printf("neg  ");
-                        printf("numls:%ld  ", port->ls_qlen);
-                        printf("mia:%ld  ", port->mia);
-                        printf("moa:%ld  ", port->moa);
-                        printf("mtu:%ld  ", port->btu);
-                        printf("%s ", sna_pr_state(port->flags));
+                        printf("  ");
+			printf("dlc:%s ", port->use_name);
+			printf("<%s> ", sna_pr_state(port->flags));
+			printf("%s@0x%02X ", port->dev_name, port->saddr[0]);
+			printf("mia %d ", port->mia);
+                        printf("moa %d ", port->moa);
+                        printf("btu %d ", port->btu);
+                        printf("links/%d ", port->ls_qlen);
                         printf("\n");
 
                         for (ls = port->ls; ls != NULL; ls = ls->next) {
-                                printf("     ");
-                                printf("linkstation:%s  ", sna_pr_ether(ls->dname));
-                                printf("port:0x%02X  ", ls->daddr[0]);
-                                printf("dev:%s  ", ls->devname);
-                                printf("%s ", sna_pr_state(ls->flags));
-                                printf("\n");
+                                printf("  ");
+				printf("link:%s ", ls->use_name);
+				printf("<%s|%s> ", sna_pr_state(ls->flags), sna_pr_ls_status(ls));
+				printf("role %s/%s ", xword_pr_word(role_types, ls->role),
+					xword_pr_word(role_types, ls->effective_role));
+				printf("tg %d/%d ", ls->tg_number, ls->effective_tg);
+				printf("btu %d/%d ", ls->tx_max_btu, ls->rx_max_btu);
+				printf("win %d/%d ", ls->tx_window, ls->rx_window);
+				printf("\n");
+				
+				printf("    ");
+				printf("plu/%s ", sna_pr_netid(&ls->plu_name));
+				printf("nodeid %s ", sna_pr_nodeid(ls->plu_node_id));
+				printf("%s@0x%02X ", sna_pr_ether(ls->plu_mac_addr),
+					ls->plu_port);
+				printf("\n");
 
-                                printf("          ");
-                                printf("byteswap:%s ",
-                                        xword_pr_word(on_types, ls->byteswap));
-                                printf("aact:%s ",
-                                        xword_pr_word(on_types, ls->auto_act));
-                                printf("adeact:%s ",
-                                        xword_pr_word(on_types, ls->auto_deact));
-                                printf("\n");
+				printf("    ");
+				printf("retry/%s ", xword_pr_word(on_types, ls->retry_on_fail));
+				printf("retries %d/%d ", ls->retries, ls->retry_times);
+				printf("xid %d ", ls->xid_count);
+				printf("xid_init %d ", ls->xid_init_method);
+				printf("autoact/%s ", xword_pr_word(on_types, ls->autoact));
+				printf("autodeact/%s ", xword_pr_word(on_types, ls->autodeact));
+				printf("\n");
+
+				printf("    ");
+				printf("byteswap/%s ", xword_pr_word(on_types, ls->byteswap));
+				printf("security/%s ", xword_pr_word(security_types, ls->security));
+				printf("cpb %d ", ls->cost_per_byte);
+				printf("cpc %d ", ls->cost_per_connect_time);
+				printf("propagation_delay %d ", ls->propagation_delay);
+				printf("\n");
                         }
                 }
         }
 
         for (lu = sna->lu; lu != NULL; lu = lu->next) {
-                printf("     ");
+                printf("  ");
                 printf("lclu:%s  ", lu->name);
                 printf("sync_point:%s  ", xword_pr_word(on_types, lu->sync_point));
                 printf("limit:%ld  ", lu->lu_sess_limit);
@@ -157,7 +205,7 @@ static int sna_show_print(struct sna_all_info *sna)
         }
 
         for (plu = sna->plu; plu != NULL; plu = plu->next) {
-                printf("     ");
+                printf("  ");
                 printf("rtlu:%s  ", sna_pr_netid(&plu->plu_name));
                 printf("parallel_sessions:%s  ",
                         xword_pr_word(on_types, plu->parallel_ss));
@@ -283,14 +331,14 @@ static int sna_show_gather_info(struct sna_all_info *sna)
                 sna->dl         = dl;
         }
 
-        /* Link each port with the correct DLC */
+        /* link each port with the correct dlc. */
         p = nof_query_port(sna_sk, sna->net, sna->name, "*", "*");
         for (dl = sna->dl; dl != NULL; dl = dl->next) {
                 for (port = p; port != NULL; port = port->next) {
-                        if (!strcmp(dl->devname, port->data.devname)) {
+                        if (!strcmp(dl->dev_name, port->data.dev_name)) {
                                 struct portreq *pt;
                                 new(pt);
-                                memcpy(pt, &port->data,sizeof(struct portreq));
+                                memcpy(pt, &port->data, sizeof(struct portreq));
                                 pt->ls          = NULL;
                                 pt->next        = dl->port;
                                 dl->port        = pt;
@@ -298,6 +346,7 @@ static int sna_show_gather_info(struct sna_all_info *sna)
                 }
         }
 
+	/* link each ls with the correct port. */
         l = nof_query_ls(sna_sk, sna->net, sna->name, "*", "*", "*");
         for (dl = sna->dl; dl != NULL; dl = dl->next) {
                 struct portreq *pt;
@@ -306,8 +355,8 @@ static int sna_show_gather_info(struct sna_all_info *sna)
                         for (ls = l; ls != NULL; ls = ls->next) {
                                 struct lsreq *lk;
 
-                                if (strcmp(ls->data.portname,pt->portname)
-                                        && strcmp(ls->data.devname,dl->devname))
+                                if (strcmp(ls->data.port_name, pt->use_name)
+                                        && strcmp(ls->data.dev_name, dl->dev_name))
                                         break;
                                 new(lk);
                                 memcpy(lk, &ls->data, sizeof(struct lsreq));

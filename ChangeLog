@@ -1,5 +1,32 @@
 ChangeLog for linux-SNA net-fun patches and tools.
 
+0.1.28 - July 30, 2002.
+- new net-fun kernel patch in patch-o-matic.
+- updated todo list.
+- proper usage of bit fields for unbind ru's.
+- clean up nof library report errno correctly, simply functions.
+- enforce node states.
+- delete node works, possible to unload sna module.
+- don't start node by default on configuration file load.
+- add start node command.
+- add delete dlc, link support in kernel.
+- add delete node, dlc and link support to snaconfig.
+- take all links offline associated with a port that gets deactivated.
+- don't allow user to start link until port/dlc is active.
+- added sysctl variables for xid_idle/retry and test_retry timers.
+- change default ls retry limit for sna.xml to unlimited.
+- retry link connection/establishment on unexpected link failure.
+- enforce xid conversation idle time.
+- stop xid retry if admin stops link.
+- make xid unlimited retry (0) work.
+- make xid no retry works.
+- improved show command node, device, dlc, ls.
+- proper stop of dlc, ls.
+- activated stop node command. 
+- add dep_tristate CONFIG_LLC to enfore proper kernel option configuration.
+- move definition of struct sna_ctrl_info into skbuff.h.
+- incremented version number.
+
 0.1.27 - July 22, 2002.
 - new net-fun kernel patch in patch-o-matic.
 - move sna specific structures in skb to end of structure to work with

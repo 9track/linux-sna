@@ -1,47 +1,43 @@
 Todo list (in no special order) for linux-sna user-space and kernel.
  - list maintained by Jay Schulist <jschlst@linux-sna.org>
 
-last updated: July 22, 2002.
+last updated: July 30, 2002.
 
 Purchase:
 0. get copy of System/370 Principles of Operation, GA22-7000.
 
 Execute:
-0. compile linux-sna kernel staticly to see if it works.
-1. perform proper stop of node components.
-2. perform proper delete of ls, dlc, node components.
-3. allow reload of configuration file.
-4. provide better output of show command.
-5. xid error checking (2.9.6).
-6. xid retry timers
-7. let user choose what xid type to send with link station.
-8. store all fields of xid for adjacent ls and use them.
-9. validate xid protocol flow/conformance.
+1. complete deallocate
+2. send unbind and unbind processing.
+3. set lu structure information proper.
+4. show lu information nicely via /proc and snaconfig.
+
+5. make xid, bind and attach process completely dynamic 
+   (remove any remaining hardcodes).
+6. add security to aftp and mode
+
+7. xid error checking (2.9.6).
+8. let user choose what xid type to send with link station.
+9. store all fields of xid for adjacent ls and use them.
 10. cleanup tdm proc output.
 11. validate all incomming bind options.
-12. set lu structure information proper.
-13. show lu information nicely via /proc.
-14. inbound bind processing.
-15. send unbind and unbind processing.
-16. add intranode path control support back.
-17. complete inbound attach processing in rm.
-18. go through all code and compare with functional specs.
-19. Add comments and use proper sense codes for everything.
-20. cleanup fscking defines that are like 60+ characters long!
-21. implement sna_ps_conv_process_fmh7_log_data_proc when not lazy.
-22. validate xml file input.
-23. cpic extract calls.
-24. make appc api values same as cpic
-25. use cpic defined variable sizes
-26. ensure that mode name is validated on allocate call
-27. add parallel session option to mode.
-28. add security to aftp and mode
-29. make bind and attach process all dynamic (remove remaining hard codes).
-30. do deallocate
-31. finish testing data tx/rx paths.
-32. Perform pacing better.
+12. inbound bind processing.
+13. add intranode path control support back.
+14. complete inbound attach processing in rm.
+15. go through all code and compare with functional specs.
+16. Add comments and use proper sense codes for everything.
+17. cleanup fscking defines that are like 60+ characters long!
+18. implement sna_ps_conv_process_fmh7_log_data_proc when not lazy.
+19. validate xml file input.
+20. make appc api values same as cpic
+21. use cpic defined variable sizes
+22. ensure that mode name is validated on allocate call
+23. add parallel session option to mode.
+24. finish testing data tx/rx paths.
+25. Perform pacing better.
+26. allow automatic start of dlc/link upon server start.
 
-finish following cpic calls:
+27. finish following cpic calls:
 #define CM_CMACCI               (CM_CALL_ID) 1
 #define CM_CMACCP               (CM_CALL_ID) 2
 #define CM_CMCANC               (CM_CALL_ID) 4
@@ -87,11 +83,6 @@ attach mgr:
 - non-queued support (run many copies of each tp).
 - full queue support.
 
-when link station is disconnected:
-- destroy as
-- destroy pc
-- tg_update
-
 tn3270 related todos:
 - validate incomming clients by user defined allowed ip ranges.
 - better signal handling.
@@ -106,7 +97,6 @@ general todos:
 - create development rpms.
 
 old list, probably not revalent anymore.
-- milestones and roadmap.
 - create libebcdic which works with international character sets.
 - Docs for APING test.                 
 - Docs for setting up an LU6.2 Peer node.      

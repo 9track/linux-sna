@@ -31,7 +31,7 @@
     <sna:dstaddr>0000396120B3</sna:dstaddr>
     <sna:dstport>0x04</sna:dstport>
     <sna:retry_on_fail>on</sna:retry_on_fail>
-    <sna:retry_times>1000</sna:retry_times>
+    <sna:retry_times>0</sna:retry_times>
     <sna:byteswap>off</sna:byteswap>
     <sna:autoact>on</sna:autoact>
     <sna:tg_number>0</sna:tg_number>

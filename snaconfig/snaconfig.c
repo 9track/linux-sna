@@ -181,6 +181,10 @@ int main(int argc, char **argv)
 		next_arg(argv, argc);
 		return sna_stop(argc, argv);
 	}
+	if (!matches(*argv, "delete")) {
+		next_arg(argv, argc);
+		return sna_delete(argc, argv);
+	}
 	if (!matches(*argv, "show")) {
 		next_arg(argv, argc);
 		return sna_show(argc, argv);

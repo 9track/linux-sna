@@ -61,7 +61,7 @@ static int sna_start_dlc(char *name)
 	strcpy(port->use_name, name);
 	err = nof_start_port(sk, port);
 	if (err < 0)
-		sna_debug(1, "start port failed `%d'.\n", err);
+		sna_debug(1, "start dlc failed `%d: %s'.\n", err, strerror(errno));
 	free(port);
 	sna_nof_disconnect(sk);
 	return err;
@@ -80,7 +80,7 @@ static int sna_start_link(char *name)
         strcpy(ls->use_name, name);
         err = nof_start_link_station(sk, ls);
 	if (err < 0)
-		sna_debug(1, "start link station failed `%d'.\n", err);
+		sna_debug(1, "start link station failed `%d: %s'.\n", err, strerror(errno));
         free(ls);
 	sna_nof_disconnect(sk);
         return err;
@@ -99,7 +99,7 @@ static int sna_start_lu(char *name)
 	strcpy(lu->use_name, name);
         err = nof_start_remote_lu(sk, lu);
         if (err < 0)
-                sna_debug(1, "start lu failed `%d'.\n", err);
+                sna_debug(1, "start lu failed `%d: %s'.\n", err, strerror(errno));
         free(lu);
         sna_nof_disconnect(sk);
         return err;
@@ -118,7 +118,7 @@ static int sna_stop_lu(char *name)
 	strcpy(lu->use_name, name);
         err = nof_stop_remote_lu(sk, lu);
         if (err < 0)
-                sna_debug(1, "stop lu failed `%d'.\n", err);
+                sna_debug(1, "stop lu failed `%d: %s'.\n", err, strerror(errno));
         free(lu);
         sna_nof_disconnect(sk);
         return err;
@@ -137,7 +137,7 @@ static int sna_stop_dlc(char *name)
         strcpy(port->use_name, name);
         err = nof_stop_port(sk, port);
         if (err < 0)
-                sna_debug(1, "stop port failed `%d'.\n", err);
+                sna_debug(1, "stop port failed `%d: %s'.\n", err, strerror(errno));
         free(port);
         sna_nof_disconnect(sk);
         return err;
@@ -156,8 +156,109 @@ static int sna_stop_link(char *name)
         strcpy(ls->use_name, name);
         err = nof_stop_link_station(sk, ls);
         if (err < 0)
-                sna_debug(1, "stop link station failed `%d'.\n", err);
+                sna_debug(1, "stop link station failed `%d: %s'.\n", err, strerror(errno));
         free(ls);
+        sna_nof_disconnect(sk);
+        return err;
+}
+
+static int sna_delete_dlc(char *name)
+{
+        struct sna_nof_port *port;
+        int err, sk;
+
+        sk = sna_nof_connect();
+        if (sk < 0)
+                return sk;
+        if (!new(port))
+                return -ENOMEM;
+        strcpy(port->use_name, name);
+        err = nof_delete_port(sk, port);
+        if (err < 0)
+                sna_debug(1, "delete port failed `%d: %s'.\n", err, strerror(errno));
+        free(port);
+        sna_nof_disconnect(sk);
+        return err;
+}
+
+static int sna_delete_link(char *name)
+{
+        struct sna_nof_ls *ls;
+        int err, sk;
+
+        sk = sna_nof_connect();
+        if (sk < 0)
+                return sk;
+        if (!new(ls))
+                return -ENOMEM;
+        strcpy(ls->use_name, name);
+        err = nof_delete_link_station(sk, ls);
+        if (err < 0)
+                sna_debug(1, "delete link station failed `%d: %s'.\n", err, strerror(errno));
+        free(ls);
+        sna_nof_disconnect(sk);
+        return err;
+}
+
+static int sna_start_node(char *name)
+{
+        struct sna_nof_node *node;
+        sna_netid *netid;
+        int err, sk;
+
+        sk = sna_nof_connect();
+        if (sk < 0)
+                return sk;
+        if (!new(node))
+                return -ENOMEM;
+        netid = sna_char_to_netid(name);
+        memcpy(&node->netid, netid, sizeof(sna_netid));
+        err = nof_start_node(sk, node);
+        if (err < 0)
+                sna_debug(1, "start node failed `%d: %s'.\n", err, strerror(errno));
+        free(node);
+        sna_nof_disconnect(sk);
+        return err;
+}
+
+static int sna_stop_node(char *name)
+{
+	struct sna_nof_node *node;
+	sna_netid *netid;
+	int err, sk;
+
+	sk = sna_nof_connect();
+        if (sk < 0)
+                return sk;
+        if (!new(node))
+                return -ENOMEM;
+	netid = sna_char_to_netid(name);
+	memcpy(&node->netid, netid, sizeof(sna_netid));
+        err = nof_stop_node(sk, node);
+        if (err < 0)
+                sna_debug(1, "stop node failed `%d: %s'.\n", err, strerror(errno));
+        free(node);
+        sna_nof_disconnect(sk);
+        return err;
+}
+
+static int sna_delete_node(char *name)
+{
+        struct sna_nof_node *node;
+        sna_netid *netid;
+        int err, sk;
+
+        sk = sna_nof_connect();
+        if (sk < 0)
+                return sk;
+        if (!new(node))
+                return -ENOMEM;
+        netid = sna_char_to_netid(name);
+        memcpy(&node->netid, netid, sizeof(sna_netid));
+        err = nof_delete_node(sk, node);
+        if (err < 0)
+                sna_debug(1, "delete node failed `%d: %s'.\n", err, strerror(errno));
+        free(node);
         sna_nof_disconnect(sk);
         return err;
 }
@@ -167,8 +268,8 @@ int sna_start(int argc, char **argv)
 	if (argc < 2)
 		sna_start_help();
 	if (!matches(*argv, "node")) {
-		sna_debug(1, "feature currently not supported.\n");
-                return 0;
+		next_arg_fail(argv, argc, sna_start_help);
+		return sna_start_node(*argv);
 	}
 	if (!matches(*argv, "dlc")) {
 		next_arg_fail(argv, argc, sna_start_help);
@@ -202,8 +303,8 @@ int sna_stop(int argc, char **argv)
         if (argc < 2)
                 sna_stop_help();
         if (!matches(*argv, "node")) {
-                sna_debug(1, "feature currently not supported.\n");
-                return 0;
+		next_arg_fail(argv, argc, sna_stop_help);
+		return sna_stop_node(*argv);
         }
         if (!matches(*argv, "dlc")) {
                 next_arg_fail(argv, argc, sna_stop_help);
@@ -214,8 +315,12 @@ int sna_stop(int argc, char **argv)
                 return sna_stop_link(*argv);
         }
 	if (!matches(*argv, "lu")) {
-		next_arg_fail(argv, argc, sna_stop_help);
-		return sna_stop_lu(*argv);
+		sna_debug(1, "feature currently not supported.\n");
+                return 0;
+		/*
+		 * next_arg_fail(argv, argc, sna_stop_help);
+		 * return sna_stop_lu(*argv);
+		 */
 	}
         if (!matches(*argv, "all")) {
                 sna_debug(1, "feature currently not supported.\n");
@@ -223,4 +328,39 @@ int sna_stop(int argc, char **argv)
         }
         sna_stop_help();
 	return 0;
+}
+
+static int sna_delete_help(void)
+{
+        printf("Usage: %s delete <service> <name>\n", name_s);
+        exit(1);
+}
+
+int sna_delete(int argc, char **argv)
+{
+
+        if (argc < 2)
+                sna_delete_help();
+        if (!matches(*argv, "node")) {
+		next_arg_fail(argv, argc, sna_delete_help);
+		return sna_delete_node(*argv);
+        }
+        if (!matches(*argv, "dlc")) {
+                next_arg_fail(argv, argc, sna_delete_help);
+                return sna_delete_dlc(*argv);
+        }
+        if (!matches(*argv, "link")) {
+                next_arg_fail(argv, argc, sna_delete_help);
+                return sna_delete_link(*argv);
+        }
+        if (!matches(*argv, "lu")) {
+		sna_debug(1, "feature currently not supported.\n");
+                return 0;
+        }
+        if (!matches(*argv, "all")) {
+                sna_debug(1, "feature currently not supported.\n");
+                return 0;
+        }
+        sna_delete_help();
+        return 0;
 }

@@ -90,7 +90,7 @@ diff -u linux-sna-kernel/Documentation/Configure.help:1.1.1.1 linux-sna-kernel/D
    The DECnet networking protocol was used in many products made by
 Index: linux-sna-kernel/Documentation/networking/sna/node-start.txt
 diff -u /dev/null linux-sna-kernel/Documentation/networking/sna/node-start.txt:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:04 2002
+--- /dev/null	Tue Jul 30 05:50:14 2002
 +++ linux-sna-kernel/Documentation/networking/sna/node-start.txt	Sun Jun 16 09:09:56 2002
 @@ -0,0 +1,24 @@
 +Linux-SNA DLC handling is as follows:
@@ -325,7 +325,7 @@ diff -u linux-sna-kernel/arch/sparc64/kernel/systbls.S:1.1.1.1 linux-sna-kernel/
  
 Index: linux-sna-kernel/drivers/net/channel/Config.in
 diff -u /dev/null linux-sna-kernel/drivers/net/channel/Config.in:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:19 2002
+--- /dev/null	Tue Jul 30 05:50:30 2002
 +++ linux-sna-kernel/drivers/net/channel/Config.in	Sun Jun 16 09:09:57 2002
 @@ -0,0 +1,13 @@
 +#
@@ -343,7 +343,7 @@ diff -u /dev/null linux-sna-kernel/drivers/net/channel/Config.in:1.1.2.1
 +endmenu
 Index: linux-sna-kernel/drivers/net/channel/Makefile
 diff -u /dev/null linux-sna-kernel/drivers/net/channel/Makefile:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:19 2002
+--- /dev/null	Tue Jul 30 05:50:30 2002
 +++ linux-sna-kernel/drivers/net/channel/Makefile	Sun Jun 16 09:09:57 2002
 @@ -0,0 +1,26 @@
 +#
@@ -374,7 +374,7 @@ diff -u /dev/null linux-sna-kernel/drivers/net/channel/Makefile:1.1.2.1
 +include $(TOPDIR)/Rules.make
 Index: linux-sna-kernel/drivers/net/twinax/Config.in
 diff -u /dev/null linux-sna-kernel/drivers/net/twinax/Config.in:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:20 2002
+--- /dev/null	Tue Jul 30 05:50:31 2002
 +++ linux-sna-kernel/drivers/net/twinax/Config.in	Sun Jun 16 09:09:57 2002
 @@ -0,0 +1,14 @@
 +#
@@ -393,7 +393,7 @@ diff -u /dev/null linux-sna-kernel/drivers/net/twinax/Config.in:1.1.2.1
 +endmenu
 Index: linux-sna-kernel/drivers/net/twinax/Makefile
 diff -u /dev/null linux-sna-kernel/drivers/net/twinax/Makefile:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:20 2002
+--- /dev/null	Tue Jul 30 05:50:31 2002
 +++ linux-sna-kernel/drivers/net/twinax/Makefile	Sun Jun 16 09:09:57 2002
 @@ -0,0 +1,26 @@
 +#
@@ -645,7 +645,7 @@ diff -u linux-sna-kernel/include/asm-sparc64/unistd.h:1.1.1.1 linux-sna-kernel/i
  type name(void) \
 Index: linux-sna-kernel/include/linux/af_netb.h
 diff -u /dev/null linux-sna-kernel/include/linux/af_netb.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:34 2002
+--- /dev/null	Tue Jul 30 05:50:46 2002
 +++ linux-sna-kernel/include/linux/af_netb.h	Sun Jun 16 09:09:58 2002
 @@ -0,0 +1,192 @@
 +#ifndef _LINUX_AF_NETB_H
@@ -842,7 +842,7 @@ diff -u /dev/null linux-sna-kernel/include/linux/af_netb.h:1.1.2.1
 +#endif /* _LINUX_AF_NETB_H */
 Index: linux-sna-kernel/include/linux/appc.h
 diff -u /dev/null linux-sna-kernel/include/linux/appc.h:1.1.2.10
---- /dev/null	Mon Jul 22 12:27:34 2002
+--- /dev/null	Tue Jul 30 05:50:46 2002
 +++ linux-sna-kernel/include/linux/appc.h	Mon Jul 22 09:58:32 2002
 @@ -0,0 +1,747 @@
 +/* appc.h: Advanced Program-to-Program Communications structures and defs.
@@ -1594,7 +1594,7 @@ diff -u /dev/null linux-sna-kernel/include/linux/appc.h:1.1.2.10
 +#endif /* _APPC_H */
 Index: linux-sna-kernel/include/linux/attach.h
 diff -u /dev/null linux-sna-kernel/include/linux/attach.h:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:34 2002
+--- /dev/null	Tue Jul 30 05:50:46 2002
 +++ linux-sna-kernel/include/linux/attach.h	Sat Jul 13 11:56:13 2002
 @@ -0,0 +1,124 @@
 +#ifndef _LINUX_ATTACH_H
@@ -1744,7 +1744,7 @@ diff -u linux-sna-kernel/include/linux/brlock.h:1.1.1.1 linux-sna-kernel/include
  
 Index: linux-sna-kernel/include/linux/cpic.h
 diff -u /dev/null linux-sna-kernel/include/linux/cpic.h:1.1.2.5
---- /dev/null	Mon Jul 22 12:27:34 2002
+--- /dev/null	Tue Jul 30 05:50:46 2002
 +++ linux-sna-kernel/include/linux/cpic.h	Sat Jul 20 12:44:21 2002
 @@ -0,0 +1,802 @@
 +/* cpic.h: CPI Communications Header.
@@ -2551,7 +2551,7 @@ diff -u /dev/null linux-sna-kernel/include/linux/cpic.h:1.1.2.5
 +#endif	/* _CPIC_H */
 Index: linux-sna-kernel/include/linux/dextab.h
 diff -u /dev/null linux-sna-kernel/include/linux/dextab.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:34 2002
+--- /dev/null	Tue Jul 30 05:50:46 2002
 +++ linux-sna-kernel/include/linux/dextab.h	Sun Jun 16 09:09:58 2002
 @@ -0,0 +1,58 @@
 +#ifndef __LINUX_DEXTAB_H
@@ -2673,7 +2673,7 @@ diff -u linux-sna-kernel/include/linux/if_ether.h:1.1.1.1 linux-sna-kernel/inclu
  #define ETH_P_IPX	0x8137		/* IPX over DIX			*/
 Index: linux-sna-kernel/include/linux/llc.h
 diff -u /dev/null linux-sna-kernel/include/linux/llc.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:35 2002
+--- /dev/null	Tue Jul 30 05:50:47 2002
 +++ linux-sna-kernel/include/linux/llc.h	Sun Jun 16 09:09:59 2002
 @@ -0,0 +1,96 @@
 +#ifndef __LINUX_LLC_H
@@ -3375,21 +3375,32 @@ diff -u linux-sna-kernel/include/linux/netbeui.h:1.1.1.1 linux-sna-kernel/includ
 +extern int nbcs_ioctl(unsigned int cmd, void *arg);
 +#endif /* _LINUX_NETBEUI_H */
 Index: linux-sna-kernel/include/linux/skbuff.h
-diff -u linux-sna-kernel/include/linux/skbuff.h:1.1.1.1 linux-sna-kernel/include/linux/skbuff.h:1.1.1.1.2.6
+diff -u linux-sna-kernel/include/linux/skbuff.h:1.1.1.1 linux-sna-kernel/include/linux/skbuff.h:1.1.1.1.2.7
 --- linux-sna-kernel/include/linux/skbuff.h:1.1.1.1	Sun Jun 16 08:47:40 2002
-+++ linux-sna-kernel/include/linux/skbuff.h	Mon Jul 22 12:19:03 2002
-@@ -26,6 +26,10 @@
++++ linux-sna-kernel/include/linux/skbuff.h	Wed Jul 24 09:29:21 2002
+@@ -26,6 +26,21 @@
  #include <linux/mm.h>
  #include <linux/highmem.h>
  
 +#if defined(CONFIG_SNA) || defined(CONFIG_SNA_MODULE)
 +#include <net/sna_formats.h>
++
++struct sna_ctrl_info {
++        atomic_t        use;
++        void (*destroy)(struct sna_ctrl_info *ctrl);
++
++        u_int32_t       bracket_id;
++        u_int8_t        fmh;
++        u_int8_t        hs_ps_type;
++        u_int8_t        type;
++        u_int8_t        reason;
++};
 +#endif
 +
  #define HAVE_ALLOC_SKB		/* For the drivers to know */
  #define HAVE_ALIGNABLE_SKB	/* Ditto 8)		   */
  #define SLAB_SKB 		/* Slabified skbuffs 	   */
-@@ -137,8 +141,10 @@
+@@ -137,8 +152,10 @@
  	struct net_device	*dev;		/* Device we arrived on/are leaving by		*/
  
  	/* Transport layer header */
@@ -3402,7 +3413,7 @@ diff -u linux-sna-kernel/include/linux/skbuff.h:1.1.1.1 linux-sna-kernel/include
  		struct tcphdr	*th;
  		struct udphdr	*uh;
  		struct icmphdr	*icmph;
-@@ -151,8 +157,12 @@
+@@ -151,8 +168,12 @@
  	/* Network layer header */
  	union
  	{
@@ -3415,7 +3426,7 @@ diff -u linux-sna-kernel/include/linux/skbuff.h:1.1.1.1 linux-sna-kernel/include
  		struct arphdr	*arph;
  		struct ipxhdr	*ipxh;
  		unsigned char	*raw;
-@@ -215,6 +225,10 @@
+@@ -215,6 +236,10 @@
  #ifdef CONFIG_NET_SCHED
         __u32           tc_index;               /* traffic control index */
  #endif
@@ -3426,7 +3437,7 @@ diff -u linux-sna-kernel/include/linux/skbuff.h:1.1.1.1 linux-sna-kernel/include
  };
  
  #define SK_WMEM_MAX	65535
-@@ -1143,6 +1157,22 @@
+@@ -1143,6 +1168,22 @@
  {
  	if (nfct)
  		atomic_inc(&nfct->master->use);
@@ -3450,10 +3461,10 @@ diff -u linux-sna-kernel/include/linux/skbuff.h:1.1.1.1 linux-sna-kernel/include
  #endif
  
 Index: linux-sna-kernel/include/linux/sna.h
-diff -u /dev/null linux-sna-kernel/include/linux/sna.h:1.1.2.8
---- /dev/null	Mon Jul 22 12:27:35 2002
-+++ linux-sna-kernel/include/linux/sna.h	Tue Jun 25 07:57:19 2002
-@@ -0,0 +1,926 @@
+diff -u /dev/null linux-sna-kernel/include/linux/sna.h:1.1.2.11
+--- /dev/null	Tue Jul 30 05:50:47 2002
++++ linux-sna-kernel/include/linux/sna.h	Wed Jul 24 11:24:05 2002
+@@ -0,0 +1,980 @@
 +/* sna.h: Linux-SNA Network Operator Facility Headers.
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -3867,17 +3878,53 @@ diff -u /dev/null linux-sna-kernel/include/linux/sna.h:1.1.2.8
 +	struct lsreq		*prev;
 +
 +	sna_netid		netid;
-+        char            	devname[SNA_RESOURCE_NAME_LEN];
-+        char            	portname[SNA_RESOURCE_NAME_LEN];
-+        char            	lsname[SNA_RESOURCE_NAME_LEN];
-+	char			dname[SNA_FQCP_NAME_LEN];
-+	char			daddr[12];
-+	unsigned char		sport;
-+	unsigned long		proc_id;
-+	unsigned short		flags;
-+	unsigned long		auto_act;
-+	unsigned long		auto_deact;
-+	unsigned long		byteswap;
++
++	u_int8_t		use_name[SNA_USE_NAME_LEN];
++	u_int8_t		dev_name[SNA_RESOURCE_NAME_LEN];
++	u_int8_t		port_name[SNA_RESOURCE_NAME_LEN];
++	
++	u_int32_t		index;
++	u_int32_t		flags;
++
++	u_int32_t		retries;
++	u_int32_t		xid_count;
++	
++	u_int32_t		state;
++	u_int32_t		co_status;
++	u_int32_t		xid_state;
++
++	u_int8_t		effective_role;
++	u_int8_t		effective_tg;
++
++	u_int16_t               tx_max_btu;
++        u_int16_t               rx_max_btu;
++        u_int16_t               tx_window;
++        u_int16_t               rx_window;
++	
++	/* destination link station. */
++        sna_netid               plu_name;
++        sna_nodeid              plu_node_id;
++        u_int8_t                plu_mac_addr[6];
++        u_int8_t                plu_port;
++
++	/* user defined link station options. */
++	int                     role;
++        int                     direction;
++        int                     xid_init_method;
++        int                     byteswap;
++        int                     retry_on_fail;
++        int                     retry_times;
++        int                     autoact;
++        int                     autodeact;
++        int                     tg_number;
++        int                     cost_per_byte;
++        int                     cost_per_connect_time;
++        int                     effective_capacity;
++        int                     propagation_delay;
++        int                     security;
++        int                     user1;
++        int                     user2;
++        int                     user3;
 +};
 +
 +struct lsconf {
@@ -3907,18 +3954,20 @@ diff -u /dev/null linux-sna-kernel/include/linux/sna.h:1.1.2.8
 +	struct portreq		*prev;
 +
 +	sna_netid		netid;
-+        char            	devname[SNA_RESOURCE_NAME_LEN];
-+        char            	portname[SNA_RESOURCE_NAME_LEN];
++	u_int8_t		use_name[SNA_USE_NAME_LEN];
++        u_int8_t            	dev_name[SNA_RESOURCE_NAME_LEN];
 +
++	u_int16_t		type;
++	u_int16_t		index;
++	u_int32_t		flags;
++	
++	u_int32_t		ls_qlen;
++	
 +	char			saddr[12];
-+	unsigned long		ls_qlen;
-+	unsigned long		proc_id;
-+	unsigned long		role;
-+	unsigned long		btu;
-+	unsigned long		mia;
-+	unsigned long		moa;
 +
-+	unsigned short		flags;
++	u_int32_t		btu;
++	u_int32_t		mia;
++	u_int32_t		moa;
 +
 +	struct lsreq		*ls;
 +};
@@ -3948,13 +3997,14 @@ diff -u /dev/null linux-sna-kernel/include/linux/sna.h:1.1.2.8
 +	struct dlcreq		*next;
 +	struct dlcreq		*prev;
 +
-+	sna_netid		netid;
-+	char			devname[SNA_RESOURCE_NAME_LEN];
-+
-+	unsigned long		port_qlen;
-+	unsigned long		proc_id;
-+	unsigned short		flags;	
-+
++	u_int8_t		dev_name[SNA_RESOURCE_NAME_LEN];
++	
++	u_int32_t		index;
++	u_int32_t		flags;
++	u_int16_t		type;
++	u_int16_t		mtu;
++	u_int8_t		dev_addr[8];
++	
 +	struct portreq		*port;
 +};
 +
@@ -4371,6 +4421,21 @@ diff -u /dev/null linux-sna-kernel/include/linux/sna.h:1.1.2.8
 +#define SNA_NOF_MS_ENTRY_POINT		0x0
 +#define SNA_NOF_MS_FOCAL_POINT		0x1
 +
++typedef enum {
++        CO_FAIL = 0,
++        CO_RESET,
++        CO_ACTIVE,
++        CO_S_TEST_C,
++        CO_R_TEST_R,
++        CO_TEST_OK,
++} connect_out_status;
++
++typedef enum {
++        SNA_LS_STATE_DEFINED = 0,
++        SNA_LS_STATE_ACTIVATED,
++        SNA_LS_STATE_ACTIVE
++} sna_ls_state_enum;
++
 +#ifdef __KERNEL__
 +#include <net/sna_formats.h>
 +#include <net/sna_vectors.h>
@@ -4396,9 +4461,9 @@ diff -u linux-sna-kernel/include/linux/socket.h:1.1.1.1 linux-sna-kernel/include
  #define IPX_TYPE	1
  
 Index: linux-sna-kernel/include/linux/sysctl.h
-diff -u linux-sna-kernel/include/linux/sysctl.h:1.1.1.1 linux-sna-kernel/include/linux/sysctl.h:1.1.1.1.2.1
+diff -u linux-sna-kernel/include/linux/sysctl.h:1.1.1.1 linux-sna-kernel/include/linux/sysctl.h:1.1.1.1.2.2
 --- linux-sna-kernel/include/linux/sysctl.h:1.1.1.1	Sun Jun 16 08:47:40 2002
-+++ linux-sna-kernel/include/linux/sysctl.h	Sun Jun 16 09:09:59 2002
++++ linux-sna-kernel/include/linux/sysctl.h	Mon Jul 29 10:49:05 2002
 @@ -164,7 +164,8 @@
  	NET_TR=14,
  	NET_DECNET=15,
@@ -4409,7 +4474,7 @@ diff -u linux-sna-kernel/include/linux/sysctl.h:1.1.1.1 linux-sna-kernel/include
  };
  
  /* /proc/sys/kernel/random */
-@@ -210,6 +211,26 @@
+@@ -210,6 +211,24 @@
  /* /proc/sys/net/ethernet */
  
  /* /proc/sys/net/802 */
@@ -4419,19 +4484,17 @@ diff -u linux-sna-kernel/include/linux/sysctl.h:1.1.1.1 linux-sna-kernel/include
 +        NET_SNA_MAX_LINK_STATIONS=1,
 +        NET_SNA_MAX_LU=2,
 +        NET_SNA_MAX_MODE=3,
-+        NET_SNA_XID_RETRY=4,
++        NET_SNA_XID_RETRY_LIMIT=4,
 +        NET_SNA_MIA=5,
 +        NET_SNA_MOA=6,
-+        NET_SNA_MAX_RETRY=7,
-+        NET_SNA_MAX_BTU=8,
-+        NET_SNA_MAX_TX_RU=9,
-+        NET_SNA_MAX_RX_RU=10,
-+        NET_SNA_MAX_AUTO_ACT=11,
-+        NET_SNA_DEBUG=12,
-+        NET_SNA_XID_IDLE_LIMIT=13,
-+        NET_SNA_XID_RETRY_INTERVAL=14,
-+        NET_SNA_CO_MAX_RETRIES=15,
-+       	NET_SNA_MAX_LS_CNT=16
++        NET_SNA_MAX_BTU=7,
++        NET_SNA_MAX_TX_RU=8,
++        NET_SNA_MAX_RX_RU=9,
++        NET_SNA_MAX_AUTO_ACT=10,
++        NET_SNA_DEBUG=11,
++        NET_SNA_XID_IDLE_LIMIT=12,
++        NET_SNA_TEST_RETRY_LIMIT=13,
++       	NET_SNA_MAX_LS_CNT=14
 +};
  
  /* /proc/sys/net/unix */
@@ -4452,7 +4515,7 @@ diff -u linux-sna-kernel/include/linux/trdevice.h:1.1.1.1 linux-sna-kernel/inclu
  extern struct net_device *init_trdev(struct net_device *dev, int sizeof_priv);
 Index: linux-sna-kernel/include/net/cpic.h
 diff -u /dev/null linux-sna-kernel/include/net/cpic.h:1.1.2.5
---- /dev/null	Mon Jul 22 12:27:36 2002
+--- /dev/null	Tue Jul 30 05:50:48 2002
 +++ linux-sna-kernel/include/net/cpic.h	Mon Jul 22 12:19:03 2002
 @@ -0,0 +1,57 @@
 +/* cpic.h: CPI Communications Header.
@@ -4552,7 +4615,7 @@ diff -u linux-sna-kernel/include/net/datalink.h:1.1.1.1 linux-sna-kernel/include
  #endif
 Index: linux-sna-kernel/include/net/llc_actn.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_actn.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:36 2002
+--- /dev/null	Tue Jul 30 05:50:49 2002
 +++ linux-sna-kernel/include/net/llc_actn.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,48 @@
 +#ifndef LLC_ACTN_H
@@ -4605,7 +4668,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_actn.h:1.1.2.1
 +#endif /* LLC_ACTN_H */
 Index: linux-sna-kernel/include/net/llc_c_ac.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_c_ac.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:36 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_c_ac.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,254 @@
 +#ifndef LLC_C_AC_H
@@ -4864,7 +4927,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_c_ac.h:1.1.2.1
 +#endif /* LLC_C_AC_H */
 Index: linux-sna-kernel/include/net/llc_c_ev.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_c_ev.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:36 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_c_ev.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,323 @@
 +#ifndef LLC_C_EV_H
@@ -5192,7 +5255,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_c_ev.h:1.1.2.1
 +#endif /* LLC_C_EV_H */
 Index: linux-sna-kernel/include/net/llc_c_st.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_c_st.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:36 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_c_st.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,48 @@
 +#ifndef LLC_C_ST_H
@@ -5245,7 +5308,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_c_st.h:1.1.2.1
 +#endif /* LLC_C_ST_H */
 Index: linux-sna-kernel/include/net/llc_conn.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_conn.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_conn.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,157 @@
 +#ifndef LLC_CONN_H
@@ -5407,7 +5470,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_conn.h:1.1.2.1
 +#endif /* LLC_CONN_H */
 Index: linux-sna-kernel/include/net/llc_evnt.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_evnt.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_evnt.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,93 @@
 +#ifndef LLC_EVNT_H
@@ -5505,7 +5568,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_evnt.h:1.1.2.1
 +#endif /* LLC_EVNT_H */
 Index: linux-sna-kernel/include/net/llc_if.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_if.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_if.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,153 @@
 +#ifndef LLC_IF_H
@@ -5663,7 +5726,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_if.h:1.1.2.1
 +#endif /* LLC_IF_H */
 Index: linux-sna-kernel/include/net/llc_mac.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_mac.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_mac.h	Sun Jun 16 09:10:00 2002
 @@ -0,0 +1,40 @@
 +#ifndef LLC_MAC_H
@@ -5708,7 +5771,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_mac.h:1.1.2.1
 +#endif /* LLC_MAC_H */
 Index: linux-sna-kernel/include/net/llc_main.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_main.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_main.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,69 @@
 +#ifndef LLC_MAIN_H
@@ -5782,7 +5845,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_main.h:1.1.2.1
 +#endif /* LLC_MAIN_H */
 Index: linux-sna-kernel/include/net/llc_pdu.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_pdu.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_pdu.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,258 @@
 +#ifndef LLC_PDU_H
@@ -6045,7 +6108,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_pdu.h:1.1.2.1
 +#endif /* LLC_PDU_H */
 Index: linux-sna-kernel/include/net/llc_s_ac.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_s_ac.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_s_ac.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,47 @@
 +#ifndef LLC_S_AC_H
@@ -6097,7 +6160,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_s_ac.h:1.1.2.1
 +#endif /* LLC_S_AC_H */
 Index: linux-sna-kernel/include/net/llc_s_ev.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_s_ev.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_s_ev.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,105 @@
 +#ifndef LLC_S_EV_H
@@ -6207,7 +6270,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_s_ev.h:1.1.2.1
 +#endif /* LLC_S_EV_H */
 Index: linux-sna-kernel/include/net/llc_s_st.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_s_st.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_s_st.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,34 @@
 +#ifndef LLC_S_ST_H
@@ -6246,7 +6309,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_s_st.h:1.1.2.1
 +#endif /* LLC_S_ST_H */
 Index: linux-sna-kernel/include/net/llc_sap.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_sap.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_sap.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,42 @@
 +#ifndef LLC_SAP_H
@@ -6293,7 +6356,7 @@ diff -u /dev/null linux-sna-kernel/include/net/llc_sap.h:1.1.2.1
 +#endif /* LLC_SAP_H */
 Index: linux-sna-kernel/include/net/llc_stat.h
 diff -u /dev/null linux-sna-kernel/include/net/llc_stat.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/llc_stat.h	Sun Jun 16 09:10:01 2002
 @@ -0,0 +1,35 @@
 +#ifndef LLC_STAT_H
@@ -6349,10 +6412,10 @@ diff -u linux-sna-kernel/include/net/p8022.h:1.1.1.1 linux-sna-kernel/include/ne
 -
  #endif
 Index: linux-sna-kernel/include/net/sna_cbs.h
-diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.39
---- /dev/null	Mon Jul 22 12:27:37 2002
-+++ linux-sna-kernel/include/net/sna_cbs.h	Mon Jul 22 09:58:32 2002
-@@ -0,0 +1,2422 @@
+diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.44
+--- /dev/null	Tue Jul 30 05:50:50 2002
++++ linux-sna-kernel/include/net/sna_cbs.h	Mon Jul 29 22:59:57 2002
+@@ -0,0 +1,2399 @@
 +/* sna_cbs.h: Linux-SNA Control blocks and layer specific declarations.
 + * - Kept in one place to ease maintance headaches
 + *
@@ -6443,7 +6506,9 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.39
 +
 +        sna_netid       netid;
 +        sna_nodeid      nodeid;
-+        unsigned short  status;
++
++	u_int32_t	flags;
++	
 +        unsigned char   type;           /* Node type. */
 +        unsigned short  lu_seg;         /* Is LU segmenting supported. */
 +        unsigned short  bind_seg;       /* Is Bind segmenting supported. */
@@ -6651,24 +6716,9 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.39
 +#define SNA_LS_TYPE_DYNAMIC             0x02
 +#define SNA_LS_TYPE_TEMP                0x04
 +
-+#define XID_TIMEOUT     3 * HZ
-+#define CO_TIMEOUT      3 * HZ
-+#define CO_MAX_RETRIES  10
-+
-+typedef enum {
-+        CO_FAIL = 0,
-+        CO_RESET,
-+        CO_ACTIVE,
-+        CO_S_TEST_C,
-+        CO_R_TEST_R,
-+        CO_TEST_OK,
-+} connect_out_status;
-+
-+typedef enum {
-+	SNA_LS_STATE_DEFINED = 0,
-+	SNA_LS_STATE_ACTIVATED,
-+	SNA_LS_STATE_ACTIVE
-+} sna_ls_state_enum;
++#define SNA_TEST_RETRY_LIMIT	3 * HZ
++#define SNA_XID_RETRY_LIMIT    	3 * HZ
++#define SNA_XID_IDLE_LIMIT	5 * HZ
 +
 +typedef enum {
 +	SNA_LS_XID_INIT_NULL = 0,
@@ -6927,7 +6977,8 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.39
 +	struct list_head 	list;
 +
 +	u_int32_t		index;
-+
++	u_int32_t		flags;
++	
 +        sna_netid       	netid;
 +	sna_nodeid		nodeid;
 +
@@ -7404,17 +7455,6 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.39
 +typedef enum {
 +	SNA_CTRL_R_PROTOCOL_VIOLATION = 0
 +} sna_ctrl_info_reasons;
-+
-+struct sna_ctrl_info {
-+	atomic_t	use;
-+	void (*destroy)(struct sna_ctrl_info *ctrl);
-+	
-+	u_int32_t	bracket_id;
-+	u_int8_t	fmh;
-+	u_int8_t	hs_ps_type;
-+	u_int8_t	type;
-+	u_int8_t	reason;
-+};
 +
 +/* IPC.
 + */
@@ -8777,7 +8817,7 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_cbs.h:1.1.2.39
 +#endif	/* __NET_SNA_CBS_H */
 Index: linux-sna-kernel/include/net/sna_errors.h
 diff -u /dev/null linux-sna-kernel/include/net/sna_errors.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:37 2002
+--- /dev/null	Tue Jul 30 05:50:50 2002
 +++ linux-sna-kernel/include/net/sna_errors.h	Sun Jun 16 09:10:02 2002
 @@ -0,0 +1,43 @@
 +/* sna_errors.h: Linux-SNA Error codes and declarations.
@@ -8824,10 +8864,10 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_errors.h:1.1.2.1
 +#endif	/* __KERNEL__ */
 +#endif	/* __NET_SNA_ERRORS_H */
 Index: linux-sna-kernel/include/net/sna_externs.h
-diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.17
---- /dev/null	Mon Jul 22 12:27:37 2002
-+++ linux-sna-kernel/include/net/sna_externs.h	Wed Jul 10 11:20:42 2002
-@@ -0,0 +1,306 @@
+diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.18
+--- /dev/null	Tue Jul 30 05:50:50 2002
++++ linux-sna-kernel/include/net/sna_externs.h	Mon Jul 29 22:59:58 2002
+@@ -0,0 +1,309 @@
 +/* sna_externs.h: Linux-SNA external function declarations.
 + * - Kept in one place to ease maintance headaches
 + *
@@ -8856,6 +8896,10 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.17
 +extern struct sna_ctrl_info *sna_ctrl_info_create(int gfp_mask);
 +extern struct sk_buff *sna_alloc_skb(unsigned int size, int gfp_mask);
 +
++extern struct proc_dir_entry *proc_sna_create(const char *name,
++        mode_t mode, get_info_t *get_info);
++extern void proc_sna_remove(const char *name);
++
 +/* ASM. */
 +extern struct sna_lfsid *sna_asm_assign_lfsid(u_int32_t pc_index, u_int32_t sm_index);
 +extern int sna_asm_create(struct sna_nof_node *start);
@@ -8874,8 +8918,8 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.17
 +
 +/* Attach. */
 +extern int sna_attach_execute_tp(__u32 tcb_id, struct sk_buff *skb);
-+extern int sna_attach_create(struct sna_nof_node *start);
-+extern int sna_attach_destroy(struct sna_nof_node *delete);
++extern int sna_attach_init(void);
++extern int sna_attach_fini(void);
 +
 +/* COSM. */
 +extern int sna_cosm_query_cos(char *arg);
@@ -8899,11 +8943,8 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.17
 +extern int sna_cpic_ioctl(int cmd, void *arg);
 +extern int sna_cpic_setsockopt(struct socket *sock, int level, int optname,
 +        char *optval, int optlen);
-+extern int sna_cpic_get_info_side(char *buffer, char **start,
-+        off_t offset, int length);
-+extern int sna_cpic_get_info(char *buffer, char **start, off_t offset, int length);
-+extern int sna_cpic_create(struct sna_nof_node *start);
-+extern int sna_cpic_destroy(struct sna_nof_node *delete);
++extern int sna_cpic_init(void);
++extern int sna_cpic_fini(void);
 +extern struct sna_tcb *sna_cpic_find_tcb_by_daf(__u8 daf);
 +
 +/* CS. */
@@ -8924,6 +8965,8 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.17
 +extern int sna_cs_query_dlc(char *arg);
 +extern int sna_cs_query_port(char *arg);
 +extern int sna_cs_query_ls(char *arg);
++extern int sna_cs_start(struct sna_nof_node *node);
++extern int sna_cs_stop(struct sna_nof_node *node);
 +extern int sna_cs_create(struct sna_nof_node *start);
 +extern int sna_cs_destroy(struct sna_nof_node *delete);
 +extern int sna_cs_define_port(struct sna_nof_port *port);
@@ -9135,10 +9178,10 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_externs.h:1.1.2.17
 +#endif	/* __KERNEL__ */
 +#endif	/* __NET_SNA_EXTERNS_H */
 Index: linux-sna-kernel/include/net/sna_formats.h
-diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.15
---- /dev/null	Mon Jul 22 12:27:37 2002
-+++ linux-sna-kernel/include/net/sna_formats.h	Fri Jul 19 13:39:41 2002
-@@ -0,0 +1,4407 @@
+diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.17
+--- /dev/null	Tue Jul 30 05:50:50 2002
++++ linux-sna-kernel/include/net/sna_formats.h	Tue Jul 30 05:49:11 2002
+@@ -0,0 +1,4409 @@
 +/* sna_formats.h: Linux-SNA data headers and declarations.
 + * - Kept in one place to ease maintance headaches
 + *
@@ -10810,21 +10853,6 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.15
 +                __pad1:4;
 +};
 +
-+/* BINDF (Bind Failure) */
-+struct sna_bindf {
-+        /* 0-2 NS header, 0x810685 */
-+        char    sense_data[3];
-+        struct  sna_reason_bit *reason;
-+
-+        /* Session Keys */
-+        /* Control Vectors */
-+};
-+
-+/* BIS (Bracket Initiation Stopped) */
-+struct sna_bis {
-+        __u8    request_code;
-+};
-+
 +/* CANCEL (Cancel) */
 +struct sna_cancel {
 +        __u8    request_code;
@@ -11334,9 +11362,11 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.15
 +/* BIS (Bracket Initiation Stopped). BIS is sent by the half-session to
 + * indicate that it will not attempt to begin any more brackets.
 + */
-+struct sna_ru_bis {
-+	__u8	req_code;
-+};
++#pragma pack(1)
++typedef struct {
++	u_int8_t rc	__attribute__ ((packed));
++} sna_ru_bis;
++#pragma pack()
 +
 +/* CANCEL (Cancel). CANCEL may be sent by a half-session to terminate a
 + * partially sent chain of FMD requests. CANCEL may be sent only when
@@ -12577,27 +12607,47 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.15
 +/* UNBIND (Unbind Session). UNBIND is sent to deactivate an active session
 + * between the two LUs.
 + */
-+struct sna_ru_unbind {
-+	__u8	req_code;
-+	__u8	unbind_type;
-+	__u32	sense;
-+	__u8	*ctrl_vectors;
-+};
++#pragma pack(1)
++typedef struct {
++#if defined(__LITTLE_ENDIAN_BITFIELD)
++	u_int8_t        rc              __attribute__ ((packed));
++        u_int8_t        type            __attribute__ ((packed));
++        u_int32_t       sense           __attribute__ ((packed));
++#elif defined(__BIG_ENDIAN_BITFIELD)
++	u_int8_t	rc		__attribute__ ((packed));
++	u_int8_t	type		__attribute__ ((packed));
++	u_int32_t	sense		__attribute__ ((packed));
++#else
++#error  "Please fix <asm/byteorder.h>"
++#endif
++} sna_ru_unbind;
++#pragma pack()
 +
 +/* UNBINDF (Unbind Failure). UNBINDF is sent, with no-response requested, by
 + * the PLU to notify the SSCP that the attempt to deactivate the session
 + * between the specified LUs has failed (for example, because of a path failure)
 + */
-+struct sna_ru_unbindf {
-+	__u8	ns_hdr[3];
-+	__u32	sense;
-+	__u8	rsv1:1,
-+		unbind_err_slu:1,
-+		takedown_rej_plu:1,
-+		rsv2:5;
-+	__u8	*session_key;
-+	__u8	*ctrl_vectors;
-+};
++#pragma pack(1)
++typedef struct {
++#if defined(__LITTLE_ENDIAN_BITFIELD)
++	u_int32_t	rc:24		__attribute__ ((packed));
++	u_int32_t	sense		__attribute__ ((packed));
++	u_int8_t	rsv2:5,
++			takedown:1,
++			unbind:1,
++			rsv1:1		__attribute__ ((packed));
++#elif defined(__BIG_ENDIAN_BITFIELD)
++	u_int32_t       rc:24           __attribute__ ((packed));
++        u_int32_t       sense           __attribute__ ((packed));
++	u_int8_t	rsv1:1,
++			unbind:1,
++			takedown:1,
++			rsv2:5		__attribute__ ((packed));
++#else
++#error  "Please fix <asm/byteorder.h>"
++#endif
++} sna_ru_unbindf;
++#pragma pack()
 +
 +/* RU NS Header indicators. */
 +#define SNA_RU_NS_CONTACT		0x010201
@@ -13322,11 +13372,6 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.15
 +/* XID.
 + */
 +
-+/* Default timer values */
-+#define SNA_XID_RETRY_LIMIT     10
-+#define SNA_XID_IDLE_LIMIT      (60 * HZ)
-+#define SNA_XID_RETRY_INTERVAL  (10 * HZ)
-+
 +/* XID I-field structures. The goal is to provide one set of XID headers
 + * for all device types, Eth, Tr, Sdlc, X.25, Channel, etc, etc..
 + */
@@ -13548,7 +13593,7 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_formats.h:1.1.2.15
 +#endif  /* __NET_SNA_FORMATS_H */
 Index: linux-sna-kernel/include/net/sna_ms_vectors.h
 diff -u /dev/null linux-sna-kernel/include/net/sna_ms_vectors.h:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:38 2002
+--- /dev/null	Tue Jul 30 05:50:51 2002
 +++ linux-sna-kernel/include/net/sna_ms_vectors.h	Sun Jun 16 09:10:03 2002
 @@ -0,0 +1,211 @@
 +/* sna_ms_vectors.h: Linux-SNA MS Control Vectors.
@@ -13764,7 +13809,7 @@ diff -u /dev/null linux-sna-kernel/include/net/sna_ms_vectors.h:1.1.2.1
 +#endif	/* __NET_SNA_MS_VECTORS_H */
 Index: linux-sna-kernel/include/net/sna_vectors.h
 diff -u /dev/null linux-sna-kernel/include/net/sna_vectors.h:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:38 2002
+--- /dev/null	Tue Jul 30 05:50:51 2002
 +++ linux-sna-kernel/include/net/sna_vectors.h	Sat Jun 22 13:54:07 2002
 @@ -0,0 +1,166 @@
 +/* sna_vectors.h: Linux-SNA Control Vectors.
@@ -13993,14 +14038,14 @@ diff -u linux-sna-kernel/include/net/sock.h:1.1.1.1 linux-sna-kernel/include/net
  	} protinfo;  		
  
 Index: linux-sna-kernel/net/Config.in
-diff -u linux-sna-kernel/net/Config.in:1.1.1.1 linux-sna-kernel/net/Config.in:1.1.1.1.2.2
+diff -u linux-sna-kernel/net/Config.in:1.1.1.1 linux-sna-kernel/net/Config.in:1.1.1.1.2.3
 --- linux-sna-kernel/net/Config.in:1.1.1.1	Sun Jun 16 08:47:59 2002
-+++ linux-sna-kernel/net/Config.in	Fri Jul  5 03:26:31 2002
++++ linux-sna-kernel/net/Config.in	Tue Jul 23 07:39:51 2002
 @@ -50,6 +50,11 @@
  fi
  
  comment ' '
-+tristate 'SNA Networking' CONFIG_SNA
++dep_tristate 'SNA Networking' CONFIG_SNA $CONFIG_LLC
 +if [ "$CONFIG_SNA" != "n" ]; then
 +   source net/sna/Config.in
 +fi
@@ -14088,7 +14133,7 @@ diff -u linux-sna-kernel/net/netsyms.c:1.1.1.1 linux-sna-kernel/net/netsyms.c:1.
  EXPORT_SYMBOL(eth_type_trans);
 Index: linux-sna-kernel/net/sna_stub_appc.c
 diff -u /dev/null linux-sna-kernel/net/sna_stub_appc.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:40 2002
+--- /dev/null	Tue Jul 30 05:50:52 2002
 +++ linux-sna-kernel/net/sna_stub_appc.c	Fri Jul  5 03:26:32 2002
 @@ -0,0 +1,100 @@
 +/* appc.c: Advanced Program-to-Program Communications.
@@ -14193,7 +14238,7 @@ diff -u /dev/null linux-sna-kernel/net/sna_stub_appc.c:1.1.2.1
 +#endif
 Index: linux-sna-kernel/net/sna_stub_attach.c
 diff -u /dev/null linux-sna-kernel/net/sna_stub_attach.c:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:40 2002
+--- /dev/null	Tue Jul 30 05:50:52 2002
 +++ linux-sna-kernel/net/sna_stub_attach.c	Sat Jul 13 11:56:14 2002
 @@ -0,0 +1,323 @@
 +/* attach.c: Linux-SNA Attach Manager Kernel Stub.
@@ -14521,7 +14566,7 @@ diff -u /dev/null linux-sna-kernel/net/sna_stub_attach.c:1.1.2.4
 +EXPORT_SYMBOL(attach_put_fd);
 Index: linux-sna-kernel/net/sna_stub_cpic.c
 diff -u /dev/null linux-sna-kernel/net/sna_stub_cpic.c:1.1.2.3
---- /dev/null	Mon Jul 22 12:27:40 2002
+--- /dev/null	Tue Jul 30 05:50:52 2002
 +++ linux-sna-kernel/net/sna_stub_cpic.c	Fri Jul 19 13:39:42 2002
 @@ -0,0 +1,328 @@
 +/* cpic.c: Common Programming Interface Communications, v2.1 compliant.
@@ -15103,7 +15148,7 @@ diff -u linux-sna-kernel/net/core/Makefile:1.1.1.1 linux-sna-kernel/net/core/Mak
  obj-$(CONFIG_NET_DIVERT) += dv.o
 Index: linux-sna-kernel/net/core/ext8022.c
 diff -u /dev/null linux-sna-kernel/net/core/ext8022.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:41 2002
+--- /dev/null	Tue Jul 30 05:50:53 2002
 +++ linux-sna-kernel/net/core/ext8022.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,76 @@
 +/*
@@ -15208,7 +15253,7 @@ diff -u linux-sna-kernel/net/core/skbuff.c:1.1.1.1 linux-sna-kernel/net/core/skb
  	kfree_skbmem(skb);
 Index: linux-sna-kernel/net/llc/Makefile
 diff -u /dev/null linux-sna-kernel/net/llc/Makefile:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:42 2002
+--- /dev/null	Tue Jul 30 05:50:56 2002
 +++ linux-sna-kernel/net/llc/Makefile	Sun Jun 16 09:10:06 2002
 @@ -0,0 +1,38 @@
 +###########################################################################
@@ -15251,7 +15296,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/Makefile:1.1.2.1
 +include $(TOPDIR)/Rules.make
 Index: linux-sna-kernel/net/llc/llc_actn.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_actn.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:42 2002
+--- /dev/null	Tue Jul 30 05:50:56 2002
 +++ linux-sna-kernel/net/llc/llc_actn.c	Sun Jun 16 09:10:06 2002
 @@ -0,0 +1,147 @@
 +/*
@@ -15403,7 +15448,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_actn.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_c_ac.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_c_ac.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:42 2002
+--- /dev/null	Tue Jul 30 05:50:56 2002
 +++ linux-sna-kernel/net/llc/llc_c_ac.c	Sun Jun 16 09:10:06 2002
 @@ -0,0 +1,1639 @@
 +/*
@@ -17047,7 +17092,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_c_ac.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_c_ev.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_c_ev.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:42 2002
+--- /dev/null	Tue Jul 30 05:50:56 2002
 +++ linux-sna-kernel/net/llc/llc_c_ev.c	Sun Jun 16 09:10:06 2002
 @@ -0,0 +1,868 @@
 +/*
@@ -17920,7 +17965,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_c_ev.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_c_st.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_c_st.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:42 2002
+--- /dev/null	Tue Jul 30 05:50:56 2002
 +++ linux-sna-kernel/net/llc/llc_c_st.c	Sun Jun 16 09:10:07 2002
 @@ -0,0 +1,4911 @@
 +/*
@@ -22836,7 +22881,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_c_st.c:1.1.2.1
 +};
 Index: linux-sna-kernel/net/llc/llc_conn.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_conn.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_conn.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,520 @@
 +/*
@@ -23361,7 +23406,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_conn.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_evnt.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_evnt.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_evnt.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,111 @@
 +/*
@@ -23477,7 +23522,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_evnt.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_if.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_if.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_if.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,493 @@
 +/*
@@ -23975,7 +24020,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_if.c:1.1.2.1
 +EXPORT_SYMBOL(llc_sap_close);
 Index: linux-sna-kernel/net/llc/llc_mac.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_mac.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_mac.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,281 @@
 +/*
@@ -24261,7 +24306,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_mac.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_main.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_main.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_main.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,607 @@
 +/*
@@ -24873,7 +24918,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_main.c:1.1.2.1
 +module_exit(llc_exit);
 Index: linux-sna-kernel/net/llc/llc_pdu.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_pdu.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_pdu.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,651 @@
 +/*
@@ -25529,7 +25574,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_pdu.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_s_ac.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_s_ac.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_s_ac.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,264 @@
 +/*
@@ -25798,7 +25843,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_s_ac.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_s_ev.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_s_ev.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_s_ev.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,114 @@
 +/*
@@ -25917,7 +25962,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_s_ev.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_s_st.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_s_st.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_s_st.c	Sun Jun 16 09:10:08 2002
 @@ -0,0 +1,189 @@
 +/*
@@ -26111,7 +26156,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_s_st.c:1.1.2.1
 +};
 Index: linux-sna-kernel/net/llc/llc_sap.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_sap.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_sap.c	Sun Jun 16 09:10:09 2002
 @@ -0,0 +1,262 @@
 +/*
@@ -26378,7 +26423,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_sap.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/llc/llc_sock.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_sock.c:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:57 2002
 +++ linux-sna-kernel/net/llc/llc_sock.c	Mon Jun 17 14:40:14 2002
 @@ -0,0 +1,1779 @@
 +/*
@@ -28162,7 +28207,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_sock.c:1.1.2.2
 +}
 Index: linux-sna-kernel/net/llc/llc_stat.c
 diff -u /dev/null linux-sna-kernel/net/llc/llc_stat.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:43 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/llc/llc_stat.c	Sun Jun 16 09:10:09 2002
 @@ -0,0 +1,207 @@
 +/*
@@ -28374,7 +28419,7 @@ diff -u /dev/null linux-sna-kernel/net/llc/llc_stat.c:1.1.2.1
 +};
 Index: linux-sna-kernel/net/netbeui/Makefile
 diff -u /dev/null linux-sna-kernel/net/netbeui/Makefile:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/Makefile	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,22 @@
 +#
@@ -28401,7 +28446,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/Makefile:1.1.2.1
 +include $(TOPDIR)/Rules.make
 Index: linux-sna-kernel/net/netbeui/af_netb.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/af_netb.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/af_netb.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,119 @@
 +/*
@@ -28525,7 +28570,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/af_netb.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/config.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/config.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/config.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,408 @@
 +/*
@@ -28938,7 +28983,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/config.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/dextab.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/dextab.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/dextab.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,244 @@
 +/*
@@ -29187,7 +29232,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/dextab.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/dgram_serve.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/dgram_serve.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/dgram_serve.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,601 @@
 +/*
@@ -29793,7 +29838,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/dgram_serve.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/llc_supp.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/llc_supp.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/llc_supp.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,1461 @@
 +/*
@@ -31259,7 +31304,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/llc_supp.c:1.1.2.1
 +module_exit(netbeui_exit);
 Index: linux-sna-kernel/net/netbeui/name_serve.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/name_serve.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/name_serve.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,898 @@
 +/*
@@ -32162,7 +32207,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/name_serve.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/nb_common.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/nb_common.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/nb_common.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,134 @@
 +/*
@@ -32301,7 +32346,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/nb_common.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/proc.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/proc.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/proc.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,281 @@
 +/*
@@ -32587,7 +32632,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/proc.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/query_serve.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/query_serve.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:58 2002
 +++ linux-sna-kernel/net/netbeui/query_serve.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,778 @@
 +/*
@@ -33370,7 +33415,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/query_serve.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/session_serve.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/session_serve.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/netbeui/session_serve.c	Sun Jun 16 09:10:56 2002
 @@ -0,0 +1,2821 @@
 +/*
@@ -36196,7 +36241,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/session_serve.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/netbeui/sock_dgram.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/sock_dgram.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:45 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/netbeui/sock_dgram.c	Sun Jun 16 09:10:57 2002
 @@ -0,0 +1,458 @@
 +/*
@@ -36659,7 +36704,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/sock_dgram.c:1.1.2.1
 +SOCKOPS_WRAP(nbso_dgram_proto, PF_NETBEUI);
 Index: linux-sna-kernel/net/netbeui/sock_name.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/sock_name.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/netbeui/sock_name.c	Sun Jun 16 09:10:57 2002
 @@ -0,0 +1,156 @@
 +/*
@@ -36820,7 +36865,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/sock_name.c:1.1.2.1
 +SOCKOPS_WRAP(nbso_name_proto, PF_NETBEUI);
 Index: linux-sna-kernel/net/netbeui/sock_session.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/sock_session.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/netbeui/sock_session.c	Sun Jun 16 09:10:57 2002
 @@ -0,0 +1,864 @@
 +/*
@@ -37689,7 +37734,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/sock_session.c:1.1.2.1
 +SOCKOPS_WRAP(nbso_session_proto, PF_NETBEUI);
 Index: linux-sna-kernel/net/netbeui/status_serve.c
 diff -u /dev/null linux-sna-kernel/net/netbeui/status_serve.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/netbeui/status_serve.c	Sun Jun 16 09:10:57 2002
 @@ -0,0 +1,767 @@
 +/*
@@ -38461,7 +38506,7 @@ diff -u /dev/null linux-sna-kernel/net/netbeui/status_serve.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/sna/Config.in
 diff -u /dev/null linux-sna-kernel/net/sna/Config.in:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/sna/Config.in	Fri Jul  5 03:26:32 2002
 @@ -0,0 +1,15 @@
 +#
@@ -38481,7 +38526,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/Config.in:1.1.2.2
 +
 Index: linux-sna-kernel/net/sna/Makefile
 diff -u /dev/null linux-sna-kernel/net/sna/Makefile:1.1.2.3
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:50:59 2002
 +++ linux-sna-kernel/net/sna/Makefile	Fri Jul  5 03:26:32 2002
 @@ -0,0 +1,30 @@
 +#
@@ -38515,10 +38560,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/Makefile:1.1.2.3
 +tar:
 +		tar -cvf /dev/f1 .
 Index: linux-sna-kernel/net/sna/af_sna.c
-diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
---- /dev/null	Mon Jul 22 12:27:46 2002
-+++ linux-sna-kernel/net/sna/af_sna.c	Mon Jul 22 12:19:04 2002
-@@ -0,0 +1,660 @@
+diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.15
+--- /dev/null	Tue Jul 30 05:51:00 2002
++++ linux-sna-kernel/net/sna/af_sna.c	Mon Jul 29 22:59:58 2002
+@@ -0,0 +1,663 @@
 +/* af_sna.c: Linux Systems Network Architecture implementation
 + *  - currently sockets only used by nof, use cpic, appc, or lua for data tx/rx.
 + *
@@ -38594,7 +38639,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +char sna_maintainer[]           = "Jay Schulist <jschlst@linux-sna.org>";
 +char sna_sw_prd_version[] 	= "0";			/* 2 chars max. */
 +char sna_sw_prd_release[]	= "1";			/* 2 chars max. */
-+char sna_sw_prd_modification[]	= "27";			/* 2 chars max. */
++char sna_sw_prd_modification[]	= "28";			/* 2 chars max. */
 +char sna_product_id[] 		= "GoBIG";		/* 7 chars max */
 +char sna_product_name[] 	= "Linux-SNA";		/* 30 chars max */
 +char sna_vendor[]		= "linux-SNA.ORG";	/* 16 chars max */
@@ -38604,7 +38649,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +__u32	sysctl_max_mode_cnt;
 +__u32	sysctl_max_inbound_activations;
 +__u32	sysctl_max_outbound_activations;
-+__u32	sysctl_max_retry_limit;
 +__u32	sysctl_max_btu_size;
 +__u32	sysctl_max_tx_ru_size;
 +__u32	sysctl_max_rx_ru_size;
@@ -39044,13 +39088,13 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +	return;
 +}
 +
-+inline struct proc_dir_entry *proc_sna_create(const char *name,
++struct proc_dir_entry *proc_sna_create(const char *name,
 +        mode_t mode, get_info_t *get_info)
 +{
 +        return create_proc_info_entry(name,mode,proc_net_sna,get_info);
 +}
 +
-+inline void proc_sna_remove(const char *name)
++void proc_sna_remove(const char *name)
 +{
 +        remove_proc_entry(name, proc_net_sna);
 +	return;
@@ -39109,8 +39153,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +	proc_sna_create("modes", 0, sna_rm_get_info_mode);
 +	proc_sna_create("local_lus", 0, sna_rm_get_info_local_lu);
 +	proc_sna_create("remote_lus", 0, sna_rm_get_info_remote_lu);
-+	proc_sna_create("cpic_side_information", 0, sna_cpic_get_info_side);
-+	proc_sna_create("cpic_conversations", 0, sna_cpic_get_info);
 +	proc_sna_create("cos_levels", 0, sna_cosm_get_info);
 +	proc_sna_create("cos_tg_characteristics", 0, sna_cosm_get_info_tg);
 +	proc_sna_create("cos_node_characteristics", 0, sna_cos_get_info_node);
@@ -39118,7 +39160,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +	proc_sna_create("transmission_groups", 0, sna_tdm_get_info_tg);
 +	proc_sna_create("asm_active_address_space", 0, sna_asm_get_info);
 +	proc_sna_create("asm_active_lfsids", 0, sna_asm_get_active_lfsids);
-+	proc_sna_create("transaction_programs", 0, sna_attach_get_info);
 +#endif
 +
 +        printk(KERN_INFO "linux-SNA (System Network Architecture) "
@@ -39132,11 +39173,21 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +        sna_register_sysctl();
 +#endif /* CONFIG_SYSCTL */
 +
++	sna_attach_init();
++#if defined(CONFIG_SNA_CPIC)
++        sna_cpic_init();
++#endif /* CONFIG_SNA_CPIC */
++	
 +        return 0;
 +}
 +
 +void __exit sna_exit(void)
 +{
++#if defined(CONFIG_SNA_CPIC)
++	sna_cpic_fini();
++#endif /* CONFIG_SNA_CPIC */
++	sna_attach_fini();
++	
 +	/* Remove out notifier from the netdevice layer. */
 +        unregister_netdevice_notifier(&nb_sna);
 +
@@ -39145,7 +39196,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +#endif /* CONFIG_SYSCTL */
 +
 +#ifdef CONFIG_PROC_FS
-+	proc_sna_remove("transaction_programs");
 +	proc_sna_remove("cos_levels");
 +	proc_sna_remove("cos_tg_characteristics");
 +	proc_sna_remove("cos_node_characteristitcs");
@@ -39153,8 +39203,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +	proc_sna_remove("transmission_groups");
 +	proc_sna_remove("asm_active_address_space");
 +	proc_sna_remove("asm_active_lfsids");
-+	proc_sna_remove("cpic_conversations");
-+	proc_sna_remove("cpic_side_information");
 +	proc_sna_remove("remote_lus");
 +	proc_sna_remove("local_lus");
 +	proc_sna_remove("modes");
@@ -39181,7 +39229,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/af_sna.c:1.1.2.12
 +#endif /* CONFIG_SNA || CONFIG_SNA_MODULE */
 Index: linux-sna-kernel/net/sna/sna_appc.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_appc.c:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:51:00 2002
 +++ linux-sna-kernel/net/sna/sna_appc.c	Fri Jul  5 03:26:32 2002
 @@ -0,0 +1,39 @@
 +/* sna_appc.c: Linux Systems Network Architecture implementation
@@ -39224,10 +39272,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_appc.c:1.1.2.2
 +#include <linux/init.h>
 +#include <linux/sna.h>
 Index: linux-sna-kernel/net/sna/sna_asm.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_asm.c:1.1.2.10
---- /dev/null	Mon Jul 22 12:27:46 2002
-+++ linux-sna-kernel/net/sna/sna_asm.c	Thu Jul 18 14:09:28 2002
-@@ -0,0 +1,449 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_asm.c:1.1.2.11
+--- /dev/null	Tue Jul 30 05:51:00 2002
++++ linux-sna-kernel/net/sna/sna_asm.c	Mon Jul 29 22:59:58 2002
+@@ -0,0 +1,436 @@
 +/* sna_asm.c: Linux Systems Network Architecture implementation
 + * - Linux-SNA Address Space Manager (Connect HS to PC).
 + *
@@ -39262,6 +39310,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_asm.c:1.1.2.10
 +#include <linux/skbuff.h>
 +#include <net/datalink.h>
 +#include <net/sock.h>
++#include <linux/proc_fs.h>
 +#include <linux/list.h>
 +
 +#include <linux/sna.h>
@@ -39562,7 +39611,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_asm.c:1.1.2.10
 +	return 0;
 +}
 +
-+int sna_asm_create(struct sna_nof_node *start)
++int sna_asm_create(struct sna_nof_node *node)
 +{
 +        sna_debug(5, "init\n");
 +        return 0;
@@ -39570,21 +39619,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_asm.c:1.1.2.10
 +
 +int sna_asm_destroy(struct sna_nof_node *delete)
 +{
-+        struct sna_lfsid_block *l;
-+        struct list_head *le, *se, *ae, *be;
-+        struct sna_asm_cb *a;
-+
-+        sna_debug(5, "init\n");
-+        list_for_each_safe(le, se, &asm_list) {
-+                a = list_entry(le, struct sna_asm_cb, list);
-+                list_for_each_safe(ae, be, &a->blk_list) {
-+                        l = list_entry(ae, struct sna_lfsid_block, list);
-+                        list_del(&l->list);
-+                        kfree(l);
-+                }
-+                list_del(&a->list);
-+                kfree(a);
-+        }
++	sna_debug(5, "init\n");
 +        return 0;
 +}
 +
@@ -39678,10 +39713,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_asm.c:1.1.2.10
 +}
 +#endif
 Index: linux-sna-kernel/net/sna/sna_attach.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_attach.c:1.1.2.8
---- /dev/null	Mon Jul 22 12:27:46 2002
-+++ linux-sna-kernel/net/sna/sna_attach.c	Sat Jul 13 11:56:14 2002
-@@ -0,0 +1,385 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_attach.c:1.1.2.9
+--- /dev/null	Tue Jul 30 05:51:00 2002
++++ linux-sna-kernel/net/sna/sna_attach.c	Mon Jul 29 22:59:58 2002
+@@ -0,0 +1,391 @@
 +/* sna_attach.c: Linux Systems Network Architecture implementation
 + * - SNA Attach Manager Kernel Backend.
 + *
@@ -40052,24 +40087,30 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_attach.c:1.1.2.8
 +	sna_attach_release
 +};
 +
-+int sna_attach_create(struct sna_nof_node *node)
++int sna_attach_init(void)
 +{
 +	sna_debug(5, "init\n");
 +        skb_queue_head_init(&attach_queue);
 +	init_waitqueue_head(&attach_wait);
 +	attach_register(&aops);
++#ifdef CONFIG_PROC_FS
++	proc_sna_create("transaction_programs", 0, sna_attach_get_info);
++#endif
 +	return 0;
 +}
 +
-+int sna_attach_destroy(struct sna_nof_node *node)
++int sna_attach_fini(void)
 +{
 +	sna_debug(5, "init\n");
++#ifdef CONFIG_PROC_FS
++	proc_sna_remove("transaction_programs");
++#endif
 +	attach_unregister(PF_SNA);
 +	return 0;
 +};
 Index: linux-sna-kernel/net/sna/sna_cosm.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_cosm.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:46 2002
+--- /dev/null	Tue Jul 30 05:51:00 2002
 +++ linux-sna-kernel/net/sna/sna_cosm.c	Sun Jun 16 09:10:09 2002
 @@ -0,0 +1,566 @@
 +/* sna_cosm.c: Linux Systems Network Architecture implementation
@@ -40639,10 +40680,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cosm.c:1.1.2.1
 +	return 0;
 +}
 Index: linux-sna-kernel/net/sna/sna_cpic.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_cpic.c:1.1.2.30
---- /dev/null	Mon Jul 22 12:27:46 2002
-+++ linux-sna-kernel/net/sna/sna_cpic.c	Mon Jul 22 12:19:04 2002
-@@ -0,0 +1,7166 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_cpic.c:1.1.2.31
+--- /dev/null	Tue Jul 30 05:51:00 2002
++++ linux-sna-kernel/net/sna/sna_cpic.c	Mon Jul 29 22:59:58 2002
+@@ -0,0 +1,7177 @@
 +/* sna_cpic.c: Linux Systems Network Architecture implementation
 + * - SNA CPI Communications (CPI-C) Pure processing backend.
 + *
@@ -40655,7 +40696,9 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cpic.c:1.1.2.30
 + *
 + * See the GNU General Public License for more details.
 + */
-+ 
++
++#include <linux/config.h>
++#if defined(CONFIG_SNA_CPIC)
 +#include <asm/uaccess.h>
 +#include <asm/system.h>
 +#include <asm/bitops.h>
@@ -47211,7 +47254,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cpic.c:1.1.2.30
 +	}
 +	switch (cpic.action) {
 +		case SNA_NOF_DEFINE:
-+			err =sna_cpic_register_side_info(&cpic);
++			err = sna_cpic_register_side_info(&cpic);
 +			break;
 +		case SNA_NOF_DELETE:
 +			err = sna_cpic_unregister_side_info(&cpic);
@@ -47701,34 +47744,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cpic.c:1.1.2.30
 +        return;
 +}
 +
-+static struct cpic_ops sna_cpic_ops = {
-+        PF_SNA,
-+	sna_cpic_cpicall,
-+        sna_cpic_release_session
-+};
-+
-+int sna_cpic_create(struct sna_nof_node *start)
-+{
-+	sna_debug(5, "init\n");
-+        cpic_register(&sna_cpic_ops);
-+        return 0;
-+}
-+
-+int sna_cpic_destroy(struct sna_nof_node *delete)
-+{
-+	struct sna_cpic_side_info *cpic;
-+        struct list_head *le, *se;
-+
-+	sna_debug(5, "init\n");
-+        cpic_unregister(PF_SNA);
-+	list_for_each_safe(le, se, &cpic_side_list) {
-+                cpic = list_entry(le, struct sna_cpic_side_info, list);
-+                list_del(&cpic->list);
-+                kfree(cpic);
-+        }
-+        return 0;
-+}
-+
 +#ifdef CONFIG_PROC_FS
 +int sna_cpic_get_info_side(char *buffer, char **start, off_t offset, int length)
 +{
@@ -47809,11 +47824,48 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cpic.c:1.1.2.30
 +        return len;
 +}
 +#endif
++
++static struct cpic_ops sna_cpic_ops = {
++        PF_SNA,
++        sna_cpic_cpicall,
++        sna_cpic_release_session
++};
++
++int sna_cpic_init(void)
++{
++        sna_debug(5, "init\n");
++        cpic_register(&sna_cpic_ops);
++#ifdef CONFIG_PROC_FS
++        proc_sna_create("cpic_side_information", 0, sna_cpic_get_info_side);
++        proc_sna_create("cpic_conversations", 0, sna_cpic_get_info);
++#endif
++        return 0;
++}
++
++int sna_cpic_fini(void)
++{
++        struct sna_cpic_side_info *cpic;
++        struct list_head *le, *se;
++
++        sna_debug(5, "init\n");
++#ifdef CONFIG_PROC_FS
++        proc_sna_remove("cpic_conversations");
++        proc_sna_remove("cpic_side_information");
++#endif
++        cpic_unregister(PF_SNA);
++        list_for_each_safe(le, se, &cpic_side_list) {
++                cpic = list_entry(le, struct sna_cpic_side_info, list);
++                list_del(&cpic->list);
++                kfree(cpic);
++        }
++        return 0;
++}
++#endif	/* CONFIG_SNA_CPIC */
 Index: linux-sna-kernel/net/sna/sna_cs.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
---- /dev/null	Mon Jul 22 12:27:47 2002
-+++ linux-sna-kernel/net/sna/sna_cs.c	Wed Jul 10 11:20:43 2002
-@@ -0,0 +1,2672 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.21
+--- /dev/null	Tue Jul 30 05:51:02 2002
++++ linux-sna-kernel/net/sna/sna_cs.c	Tue Jul 30 00:06:15 2002
+@@ -0,0 +1,2902 @@
 +/* sna_cs.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -47848,6 +47900,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +#include <net/datalink.h>
 +#include <net/sock.h>
 +#include <linux/if_arp.h>
++#include <linux/proc_fs.h>
 +#include <linux/sna.h>
 +
 +#ifdef CONFIG_SNA_LLC
@@ -47858,9 +47911,9 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +#include <linux/llc.h>
 +#endif  /* CONFIG_SNA_LLC */
 +
-+__u32	sysctl_xid_idle_limit		= SNA_XID_IDLE_LIMIT;
-+__u32	sysctl_xid_retry_interval	= SNA_XID_RETRY_INTERVAL;
-+__u32	sysctl_xid_retry_limit		= SNA_XID_RETRY_LIMIT;
++u_int32_t sysctl_xid_idle_limit		= SNA_XID_IDLE_LIMIT;
++u_int32_t sysctl_xid_retry_limit	= SNA_XID_RETRY_LIMIT;
++u_int32_t sysctl_test_retry_limit	= SNA_TEST_RETRY_LIMIT;
 +
 +static LIST_HEAD(cs_list);
 +static LIST_HEAD(dlc_list);		/* devices SNA can use. */
@@ -47872,6 +47925,8 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +
 +static void xid_output_connect_finish(void *data);
 +static int xid_doit(struct sna_ls_cb *ls);
++static int sna_cs_stop_port_gen(struct sna_port_cb *port);
++static int sna_cs_delete_port_gen(struct sna_port_cb *port);
 +
 +struct sna_cs_cb *sna_cs_get_by_name(char *name)
 +{
@@ -48076,18 +48131,46 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        return 0;
 +}
 +
-+int sna_cs_shutdown(void)
++int sna_cs_start(struct sna_nof_node *node)
 +{
++	struct sna_cs_cb *cs;
++	
++	sna_debug(5, "init\n");
++	cs = sna_cs_get_by_name(node->netid.name);
++        if (!cs)
++                return -ENOENT;
++	if (cs->flags & SNA_RUNNING)
++		return -EUSERS;
++	cs->flags &= ~SNA_STOPPED;
++        cs->flags |= SNA_RUNNING;
++        return 0;
++}
++
++int sna_cs_stop(struct sna_nof_node *node)
++{
++	struct list_head *le, *se;
++	struct sna_port_cb *port;
++	struct sna_cs_cb *cs;
++	
++        sna_debug(5, "init\n");
++	cs = sna_cs_get_by_name(node->netid.name);
++        if (!cs)
++                return -ENOENT;
++	if (cs->flags & SNA_STOPPED)
++		return 0;
++	cs->flags &= ~SNA_RUNNING;
++        cs->flags |= SNA_STOPPED;
++	list_for_each_safe(le, se, &port_list) {
++		port = list_entry(le, struct sna_port_cb, list);
++		if (!memcmp(&node->netid, &port->netid, sizeof(sna_netid)))
++			sna_cs_stop_port_gen(port);
++	}
 +        return 0;
 +}
 +
 +int sna_cs_create(struct sna_nof_node *start)
 +{
 +	struct sna_cs_cb *cs;
-+#ifdef NOT
-+	struct sna_pc_cb *pc;
-+	struct sna_rm_act_session_rq *as;
-+#endif
 +
 +	sna_debug(5, "init: %s\n", start->netid.name);
 +	cs = sna_cs_get_by_name(start->netid.name);
@@ -48097,11 +48180,16 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	if (!cs)
 +		return -ENOMEM;
 +	cs->index 	= sna_cs_new_index();
++	cs->flags     	= SNA_UP | SNA_STOPPED;
 +	cs->nodeid	= start->nodeid;
 +	memcpy(&cs->netid, &start->netid, sizeof(sna_netid));
 +	list_add_tail(&cs->list, &cs_list);
++	sna_mod_inc_use_count();
 +
 +#ifdef NOT
++	struct sna_pc_cb *pc;
++        struct sna_rm_act_session_rq *as;
++
 +	/* Create the intranode Path Control - One per Node */
 +	new(pc, GFP_KERNEL);
 +	if (!pc)
@@ -48127,61 +48215,33 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	return 0;
 +}
 +
-+int sna_cs_destroy(struct sna_nof_node *delete)
++int sna_cs_destroy(struct sna_nof_node *node)
 +{
-+	struct list_head *le, *se, *ae, *be, *ce, *de, *ee, *fe;
++	struct list_head *le, *se;
 +	struct sna_port_cb *port;
 +	struct sna_cs_cb *cs;
-+	struct sna_dlc_cb *dlc;
-+	struct sna_ls_cb *ls;
-+	
-+	sna_debug(5, "init\n");
 +
-+	/* destroy port list. */
-+	list_for_each_safe(ce, de, &port_list) {
-+		port = list_entry(ce, struct sna_port_cb, list);
++        sna_debug(5, "init\n");
++        cs = sna_cs_get_by_name(node->netid.name);
++        if (!cs)
++                return -ENOENT;
 +
-+		/* destroy link station list. */
-+		list_for_each_safe(ee, fe, &port->ls_list) {
-+	                ls = list_entry(ee, struct sna_ls_cb, list);
-+                        list_del(&ls->list);
-+                        kfree(ls);
-+			port->ls_qlen--;
-+                        sna_mod_dec_use_count();
-+		}
++	/* ensure cs is inactive. */
++	sna_cs_stop(node);
 +
-+		 switch (port->type) {
-+#ifdef CONFIG_SNA_LLC
-+			case SNA_PORT_TYPE_LLC:
-+				llc_sap_close(port->llc_dl);
-+				break;
-+#endif
-+		}
-+		list_del(&port->list);
-+		kfree(port);
-+		sna_mod_dec_use_count();
-+	}
-+
-+	/* destroy dlc list. */
-+	list_for_each_safe(ae, be, &dlc_list) {
-+		dlc = list_entry(ae, struct sna_dlc_cb, list);
-+		if (dlc->dev)
-+			dev_put(dlc->dev);
-+		list_del(&dlc->list);
-+		kfree(dlc);
-+	}
-+
-+	/* destroy cs from list. */
-+	list_for_each_safe(le, se, &cs_list) {
-+		cs = list_entry(le, struct sna_cs_cb, list);
-+                if (!strncmp(cs->netid.name, delete->netid.name, 8)) {
-+//			sna_pc_destroy(cs->intranode_pc_id);
-+			list_del(&cs->list);
-+                        kfree(cs);
-+                        return 0;
-+                }
++	/* delete port and link stations. */
++	list_for_each_safe(le, se, &port_list) {
++                port = list_entry(le, struct sna_port_cb, list);
++                if (!memcmp(&node->netid, &port->netid, sizeof(sna_netid)))
++			sna_cs_delete_port_gen(port);
 +        }
-+	return -ENOENT;
++
++	/* delete this cs. */
++	list_del(&cs->list);
++	kfree(cs);
++
++	sna_mod_dec_use_count();
++	return 0;
 +}
 +
 +/**
@@ -48332,41 +48392,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	return 0;
 +}
 +
-+int sna_cs_delete_ls(struct sna_nof_ls *dls)
-+{
-+	struct sna_port_cb *port;
-+	struct sna_cs_cb *cs;
-+	struct sna_dlc_cb *dlc;
-+	struct sna_ls_cb *ls;
-+	int err = -ENOENT;
-+	
-+	sna_debug(5, "init\n");
-+        cs = sna_cs_get_by_name(dls->netid.name);
-+        if (!cs)
-+		goto out;
-+        dlc = sna_cs_dlc_get_by_name(dls->name);
-+        if (!dlc)
-+		goto out;
-+	port = sna_cs_port_get_by_addr(dls->saddr);
-+	if (!port)
-+		goto out;
-+	ls = sna_cs_ls_get_by_addr(dls->dname, dls->daddr);
-+	if (!ls)
-+		goto out;
-+
-+	/* must stop link first. */
-+
-+	if (ls->state != SNA_LS_STATE_DEFINED) {
-+	//	sna_pc_destroy(ls->pc_index);
-+	}
-+	list_del(&ls->list);
-+        kfree(ls);
-+	port->ls_qlen--;
-+	sna_mod_dec_use_count();
-+	err = 0;
-+out:	return err;
-+}
-+
 +/**
 + * sna_cs_define_ls - setup a link station so it is ready to be activated.
 + */
@@ -48414,10 +48439,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	ls->role                        = cfg->role;
 +	ls->direction			= cfg->direction;
 +	ls->effective_role		= cfg->role;
-+	if (ls->effective_role == SNA_LS_ROLE_SEC)
-+		ls->co_status		= CO_TEST_OK;
-+	else
-+		ls->co_status  		= CO_RESET;
++	if (ls->direction == SNA_LS_DIR_OUT)
++	        ls->co_status           = CO_RESET;
++        else
++                ls->co_status           = CO_TEST_OK;
 +        ls->xid_state  			= XID_STATE_RESET;
 +	ls->xid_input			= XID_IN_RESET;
 +	ls->byteswap			= cfg->byteswap;
@@ -48467,42 +48492,13 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        ls->xid_parallel_tg_sup		= 0;
 +        ls->xid_ls_txrx_cap		= 0;
 +	ls->xid_gen_odai_usage_opt_set	= 0;
++#ifdef CONFIG_SNA_LLC
++	ls->llc_sk			= NULL;
++#endif
 +	list_add_tail(&ls->list, &port->ls_list);
 +	port->ls_qlen++;
 +	sna_mod_inc_use_count();
 +out:	return err;
-+}
-+
-+int sna_cs_delete_port(struct sna_nof_port *dport)
-+{
-+	struct sna_port_cb *port;
-+	struct sna_cs_cb *cs;
-+	struct sna_dlc_cb *dlc;
-+
-+	sna_debug(5, "init: (%s, %s)\n", dport->name,dport->saddr);
-+	cs = sna_cs_get_by_name(dport->netid.name);
-+	if (!cs)
-+		return -ENOENT;
-+	dlc = sna_cs_dlc_get_by_name(dport->name);
-+        if (!dlc)
-+                return -ENOENT;
-+	port = sna_cs_port_get_by_addr(dport->saddr);
-+	if (!port)
-+		return -ENOENT;
-+	switch (port->type) {
-+#ifdef CONFIG_SNA_LLC
-+		case SNA_PORT_TYPE_LLC:
-+			if (port->llc_dl)
-+				llc_sap_close(port->llc_dl);
-+			break;
-+#endif
-+		default:
-+			break;
-+	}
-+	list_del(&port->list);
-+        kfree(port);
-+	sna_mod_dec_use_count();
-+        return 0;
 +}
 +
 +/**
@@ -48538,11 +48534,14 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	port->cs_index	= cs->index;
 +	port->dlc_index	= dlc->index;
 +	port->flags	= SNA_UP | SNA_STOPPED;
-+	INIT_LIST_HEAD(&port->ls_list);
 +	port->ls_qlen	= 0;
 +	port->btu	= dport->btu;
 +	port->mia	= dport->mia;
 +	port->moa	= dport->moa;
++#ifdef CONFIG_SNA_LLC
++	port->llc_dl	= NULL;
++#endif
++	INIT_LIST_HEAD(&port->ls_list);
 +	list_add_tail(&port->list, &port_list);
 +	sna_mod_inc_use_count();
 +	sna_debug(5, "fini\n");
@@ -48551,6 +48550,8 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +
 +int sna_cs_start_ls(struct sna_nof_ls *cfg)
 +{
++	struct sna_port_cb *port;
++	struct sna_cs_cb *cs;
 +        struct sna_ls_cb *ls;
 +	int err = -ENOENT;
 +
@@ -48558,12 +48559,28 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	ls = sna_cs_ls_get_by_name(cfg->use_name);
 +	if (!ls)
 +		goto out;
-+	if (ls->state != SNA_LS_STATE_DEFINED) {
++	port = sna_cs_port_get_by_index(ls->port_index);
++        if (!port)
++		goto out;
++	cs = sna_cs_get_by_index(port->cs_index);
++        if (!cs)
++		goto out;
++        if (cs->flags & SNA_STOPPED) {
++		sna_debug(5, "node is not ACTIVE.\n");
++                err = -EHOSTDOWN;
++		goto out;
++	}
++	if (port->flags & SNA_STOPPED) {
++		sna_debug(5, "port/dlc is not ACTIVE.\n");
++		err = -ENETDOWN;
++		goto out;
++	}
++	if (ls->state != SNA_LS_STATE_DEFINED || ls->flags & SNA_RUNNING) {
 +		sna_debug(5, "link station already in use.\n");
 +		err = -EUSERS;
 +		goto out;
 +	}
-+
++	
 +	err			= 0;
 +	ls->state		= SNA_LS_STATE_ACTIVATED;
 +	ls->xid_input		= XID_IN_BEGIN;
@@ -48584,17 +48601,22 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +int sna_cs_start_port(struct sna_nof_port *sport)
 +{
 +	struct sna_port_cb *port;
++	struct sna_cs_cb *cs;
 +	
 +	sna_debug(5, "init\n");
 +	port = sna_cs_port_get_by_name(sport->use_name);
 +	if (!port)
 +		return -ENOENT;
++	cs = sna_cs_get_by_index(port->cs_index);
++	if (!cs)
++		return -ENOENT;
++	if (cs->flags & SNA_STOPPED)
++		return -EHOSTDOWN;
 +	if (port->flags & SNA_RUNNING)
 +		return -EUSERS;
 +	switch (port->type) {
 +#ifdef CONFIG_SNA_LLC
 +		case SNA_PORT_TYPE_LLC:
-+			port->flags |= SNA_UP;
 +			port->llc_dl = llc_sap_open(sna_dlc_llc_indicate,
 +				sna_dlc_llc_confirm, port->saddr[0]);
 +			if (!port->llc_dl) {
@@ -48611,6 +48633,29 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	return 0;
 +}
 +
++static int sna_cs_stop_ls_gen(struct sna_ls_cb *ls)
++{
++	sna_debug(5, "init\n");
++	if (ls->flags & SNA_STOPPED)
++                return 0;
++	ls->flags &= ~SNA_RUNNING;
++        ls->flags |= SNA_STOPPED;
++        if (ls->xid_state == XID_STATE_ACTIVE) {
++#ifdef CONFIG_SNA_LLC
++                sna_dlc_disc_req(ls);
++
++                /* in case we don't get a disc rsp, force cleanup. */
++                ls->xid_input 	  = XID_IN_RESET;
++                ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++                add_timer(&ls->retry);
++#endif
++        } else {
++                ls->xid_input = XID_IN_RESET;
++                xid_doit(ls);
++        }
++	return 0;
++}
++
 +int sna_cs_stop_ls(struct sna_nof_ls *sls)
 +{
 +        struct sna_ls_cb *ls;
@@ -48619,19 +48664,89 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	ls = sna_cs_ls_get_by_name(sls->use_name);
 +	if (!ls)
 +		return -ENOENT;
-+	if (ls->flags & SNA_STOPPED)
-+		return 0;
-+	if (ls->xid_state == XID_STATE_ACTIVE) {
-+#ifdef CONFIG_SNA_LLC
-+		sna_dlc_disc_req(ls);
-+#endif
-+	} else {
-+		ls->xid_input = XID_IN_RESET;
-+		xid_doit(ls);
++	return sna_cs_stop_ls_gen(ls);
++}
++
++static int sna_cs_stop_ls_all(struct sna_port_cb *port)
++{
++	struct list_head *le;
++	struct sna_ls_cb *ls;
++
++	sna_debug(5, "init\n");
++	list_for_each(le, &port->ls_list) {
++		ls = list_entry(le, struct sna_ls_cb, list);
++		sna_cs_stop_ls_gen(ls);
 +	}
++	return 0;
++}
++
++static int sna_cs_delete_ls_gen(struct sna_ls_cb *ls)
++{
++	sna_debug(5, "init\n");
++
++	/* ensure link is offline. */
++        sna_cs_stop_ls_gen(ls);
++
++        /* remove the link from the system. */
++        list_del(&ls->list);
++        kfree(ls);
++
++        sna_mod_dec_use_count();
++	return 0;
++}
++
++int sna_cs_delete_ls(struct sna_nof_ls *dls)
++{
++	struct sna_port_cb *port;
++	struct sna_ls_cb *ls;
++
++        sna_debug(5, "init\n");
++        ls = sna_cs_ls_get_by_name(dls->use_name);
++        if (!ls)
++                return -ENOENT;
++	port = sna_cs_port_get_by_index(ls->port_index);
++	if (!port)
++		return -ENOENT;
++	port->ls_qlen--;
++	return sna_cs_delete_ls_gen(ls);
++}
++
++static int sna_cs_delete_ls_all(struct sna_port_cb *port)
++{
++	struct list_head *le, *se;
++        struct sna_ls_cb *ls;
++
++        sna_debug(5, "init\n");
++        list_for_each_safe(le, se, &port->ls_list) {
++                ls = list_entry(le, struct sna_ls_cb, list);
++		sna_cs_delete_ls_gen(ls);
++		port->ls_qlen--;
++        }
++        return 0;
++}
++
++static int sna_cs_stop_port_gen(struct sna_port_cb *port)
++{
++	sna_debug(5, "init\n");
++	if (port->flags & SNA_STOPPED)
++                return 0;
++	port->flags &= ~SNA_RUNNING;
++        port->flags |= SNA_STOPPED;
 +	
-+	ls->flags 	&= ~SNA_RUNNING;
-+	ls->flags 	|= SNA_STOPPED;
++	/* stop all link stations using this port. */
++        sna_cs_stop_ls_all(port);
++
++        /* stop the actual port. */
++        switch (port->type) {
++#ifdef CONFIG_SNA_LLC
++                case SNA_PORT_TYPE_LLC:
++                        if (port->llc_dl)
++                                llc_sap_close(port->llc_dl);
++                        break;
++#endif
++                default:
++                        return -EINVAL;
++        }
 +	return 0;
 +}
 +
@@ -48643,19 +48758,36 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	port = sna_cs_port_get_by_name(sport->use_name);
 +	if (!port)
 +		return -ENOENT;
-+	if (port->flags & SNA_STOPPED)
-+		return 0;
-+        switch (port->type) {
-+#ifdef CONFIG_SNA_LLC
-+		case SNA_PORT_TYPE_LLC:
-+			if (port->llc_dl)
-+				llc_sap_close(port->llc_dl);
-+			break;
-+#endif
-+	}
-+	port->flags &= ~SNA_RUNNING;
-+        port->flags |= SNA_STOPPED;
++	return sna_cs_stop_port_gen(port);
++}
++
++static int sna_cs_delete_port_gen(struct sna_port_cb *port)
++{
++	sna_debug(5, "init\n");
++
++	/* ensure port is inactive. */
++        sna_cs_stop_port_gen(port);
++
++        /* delete all link stations using this port. */
++        sna_cs_delete_ls_all(port);
++
++        /* remove the port from the system. */
++        list_del(&port->list);
++        kfree(port);
++
++        sna_mod_dec_use_count();
 +	return 0;
++}
++
++int sna_cs_delete_port(struct sna_nof_port *sport)
++{
++	struct sna_port_cb *port;
++
++        sna_debug(5, "init\n");
++        port = sna_cs_port_get_by_name(sport->use_name);
++        if (!port)
++                return -ENOENT;
++	return sna_cs_delete_port_gen(port);
 +}
 +
 +int sna_dlc_ginfo(struct sna_dlc_cb *dlc, char *buf, int len)
@@ -48673,12 +48805,13 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        memset(&dr, 0, sizeof(struct dlcreq));
 +
 +        /* Move the data here */
-+//	strncpy(dr.dlc_net, cs->netid.net, 8);
-+//	strncpy(dr.dlc_name, cs->netid.name, 8);
-+	strncpy(dr.devname, dlc->dev->name, SNA_RESOURCE_NAME_LEN);
-+	dr.proc_id 		= dlc->index;
++	strcpy(dr.dev_name, dlc->dev->name);
++	memcpy(dr.dev_addr, dlc->dev->dev_addr, MAX_ADDR_LEN);
++	dr.index 		= dlc->index;
 +	dr.flags 		= dlc->flags;
-+
++	dr.type			= dlc->type;
++	dr.mtu			= dlc->dev->mtu;
++	
 +        if (copy_to_user(buf, &dr, sizeof(struct dlcreq)))
 +                return -EFAULT;
 +        buf  += sizeof(struct dlcreq);
@@ -48725,10 +48858,14 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +
 +int sna_port_ginfo(struct sna_port_cb *port, char *buf, int len)
 +{
++	struct sna_dlc_cb *dlc;
 +        struct portreq pr;
 +        int done = 0;
 +
 +        sna_debug(10, "sna_port_ginfo\n");
++	dlc = sna_cs_dlc_get_by_index(port->dlc_index);
++	if (!dlc)
++		return done;
 +        if (!buf) {
 +                done += sizeof(pr);
 +                return done;
@@ -48739,9 +48876,12 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +
 +        /* Move the data here */
 +	memcpy(&pr.netid, &port->netid, sizeof(sna_netid));
++	memcpy(&pr.use_name, &port->use_name, SNA_RESOURCE_NAME_LEN);
 +	memcpy(&pr.saddr, port->saddr, 12);
++	strcpy(pr.dev_name, dlc->dev->name);
 +	pr.ls_qlen	= port->ls_qlen;
-+	pr.proc_id	= port->index;
++	pr.index	= port->index;
++	pr.type		= port->type;
 +	pr.flags	= port->flags;
 +	pr.btu		= port->btu;
 +	pr.mia		= port->mia;
@@ -48791,10 +48931,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +
 +int sna_ls_ginfo(struct sna_ls_cb *ls, char *buf, int len)
 +{
++	struct sna_port_cb *port;
++	struct sna_dlc_cb *dlc;
 +        struct lsreq lr;
 +        int done = 0;
 +
 +        sna_debug(10, "sna_ls_ginfo\n");
++	port = sna_cs_port_get_by_index(ls->port_index);
++	if (!port)
++		return done;
++	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
++	if (!dlc)
++		return done;
 +        if (!buf) {
 +                done += sizeof(lr);
 +                return done;
@@ -48805,12 +48953,50 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +
 +        /* Move the data here */
 +	memcpy(&lr.netid, &ls->netid, sizeof(sna_netid));
-+	memcpy(&lr.dname, ls->plu_mac_addr, IFHWADDRLEN);
-+	memcpy(&lr.daddr, &ls->plu_port, 1);
-+	lr.proc_id	= ls->index;
-+	lr.flags	= ls->flags;
-+	lr.auto_act	= ls->autoact;
-+	lr.auto_deact	= ls->autodeact;
++	strcpy(lr.use_name, ls->use_name);
++	strcpy(lr.port_name, port->use_name);
++        strcpy(lr.dev_name, dlc->dev->name);
++	
++	lr.index			= ls->index;
++	lr.flags			= ls->flags;
++
++	lr.retries			= ls->retries;
++	lr.xid_count			= ls->xid_count;
++	
++	lr.state			= ls->state;
++	lr.co_status			= ls->co_status;
++	lr.xid_state			= ls->xid_state;
++	
++	lr.effective_role		= ls->effective_role;
++	lr.effective_tg			= ls->effective_tg;
++
++	lr.tx_max_btu			= ls->tx_max_btu;
++	lr.rx_max_btu			= ls->rx_max_btu;
++	lr.tx_window			= ls->tx_window;
++	lr.rx_window			= ls->rx_window;
++	
++	memcpy(&lr.plu_name, &ls->plu_name, sizeof(sna_netid));
++	memcpy(&lr.plu_node_id, &ls->plu_node_id, sizeof(sna_nodeid));
++	memcpy(lr.plu_mac_addr, ls->plu_mac_addr, IFHWADDRLEN);
++	lr.plu_port			= ls->plu_port;
++
++	lr.role				= ls->role;
++	lr.direction			= ls->direction;
++	lr.xid_init_method		= ls->xid_init_method;
++	lr.byteswap			= ls->byteswap;
++	lr.retry_on_fail		= ls->retry_on_fail;
++	lr.retry_times			= ls->retry_times;
++	lr.autoact			= ls->autoact;
++	lr.autodeact			= ls->autodeact;
++	lr.tg_number			= ls->tg_number;
++	lr.cost_per_byte		= ls->cost_per_byte;
++	lr.cost_per_connect_time	= ls->cost_per_connect_time;
++	lr.effective_capacity		= ls->effective_capacity;
++	lr.propagation_delay		= ls->propagation_delay;
++	lr.security			= ls->security;
++	lr.user1			= ls->user1;
++	lr.user2			= ls->user2;
++	lr.user3			= ls->user3;
 +
 +        if (copy_to_user(buf, &lr, sizeof(struct lsreq)))
 +                return -EFAULT;
@@ -48891,6 +49077,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +out:	return err;
 +}
 +
++int sna_cs_pc_deactivate(struct sna_ls_cb *ls)
++{
++	int err;
++
++	sna_debug(5, "init\n");
++	err = sna_pc_destroy(ls->pc_index);
++	if (err < 0)
++		sna_debug(5, "falied to destroy pc instance\n");
++	ls->pc_index = 0;
++	return err;
++}
++
 +int sna_cs_as_activate(struct sna_ls_cb *ls)
 +{
 +	struct sna_asm_cb *as;
@@ -48918,6 +49116,17 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +		goto out;
 +	}
 +out:	return err;
++}
++
++int sna_cs_as_deactivate(struct sna_ls_cb *ls)
++{
++	int err;
++
++	sna_debug(5, "init\n");
++	err = sna_asm_deactivate_as(ls->pc_index);
++	if (err < 0)
++		sna_debug(5, "failed to destory as instance.\n");
++	return err;
 +}
 +
 +int sna_cs_tg_activate(struct sna_ls_cb *ls)
@@ -48991,7 +49200,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +{
 +	sna_xid3 *xid = (sna_xid3 *)skb->data;
 +
-+	sna_debug(5, "init: %02X len = %d\n", skb->data[0], skb->len);
++	sna_debug(5, "init: %p %02X len = %d\n", sna_cs_xid_pkt_input, skb->data[0], skb->len);
 +	if (skb->len == 0)
 +		return XID_IN_NULL;
 +	sna_debug(5, "state = %d role = %d\n", xid->state, xid->ls_role);
@@ -49353,6 +49562,26 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	skb = skb_copy(ls->xid_last_tx, GFP_ATOMIC);
 +	if (!skb)
 +		goto out;
++
++	/* once in resend, means we have hit an error state,
++	 * retry until failed.
++	 */
++	if (ls->state != SNA_LS_STATE_ACTIVATED) {
++		err = 0;
++		goto out;
++	}
++        if (!ls->retry_on_fail || (ls->retry_on_fail
++        	&& ls->retry_times && ls->retries >= ls->retry_times)) {
++		sna_debug(5, "XID failed\n");
++		ls->xid_input = XID_IN_RESET;
++                xid_doit(ls);
++		err = 0;
++		goto out;
++	}
++        ls->retries++;
++        ls->retry.expires = jiffies + sysctl_xid_retry_limit;
++        add_timer(&ls->retry);
++
 +	ls->xid_count++;
 +	if (ls->xid_last_tx_direction == XID_DIR_OUTBOUND)
 +                err = sna_dlc_xid_req(ls, skb);
@@ -49366,20 +49595,26 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	struct sk_buff *skb;
 +	int size, err = -ENOMEM;
 +
-+	sna_debug(5, "init\n");
++	sna_debug(5, "init: %p\n", xid_output_null);
 +	size = sna_dlc_xid_min_len(ls) + 150;   /* static max for now. */
 +        skb = sna_alloc_skb(size, GFP_ATOMIC);
 +        if (!skb)
 +		goto out;
 +        sna_dlc_xid_reserve(ls, skb);
-+	if (ls->xid_last_tx)
++	if (ls->xid_last_tx) {
++		sna_debug(5, "prev->skb=%p\n", ls->xid_last_tx);
 +		kfree_skb(ls->xid_last_tx);
++		ls->xid_last_tx = NULL;
++	}
 +	ls->xid_last_tx 		= skb_copy(skb, GFP_ATOMIC);
 +	ls->xid_last_tx_direction	= ls->xid_direction;
 +	ls->xid_count++;
-+	if (ls->xid_direction == XID_DIR_OUTBOUND)
++	sna_debug(5, "skb=%p, copy=%p\n", skb, ls->xid_last_tx);
++	if (ls->xid_direction == XID_DIR_OUTBOUND) {
++		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++	        add_timer(&ls->retry);
 +		err = sna_dlc_xid_req(ls, skb);
-+	else
++	} else
 +		err = sna_dlc_xid_rsp(ls, skb);
 +out:	return err;
 +}
@@ -49403,14 +49638,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	}
 +	/* set prenegotiation xid values. */
 +	x3->state = SNA_XID_XCHG_STATE_PN;
-+        if (ls->xid_last_tx)
++        if (ls->xid_last_tx) {
 +                kfree_skb(ls->xid_last_tx);
++		ls->xid_last_tx = NULL;
++	}
 +	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
 +        ls->xid_last_tx_direction       = ls->xid_direction;
 +        ls->xid_count++;
-+	if (ls->xid_direction == XID_DIR_OUTBOUND)
++	if (ls->xid_direction == XID_DIR_OUTBOUND) {
++		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++                add_timer(&ls->retry);
 +                err = sna_dlc_xid_req(ls, skb);
-+        else
++        } else
 +                err = sna_dlc_xid_rsp(ls, skb);
 +out:    return err;
 +}
@@ -49436,14 +49675,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        }
 +	/* set negotiation-proceeding xid values. */
 +	x3->state = SNA_XID_XCHG_STATE_NEG;
-+        if (ls->xid_last_tx)
++        if (ls->xid_last_tx) {
 +                kfree_skb(ls->xid_last_tx);
++		ls->xid_last_tx = NULL;
++	}
 +	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
 +        ls->xid_last_tx_direction       = ls->xid_direction;
 +        ls->xid_count++;
-+	if (ls->xid_direction == XID_DIR_OUTBOUND)
++	if (ls->xid_direction == XID_DIR_OUTBOUND) {
++		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++                add_timer(&ls->retry);
 +                err = sna_dlc_xid_req(ls, skb);
-+        else
++        } else
 +                err = sna_dlc_xid_rsp(ls, skb);
 +out:    return err;
 +}
@@ -49469,14 +49712,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        }
 +        /* set negotiation-proceeding xid values. */
 +	x3->state = SNA_XID_XCHG_STATE_NEG;
-+        if (ls->xid_last_tx)
++        if (ls->xid_last_tx) {
 +                kfree_skb(ls->xid_last_tx);
++		ls->xid_last_tx = NULL;
++	}
 +	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
 +        ls->xid_last_tx_direction       = ls->xid_direction;
 +        ls->xid_count++;
-+	if (ls->xid_direction == XID_DIR_OUTBOUND)
++	if (ls->xid_direction == XID_DIR_OUTBOUND) {
++		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++                add_timer(&ls->retry);
 +                err = sna_dlc_xid_req(ls, skb);
-+        else
++        } else
 +                err = sna_dlc_xid_rsp(ls, skb);
 +out:    return err;
 +}
@@ -49502,14 +49749,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        }
 +        /* set negotiation-proceeding xid values. */
 +	x3->state = SNA_XID_XCHG_STATE_NEG;
-+        if (ls->xid_last_tx)
++        if (ls->xid_last_tx) {
 +                kfree_skb(ls->xid_last_tx);
++		ls->xid_last_tx = NULL;
++	}
 +	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
 +        ls->xid_last_tx_direction       = ls->xid_direction;
 +        ls->xid_count++;
-+	if (ls->xid_direction == XID_DIR_OUTBOUND)
++	if (ls->xid_direction == XID_DIR_OUTBOUND) {
++		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++                add_timer(&ls->retry);
 +                err = sna_dlc_xid_req(ls, skb);
-+        else
++        } else
 +                err = sna_dlc_xid_rsp(ls, skb);
 +out:    return err;
 +}
@@ -49535,14 +49786,18 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +        }
 +        /* set negotiation-proceeding xid values. */
 +	x3->state = SNA_XID_XCHG_STATE_NEG;
-+        if (ls->xid_last_tx)
++        if (ls->xid_last_tx) {
 +                kfree_skb(ls->xid_last_tx);
++		ls->xid_last_tx = NULL;
++	}
 +	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
 +        ls->xid_last_tx_direction       = ls->xid_direction;
 +        ls->xid_count++;
-+	if (ls->xid_direction == XID_DIR_OUTBOUND)
++	if (ls->xid_direction == XID_DIR_OUTBOUND) {
++		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
++                add_timer(&ls->retry);
 +                err = sna_dlc_xid_req(ls, skb);
-+        else
++        } else
 +                err = sna_dlc_xid_rsp(ls, skb);
 +out:    return err;
 +}
@@ -49762,6 +50017,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			break;
 +                case XID_STATE_ACTIVE:
 +			/* send to nonactive fsm. */
++			sna_debug(5, "FIXME: nonactive fsm\n");
 +                        break;
 +        }
 +        return 0;
@@ -49838,6 +50094,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +                        break;
 +                case XID_STATE_ACTIVE:
 +			/* send to nonactive fsm. */
++			sna_debug(5, "FIXME: nonactive fsm\n");
 +                        break;
 +        }
 +        return 0;
@@ -49916,6 +50173,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			break;
 +                case XID_STATE_ACTIVE:
 +			/* send to nonactive fsm. */
++			sna_debug(5, "FIXME: nonactive fsm\n");
 +                        break;
 +        }
 +        return 0;
@@ -49992,6 +50250,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			break;
 +                case XID_STATE_ACTIVE:
 +			/* send to nonactive fsm. */
++			sna_debug(5, "FIXME: nonactive fsm\n");
 +                        break;
 +        }
 +        return 0;
@@ -50045,6 +50304,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			break;
 +                case XID_STATE_ACTIVE:
 +			/* send to nonactive fsm. */
++			sna_debug(5, "FIXME: nonactive fsm\n");
 +                        break;
 +        }
 +out:	return err;
@@ -50079,6 +50339,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			break;
 +                case XID_STATE_ACTIVE:
 +			/* send to nonactive fsm. */
++			sna_debug(5, "FIXME: nonactive fsm\n");
 +                        break;
 +        }
 +        return 0;
@@ -50156,7 +50417,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	sna_debug(5, "init\n");
 +        switch (ls->xid_state) {
 +                case XID_STATE_RESET:
-+                        break;
 +                case XID_STATE_S_PN:
 +                case XID_STATE_S_NEG:
 +                case XID_STATE_S_PRI:
@@ -50165,21 +50425,28 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +                case XID_STATE_S_PRI_R_SEC:
 +                case XID_STATE_ACTIVE:
 +			del_timer(&ls->retry);
++			ls->retries			= 0;
 +			ls->tg_input  			= SNA_TG_INPUT_RESET;
 +		        sna_cs_tg_negotiate(ls);
-+			ls->xid_state 			= XID_STATE_RESET;
-+			ls->xid_input 			= XID_IN_RESET;
++			if (ls->direction == SNA_LS_DIR_OUT)
++				ls->co_status 		= CO_RESET;
++			else
++		                ls->co_status           = CO_TEST_OK;
++			ls->xid_state                   = XID_STATE_RESET;
++                        ls->xid_input                   = XID_IN_RESET;		
 +			ls->xid_direction 		= 0;
 +			ls->xid_count 			= 0;
 +			ls->xid_last_tx_direction	= 0;
 +			ls->xid_last_rx_direction	= 0;
-+			ls->co_status			= CO_RESET;
 +			ls->effective_role		= ls->role;
-+			ls->retries			= 0;
-+			if (ls->xid_last_tx)
++			if (ls->xid_last_tx) {
 +				kfree_skb(ls->xid_last_tx);
-+			if (ls->xid_last_rx)
++				ls->xid_last_tx = NULL;
++			}
++			if (ls->xid_last_rx) {
 +				kfree_skb(ls->xid_last_rx);
++				ls->xid_last_rx = NULL;
++			}
 +#ifdef CONFIG_SNA_LLC
 +			/* shouldn't be needed but current llc stack will assume
 +			 * connect and complete a connection before we are notified.
@@ -50187,8 +50454,21 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			if (ls->llc_sk)
 +				sna_dlc_disc_req(ls);
 +#endif
-+			wake_up_interruptible(&ls->sleep);
-+			ls->state = SNA_LS_STATE_DEFINED;
++			sna_cs_as_deactivate(ls);
++			sna_cs_pc_deactivate(ls);
++
++			/* this was an unexpected disconnect, retry connection
++			 * until retry limit exceeded.
++			 */
++			if (ls->flags & SNA_RUNNING) {
++				ls->state               = SNA_LS_STATE_ACTIVATED;
++        			ls->xid_input           = XID_IN_BEGIN;
++        			ls->xid_direction       = XID_DIR_OUTBOUND;
++        			sna_cs_connect_out((unsigned long)ls);
++			} else {
++				wake_up_interruptible(&ls->sleep);
++				ls->state = SNA_LS_STATE_DEFINED;
++			}
 +                        break;
 +        }
 +        return 0;
@@ -50199,10 +50479,6 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	int err = -EINVAL;
 +
 +	sna_debug(5, "init\n");
-+	if (ls->xid_count > 1000) {
-+		sna_debug(5, "XID count > 1000, failing\n");
-+		goto out;
-+	}
 +	switch (ls->xid_input) {
 +		case XID_IN_BEGIN:
 +			err = xid_input_begin(ls);
@@ -50232,7 +50508,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +			err = xid_input_reset(ls);
 +			break;
 +	}
-+out:	return err;
++	return err;
 +}
 +
 +/**
@@ -50241,10 +50517,12 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 + */
 +int sna_cs_connect_in(struct sna_ls_cb *ls)
 +{
-+	int err;
++	int err = -EINVAL;
 +
 +	sna_debug(5, "init\n");
 +	del_timer(&ls->retry);
++	if (ls->state == SNA_LS_STATE_DEFINED)
++		return err;
 +	err = xid_doit(ls);
 +        if (err < 0)
 +                sna_debug(5, "xid_doit error `%d'.\n", err);
@@ -50260,20 +50538,24 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +	struct sna_ls_cb *ls = (struct sna_ls_cb *)data;
 +	int err;
 +	
-+	sna_debug(5, "init: ls=%d role=%d retry_on_fail=%d retry_times=%d retires=%d\n",
-+		ls->index, ls->role, ls->retry_on_fail, ls->retry_times, ls->retries);
++	sna_debug(5, "init: %p ls=%d role=%d retry_on_fail=%d retry_times=%d retires=%d\n",
++		sna_cs_connect_out, ls->index, ls->role, ls->retry_on_fail, 
++		ls->retry_times, ls->retries);
 +	del_timer(&ls->retry);
 +	switch (ls->co_status) {
 +		case CO_RESET:
 +		case CO_S_TEST_C:
-+			if (ls->retry_on_fail && ls->retries >= ls->retry_times) {
++			if (ls->state != SNA_LS_STATE_ACTIVATED)
++				return;
++			if (!ls->retry_on_fail || (ls->retry_on_fail 
++				&& ls->retry_times && ls->retries >= ls->retry_times)) {
 +				sna_debug(5, "CO test failed\n");
 +				ls->co_status = CO_FAIL;
 +				return;
 +			}
 +			ls->retries++;
 +			ls->co_status 		= CO_S_TEST_C;
-+			ls->retry.expires 	= jiffies + CO_TIMEOUT;
++			ls->retry.expires 	= jiffies + sysctl_test_retry_limit;
 +			add_timer(&ls->retry);
 +			err = sna_dlc_test_req(ls);
 +                        if (err < 0)
@@ -50487,10 +50769,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_cs.c:1.1.2.12
 +}
 +#endif
 Index: linux-sna-kernel/net/sna/sna_dfc.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_dfc.c:1.1.2.30
---- /dev/null	Mon Jul 22 12:27:47 2002
-+++ linux-sna-kernel/net/sna/sna_dfc.c	Mon Jul 22 10:42:59 2002
-@@ -0,0 +1,2740 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_dfc.c:1.1.2.31
+--- /dev/null	Tue Jul 30 05:51:02 2002
++++ linux-sna-kernel/net/sna/sna_dfc.c	Mon Jul 29 23:00:00 2002
+@@ -0,0 +1,2741 @@
 +/* sna_dfc.c: Linux Systems Network Architecture implementation
 + * - SNA LU 6.2 Data Flow Control (DFC)
 + *
@@ -50518,6 +50800,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dfc.c:1.1.2.30
 +#include <linux/stat.h>
 +#include <linux/if.h>
 +#include <linux/if_ether.h>
++#include <linux/proc_fs.h>
 +
 +#ifdef CONFIG_SNA_LLC
 +#include <net/llc_if.h>
@@ -53232,10 +53515,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dfc.c:1.1.2.30
 +}
 +#endif
 Index: linux-sna-kernel/net/sna/sna_dlc.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
---- /dev/null	Mon Jul 22 12:27:48 2002
-+++ linux-sna-kernel/net/sna/sna_dlc.c	Sat Jun 22 12:20:15 2002
-@@ -0,0 +1,740 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.8
+--- /dev/null	Tue Jul 30 05:51:03 2002
++++ linux-sna-kernel/net/sna/sna_dlc.c	Sun Jul 28 00:35:19 2002
+@@ -0,0 +1,744 @@
 +/* sna_dlc.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -53323,7 +53606,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
 +        struct llc_prim_if_block prim;
 +	int err;
 +	
-+	sna_debug(5, "init\n");
++	sna_debug(5, "init %p\n", sna_dlc_llc_send_llc1);
 +	if (!sap) {
 +		sna_debug(5, "!sap\n");
 +		return -EINVAL;
@@ -53482,8 +53765,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
 +	ls->xid_count++;
 +        ls->xid_input           = sna_cs_xid_pkt_input(skb);
 +        ls->xid_direction       = XID_DIR_INBOUND;
-+        if (ls->xid_last_rx)
++        if (ls->xid_last_rx) {
 +                kfree_skb(ls->xid_last_rx);
++		ls->xid_last_rx = NULL;
++	}
 +        ls->xid_last_rx                 = skb2;
 +        ls->xid_last_rx_direction       = ls->xid_direction;
 +        sna_cs_connect_in(ls);
@@ -53495,7 +53780,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
 +	struct sk_buff *skb2, *skb = prim_data->skb;
 +        struct sna_ls_cb *ls;
 +
-+        sna_debug(5, "init\n");
++        sna_debug(5, "init: %p\n", sna_dlc_llc_ind_xid_rsp);
 +	ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac,
 +                &prim_data->saddr.lsap);
 +        if (!ls) {
@@ -53508,8 +53793,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
 +	ls->xid_count++;
 +	ls->xid_input 		= sna_cs_xid_pkt_input(skb);
 +	ls->xid_direction	= XID_DIR_INBOUND;
-+	if (ls->xid_last_rx)
++	if (ls->xid_last_rx) {
 +                kfree_skb(ls->xid_last_rx);
++		ls->xid_last_rx = NULL;
++	}
 +        ls->xid_last_rx         	= skb2;
 +	ls->xid_last_rx_direction	= ls->xid_direction;
 +        sna_cs_connect_out((unsigned long)ls);
@@ -53720,7 +54007,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
 +	struct net_device *dev = dlc->dev;
 +	struct sna_dlc_llc_addr addr;
 +
-+	sna_debug(5, "init\n");
++	sna_debug(5, "init %p\n", sna_dlc_llc_tx_xid_c);
 +	addr.arphrd     = dlc->type;
 +        addr.dsap       = ls->plu_port;
 +        addr.ssap       = port->saddr[0];
@@ -53977,10 +54264,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_dlc.c:1.1.2.7
 +out:    return err;
 +}
 Index: linux-sna-kernel/net/sna/sna_ds.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_ds.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:48 2002
-+++ linux-sna-kernel/net/sna/sna_ds.c	Sun Jun 16 09:10:11 2002
-@@ -0,0 +1,116 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_ds.c:1.1.2.2
+--- /dev/null	Tue Jul 30 05:51:03 2002
++++ linux-sna-kernel/net/sna/sna_ds.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,117 @@
 +/* sna_ds.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -54014,6 +54301,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ds.c:1.1.2.1
 +#include <linux/skbuff.h>
 +#include <net/datalink.h>
 +#include <net/sock.h>
++#include <linux/proc_fs.h>
 +#include <linux/sna.h>
 +
 +static LIST_HEAD(ds_clients);
@@ -54098,10 +54386,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ds.c:1.1.2.1
 +	return 0;
 +}
 Index: linux-sna-kernel/net/sna/sna_ebcdic.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_ebcdic.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:48 2002
-+++ linux-sna-kernel/net/sna/sna_ebcdic.c	Sun Jun 16 09:10:11 2002
-@@ -0,0 +1,169 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_ebcdic.c:1.1.2.2
+--- /dev/null	Tue Jul 30 05:51:03 2002
++++ linux-sna-kernel/net/sna/sna_ebcdic.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,170 @@
 +/* sna_ebcdic.c: Linux-SNA EBCDIC/ASCII converter.
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -54135,6 +54423,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ebcdic.c:1.1.2.1
 +#include <linux/skbuff.h>
 +#include <net/datalink.h>
 +#include <net/sock.h>
++#include <linux/proc_fs.h>
 +
 +#include <linux/sna.h>
 +
@@ -54273,7 +54562,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ebcdic.c:1.1.2.1
 +}
 Index: linux-sna-kernel/net/sna/sna_hsr.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_hsr.c:1.1.2.13
---- /dev/null	Mon Jul 22 12:27:48 2002
+--- /dev/null	Tue Jul 30 05:51:03 2002
 +++ linux-sna-kernel/net/sna/sna_hsr.c	Fri Jul  5 08:45:35 2002
 @@ -0,0 +1,222 @@
 +/* sna_hsr.c: Linux Systems Network Architecture implementation
@@ -54500,7 +54789,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_hsr.c:1.1.2.13
 +}
 Index: linux-sna-kernel/net/sna/sna_isr.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_isr.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:48 2002
+--- /dev/null	Tue Jul 30 05:51:03 2002
 +++ linux-sna-kernel/net/sna/sna_isr.c	Sun Jun 16 09:10:11 2002
 @@ -0,0 +1,92 @@
 +/* sna_isr.c: Linux Systems Network Architecture implementation
@@ -54596,10 +54885,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_isr.c:1.1.2.1
 +	return 0;
 +}
 Index: linux-sna-kernel/net/sna/sna_ms.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_ms.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:48 2002
-+++ linux-sna-kernel/net/sna/sna_ms.c	Sun Jun 16 09:10:11 2002
-@@ -0,0 +1,95 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_ms.c:1.1.2.2
+--- /dev/null	Tue Jul 30 05:51:03 2002
++++ linux-sna-kernel/net/sna/sna_ms.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,96 @@
 +/* sna_ms.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -54634,6 +54923,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ms.c:1.1.2.1
 +#include <net/datalink.h>
 +#include <net/sock.h>
 +#include <linux/if_arp.h>
++#include <linux/proc_fs.h>
 +#include <linux/sna.h>
 +
 +sna_ms_sub_vector_t *sna_ms_build_product_id_sv(sna_ms_product_id_c *sv_c)
@@ -54696,10 +54986,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ms.c:1.1.2.1
 +	return sv;
 +}
 Index: linux-sna-kernel/net/sna/sna_nof.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.7
---- /dev/null	Mon Jul 22 12:27:48 2002
-+++ linux-sna-kernel/net/sna/sna_nof.c	Sun Jun 23 01:20:06 2002
-@@ -0,0 +1,642 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.8
+--- /dev/null	Tue Jul 30 05:51:03 2002
++++ linux-sna-kernel/net/sna/sna_nof.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,685 @@
 +/* sna_nof.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -54783,91 +55073,134 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.7
 +        return NULL;
 +}
 +
-+static int sna_nof_node_delete(struct sna_nof_node *node)
-+{
-+	struct sna_nof_cb *nof; 
-+
-+        sna_debug(5, "init: %s\n", node->netid.name);
-+	nof = sna_nof_get_by_netid(&node->netid);
-+	if (!nof)
-+		return -ENOENT;
-+	sna_attach_destroy(node);
-+	sna_cpic_destroy(node);
-+	sna_sm_destroy(node);
-+	sna_trs_destroy(node);
-+	sna_cs_destroy(node);
-+	sna_ds_destroy(node);
-+	sna_ss_destroy(node);
-+	sna_asm_destroy(node);
-+
-+	/* cleanup local nof. */
-+	list_del(&nof->list);
-+        kfree(nof);
-+	sna_mod_dec_use_count();
-+        return 0;
-+}
-+
-+static int sna_nof_node_stop(struct sna_nof_node *stop)
-+{
-+	sna_debug(5, "init: %s\n", stop->netid.name);
-+	sna_debug(5, "Function not implemented use delete\n");
-+	return -EINVAL;
-+}
-+
-+static int sna_nof_node_start(struct sna_nof_node *start)
++static int sna_nof_node_stop(struct sna_nof_node *node)
 +{
 +	struct sna_nof_cb *nof;
-+
-+	sna_debug(5, "init: %s\n", start->netid.name);
-+	if (sna_nof_get_by_netid(&start->netid))
-+		return -EEXIST;
-+	new(nof, GFP_ATOMIC);
++	int err = -ENOENT;
++	
++	sna_debug(5, "init: %s\n", node->netid.name);
++	nof = sna_nof_get_by_netid(&node->netid);
 +	if (!nof)
-+		return -ENOMEM;
-+        memcpy(&nof->netid, &start->netid, sizeof(sna_netid));
-+	nof->nodeid	= start->nodeid;
-+	nof->type	= start->type;
-+	nof->lu_seg	= start->lu_seg;
-+	nof->bind_seg	= start->bind_seg;
-+	nof->max_lus	= start->max_lus;
-+	nof->status	= (SNA_UP | SNA_RUNNING);
-+	list_add_tail(&nof->list, &nof_list);
++		goto out;
++	err = 0;
++	if (nof->flags & SNA_STOPPED)
++		goto out;
++	nof->flags &= ~SNA_RUNNING;
++        nof->flags |= SNA_STOPPED;	
++        sna_cs_stop(node);
++out:	return err;
++}
++
++static int sna_nof_node_delete(struct sna_nof_node *node)
++{
++        struct sna_nof_cb *nof;
++	int err = -ENOENT;
++
++        sna_debug(5, "init: %s\n", node->netid.name);
++        nof = sna_nof_get_by_netid(&node->netid);
++        if (!nof)
++		goto out;
++
++	/* stop node if active. */
++	if (nof->flags & SNA_RUNNING) {
++		err = sna_nof_node_stop(node);
++		if (err < 0)
++			goto out;
++	}
++
++	err = 0;
++        sna_sm_destroy(node);
++        sna_trs_destroy(node);
++        sna_cs_destroy(node);
++        sna_ds_destroy(node);
++        sna_ss_destroy(node);
++        sna_asm_destroy(node);
++
++        /* finally delete this node. */
++        list_del(&nof->list);
++        kfree(nof);
++
++        sna_mod_dec_use_count();
++out:    return err;
++}
++
++static int sna_nof_node_start(struct sna_nof_node *node)
++{
++	struct sna_nof_cb *nof;
++	int err = -ENOENT;
++
++	sna_debug(5, "init: %s\n", node->netid.name);
++	nof = sna_nof_get_by_netid(&node->netid);
++        if (!nof)
++                goto out;
++	err = -EUSERS;
++	if (nof->flags & SNA_RUNNING)
++		goto out;
++	err = 0;
++	nof->flags &= ~SNA_STOPPED;
++        nof->flags |= SNA_RUNNING;
++	sna_cs_start(node);
++out:	return err;
++}
++
++static int sna_nof_node_define(struct sna_nof_node *start)
++{
++        struct sna_nof_cb *nof;
++	int err = -EEXIST;
++
++        sna_debug(5, "init: %s\n", start->netid.name);
++        if (sna_nof_get_by_netid(&start->netid))
++		goto out;
++	err = sna_tdm_define_node_chars(start);
++        if (err < 0)
++		goto out;
++        new(nof, GFP_ATOMIC);
++        if (!nof) {
++		err = -ENOMEM;
++		goto out;
++	}
++	err = 0;
++	memcpy(&nof->netid, &start->netid, sizeof(sna_netid));
++        nof->nodeid     = start->nodeid;
++        nof->type       = start->type;
++        nof->lu_seg     = start->lu_seg;
++        nof->bind_seg   = start->bind_seg;
++        nof->max_lus    = start->max_lus;
++	nof->flags	= SNA_UP | SNA_STOPPED;
++        list_add_tail(&nof->list, &nof_list);
 +
 +	sna_asm_create(start);
-+	sna_ss_create(start);
-+	sna_ds_create(start);
-+	sna_cs_create(start);
-+	sna_trs_create(start);
-+	sna_sm_create(start);
-+	sna_cpic_create(start);
-+	sna_attach_create(start);
-+
-+	sna_mod_inc_use_count();
++        sna_ss_create(start);
++        sna_ds_create(start);
++        sna_cs_create(start);
++        sna_trs_create(start);
++        sna_sm_create(start);
 +
 +#ifdef NOT
-+	nof->netid_registered			= start->netid_registered;
-+	nof->ls_supp_type			= start->ls_supp_type;
-+	nof->resource_registration		= start->resource_registration;
-+	nof->segment_generation_lvl		= start->segment_generation_lvl;
-+	nof->mode_to_cos_mapping		= start->mode_to_cos_mapping;
-+	nof->ms_node_type			= start->ms_node_type;
-+	nof->mj_vector_file			= start->mj_vector_file;
-+	nof->ms_log_file			= start->ms_log_file;
-+	nof->peer_resource_registration		
-+		= start->peer_resource_registration;
-+	nof->network_node_type			= start->network_node_type;
-+	nof->directory_type_supp		= start->directory_type_supp;
-+	nof->rs_tree_update_type		= start->rs_tree_update_type;
-+	nof->tdm_node_name			= start->tdm_node_name;
-+	nof->cosdm_node_name			= start->cosdm_node_name;
-+	nof->max_rs_cache_trees			= start->max_rs_cache_trees;
-+	nof->max_oos_tdm_updates		= start->max_oos_tdm_updates;
-+	nof->resource_service_search		
-+		= start->resource_service_search;
-+	nof->general_odai_usage_supp		
-+		= start->general_odai_usage_supp;
++        nof->netid_registered                   = start->netid_registered;
++        nof->ls_supp_type                       = start->ls_supp_type;
++        nof->resource_registration              = start->resource_registration;
++        nof->segment_generation_lvl             = start->segment_generation_lvl;
++        nof->mode_to_cos_mapping                = start->mode_to_cos_mapping;
++        nof->ms_node_type                       = start->ms_node_type;
++        nof->mj_vector_file                     = start->mj_vector_file;
++        nof->ms_log_file                        = start->ms_log_file;
++        nof->peer_resource_registration
++                = start->peer_resource_registration;
++        nof->network_node_type                  = start->network_node_type;
++        nof->directory_type_supp                = start->directory_type_supp;
++        nof->rs_tree_update_type                = start->rs_tree_update_type;
++        nof->tdm_node_name                      = start->tdm_node_name;
++        nof->cosdm_node_name                    = start->cosdm_node_name;
++        nof->max_rs_cache_trees                 = start->max_rs_cache_trees;
++        nof->max_oos_tdm_updates                = start->max_oos_tdm_updates;
++        nof->resource_service_search
++                = start->resource_service_search;
++        nof->general_odai_usage_supp
++                = start->general_odai_usage_supp;
 +#endif
-+	return 0;
++	sna_mod_inc_use_count();
++out:	return err;
 +}
 +
 +static int sna_nof_node(struct sna_nof_node *node)
@@ -54877,7 +55210,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.7
 +	sna_debug(5, "init\n");
 +	switch (node->action) {
 +		case SNA_NOF_DEFINE:
-+			err = sna_tdm_define_node_chars(node);
++			err = sna_nof_node_define(node);
 +			break;
 +		case SNA_NOF_START:
 +			err = sna_nof_node_start(node);
@@ -55070,7 +55403,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.7
 +		len += sprintf(buffer + len, "%-17s%-11s",
 +			sna_pr_netid(&nof->netid), sna_pr_nodeid(nof->nodeid));
 +		len += sprintf(buffer + len, "%02X   %02X     %-7d%-9d%-8ld\n",
-+			nof->type, nof->status, nof->lu_seg,
++			nof->type, nof->flags, nof->lu_seg,
 +			nof->bind_seg, nof->max_lus);
 +
 +                /* Are we still dumping unwanted data then discard the record */
@@ -55255,7 +55588,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.7
 +	sr.lu_seg	= nof->lu_seg;
 +	sr.bind_seg	= nof->bind_seg;
 +	sr.max_lus	= nof->max_lus;
-+	sr.node_status	= nof->status;
++	sr.node_status	= nof->flags;
 +	sr.nodeid	= nof->nodeid;
 +
 +	if (copy_to_user(buf, &sr, sizeof(struct snareq)))
@@ -55344,7 +55677,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_nof.c:1.1.2.7
 +} 
 Index: linux-sna-kernel/net/sna/sna_pc.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_pc.c:1.1.2.13
---- /dev/null	Mon Jul 22 12:27:48 2002
+--- /dev/null	Tue Jul 30 05:51:04 2002
 +++ linux-sna-kernel/net/sna/sna_pc.c	Tue Jul 16 11:14:39 2002
 @@ -0,0 +1,500 @@
 +/* sna_pc.c: Linux Systems Network Architecture implementation
@@ -55849,7 +56182,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_pc.c:1.1.2.13
 +#endif
 Index: linux-sna-kernel/net/sna/sna_ps_conv.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_conv.c:1.1.2.42
---- /dev/null	Mon Jul 22 12:27:48 2002
+--- /dev/null	Tue Jul 30 05:51:04 2002
 +++ linux-sna-kernel/net/sna/sna_ps_conv.c	Mon Jul 22 12:19:06 2002
 @@ -0,0 +1,3475 @@
 +/* sna_ps_conv.c: Linux Systems Network Architecture implementation
@@ -59329,7 +59662,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_conv.c:1.1.2.42
 +#endif
 Index: linux-sna-kernel/net/sna/sna_ps_copr.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_copr.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:49 2002
+--- /dev/null	Tue Jul 30 05:51:04 2002
 +++ linux-sna-kernel/net/sna/sna_ps_copr.c	Sun Jun 16 09:10:12 2002
 @@ -0,0 +1,479 @@
 +/* sna_ps_copr.c: Linux Systems Network Architecture implementation
@@ -59813,7 +60146,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_copr.c:1.1.2.1
 +#endif
 Index: linux-sna-kernel/net/sna/sna_ps_main.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_main.c:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:49 2002
+--- /dev/null	Tue Jul 30 05:51:04 2002
 +++ linux-sna-kernel/net/sna/sna_ps_main.c	Sun Jul  7 10:51:52 2002
 @@ -0,0 +1,509 @@
 +/* sna_ps_main.c: Linux Systems Network Architecture implementation
@@ -60327,7 +60660,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_main.c:1.1.2.4
 +#endif
 Index: linux-sna-kernel/net/sna/sna_ps_mc.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_mc.c:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:49 2002
+--- /dev/null	Tue Jul 30 05:51:04 2002
 +++ linux-sna-kernel/net/sna/sna_ps_mc.c	Tue Jul  9 04:30:52 2002
 @@ -0,0 +1,44 @@
 +/* sna_ps_mc.c: Linux Systems Network Architecture implementation
@@ -60376,7 +60709,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_mc.c:1.1.2.2
 +}
 Index: linux-sna-kernel/net/sna/sna_ps_sync.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_sync.c:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:49 2002
+--- /dev/null	Tue Jul 30 05:51:04 2002
 +++ linux-sna-kernel/net/sna/sna_ps_sync.c	Tue Jul  9 04:30:52 2002
 @@ -0,0 +1,43 @@
 +/* sna_ps_sync.c:
@@ -60423,10 +60756,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ps_sync.c:1.1.2.2
 +	return 0;
 +}
 Index: linux-sna-kernel/net/sna/sna_rm.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
---- /dev/null	Mon Jul 22 12:27:49 2002
-+++ linux-sna-kernel/net/sna/sna_rm.c	Sat Jul 20 12:44:25 2002
-@@ -0,0 +1,3406 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.24
+--- /dev/null	Tue Jul 30 05:51:04 2002
++++ linux-sna-kernel/net/sna/sna_rm.c	Mon Jul 29 23:41:38 2002
+@@ -0,0 +1,3414 @@
 +/* sna_rm.c: Linux Systems Network Architecture implementation
 + * - SNA LU 6.2 Resource Manager (RM)
 + *
@@ -60568,6 +60901,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +
 +static u_int32_t sna_rm_remote_lu_new_index(void)
 +{
++	sna_debug(5, "init\n");
 +        for (;;) {
 +                if (++sna_remote_lu_system_index <= 0)
 +                        sna_remote_lu_system_index = 1;
@@ -60593,6 +60927,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +
 +static u_int32_t sna_rm_local_lu_new_index(void)
 +{
++	sna_debug(5, "init\n");
 +        for (;;) {
 +                if (++sna_local_lu_system_index <= 0)
 +                        sna_local_lu_system_index = 1;
@@ -60618,6 +60953,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +
 +static u_int32_t sna_rm_mode_new_index(void)
 +{
++	sna_debug(5, "init\n");
 +        for (;;) {
 +                if (++sna_mode_system_index <= 0)
 +                        sna_mode_system_index = 1;
@@ -60717,6 +61053,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +
 +static u_int32_t sna_rm_rcb_new_index(void)
 +{
++	sna_debug(5, "init\n");
 +        for (;;) {
 +                if (++sna_rcb_system_index <= 0)
 +                        sna_rcb_system_index = 1;
@@ -60884,6 +61221,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +	struct list_head *le, *se;
 +        struct sna_local_lu_cb *lu;
 +
++	sna_debug(5, "init\n");
 +	list_for_each_safe(le, se, &local_lu_list) {
 +		lu = list_entry(le, struct sna_local_lu_cb, list);
 +                if (!strcmp(lu->lu_name, dlu->lu_name)) {
@@ -60901,6 +61239,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +	struct list_head *le, *se;
 +        struct sna_remote_lu_cb *plu;
 +
++	sna_debug(5, "init\n");
 +	list_for_each_safe(le, se, &remote_lu_list) {
 +		plu = list_entry(le, struct sna_remote_lu_cb, list);
 +                if (!strcmp(plu->netid_plu.net, dplu->netid_plu.net)
@@ -60919,6 +61258,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +	struct list_head *le, *se;
 +	struct sna_mode_cb *mode;
 +
++	sna_debug(5, "init\n");
 +	list_for_each_safe(le, se, &mode_list) {
 +		mode = list_entry(le, struct sna_mode_cb, list);
 +		if (!strcmp(mode->mode_name, dm->mode_name)) {
@@ -60935,6 +61275,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +{
 +	struct sna_local_lu_cb *lu;
 +
++	sna_debug(5, "init\n");
 +        lu = sna_rm_local_lu_get_by_name(dlu->lu_name);
 +        if (lu)
 +                return -EEXIST;
@@ -61946,7 +62287,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +        }
 +        list_for_each_safe(le, se, &remote_lu_list) {
 +                plu = list_entry(le, struct sna_remote_lu_cb, list);
-+                list_del(&remote_lu_list);
++                list_del(&plu->list);
 +                kfree(plu);
 +                sna_mod_dec_use_count();
 +        }
@@ -63834,10 +64175,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rm.c:1.1.2.23
 +}
 +#endif
 Index: linux-sna-kernel/net/sna/sna_rss.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_rss.c:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:49 2002
-+++ linux-sna-kernel/net/sna/sna_rss.c	Fri Jun 21 12:05:11 2002
-@@ -0,0 +1,98 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_rss.c:1.1.2.3
+--- /dev/null	Tue Jul 30 05:51:05 2002
++++ linux-sna-kernel/net/sna/sna_rss.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,99 @@
 +/* sna_rss.c: Linux Systems Network Architecture implementation
 + * Route Selection Services.
 + *
@@ -63877,6 +64218,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rss.c:1.1.2.2
 +#include <linux/skbuff.h>
 +#include <net/datalink.h>
 +#include <net/sock.h>
++#include <linux/proc_fs.h>
 +#include <linux/sna.h>
 +
 +int sna_rss_request_route(struct sna_rss_route *r)
@@ -63938,7 +64280,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_rss.c:1.1.2.2
 +}
 Index: linux-sna-kernel/net/sna/sna_sm.c
 diff -u /dev/null linux-sna-kernel/net/sna/sna_sm.c:1.1.2.16
---- /dev/null	Mon Jul 22 12:27:49 2002
+--- /dev/null	Tue Jul 30 05:51:05 2002
 +++ linux-sna-kernel/net/sna/sna_sm.c	Thu Jul 18 14:09:29 2002
 @@ -0,0 +1,2358 @@
 +/* sna_sm.c: Linux Systems Network Architecture implementation
@@ -66300,10 +66642,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_sm.c:1.1.2.16
 +}
 +#endif
 Index: linux-sna-kernel/net/sna/sna_ss.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_ss.c:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:50 2002
-+++ linux-sna-kernel/net/sna/sna_ss.c	Sat Jun 22 12:20:15 2002
-@@ -0,0 +1,454 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_ss.c:1.1.2.5
+--- /dev/null	Tue Jul 30 05:51:06 2002
++++ linux-sna-kernel/net/sna/sna_ss.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,455 @@
 +/* sna_ss.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -66337,6 +66679,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ss.c:1.1.2.4
 +#include <linux/skbuff.h>
 +#include <net/datalink.h>
 +#include <net/sock.h>
++#include <linux/proc_fs.h>
 +#include <linux/list.h>
 +
 +#include <linux/sna.h>
@@ -66454,7 +66797,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ss.c:1.1.2.4
 +	return 0;
 +}
 +
-+static __u32 sna_pc_system_id  = 1;
++static u_int32_t sna_pc_system_id  = 1;
 +
 +/*
 +  Returns a string of 0 and 1 characters, representing the provided 64bit
@@ -66759,10 +67102,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_ss.c:1.1.2.4
 +	return err;
 +}
 Index: linux-sna-kernel/net/sna/sna_tc.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_tc.c:1.1.2.11
---- /dev/null	Mon Jul 22 12:27:50 2002
-+++ linux-sna-kernel/net/sna/sna_tc.c	Tue Jul 16 11:14:40 2002
-@@ -0,0 +1,904 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_tc.c:1.1.2.12
+--- /dev/null	Tue Jul 30 05:51:06 2002
++++ linux-sna-kernel/net/sna/sna_tc.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,905 @@
 +/* sna_tc.c: Linux Systems Network Architecture implementation
 + * - SNA Transmission Control (TC)
 + *
@@ -66790,6 +67133,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_tc.c:1.1.2.11
 +#include <linux/stat.h>
 +#include <linux/if.h>
 +#include <linux/if_ether.h>
++#include <linux/proc_fs.h>
 +
 +#ifdef CONFIG_SNA_LLC
 +#include <net/llc_if.h>
@@ -67668,10 +68012,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_tc.c:1.1.2.11
 +}
 +#endif /* CONFIG_SNA_LU62_HS || CONFIG_SNA_LU62_HS_MODULE */
 Index: linux-sna-kernel/net/sna/sna_tdm.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_tdm.c:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:50 2002
-+++ linux-sna-kernel/net/sna/sna_tdm.c	Sat Jun 22 12:20:16 2002
-@@ -0,0 +1,360 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_tdm.c:1.1.2.6
+--- /dev/null	Tue Jul 30 05:51:06 2002
++++ linux-sna-kernel/net/sna/sna_tdm.c	Mon Jul 29 23:00:01 2002
+@@ -0,0 +1,361 @@
 +/* sna_tdm.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -67712,6 +68056,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_tdm.c:1.1.2.4
 +#include <net/datalink.h>
 +#include <net/sock.h>
 +#include <linux/ctype.h>
++#include <linux/proc_fs.h>
 +#include <linux/list.h>
 +
 +#include <linux/sna.h>
@@ -67968,7 +68313,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_tdm.c:1.1.2.4
 +		c = list_entry(le, struct sna_tdm_node_cb, list);
 +		list_for_each(se, &c->tg_list) {
 +			t = list_entry(se, struct sna_tg_cb, list);
-+                	len += sprintf(buffer + len, "%-18s", 
++                	len += sprintf(buffer + len, "%-18s\n", 
 +				sna_pr_netid(&c->netid));
 +#ifdef NOT
 +			len += sprintf(buffer + len, "%5d%4d%7d%8d%10d%5d"
@@ -68033,10 +68378,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_tdm.c:1.1.2.4
 +	return 0;
 +}
 Index: linux-sna-kernel/net/sna/sna_trs.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_trs.c:1.1.2.1
---- /dev/null	Mon Jul 22 12:27:50 2002
-+++ linux-sna-kernel/net/sna/sna_trs.c	Sun Jun 16 09:10:13 2002
-@@ -0,0 +1,52 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_trs.c:1.1.2.2
+--- /dev/null	Tue Jul 30 05:51:06 2002
++++ linux-sna-kernel/net/sna/sna_trs.c	Mon Jul 29 23:00:02 2002
+@@ -0,0 +1,53 @@
 +/* sna_trs.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -68070,6 +68415,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_trs.c:1.1.2.1
 +#include <linux/skbuff.h>
 +#include <net/datalink.h>
 +#include <net/sock.h>
++#include <linux/proc_fs.h>
 +#include <linux/sna.h>
 +
 +int sna_trs_create(struct sna_nof_node *start)
@@ -68090,10 +68436,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_trs.c:1.1.2.1
 +	return 0;
 +}
 Index: linux-sna-kernel/net/sna/sna_vector.c
-diff -u /dev/null linux-sna-kernel/net/sna/sna_vector.c:1.1.2.4
---- /dev/null	Mon Jul 22 12:27:50 2002
-+++ linux-sna-kernel/net/sna/sna_vector.c	Sat Jun 22 13:54:07 2002
-@@ -0,0 +1,150 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sna_vector.c:1.1.2.5
+--- /dev/null	Tue Jul 30 05:51:06 2002
++++ linux-sna-kernel/net/sna/sna_vector.c	Mon Jul 29 23:00:02 2002
+@@ -0,0 +1,151 @@
 +/* sna_vector.c: Linux Systems Network Architecture implementation
 + *
 + * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
@@ -68128,6 +68474,7 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_vector.c:1.1.2.4
 +#include <net/datalink.h>
 +#include <net/sock.h>
 +#include <linux/if_arp.h>
++#include <linux/proc_fs.h>
 +#include <linux/sna.h>
 +
 +int sna_vector_cos_tpf(u_int8_t *name, int net_pri, int tx_pri, 
@@ -68245,10 +68592,10 @@ diff -u /dev/null linux-sna-kernel/net/sna/sna_vector.c:1.1.2.4
 +	return len;
 +}
 Index: linux-sna-kernel/net/sna/sysctl_net_sna.c
-diff -u /dev/null linux-sna-kernel/net/sna/sysctl_net_sna.c:1.1.2.2
---- /dev/null	Mon Jul 22 12:27:50 2002
-+++ linux-sna-kernel/net/sna/sysctl_net_sna.c	Sat Jun 22 12:20:16 2002
-@@ -0,0 +1,98 @@
+diff -u /dev/null linux-sna-kernel/net/sna/sysctl_net_sna.c:1.1.2.3
+--- /dev/null	Tue Jul 30 05:51:06 2002
++++ linux-sna-kernel/net/sna/sysctl_net_sna.c	Mon Jul 29 10:49:07 2002
+@@ -0,0 +1,99 @@
 +/* sysctl_net_sna.c: Linux Systems Network Architecture implementation
 + * - SysCtrl user interface to Linux-SNA
 + *
@@ -68279,10 +68626,11 @@ diff -u /dev/null linux-sna-kernel/net/sna/sysctl_net_sna.c:1.1.2.2
 +extern __u32   	sysctl_bind_pacing_cnt;
 +extern __u8    	sna_debug_level;
 +
-+/* XID sysctls */
-+extern __u32	sysctl_xid_idle_limit;
-+extern __u32	sysctl_xid_retry_interval;
-+extern __u32	sysctl_xid_retry_limit;
++/* xid. */
++extern u_int32_t sysctl_xid_idle_limit;
++extern u_int32_t sysctl_xid_retry_limit;
++extern u_int32_t sysctl_test_retry_limit;
++
 +
 +#ifdef CONFIG_SYSCTL
 +ctl_table sna_table[] = {
@@ -68294,21 +68642,21 @@ diff -u /dev/null linux-sna-kernel/net/sna/sysctl_net_sna.c:1.1.2.2
 +        &proc_dointvec_jiffies},
 +        {NET_SNA_MAX_MODE, "max_mode_count", &sysctl_max_mode_cnt,
 +        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-+        {NET_SNA_XID_RETRY, "xid_retry_limit", &sysctl_xid_retry_limit,
-+        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
++
++	/* xid. */	
++        {NET_SNA_XID_RETRY_LIMIT, "xid_retry_limit", &sysctl_xid_retry_limit,
++        sizeof(u_int32_t), 0644, NULL, &proc_dointvec_jiffies},
 +	{NET_SNA_XID_IDLE_LIMIT, "xid_idle_limit", &sysctl_xid_idle_limit,
-+	sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-+	{NET_SNA_XID_RETRY_INTERVAL, "xid_retry_interval", 
-+	&sysctl_xid_retry_interval, sizeof(__u32), 0644, NULL, 
-+	&proc_dointvec_jiffies},
++	sizeof(u_int32_t), 0644, NULL, &proc_dointvec_jiffies},
++	{NET_SNA_TEST_RETRY_LIMIT, "test_retry_limit", &sysctl_test_retry_limit,
++	sizeof(u_int32_t), 0644, NULL, &proc_dointvec_jiffies},
++
 +        {NET_SNA_MIA, "max_inbound_activations",
 +        &sysctl_max_inbound_activations, sizeof(__u32), 0644, NULL,
 +        &proc_dointvec_jiffies},
 +        {NET_SNA_MOA, "max_outbound_activations",
 +        &sysctl_max_outbound_activations, sizeof(__u32), 0644, NULL,
 +        &proc_dointvec_jiffies},
-+        {NET_SNA_MAX_RETRY, "max_retry_limit", &sysctl_max_retry_limit,
-+        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
 +        {NET_SNA_MAX_BTU, "max_btu_size", &sysctl_max_btu_size,
 +        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
 +        {NET_SNA_MAX_TX_RU, "max_tx_ru_size", &sysctl_max_tx_ru_size,

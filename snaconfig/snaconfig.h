@@ -220,5 +220,6 @@ extern int sna_reload(int argc, char **argv);
 extern int sna_unload(int argc, char **argv);
 extern int sna_start(int argc, char **argv);
 extern int sna_stop(int argc, char **argv);
+extern int sna_delete(int argc, char **argv);
 extern int sna_show(int argc, char **argv);
 #endif	/* _SNACONFIG_H */
