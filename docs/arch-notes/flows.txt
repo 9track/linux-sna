@@ -1,3 +1,15 @@
+define_dlc
+ define_port
+  define_ls
+
+start_port
+ start_ls
+  sna_rm_activate_seesion
+   sna_rm_send_activate_session
+    sna_sm_process_activation_session
+
+	sna_cs_activate_route
+
 /* COS definition flow */
 sna_nof_define_class_of_service
   sna_cosm_define_cos

@@ -1,20 +1,20 @@
 /* snaconfig.c: Provide an easy interface into the dark devilish world of SNA.
  * - main() and high level entrance into parsers.
  *
- * Author:
- * Jay Schulist         <jschlst@samba.org>
+ * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or (at your option) any later version.
+ * This program can be redistributed or modified under the terms of the
+ * GNU General Public License as published by the Free Software Foundation.
+ * This program is distributed without any warranty or implied warranty
+ * of merchantability or fitness for a particular purpose.
  *
- * None of the authors or maintainers or their employers admit
- * liability nor provide warranty for any of this software.
- * This material is provided "as is" and at no charge.
+ * See the GNU General Public License for more details.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,7 +79,6 @@ int help(void)
 	printf("	  [min_user2 <NN>] [max_user2 <NN>]\n");
 	printf("	  [min_user3 <NN>] [max_user3 <NN>]]\n");
 	printf("	[start|stop|delete] ... \n");
-
 	exit (1);
 }
 
@@ -87,14 +86,14 @@ int version(void)
 {
 	printf("snaconfig v%s\n", ToolsVersion);
 	printf("%s\n", ToolsMaintain);
-
 	exit (1);
 }
 
 int main(int argc, char **argv)
 {
-	int i, err;
-
+	int i, err, from_file = 0;
+	char cfg_file[120];
+	
 	/* Find any options. */
   	(void)argc--;
 	(void)argv++;
@@ -127,26 +126,18 @@ int main(int argc, char **argv)
 			help();
 
 		/* Parse a Linux-SNA configuration file. */
-		if(!strcmp(*argv, "-f"))
-		{
+		if(!strcmp(*argv, "-f")) {
 			if(*++argv == NULL) help();
-			err = sna_load_cfg_file(*argv);
-			exit (err);
+			argc--;
+			strcpy(cfg_file, *argv);
+			from_file = 1;
+			goto wrap;
 		}
 
 wrap:
     		(void)argv++;
     		(void)argc--;
   	}
-
-	/* Show current SNA configuration for all nodes. */
-	if(argc == 0 || opt_a)
-	{
-		int err;
-		printf("here\n");
-		err = sna_print(NULL);
-		exit(err < 0);
-	}
 
 	sna_sk = socket(AF_SNA, SOCK_DGRAM, SOL_SNA_NOF); 
         if(sna_sk < 0)  
@@ -156,6 +147,15 @@ wrap:
                 exit (1);
         }       
 
+	/* Show current SNA configuration for all nodes. */
+        if(!from_file && (argc == 0 || opt_a))
+        {
+                int err;
+                printf("here\n");
+                err = sna_print(NULL);
+                exit(err < 0);
+        }
+	
 #ifdef OLD_LAR_CODE
 	if(!strcmp(*argv, "find"))
 	{
@@ -198,8 +198,10 @@ wrap:
 	}
 #endif
 
-	sna_load_cfg_stdin(argv);
-
+	if (from_file)
+		sna_load_cfg_file(cfg_file);
+	else	
+		sna_load_cfg_stdin(argv);
 	close(sna_sk);
 	exit (0);
 }

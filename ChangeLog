@@ -1,5 +1,30 @@
 ChangeLog for net-fun patches and the sna-tools.
 
+0.1.21 - June 9, 2002.
+- new net-fun patch-o-matic kernel patch.
+- some user space code cleanup.
+- lots of kernel code cleanup.
+- created generic dlc level commands for path control.
+- finished porting linux-sna to use the new linux-llc stack.
+- fixed kernel crash on snatchd startup with no sna module loaded.
+- fixed problem with loading configuration from file.
+- updated all copyright and contact information.
+- incremented version number.
+
+0.1.20 - June 6, 2002.
+- new net-fun patch which starts to use new llc and has a bit of code washing.
+- added file for sna.7 man page.
+- removed some old files from docs/confs directory.
+- added start scripts for snatchd, tn3270d and tn5250d.
+- better libxml message when it can't be found by autoconf.
+- removed useless conftest* files.
+- changed all the @turbolinux.com addresses to @linux-sna.org
+- updated make rpm-dist and added make ftp-dist commands.
+- created linux-sna.spec file for RPMs.
+- created Xml version of default sna.cfg, Xml is the new format.
+- changed to better version number format.
+- added version number support to libraries.
+
 1.00PRE19 - November 8, 2001.
 - removed old lar code from linux-sna tools.
 

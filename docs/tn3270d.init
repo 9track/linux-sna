@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# tn3270d.init        Starts TN3270 daemon.
+#
+#
+# chkconfig: 2345 12 88
+# description: Start the daemon.
+
+# Source function library.
+. /etc/init.d/functions
+
+[ -f /usr/sbin/tn3270d ] || exit 0
+
+RETVAL=0
+
+umask 077
+
+start() {
+ 	echo -n $"Starting TN3270 daemon: "
+	daemon tn3270d
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tn3270d
+	return $RETVAL
+}
+	
+stop() {
+	echo -n $"Shutting down TN3270 daemon: "
+	killproc tn3270d
+	echo
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/tn3270d
+	return $RETVAL
+}
+
+rhstatus() {
+	status tn3270d
+}
+
+restart() {
+	stop
+	start
+}	
+
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  status)
+  	rhstatus
+	;;
+  restart|reload)
+  	restart
+	;;
+  condrestart)
+  	[ -f /var/lock/subsys/tn3270d ] && restart || :
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+	exit 1
+esac
+
+exit $?
+

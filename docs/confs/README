@@ -1,7 +1,15 @@
+June 5, 2002.
+
+The files here are mostly historical.. use the RPMs if you want
+an easy installation.
+
+J.
+
+
 README: etc-sna compile and installation instructions.
 
 Author:
- - Jay Schulist <jschlst@samba.org>
+ - Jay Schulist <jschlst@linux-sna.org>
 
 There is nothing to compile just install.
 

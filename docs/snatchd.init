@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# snatcd.init        Starts SNA attach daemon.
+#
+#
+# chkconfig: 2345 12 88
+# description: Start the daemon.
+
+# Source function library.
+. /etc/init.d/functions
+
+[ -f /usr/sbin/snatchd ] || exit 0
+[ -f /etc/snatchd.conf ] || exit 0
+
+RETVAL=0
+
+umask 077
+
+start() {
+ 	echo -n $"Starting SNA attach daemon: "
+	daemon snatchd
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snatchd
+	return $RETVAL
+}
+	
+stop() {
+	echo -n $"Shutting down SNA attach daemon: "
+	killproc snatchd
+	echo
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/snatchd
+	return $RETVAL
+}
+
+rhstatus() {
+	status snatchd
+}
+
+restart() {
+	stop
+	start
+}	
+
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  status)
+  	rhstatus
+	;;
+  restart|reload)
+  	restart
+	;;
+  condrestart)
+  	[ -f /var/lock/subsys/snatchd ] && restart || :
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+	exit 1
+esac
+
+exit $?
+

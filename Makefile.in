@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -46,9 +46,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -75,8 +76,9 @@ XML_CONFIG = @XML_CONFIG@
 
 AUTOMAKE_OPTIONS = 1.3e foreign
 
-BUILD_SUBDIRS = . include libsna libasuite snaconfig snatchd asuite 	sense tn3270d tn5250d docs 
+BUILD_SUBDIRS = . include libsna libasuite snaconfig snatchd asuite 	sense docs 
 
+# 	tn3270d tn5250d
 SUBDIRS = $(BUILD_SUBDIRS)
 DIST_SUBDIRS = $(BUILD_SUBDIRS) $(CONF_SUBDIRS)
 
@@ -99,7 +101,7 @@ CVS = "cvs"
 
 # RPM happenings
 #ifndef RPM_BUILD_DIR
-RPM_BUILD_DIR = "/usr/src/redhat"
+RPM_BUILD_DIR = "/usr/src/rpm"
 #endif
 #ifndef RPM_BUILD_TARGET
 RPM_BUILD_TARGET = `uname -m`
@@ -331,7 +333,7 @@ uninstall: uninstall-recursive
 all-am: Makefile
 all-redirect: all-recursive
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs: installdirs-recursive
 installdirs-am:
 
@@ -411,23 +413,35 @@ pending-patches:
 
 rpm-dist:
 	if ! test -f $(srcdir)/docs/$(PACKAGE).spec; then \
-		echo "RPM spec file '$(PACKAGE).spec' missing from '$(srcdir)/docs' directory; aborting rpm build" 1>&2; \
-		exit 1; \
-	fi; \ 
-	rm -f $(srcdir)/$(PACKAGE)-$(VERSION).tar.gz; \
-	rm -f $(srcdir)/$(PACKAGE)-$(VERSION)-1.src.rpm; \
-	rm -f $(srcdir)/$(PACKAGE)-$(VERSION)-1.$(RPM_BUILD_TARGET).rpm; \
-	cat $(srcdir)/docs/$(PACKAGE).spec | sed s/VERSION/$(VERSION)/g > $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
-	$(MAKE) dist; \
-	cp -f $(srcdir)/$(PACKAGE)-$(VERSION).tar.gz $(RPM_BUILD_DIR)/SOURCES/$(PACKAGE)-$(VERSION).tar.gz; \
-	rpm -ba --target=$(RPM_BUILD_TARGET) -v $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
-	cp -f $(RPM_BUILD_DIR)/RPMS/$(RPM_BUILD_TARGET)/$(PACKAGE)-$(VERSION)-1.$(RPM_BUILD_TARGET).rpm $(srcdir); \
-	cp -f $(RPM_BUILD_DIR)/SRPMS/$(PACKAGE)-$(VERSION)-1.src.rpm $(srcdir); \
-	rm -f $(RPM_BUILD_DIR)/RPMS/$(RPM_BUILD_TARGET)/$(PACKAGE)-$(VERSION)-1.$(RPM_BUILD_TARGET).rpm; \
-	rm -f $(RPM_BUILD_DIR)/SRPMS/$(PACKAGE)-$(VERSION)-1.src.rpm; \
-	rm -f $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
-	rm -f $(RPM_BUILD_DIR)/SOURCES/$(PACKAGE)-$(VERSION).tar.gz; \
-	rm -rf $(RPM_BUILD_DIR)/BUILD/$(PACKAGE)-$(VERSION)
+                echo "RPM spec file '$(PACKAGE).spec' missing from '$(srcdir)/docs' directory; aborting rpm build" 1>&2; \
+                exit 1; \
+        fi; \
+        cat $(srcdir)/docs/$(PACKAGE).spec | sed s/VERSION/$(VERSION)/g > $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
+        $(MAKE) dist; \
+        cp -f $(srcdir)/$(PACKAGE)-$(VERSION).tar.gz $(RPM_BUILD_DIR)/SOURCES/$(PACKAGE)-$(VERSION).tar.gz; \
+        rpm -ba -v --sign $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
+        rm -f $(RPM_BUILD_DIR)/SPECS/$(PACKAGE).spec; \
+        rm -f $(RPM_BUILD_DIR)/SOURCES/$(PACKAGE)-$(VERSION).tar.gz; \
+        rm -rf $(RPM_BUILD_DIR)/BUILD/$(PACKAGE)-$(VERSION); \
+        $(MAKE) clean-dist; \
+        mkdir -p $(srcdir)/build.tmp; \
+        mkdir -p $(srcdir)/build.tmp/source; \
+        mkdir -p $(srcdir)/build.tmp/binaries; \
+        mkdir -p $(srcdir)/build.tmp/binaries/RPMS; \
+        mkdir -p $(srcdir)/build.tmp/binaries/SRPMS; \
+        mv -f $(PACKAGE)-$(VERSION).tar.gz $(srcdir)/build.tmp/source; \
+        mv -f `find $(RPM_BUILD_DIR)/SRPMS -name "$(PACKAGE)-*.src.rpm" -print` $(srcdir)/build.tmp/binaries/SRPMS/; \
+        mv -f `find $(RPM_BUILD_DIR)/RPMS -name "$(PACKAGE)-*.rpm" -print` $(srcdir)/build.tmp/binaries/RPMS/
+
+ftp-dist:
+	if ! test -d $(srcdir)/build.tmp; then \
+                echo "Build directory '$(srcdir)/build.tmp' missing, run 'make rpm-dist' first" 1>&2; \
+                exit 1; \
+        fi; \
+        ncftpput -R -u jschlst ftp.linux-sna.org /home/ftp/pub/$(PACKAGE)/v0.1/ $(srcdir)/build.tmp/*
+
+clean-dist:
+	rm -rf $(srcdir)/build.tmp
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -46,9 +46,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -80,14 +81,14 @@ INCLUDES = -I../include
 
 lib_LTLIBRARIES = libacomm.la libaftp.la libaname.la 
 
-libacomm_la_LDFLAGS = -Wc,-nostartfiles
+libacomm_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libacomm_la_SOURCES = asuitecommon.c cpicsession.c wildcard.c filemode.c 	util.c tdb.c
 
 
-libaftp_la_LDFLAGS = -Wc,-nostartfiles
+libaftp_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libaftp_la_SOURCES = libaftp.c filemode.c
 
-libaname_la_LDFLAGS = -Wc,-nostartfiles
+libaname_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libaname_la_SOURCES = libaname.c
 
 include_HEADERS = anameapi.h appfftp.h asuitecommon.h cpicsession.h 	filemode.h libaftp.h libaname.h port.h tdb.h util.h wildcard.h
@@ -342,7 +343,7 @@ uninstall: uninstall-am
 all-am: Makefile $(LTLIBRARIES) $(MANS) $(HEADERS)
 all-redirect: all-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
 	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
 

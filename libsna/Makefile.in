@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -46,9 +46,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -81,22 +82,22 @@ CFLAGS = -fPIC -Wall
 lib_LTLIBRARIES = libappc.la libattach.la libcpic.la 	liblua.la libnof.la
 
 
-libappc_la_LDFLAGS = -Wc,-nostartfiles
+libappc_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libappc_la_SOURCES = libappc.c
 
-libattach_la_LDFLAGS = -Wc,-nostartfiles
+libattach_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libattach_la_SOURCES = libattach.c
 
-libcpic_la_LDFLAGS = -Wc,-nostartfiles
+libcpic_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libcpic_la_SOURCES = libcpic.c
 
-liblua_la_LDFLAGS = -Wc,-nostartfiles
+liblua_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 liblua_la_SOURCES = liblua.c
 
-libnof_la_LDFLAGS = -Wc,-nostartfiles
+libnof_la_LDFLAGS = -Wc,-nostartfiles -release $(VERSION)
 libnof_la_SOURCES = libnof.c
 
-include_HEADERS = appc.h attach.h cpic.h lua.h nof.h
+include_HEADERS = appc.h attach.h lua.h nof.h
 
 man_MANS = 
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -355,7 +356,7 @@ uninstall: uninstall-am
 all-am: Makefile $(LTLIBRARIES) $(MANS) $(HEADERS)
 all-redirect: all-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
 	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(includedir)
 

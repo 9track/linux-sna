@@ -1,11 +1,21 @@
 ToDo list for sna-tools and net-fun kernel patch (never ending).
- - Maintained by Jay Schulist <jschlst@samba.org>
+ - Maintained by Jay Schulist <jschlst@linux-sna.org>
 
-Features that would be nice and are easy (but abit time consuming) to do:
 - milestones and roadmap.
 - xml configuration files for snaconfig and snatchd.
-- Configuration file conversion. A tool that converts a given SNA
+- configuration file conversion. A tool that converts a given SNA
   implementations cfg file into a Linux-SNA configuration file.
+- make single sna interface via command `sna`, like iproute2.
+- create libebcdic which works with international character sets.
+- Talk to kernel stack with only ebcdic.
+- Do full Xid.
+- Handle APPN.
+- Do basic LU6.2 so Aping test works.
+
+xml:
+ - read xml config file in.
+ - display structures for debug
+ - write xml config file out.
 
 Goal:
 1. APING loopback test.
@@ -15,7 +25,6 @@ Goal:
 5. Docs for setting up an LU6.2 Peer node.      2/15/2001
 
 Short term todo(s):
-- Update Hardware and Software sections of linux-sna.org.
 - Loopback TPs should work swimmingly using full code paths.
 - Build generic BIND processing engine.
 - Build generic BIND build engine.
@@ -27,8 +36,6 @@ Short term todo(s):
   does a structured link teardown
 - Complete internode bind.
 - Expand handling of bind and unbind conditions.
-- snaconfig-file occasional flakiness.
-
 
 Stuff that I will probably (never?) end up doing:
 - Move guts of sna_nof.c to sna_ps_copr.c

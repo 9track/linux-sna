@@ -1,2 +1,2 @@
 #define ToolsVersion		VERSION
-#define ToolsMaintain		"Jay Schulist <jschlst@samba.org>"
+#define ToolsMaintain		"Jay Schulist <jschlst@linux-sna.org>"

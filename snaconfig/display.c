@@ -1,19 +1,19 @@
 /* display.c: functions to display sna node information.
  *
- * Author:
- * Jay Schulist         <jschlst@samba.org>
+ * Copyright (c) 1999-2002 by Jay Schulist <jschlst@linux-sna.org>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or (at your option) any later version.
+ * This program can be redistributed or modified under the terms of the
+ * GNU General Public License as published by the Free Software Foundation.
+ * This program is distributed without any warranty or implied warranty
+ * of merchantability or fitness for a particular purpose.
  *
- * None of the authors or maintainers or their employers admit
- * liability nor provide warranty for any of this software.
- * This material is provided "as is" and at no charge.
+ * See the GNU General Public License for more details.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
