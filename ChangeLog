@@ -1,0 +1,50 @@
+ChangeLog for net-fun patches and the sna-tools.
+
+Release 0.014:
+- Created appc.h with all the Linux-SNA APPC definitions.
+- Added FEATURES file for list of needed 1.0 release features.
+- Merged Apingd and Aping directories.
+- Added Mike Madore's Aping code, very nice.
+- Added Atell and Arexec directories for future code.
+- Finished user space CPI-C lib, it will no longer change.
+- Mapped all the CPI-C calls into system calls.
+- Added Aping update.
+- Added Atell.
+
+Release 0.013:
+- Added a sna_appc.c file to hold all the APPC to PS mappings.
+- Added etc.sample directory to hold configuration files.
+- Created snatchd.conf for the SNA Attach Daemon.
+- Coded snatchd, the "SNA Super TP" or Attach Manager.
+
+Release 0.012:
+- Added functionality to define remote/local LU and Modes.
+- Added display of LU and Modes through proc and ioctl interfaces.
+- Added Mike's libaftp files and created the libaftp directory.
+
+Release 0.011:
+- Added help options for LU, Mode and CPI-C definitions.
+- Added option parsing for LU, Mode, and CPI-C definitions.
+
+Release 0.010:
+- Removed a3270* directories as they were misguided.
+- Added snapd directory to contain the future SNA Program Daemon.
+- Adjusted sna-tools so that top-level make now works.
+- Fixed LAR, so now snaconfig interface is pretty along with proc.
+
+Release 0.009:
+- Added feature to display all nodes when one just enters ./snaconfig
+- Fixed the bugs with wrong flags showing up for port and ls.
+- Fixed bugs that stoped one from compiling Linux-SNA staticly in kernel.
+- Finally added module counting to the SNA stack.
+- Removed Global Port and LS lists from stack and fixed the list after del prob.
+- Node delete/stop now will stop/delete all ports and ls.
+
+Release 0.008:
+- Cleaned up snaconfig a lot. Fixed the CPI-C library header file(s). 
+  Removed the a5250* directories as they will no longer be needed. Added
+  a libappc directory for the APPC API libraries.
+
+Release 0.001:
+- Don't expect much to work. sense, mksense, xsense, llcping should
+  compile that is about it. Expect more in the next few weeks.

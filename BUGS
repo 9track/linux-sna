@@ -1,0 +1,4 @@
+Please send bug reports to linux-sna@turbolinux.com.
+
+1. compiled static; define node; delete node; add node; get segfault / kpanic
+2. fix llcping

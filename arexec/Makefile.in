@@ -1,0 +1,41 @@
+# Makefile for arexec
+#
+# Copyright (C) 2000, Jay Schulist <jschlst@turbolinux.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+include ../config.make
+
+ASRCS = arexec.c 
+DSRCS = arexecd.c
+HDRS = arexec.h
+DISTFILES = $(ASRCS) $(DSRCS) $(HDRS) arexec.1 arexecd.8
+
+INSTALL_TARGETS = $(bindir)/arexec $(sbindir)/arexecd $(man1dir)/arexec.1 $(man8dir)/arexecd.8
+AOBJS = $(ASRCS:.c=.o)
+DOBJS = $(DSRCS:.c=.o)
+LDLIBS := $(LDLIBS) -L../libcpic -lcpic
+CPPFLAGS +=
+CLEAN = arexec arexecd $(AOBJS) $(DOBJS)
+
+all: arexec arexecd
+arexec: $(AOBJS)
+
+arexecd: $(DOBJS)
+
+include $(RULES)

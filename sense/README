@@ -1,0 +1,24 @@
+Linux-SNA Sense Decoder v1.0
+
+Written and Maintained by Jay Schulist <jschlst@turbolinux.com>
+
+This software may be used and distributed according to the terms
+of the GNU Public License, incorporated herein by reference.
+
+Application Index:
+ - xsense:  Xwindows front-end to the sense application.
+ - sense:   Text based sense decoder.
+ - mksense: Sense database generation tool.
+
+Usage:
+ - xsense:
+    Start the application by running the xsense command.
+ - sense:
+    args> sense -d database [-s code|-a]
+     -d database: The complete path to the sense database you wish to use.
+     -s code: The sense code you wish to receive information about.
+     -a: Export all sense information. *Very Long*
+ - mksense:
+    args> mksense t=textfile d=dbfile
+     t=textfile: The text import file in Linux-SNA Sense DB format.
+     d=dbfile: The DB file entries are exported to.

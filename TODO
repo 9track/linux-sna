@@ -1,0 +1,25 @@
+ToDo list for sna-tools and net-fun kernel patch.
+
+/*
+ * Critical Todo(s)
+ */
+1. CPI-C and APPC libraries.
+2. kfree_s bad obj on node delete.
+3. Finish XID changes, so one can build links again.
+
+/*
+ * Hardware Todo(s)
+ */
+1. TwinAx drivers.
+
+
+/*
+ * Non-Critical Todo(s)
+ */
+- snaconfig tool (always)
+  - Configuration file support.
+    The option exists but there is no backend support, a good
+    configuration file design and parser is needed.
+  - Case Sensativity
+    It may be nice to allow case insensative options.
+- API libraries. (CPI-C, APPC, LUA)

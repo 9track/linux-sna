@@ -1,0 +1,28 @@
+Must have features for Linux-SNA 1.0 release (April 3, 2000)
+
+Below are a list of features, some are already supported, others have been
+started on, others have yet to be done, that are required for Linux-SNA
+to reach a 1.0 release. This list will also be published to the web site,
+along with a companion wishlist with all the features Linux-SNA may
+someday support.
+
+Linux-SNA 1.0
+
+API(s):
+- CPI-C v2.1
+- APPC w/ SyncPoint
+
+DLC(s):
+- LLC2
+- Channel
+- SDLC
+- Loopback
+
+Application(s):
+- TN5250 Client & Gateway
+- TN3270 Client & Gateway
+- Asuite (A5250, A3270, Aping, Aftp, Acopy, Arexec, Atell)
+
+Misc:
+- SNA Attach Manager (snatchd) w/ security.
+- Automatic SNA stack setup through configuration files.
