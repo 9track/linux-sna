@@ -1,7 +1,10 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ltmain.sh)
-AM_INIT_AUTOMAKE(linux-sna, 0.1.28)
+AC_INIT(linux-sna, 0.1.28)
+AC_CONFIG_SRCDIR(ltmain.sh)
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(include/config.h)
+LT_INIT
+AC_CONFIG_MACRO_DIRS([m4])
 
 CFLAGS="-Wall"
 
@@ -28,35 +31,16 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 
 dnl Check for XML libraries.
-AC_PATH_PROG(XML_CONFIG, xml-config, no)
-if test x$XML_CONFIG = xno ; then
-	AC_MSG_WARN(** Can't find xml-config.  Is libxml or libxml-devel rpm installed? **)
-        AC_MSG_ERROR(** libxml-devel is available via ftp from your linux distro or ftp.ximian.com **)
-fi
-AC_MSG_CHECKING(for xml C flags)
-XML_CFLAGS="`$XML_CONFIG --cflags`"
+PKG_CHECK_MODULES(XML, libxml-2.0)
 CFLAGS="$CFLAGS $XML_CFLAGS"
-AC_MSG_RESULT($XML_CFLAGS)
-AC_MSG_CHECKING(for xml libs)
-XML_LIBS="`$XML_CONFIG --libs`"
 LIBS="$LIBS $XML_LIBS"
-AC_MSG_RESULT($XML_LIBS)
 
 dnl *
 dnl * Not using gnome, so look for glib and GTK+ instead.
 dnl *
-AC_PATH_PROG(GLIB_CONFIG,glib-config,no)
-if test x$GLIB_CONFIG = xno ; then
-        AC_MSG_ERROR(** Can't find glib-config.  Is glib installed? **)
-fi
-AC_MSG_CHECKING(for glib C flags)
-GLIB_CFLAGS="`$GLIB_CONFIG --cflags glib`"
+PKG_CHECK_MODULES(GLIB, glib-2.0)
 CFLAGS="$CFLAGS $GLIB_CFLAGS"
-AC_MSG_RESULT($GLIB_CFLAGS)
-AC_MSG_CHECKING(for glib libs)
-GLIB_LIBS="`$GLIB_CONFIG --libs glib`"
 LIBS="$LIBS $GLIB_LIBS"
-AC_MSG_RESULT($GLIB_LIBS)
 
 dnl Checks for library functions.
 

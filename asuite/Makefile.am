@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS)
-INCLUDES   = -I../include -I../libasuite
-AM_CFLAGS  = -Wall -L../libasuite -L../libsna
+EXTRA_DIST  = $(man_MANS)
+AM_CPPFLAGS = -I$(srcdir)/../include -I$(srcdir)/../libasuite
+AM_CFLAGS   = -Wall -L../libasuite -L../libsna
 
 bin_PROGRAMS  = acopy aftp aping arexec atell atest
 sbin_PROGRAMS = aftpd anamed apingd arexecd atelld

@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS) sense.data
-INCLUDES   = -I../include
-LIBS	   =
+EXTRA_DIST  = $(man_MANS) sense.data
+AM_CPPFLAGS = -I$(srcdir)/../include
+LIBS	    =
 
 bin_PROGRAMS = getsense
 

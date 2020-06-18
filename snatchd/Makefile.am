@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS)
-INCLUDES   = -I../include -I../libsna
-AM_CFLAGS  = -Wall -L../libsna
+EXTRA_DIST  = $(man_MANS)
+AM_CPPFLAGS = -I$(srcdir)/../include -I$(srcdir)/../libsna
+AM_CFLAGS   = -Wall -L../libsna
 
 sbin_PROGRAMS 	= snatchd
 

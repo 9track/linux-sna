@@ -1,6 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 AUTOMAKE_OPTIONS = 1.3e foreign
+ACLOCAL_AMFLAGS = -I m4
 
 BUILD_SUBDIRS = . include libsna libasuite snaconfig snatchd asuite \
 	sense docs libtnX tn3270d

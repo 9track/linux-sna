@@ -22,8 +22,8 @@
 #include <errno.h>
 
 /* xml stuff. */
-#include <gnome-xml/xmlmemory.h>
-#include <gnome-xml/parser.h>
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
 
 /* required for linux-SNA. */
 #include <asm/byteorder.h>

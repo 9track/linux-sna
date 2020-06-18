@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS) transmaps
-INCLUDES   = -I../include
-AM_CFLAGS  = -fPIC -Wall 
+EXTRA_DIST  = $(man_MANS) transmaps
+AM_CPPFLAGS = -I$(srcdir)/../include
+AM_CFLAGS   = -fPIC -Wall 
 
 lib_LTLIBRARIES = libtnX.la
 

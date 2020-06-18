@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS)
-INCLUDES   = -I../include -I../libtnX -I../libsna
-AM_CFLAGS  = -Wall -L../libtnX -L../libsna
+EXTRA_DIST  = $(man_MANS)
+AM_CPPFLAGS = -I$(srcdir)/../include -I$(srcdir)/../libtnX -I$(srcdir)/../libsna
+AM_CFLAGS   = -Wall -L../libtnX -L../libsna
 
 sbin_PROGRAMS = tn3270d
 

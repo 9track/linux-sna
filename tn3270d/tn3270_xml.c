@@ -28,8 +28,8 @@
 #include <arpa/inet.h>
 
 /* xml stuff. */
-#include <gnome-xml/xmlmemory.h>
-#include <gnome-xml/parser.h>
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
 
 #include <libtnX.h>
 

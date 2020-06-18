@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = $(man_MANS)
-INCLUDES   = -I../include
-AM_CFLAGS  = -Wall 
+EXTRA_DIST  = $(man_MANS)
+AM_CPPFLAGS = -I$(srcdir)/../include
+AM_CFLAGS   = -Wall 
 
 lib_LTLIBRARIES = libappc.la libattach.la libcpic.la \
 	liblua.la libnof.la
