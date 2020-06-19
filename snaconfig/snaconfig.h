@@ -41,7 +41,7 @@
 
 #define sna_debug(level, format, arg...) do {                           \
         if (sna_debug_level >= level)                                   \
-                printf(__FILE__ ":" __FUNCTION__ ": " format, ## arg);  \
+                printf("%s:%s: " format, __FILE__, __FUNCTION__, ## arg);  \
 } while (0)
 
 typedef struct {

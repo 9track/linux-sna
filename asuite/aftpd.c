@@ -432,7 +432,7 @@ a_request_file()
       errorcode = A_ERR_ACCESS_DENIED;
       break;
     default:
-      
+      break; 
     }
     send_simple_response(conv_id, AFTP_RC_FAIL_INPUT_ERROR, 0, 
 			 errorcode);

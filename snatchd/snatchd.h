@@ -33,7 +33,7 @@
 
 #define snatch_debug(level, format, arg...) do {                           \
         if (snatch_debug_level >= level)                                   \
-               printf(__FILE__ ":" __FUNCTION__ ": " format, ## arg);  \
+               printf("%s:%s: " format, __FILE__, __FUNCTION__, ## arg);  \
 } while (0)
 
 #define TOOMANY         40              /* don't start more than TOOMANY. */
