@@ -16,31 +16,10 @@
  * - Garbage collection
  */
 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
-#include <linux/skbuff.h>
-#include <net/datalink.h>
-#include <net/sock.h>
-#include <linux/ctype.h>
-#include <linux/proc_fs.h>
 #include <linux/list.h>
-
 #include <linux/sna.h>
 
 static LIST_HEAD(node_list);
@@ -50,7 +29,7 @@ struct sna_tdm_node_cb *sna_tdm_node_get_by_netid(sna_netid *netid)
 {
 	struct sna_tdm_node_cb *n;
 	struct list_head *le;
-	
+
 	sna_debug(5, "init: %s\n", sna_pr_netid(netid));
 	list_for_each(le, &node_list) {
 		n = list_entry(le, struct sna_tdm_node_cb, list);
@@ -68,31 +47,31 @@ struct sna_tg_cb *sna_tdm_find_tg_by_mac(char *mac)
 	struct sna_tdm_node_cb *n;
 	struct list_head *le, *se;
 	struct sna_tg_cb *t;
-	
-        sna_debug(5, "init: (%s)\n", sna_pr_ether(mac));
+
+	sna_debug(5, "init: (%s)\n", sna_pr_ether(mac));
 	list_for_each(le, &node_list) {
 		n = list_entry(le, struct sna_tdm_node_cb, list);
 		list_for_each(se, &n->tg_list) {
 			t = list_entry(se, struct sna_tg_cb, list);
-                        if (!memcmp(t->tg_vector.desc.dlc.mac, mac, IFHWADDRLEN))
-                                return t;
+			if (!memcmp(t->tg_vector.desc.dlc.mac, mac, IFHWADDRLEN))
+				return t;
 		}
-        }
-        return NULL;
+	}
+	return NULL;
 }
 #endif
 
-struct sna_tg_cb *sna_tdm_tg_get_by_number(struct sna_tdm_node_cb *node, 
+struct sna_tg_cb *sna_tdm_tg_get_by_number(struct sna_tdm_node_cb *node,
 	u_int8_t tg_number)
 {
 	struct list_head *le;
 	struct sna_tg_cb *tg;
-	
+
 	sna_debug(5, "init\n");
 	list_for_each(le, &node->tg_list) {
 		tg = list_entry(le, struct sna_tg_cb, list);
-               	if (tg->tg_number == tg_number)
-                       	return tg;
+		if (tg->tg_number == tg_number)
+			return tg;
 	}
 	return NULL;
 }
@@ -120,9 +99,9 @@ int sna_tdm_tg_update(sna_netid *name, struct sna_tg_update *update)
 			goto out;
 		}
 		INIT_LIST_HEAD(&tg->cos_list);
-                list_add_tail(&tg->list, &node->tg_list);
+		list_add_tail(&tg->list, &node->tg_list);
 	}
-	err = 0;	
+	err = 0;
 	do_gettimeofday(&tg->updated);
 	memcpy(&tg->plu_name, &update->plu_name, sizeof(sna_netid));
 	tg->tg_number			= update->tg_number;
@@ -140,7 +119,7 @@ int sna_tdm_define_node_chars(struct sna_nof_node *n)
 {
 	struct sna_tdm_node_cb *node;
 	int err = -ENOMEM;
-	
+
 	sna_debug(5, "init\n");
 	node = sna_tdm_node_get_by_netid(&n->netid);
 	if (!node) {
@@ -199,18 +178,18 @@ struct sna_tg_cb *sna_tdm_request_tg_vectors(sna_netid *remote_name)
 	struct sna_tdm_node_cb *node;
 	struct sna_tg_cb *tg;
 	struct list_head *le;
-	
+
 	sna_debug(5, "init\n");
 	node = sna_tdm_node_get_by_netid(remote_name);
-        if (!node)
+	if (!node)
 		return NULL;
 	list_for_each(le, &node->tg_list) {
-                tg = list_entry(le, struct sna_tg_cb, list);
-                return tg;
-        }
+		tg = list_entry(le, struct sna_tg_cb, list);
+		return tg;
+	}
 	return NULL;
 }
-	
+
 #ifdef NOT
 	cb = sna_tdm_node_get_by_netid(&v->org_cp_name);
 	if (!cb)
@@ -225,14 +204,14 @@ struct sna_tg_cb *sna_tdm_request_tg_vectors(sna_netid *remote_name)
 	if (!v->tg_vectors)
 		return -ENOMEM;
 	memcpy(v->tg_vectors, &tg->tg_vector, sizeof(struct sna_tg_vector));
-//	memcpy(v->tg_vectors, &cb->tg_list->tg_vector, 
+//	memcpy(v->tg_vectors, &cb->tg_list->tg_vector,
 //		sizeof(struct sna_tg_vector));
-	new_s(v->tg_vectors->desc.id.pcp_name, 
+	new_s(v->tg_vectors->desc.id.pcp_name,
 		v->tg_vectors->desc.id.pcp_len + 1, GFP_ATOMIC);
 	if (!v->tg_vectors->desc.id.pcp_name)
 		return -ENOMEM;
 	strcpy(v->tg_vectors->desc.id.pcp_name, tg->tg_vector.desc.id.pcp_name);
-//	strcpy(v->tg_vectors->desc.id.pcp_name, 
+//	strcpy(v->tg_vectors->desc.id.pcp_name,
 //		cb->tg_list->tg_vector.desc.id.pcp_name);
 #endif
 
@@ -247,47 +226,28 @@ int sna_tdm_tdu_chk_errors(void)
 }
 
 #ifdef CONFIG_PROC_FS
-int sna_tdm_get_info(char *buffer, char **start,
-        off_t offset, int length)
-{
-        struct sna_tdm_node_cb *c;
-        off_t pos = 0, begin = 0;
-	struct list_head *le;
-        int len = 0;
-
-	len += sprintf(buffer, "%-18s\n", "NetID.Node");
-	list_for_each(le, &node_list) {
-		c = list_entry(le, struct sna_tdm_node_cb, list);
-                len += sprintf(buffer + len, "%-18s\n",sna_pr_netid(&c->netid));
-		pos = begin + len;
-                if (pos < offset) {
-                        len   = 0;
-			begin = pos;
-                }
-                if (pos > offset + length) 
-                        break;
-        }
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
-}
-
-int sna_tdm_get_info_tg(char *buffer, char **start,
-        off_t offset, int length)
+int sna_tdm_get_info(struct seq_file *m, void *v)
 {
 	struct sna_tdm_node_cb *c;
-        off_t pos = 0, begin = 0;
+	struct list_head *le;
+
+	seq_printf(m, "%-18s\n", "NetID.Node");
+	list_for_each(le, &node_list) {
+		c = list_entry(le, struct sna_tdm_node_cb, list);
+		seq_printf(m, "%-18s\n",sna_pr_netid(&c->netid));
+	}
+
+	return 0;
+}
+
+int sna_tdm_get_info_tg(struct seq_file *m, void *v)
+{
+	struct sna_tdm_node_cb *c;
 	struct list_head *le, *se;
 	struct sna_tg_cb *t;
-        int len = 0;
 
-	len += sprintf(buffer, "%-18s%5s%4s%7s%8s%10s%5s%5s%4s%4s%9s%18s%6s%6s%6s\n",
-                "NetID.Node", "type", "tgn", "status", "garbage",
+	seq_printf(m, "%-18s%5s%4s%7s%8s%10s%5s%5s%4s%4s%9s%18s%6s%6s%6s\n",
+		"NetID.Node", "type", "tgn", "status", "garbage",
 		"quiescing", "cpcp", "ecap", "cpc",
 		"cpb", "security", "propagation_delay",
 		"user1", "user2", "user3");
@@ -295,10 +255,10 @@ int sna_tdm_get_info_tg(char *buffer, char **start,
 		c = list_entry(le, struct sna_tdm_node_cb, list);
 		list_for_each(se, &c->tg_list) {
 			t = list_entry(se, struct sna_tg_cb, list);
-                	len += sprintf(buffer + len, "%-18s\n", 
+			seq_printf(m, "%-18s\n",
 				sna_pr_netid(&c->netid));
 #ifdef NOT
-			len += sprintf(buffer + len, "%5d%4d%7d%8d%10d%5d"
+			seq_printf(m, "%5d%4d%7d%8d%10d%5d"
 				"%5d%4d%4d%9d%18d%6d%6d%6d\n",
 				t->tg_vector.desc.id.type,
 				t->tg_vector.desc.id.tg_number,
@@ -315,24 +275,10 @@ int sna_tdm_get_info_tg(char *buffer, char **start,
 				t->tg_vector.chars.user2,
 				t->tg_vector.chars.user3);
 #endif
-			pos = begin + len;
-                	if (pos < offset) {
-                        	len = 0; 
-				begin = pos;
-                	}
-                	if (pos > offset + length) 
-                        	break;
 		}
-        }
+	}
 
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-        if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 #endif
 

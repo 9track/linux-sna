@@ -392,274 +392,274 @@ typedef CM_INT32 SYNC_LEVEL;
 #define CM_UID_SIZE	(10)	/* userid ID. */
 
 CM_ENTRY cmacci(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmaccp(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmallc(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmcanc(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmcfm(unsigned char CM_PTR,
-        CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmcfmd(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmcnvi(unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmcnvo(unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmdeal(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmdfde(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmeaeq(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmeapt(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmeacn(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmecs(unsigned char CM_PTR,
-        CM_CONVERSATION_STATE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONVERSATION_STATE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmect(unsigned char CM_PTR,
-        CM_CONVERSATION_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONVERSATION_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmectx(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmeid(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmembs(CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmemn(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmepid(unsigned char CM_PTR,
-        CM_PARTNER_ID_TYPE CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_PARTNER_ID_SCOPE CM_PTR,
-        CM_DIRECTORY_SYNTAX CM_PTR,
-        CM_DIRECTORY_ENCODING CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_PARTNER_ID_TYPE CM_PTR,
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_PARTNER_ID_SCOPE CM_PTR,
+	CM_DIRECTORY_SYNTAX CM_PTR,
+	CM_DIRECTORY_ENCODING CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmepln(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmesi(unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_DATA_RECEIVED_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_INT32 CM_PTR,
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_DATA_RECEIVED_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmesl(unsigned char CM_PTR,
-        CM_SYNC_LEVEL CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_SYNC_LEVEL CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmesrm(unsigned char CM_PTR,
-        CM_SEND_RECEIVE_MODE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_SEND_RECEIVE_MODE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmesui(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmetc(unsigned char CM_PTR,
-        CM_TRANSACTION_CONTROL CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_TRANSACTION_CONTROL CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmetpn(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmflus(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmincl(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cminic(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cminit(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmprep(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmptr(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmrcv(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_DATA_RECEIVED_TYPE CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_STATUS_RECEIVED CM_PTR,
-        CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_DATA_RECEIVED_TYPE CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_STATUS_RECEIVED CM_PTR,
+	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmrcvx(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RECEIVE_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
+	CM_RECEIVE_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmrltp(unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmrts(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsaeq(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsac(unsigned char CM_PTR,
-        CM_ALLOCATE_CONFIRM_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_ALLOCATE_CONFIRM_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsacn(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsapt(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_AE_QUAL_OR_AP_TITLE_FORMAT CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsbt(unsigned char CM_PTR,
-        CM_BEGIN_TRANSACTION CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_BEGIN_TRANSACTION CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmscsp(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmscst(unsigned char CM_PTR,
-        CM_CONVERSATION_SECURITY_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONVERSATION_SECURITY_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmscsu(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsct(unsigned char CM_PTR,
-        CM_CONVERSATION_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONVERSATION_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmscu(unsigned char CM_PTR,
-        CM_CONFIRMATION_URGENCY CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONFIRMATION_URGENCY CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsdt(unsigned char CM_PTR,
-        CM_DEALLOCATE_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_DEALLOCATE_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsed(unsigned char CM_PTR,
-        CM_ERROR_DIRECTION CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_ERROR_DIRECTION CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsend(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmserr(unsigned char CM_PTR,
 	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsf(unsigned char CM_PTR,
-        CM_FILL CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_FILL CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsid(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsld(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsltp(unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsmn(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsndx(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmspdp(unsigned char CM_PTR,
-        CM_PREPARE_DATA_PERMITTED_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_PREPARE_DATA_PERMITTED_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmspid(unsigned char CM_PTR,
-        CM_PARTNER_ID_TYPE CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_PARTNER_ID_SCOPE CM_PTR,
-        CM_DIRECTORY_SYNTAX CM_PTR,
-        CM_DIRECTORY_ENCODING CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_PARTNER_ID_TYPE CM_PTR,
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_PARTNER_ID_SCOPE CM_PTR,
+	CM_DIRECTORY_SYNTAX CM_PTR,
+	CM_DIRECTORY_ENCODING CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmspln(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmspm(unsigned char CM_PTR,
-        CM_PROCESSING_MODE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_PROCESSING_MODE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsptr(unsigned char CM_PTR,
-        CM_PREPARE_TO_RECEIVE_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_PREPARE_TO_RECEIVE_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsqcf(unsigned char CM_PTR,
-        CM_CONVERSATION_QUEUE CM_PTR,
-        unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONVERSATION_QUEUE CM_PTR,
+	unsigned char CM_PTR,
+	unsigned char CM_PTR,
+	unsigned char CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsqpm(unsigned char CM_PTR,
-        CM_CONVERSATION_QUEUE CM_PTR,
-        CM_PROCESSING_MODE CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONVERSATION_QUEUE CM_PTR,
+	CM_PROCESSING_MODE CM_PTR,
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsrc(unsigned char CM_PTR,
-        CM_RETURN_CONTROL CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CONTROL CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsrt(unsigned char CM_PTR,
-        CM_RECEIVE_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RECEIVE_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmssl(unsigned char CM_PTR,
-        CM_SYNC_LEVEL CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_SYNC_LEVEL CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmssrm(unsigned char CM_PTR,
-        CM_SEND_RECEIVE_MODE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_SEND_RECEIVE_MODE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmsst(unsigned char CM_PTR,
-        CM_SEND_TYPE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_SEND_TYPE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmstc(unsigned char CM_PTR,
-        CM_TRANSACTION_CONTROL CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_TRANSACTION_CONTROL CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmstpn(unsigned char CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmtrts(unsigned char CM_PTR,
-        CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_CONTROL_INFORMATION_RECEIVED CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmwait(unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_RETURN_CODE CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 CM_ENTRY cmwcmp(unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        CM_INT32 CM_PTR,
-        unsigned char CM_PTR,
-        CM_INT32 CM_PTR,
-        unsigned char CM_PTR,
-        CM_RETURN_CODE CM_PTR);
+	CM_INT32 CM_PTR,
+	CM_INT32 CM_PTR,
+	unsigned char CM_PTR,
+	CM_INT32 CM_PTR,
+	unsigned char CM_PTR,
+	CM_RETURN_CODE CM_PTR);
 
 /* Macros to use long descriptive names instead of crusty CPI-C names. */
 #define Accept_Conversation(v1,v2)			cmaccp(v1,v2)
@@ -747,56 +747,59 @@ CM_ENTRY cmwcmp(unsigned char CM_PTR,
 
 /* Input/Output CPI-C call structure. */
 typedef struct {
-        unsigned long   *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9;
+    unsigned char CM_PTR conversation_id;
+    unsigned short opcode;
+    CM_RETURN_CODE CM_PTR return_code;
+	unsigned long   *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9;
 } cpic_args;
 
 #define cargo1(a, v1)                   \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1;
 
 #define cargo2(a, v1, v2)               \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1; \
-        a->a2 = (unsigned long *)v2;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1; \
+	a->a2 = (unsigned long *)v2;
 
 #define cargo3(a, v1, v2, v3)           \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1; \
-        a->a2 = (unsigned long *)v2; \
-        a->a3 = (unsigned long *)v3;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1; \
+	a->a2 = (unsigned long *)v2; \
+	a->a3 = (unsigned long *)v3;
 
 #define cargo4(a, v1, v2, v3, v4)       \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1; \
-        a->a2 = (unsigned long *)v2; \
-        a->a3 = (unsigned long *)v3; \
-        a->a4 = (unsigned long *)v4;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1; \
+	a->a2 = (unsigned long *)v2; \
+	a->a3 = (unsigned long *)v3; \
+	a->a4 = (unsigned long *)v4;
 
 #define cargo5(a, v1, v2, v3, v4, v5)   \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1; \
-        a->a2 = (unsigned long *)v2; \
-        a->a3 = (unsigned long *)v3; \
-        a->a4 = (unsigned long *)v4; \
-        a->a5 = (unsigned long *)v5;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1; \
+	a->a2 = (unsigned long *)v2; \
+	a->a3 = (unsigned long *)v3; \
+	a->a4 = (unsigned long *)v4; \
+	a->a5 = (unsigned long *)v5;
 
 #define cargo6(a, v1, v2, v3, v4, v5, v6) \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1; \
-        a->a2 = (unsigned long *)v2; \
-        a->a3 = (unsigned long *)v3; \
-        a->a4 = (unsigned long *)v4; \
-        a->a5 = (unsigned long *)v5; \
-        a->a6 = (unsigned long *)v6;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1; \
+	a->a2 = (unsigned long *)v2; \
+	a->a3 = (unsigned long *)v3; \
+	a->a4 = (unsigned long *)v4; \
+	a->a5 = (unsigned long *)v5; \
+	a->a6 = (unsigned long *)v6;
 
 #define cargo7(a, v1, v2, v3, v4, v5, v6, v7) \
-        a = (cpic_args *)malloc(sizeof(cpic_args)); \
-        a->a1 = (unsigned long *)v1; \
-        a->a2 = (unsigned long *)v2; \
-        a->a3 = (unsigned long *)v3; \
-        a->a4 = (unsigned long *)v4; \
-        a->a5 = (unsigned long *)v5; \
-        a->a6 = (unsigned long *)v6; \
-        a->a7 = (unsigned long *)v7;
+	a = (cpic_args *)malloc(sizeof(cpic_args)); \
+	a->a1 = (unsigned long *)v1; \
+	a->a2 = (unsigned long *)v2; \
+	a->a3 = (unsigned long *)v3; \
+	a->a4 = (unsigned long *)v4; \
+	a->a5 = (unsigned long *)v5; \
+	a->a6 = (unsigned long *)v6; \
+	a->a7 = (unsigned long *)v7;
 
 #endif	/* _CPIC_H */

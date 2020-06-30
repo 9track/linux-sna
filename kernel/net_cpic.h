@@ -19,31 +19,31 @@
 #ifdef __KERNEL__
 struct cpic {
 	struct list_head		list;
-	
-        u_int32_t              		state;
-        u_int32_t			flags;
 
-        struct cpic_ops         	*ops;
-        struct sna_cpic_side_info   	*side;
-        struct inode            	*inode;
-        struct fasync_struct    	*fasync_list;
-        struct file             	*file;
-        pid_t                   	pid;
+	u_int32_t              		state;
+	u_int32_t			flags;
+
+	struct cpic_ops         	*ops;
+	struct sna_cpic_side_info   	*side;
+	struct inode            	*inode;
+	struct fasync_struct    	*fasync_list;
+	struct file             	*file;
+	pid_t                   	pid;
 
 	wait_queue_head_t       	wait;
-	
+
 	union {
-        	struct sna_tp_cb        *sna;
+		struct sna_tp_cb        *sna;
 	} vi;
 };
 
 struct cpic_ops {
-        int     family;
+	int     family;
 
 	void 	(*cpicall)	(unsigned char *conversation_id,
-				unsigned short opcode, void *uaddr, 
+				unsigned short opcode, void *uaddr,
 				signed long int *return_code);
-        int     (*release)      (struct cpic *cpic);
+	int     (*release)      (struct cpic *cpic);
 };
 
 extern int cpic_register(struct cpic_ops *ops);

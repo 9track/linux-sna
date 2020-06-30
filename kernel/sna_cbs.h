@@ -22,101 +22,101 @@
  */
 
 struct sna_hs_create_parms {
-        __u8 lu_id;
-        __u8 hs_id;
+	__u8 lu_id;
+	__u8 hs_id;
 };
 
 struct sna_ps_create_parms {
-        struct sna_lucb *lucb_list_ptr;
-        __u8 lu_id;
+	struct sna_lucb *lucb_list_ptr;
+	__u8 lu_id;
 
-        struct sna_tcb *tcb_list_ptr;
-        __u8 tcb_id;
+	struct sna_tcb *tcb_list_ptr;
+	__u8 tcb_id;
 
-        struct sna_rcb *rcb_list_ptr;
+	struct sna_rcb *rcb_list_ptr;
 };
 
 /* cpic.
  */
 
 typedef enum {
-        CM_RESET = 1,
-        CM_INIT,
-        CM_SEND,
-        CM_RCV,
-        CM_SEND_PEND,
-        CM_CONFIRM_SEND,
-        CM_CONFIRM_DEALLOC,
-        CM_INIT_INCOMING,
-        CM_SEND_RCV,
-        CM_SEND_ONLY,
-        CM_RCV_ONLY,
-        CM_DEFER_RCV,
-        CM_DEFER_DEALLOC,
-        CM_PREPARED,
-        CM_SYNC_POINT_SEND,
-        CM_SYNC_POINT_DEALLOC
+	CM_RESET = 1,
+	CM_INIT,
+	CM_SEND,
+	CM_RCV,
+	CM_SEND_PEND,
+	CM_CONFIRM_SEND,
+	CM_CONFIRM_DEALLOC,
+	CM_INIT_INCOMING,
+	CM_SEND_RCV,
+	CM_SEND_ONLY,
+	CM_RCV_ONLY,
+	CM_DEFER_RCV,
+	CM_DEFER_DEALLOC,
+	CM_PREPARED,
+	CM_SYNC_POINT_SEND,
+	CM_SYNC_POINT_DEALLOC
 } cpic_state;
 
 struct sna_cpic_side_info {
-        struct list_head 	list;
+	struct list_head 	list;
 
 	u_int32_t		index;
 
-        sna_netid              	netid;
-        sna_netid              	netid_plu;
+	sna_netid              	netid;
+	sna_netid              	netid_plu;
 
-        unsigned char           sym_dest_name[SNA_RESOURCE_NAME_LEN];
+	unsigned char           sym_dest_name[SNA_RESOURCE_NAME_LEN];
 
-        unsigned char           mode_name[SNA_RESOURCE_NAME_LEN];
+	unsigned char           mode_name[SNA_RESOURCE_NAME_LEN];
 	u_int8_t		mode_name_length;
-	
-        unsigned char           tp_name[65];
+
+	unsigned char           tp_name[65];
 	u_int8_t		tp_name_length;
-	
-        unsigned char           service_tp;
-        unsigned short          security_level;
-        unsigned char           username[11];
-        unsigned char           password[11];
+
+	unsigned char           service_tp;
+	unsigned short          security_level;
+	unsigned char           username[11];
+	unsigned char           password[11];
 };
 
 /* nof.
  */
 
 struct sna_nof_cb {
-        struct list_head list;
+	struct list_head list;
 
-        sna_netid       netid;
-        sna_nodeid      nodeid;
+	sna_netid       netid;
+	sna_nodeid      nodeid;
 
 	u_int32_t	flags;
-	
-        unsigned char   type;           /* Node type. */
-        unsigned short  lu_seg;         /* Is LU segmenting supported. */
-        unsigned short  bind_seg;       /* Is Bind segmenting supported. */
-        unsigned long   max_lus;        /* Max number of LU sessions,
-                                         * 0 = Unlimited.
-                                         *                                          */
 
-        /* Data below not currently used. */
-        unsigned long   netid_registered;
-        unsigned long   ls_supp_type;
-        unsigned long   resource_registration;
-        unsigned long   segment_generation_lvl;
-        unsigned long   mode_to_cos_mapping;
-        unsigned long   ms_node_type;
-        unsigned long   mj_vector_file;
-        unsigned long   ms_log_file;
-        unsigned long   peer_resource_registration;
-        unsigned long   network_node_type;
-        unsigned long   directory_type_supp;
-        unsigned long   rs_tree_update_type;
-        unsigned long   tdm_node_name;
-        unsigned long   cosdm_node_name;
-        unsigned long   max_rs_cache_trees;
-        unsigned long   max_oos_tdm_updates;
-        unsigned long   resource_service_search;
-        unsigned long   general_odai_usage_supp;
+	unsigned char   type;           /* Node type. */
+	unsigned short  lu_seg;         /* Is LU segmenting supported. */
+	unsigned short  bind_seg;       /* Is Bind segmenting supported. */
+	unsigned long   max_lus;        /* Max number of LU sessions,
+					 * 0 = Unlimited.
+					 *                                          */
+
+	/* Data below not currently used. */
+	unsigned long   netid_registered;
+	unsigned long   ls_supp_type;
+	unsigned long   resource_registration;
+	unsigned long   segment_generation_lvl;
+	unsigned long   mode_to_cos_mapping;
+	unsigned long   ms_node_type;
+	unsigned long   mj_vector_file;
+	unsigned long   ms_log_file;
+	unsigned long   peer_resource_registration;
+	unsigned long   network_node_type;
+	unsigned long   directory_type_supp;
+	unsigned long   rs_tree_update_type;
+	unsigned long   tdm_node_name;
+	unsigned long   cosdm_node_name;
+	unsigned long   max_rs_cache_trees;
+	unsigned long   max_oos_tdm_updates;
+	unsigned long   resource_service_search;
+	unsigned long   general_odai_usage_supp;
 };
 
 /* ASM.
@@ -127,7 +127,7 @@ struct sna_lfsid {
 	u_int16_t	sm_index;	/* lulu_cb->index. */
 
 	/* lfsid -> odai/daf/oaf mapping. */
-        u_int8_t 	odai;		/* pri=0, sec=1. */
+	u_int8_t 	odai;		/* pri=0, sec=1. */
 	u_int8_t	sidh;
 	u_int8_t	sidl;
 };
@@ -152,7 +152,7 @@ struct sna_asm_cb {
 	u_int8_t		dlus_lu_reg;
 	u_int8_t		adptv_bind_pacing;
 	u_int8_t		gen_odai_usage_opt_set;
-	
+
 	/* list of 256 unique addresses */
 	u_int8_t		blk_count;
 	struct list_head 	blk_list;
@@ -207,26 +207,26 @@ typedef enum {
 } xid_direction_enum;
 
 struct sna_xid_info {
-        struct sk_buff  *last_tx_xid;
-        struct sk_buff  *last_rx_xid;
+	struct sk_buff  *last_tx_xid;
+	struct sk_buff  *last_rx_xid;
 
 //        xid_state               xid_status;
-        struct timer_list       xid_timer;
-        __u32                   xid_idle_limit;
-        __u32                   xid_retry_interval;
-        __u32                   xid_retry_limit;
+	struct timer_list       xid_timer;
+	__u32                   xid_idle_limit;
+	__u32                   xid_retry_interval;
+	__u32                   xid_retry_limit;
 	__u32			xid_retries;
 
-        __u8    xid_initiator;		/* 0x00 = Local / 0x01 = Remote */
+	__u8    xid_initiator;		/* 0x00 = Local / 0x01 = Remote */
 	__u8	xid_direction;		/* 0x00 = cmd / 0x01 = rsp */
-        __u32   xid_count;              /* number of xids exchanged */
+	__u32   xid_count;              /* number of xids exchanged */
 
-        __u16   i_tx_window;
-        __u16   i_rx_window;
-        __u16   i_mtu;                  /* max btu size */
+	__u16   i_tx_window;
+	__u16   i_rx_window;
+	__u16   i_mtu;                  /* max btu size */
 
-        __u8    tg_type;
-        __u8    tg_id;
+	__u8    tg_type;
+	__u8    tg_id;
 
 	/* detailed xid information */
 	__u8	init_self;
@@ -239,17 +239,17 @@ struct sna_xid_info {
 
 	/* Junk below but keeping around for a while */
 	__u32   adj_node_id;
-        char    real_adj_cp_name[8];
-        __u32   local_odai_value;
-        __u32   sscp_med_sessions;
-        __u32   adj_node_bind_reassembly;
-        __u32   local_cpcp_sessions_supp_status;
-        __u32   adj_node_cpcp_sessions_supp_status;
-        __u32   curr_cpcp_sessions_supp_status;
-        __u32   ss_cpcp_sessions_supp_override;
-        __u32   partner_node_type;
-        __u32   tg_sec_init_nonact_xchg;
-        __u32   restart_nonact_xid3_xchg;
+	char    real_adj_cp_name[8];
+	__u32   local_odai_value;
+	__u32   sscp_med_sessions;
+	__u32   adj_node_bind_reassembly;
+	__u32   local_cpcp_sessions_supp_status;
+	__u32   adj_node_cpcp_sessions_supp_status;
+	__u32   curr_cpcp_sessions_supp_status;
+	__u32   ss_cpcp_sessions_supp_override;
+	__u32   partner_node_type;
+	__u32   tg_sec_init_nonact_xchg;
+	__u32   restart_nonact_xid3_xchg;
 };
 
 typedef enum {
@@ -264,30 +264,30 @@ typedef enum {
 } bind_state;
 
 struct sna_session_initiation_info {
-        char    adj_cp_name[8];
-        __u32   real_node_tgs;
-        __u32   virtual_node_tgs;
-        char    virtual_node_cp_name[8];
+	char    adj_cp_name[8];
+	__u32   real_node_tgs;
+	__u32   virtual_node_tgs;
+	char    virtual_node_cp_name[8];
 };
 
 struct sna_xid_error_info {
-        __u32   sense;
-        __u32   *procedure_name;
-        __u32   byte_offset;
-        __u32   bit_offset;
-        __u32   send_xid;
+	__u32   sense;
+	__u32   *procedure_name;
+	__u32   byte_offset;
+	__u32   bit_offset;
+	__u32   send_xid;
 };
 
 struct sna_adj_node_cb {
-        struct sna_adj_node_cb *next;
-        struct sna_adj_node_cb *prev;
+	struct sna_adj_node_cb *next;
+	struct sna_adj_node_cb *prev;
 
-        char    real_adj_cp_name[8];
-        __u32   last_adj_cp_contacted;
-        __u32   parallel_tgs;
-        __u32   tg_numbers;
+	char    real_adj_cp_name[8];
+	__u32   last_adj_cp_contacted;
+	__u32   parallel_tgs;
+	__u32   tg_numbers;
 
-        struct sna_cs_process_data *cs_instance;
+	struct sna_cs_process_data *cs_instance;
 };
 
 /*
@@ -338,21 +338,21 @@ typedef enum {
 
 struct sna_als_cb {
 	/* negotiated link station role and tg number. */
-        u_int8_t                effective_role;
-        u_int8_t                effective_tg;
-        u_int8_t                tg_state;
-        u_int8_t                tg_input;
+	u_int8_t                effective_role;
+	u_int8_t                effective_tg;
+	u_int8_t                tg_state;
+	u_int8_t                tg_input;
 };
 
 /**
- * sna_ls_cb - link station control block. 
+ * sna_ls_cb - link station control block.
  * this structure is used for both local and adjacent link stations.
  */
 struct sna_ls_cb {
 	struct list_head 	list;
 
 	char            	use_name[SNA_RESOURCE_NAME_LEN];
-	
+
 	u_int32_t 		index;		/* used as internal link number. */
 	u_int32_t		flags;
 	u_int32_t		state;
@@ -361,7 +361,7 @@ struct sna_ls_cb {
 	u_int32_t		dlc_index;	/* dlc used by this link station. */
 	u_int32_t		port_index;	/* port used by this link station. */
 	u_int32_t		pc_index;
-	
+
 	/* run-time activation timer. */
 	u_int32_t		retries;
 	struct timer_list 	retry;
@@ -371,21 +371,21 @@ struct sna_ls_cb {
 
 	/* xid information. */
 	u_int32_t       	xid_state;
-        u_int32_t       	xid_direction;
+	u_int32_t       	xid_direction;
 	u_int32_t		xid_count;
 	u_int32_t		xid_input;
 	struct sk_buff  	*xid_last_tx;
 	u_int32_t		xid_last_tx_direction;
-        struct sk_buff  	*xid_last_rx;
+	struct sk_buff  	*xid_last_rx;
 	u_int32_t		xid_last_rx_direction;
 
 	/* connection establish related data. */
-	struct tq_struct  	connect;
+	struct work_struct  	connect;
 	wait_queue_head_t 	sleep;
 #ifdef	CONFIG_SNA_LLC
 	struct sock		*llc_sk;
 #endif
-	
+
 	/* negotiated link station role and tg number. */
 	u_int8_t		effective_role;
 	u_int8_t		effective_tg;
@@ -395,11 +395,11 @@ struct sna_ls_cb {
 	/* other values set from xid negotation. */
 	u_int8_t		odai;
 	u_int16_t               tx_max_btu;
-        u_int16_t               rx_max_btu;
+	u_int16_t               rx_max_btu;
 	u_int16_t		tx_window;
 	u_int16_t		rx_window;
 	u_int16_t		bind_pacing;
-	
+
 	/* destination link station. */
 	sna_netid 		plu_name;
 	sna_nodeid		plu_node_id;
@@ -411,27 +411,27 @@ struct sna_ls_cb {
 	 * else.
 	 */
 	struct sna_als_cb 	als;
-	
-	/* user defined capabilities of this link station, 
-	 * not all are currently used. 
+
+	/* user defined capabilities of this link station,
+	 * not all are currently used.
 	 */
 	int			role;
 	int			direction;
 	int			xid_init_method;
-        int 			byteswap;
-        int 			retry_on_fail;
-        int 			retry_times;
-        int 			autoact;
-        int 			autodeact;
-        int 			tg_number;
-        int 			cost_per_byte;
-        int 			cost_per_connect_time;
-        int 			effective_capacity;
-        int 			propagation_delay;
-        int 			security;
-        int 			user1;
-        int 			user2;
-        int 			user3;
+	int 			byteswap;
+	int 			retry_on_fail;
+	int 			retry_times;
+	int 			autoact;
+	int 			autodeact;
+	int 			tg_number;
+	int 			cost_per_byte;
+	int 			cost_per_connect_time;
+	int 			effective_capacity;
+	int 			propagation_delay;
+	int 			security;
+	int 			user1;
+	int 			user2;
+	int 			user3;
 
 	/* detail xid information we don't gather dynamicly on xid_init. */
 	u_int8_t		xid_format;
@@ -453,19 +453,19 @@ struct sna_ls_cb {
 	u_int8_t		xid_parallel_tg_sup;
 	u_int8_t		xid_ls_txrx_cap;
 	u_int8_t		xid_gen_odai_usage_opt_set;
-	
-	
+
+
 	/* we need to clean up everything below here soon. */
 	sna_netid 		netid;
 
-        __u32                   adj_node_type;
-        char                    adj_node_id[8];
-        __u32                   adj_node_session;
+	__u32                   adj_node_type;
+	char                    adj_node_id[8];
+	__u32                   adj_node_session;
 
-        __u32                   bind_pacing_cnt;
+	__u32                   bind_pacing_cnt;
 
-        struct sna_session_initiation_info *session_initiation_info;
-        struct sna_activate_route *activate_route_list;
+	struct sna_session_initiation_info *session_initiation_info;
+	struct sna_activate_route *activate_route_list;
 };
 
 /*
@@ -482,22 +482,22 @@ struct sna_port_cb {
 	struct list_head 	list;
 
 	char            	use_name[SNA_RESOURCE_NAME_LEN];
-	
+
 	u_int16_t       	type;
-        u_int32_t       	index;
+	u_int32_t       	index;
 	u_int32_t		cs_index;
 	u_int32_t		dlc_index;
-        u_int32_t       	flags;
+	u_int32_t       	flags;
 
 	struct list_head        ls_list;
 	u_int32_t               ls_qlen;
 	u_int32_t 		ls_system_index;
 
-        char 			saddr[12];
+	char 			saddr[12];
 
-        u_int32_t   		btu;
-        u_int32_t		mia;
-        u_int32_t		moa;
+	u_int32_t   		btu;
+	u_int32_t		mia;
+	u_int32_t		moa;
 
 #ifdef CONFIG_SNA_LLC
 	struct llc_sap 		*llc_dl;
@@ -513,20 +513,20 @@ struct sna_port_cb {
 
 	/* need to cleanup the fields below. */
 	sna_netid               netid;
-	
-        unsigned long   max_adjacent_ls;
-        unsigned long   real_adjacent_ls;
 
-        unsigned long   real_inbound_activation;
-        unsigned long   inbound_activation_cnt;
+	unsigned long   max_adjacent_ls;
+	unsigned long   real_adjacent_ls;
 
-        unsigned long   real_outbound_activation;
-        unsigned long   outbound_activation_cnt;
+	unsigned long   real_inbound_activation;
+	unsigned long   inbound_activation_cnt;
 
-        unsigned long   link_station_txrx;
-        unsigned long   max_nonack_xid;
+	unsigned long   real_outbound_activation;
+	unsigned long   outbound_activation_cnt;
 
-        unsigned long   xid_exchange_type;
+	unsigned long   link_station_txrx;
+	unsigned long   max_nonack_xid;
+
+	unsigned long   xid_exchange_type;
 };
 
 /*
@@ -535,11 +535,11 @@ struct sna_port_cb {
 
 #ifdef CONFIG_SNA_LLC
 struct sna_dlc_llc_addr {
-        sa_family_t     arphrd;         /* ARPHRD_ETHER */
-        u_int8_t        dsap;
-        u_int8_t        ssap;
-        u_int8_t        dmac[IFHWADDRLEN];
-        u_int8_t        smac[IFHWADDRLEN];
+	sa_family_t     arphrd;         /* ARPHRD_ETHER */
+	u_int8_t        dsap;
+	u_int8_t        ssap;
+	u_int8_t        dmac[IFHWADDRLEN];
+	u_int8_t        smac[IFHWADDRLEN];
 };
 #endif  /* CONFIG_SNA_LLC */
 
@@ -549,9 +549,9 @@ struct sna_dlc_llc_addr {
 struct sna_dlc_cb {
 	struct list_head list;
 
-        struct net_device 	*dev;
+	struct net_device 	*dev;
 	u_int16_t		type;	/* ARPHRD */
-        u_int32_t 		flags;
+	u_int32_t 		flags;
 	u_int32_t		index;
 };
 
@@ -560,8 +560,8 @@ struct sna_cs_cb {
 
 	u_int32_t		index;
 	u_int32_t		flags;
-	
-        sna_netid       	netid;
+
+	sna_netid       	netid;
 	sna_nodeid		nodeid;
 
 	unsigned char		node_type;
@@ -569,24 +569,24 @@ struct sna_cs_cb {
 
 
 /* Not used below */
-        struct sna_adj_node_cb  *adj_node_cb;
-        struct sna_fq_netid     *netid_cp;
-        unsigned long   bind_reassembly;
-        unsigned long   adaptive_bind_pacing;
+	struct sna_adj_node_cb  *adj_node_cb;
+	struct sna_fq_netid     *netid_cp;
+	unsigned long   bind_reassembly;
+	unsigned long   adaptive_bind_pacing;
 };
 
 /* DFC.
  */
 
 typedef enum {
-        SNA_SM_S_STATE_ACTIVE = 0,
-        SNA_SM_S_STATE_INIT_SENT,
-        SNA_SM_S_STATE_BIND_SENT
+	SNA_SM_S_STATE_ACTIVE = 0,
+	SNA_SM_S_STATE_INIT_SENT,
+	SNA_SM_S_STATE_BIND_SENT
 } sna_sm_session_state;
 
 typedef enum {
-        SNA_SM_S_TYPE_FSP = 0,
-        SNA_SM_S_TYPE_BIDDER
+	SNA_SM_S_TYPE_FSP = 0,
+	SNA_SM_S_TYPE_BIDDER
 } sna_sm_session_type;
 
 typedef enum {
@@ -655,53 +655,53 @@ struct sna_lulu_cb {
 	u_int32_t		hs_index;
 
 	u_int32_t		tp_index;		/* this is our correlator. */
-	
+
 	int                     type;                   /* fsp or bidder. */
-        struct sna_lfsid        lfsid;
-        sna_fqpcid              fqpcid;
-	
+	struct sna_lfsid        lfsid;
+	sna_fqpcid              fqpcid;
+
 	/* information for fsm_status() */
 	u_int32_t		input;
 	u_int32_t		state;
 
 	/* not used below.. cleanup soon. */
-        sna_netid netid;
+	sna_netid netid;
 	sna_netid plu_netid;
 	unsigned char mode_name[SNA_RESOURCE_NAME_LEN];
 
 
 /*	Not used anymore.
 
-        __u8    bracket_id;
+	__u8    bracket_id;
 
-        struct sna_ct   ct_rcv;
-        struct sna_ct   ct_send;
+	struct sna_ct   ct_rcv;
+	struct sna_ct   ct_send;
 
-        sna_snf sqn_send_cnt;
-        sna_snf phs_bb_register;
-        sna_snf shs_bb_register;
-        sna_snf current_bracket_sqn;
+	sna_snf sqn_send_cnt;
+	sna_snf phs_bb_register;
+	sna_snf shs_bb_register;
+	sna_snf current_bracket_sqn;
 
-        __u8    rqd_required_on_ceb;
-        __u8    deallocate_abend;
+	__u8    rqd_required_on_ceb;
+	__u8    deallocate_abend;
 
-        __u16   normal_flow_rq_cnt;
+	__u16   normal_flow_rq_cnt;
 
-        __u8    sig_received;
-        sna_snf sig_snf;
+	__u8    sig_received;
+	sna_snf sig_snf;
 
-        __u8    betc;
-        __u8    send_error_rsp_state;
-        __u8    bb_rsp_state;
-        __u32   bb_rsp_sense;
+	__u8    betc;
+	__u8    send_error_rsp_state;
+	__u8    bb_rsp_state;
+	__u32   bb_rsp_sense;
 
-        __u8    rtr_rsp_state;
-        __u32   rtr_rsp_sense;
+	__u8    rtr_rsp_state;
+	__u32   rtr_rsp_sense;
 
-        __u8    sig_rq_outstanding;
-        __u8    alternate_code;
-        __u8    session_just_started;
-        struct sna_mu   *saved_mu_ptr;
+	__u8    sig_rq_outstanding;
+	__u8    alternate_code;
+	__u8    session_just_started;
+	struct sna_mu   *saved_mu_ptr;
 */
 };
 
@@ -769,10 +769,10 @@ struct sna_lulu_cb {
 struct sna_ds_pinfo {
 	struct list_head list;
 
-        sna_netid netid;
+	sna_netid netid;
 
-        unsigned long   bind_reassembly;
-        unsigned long   adaptive_bind_pacing;
+	unsigned long   bind_reassembly;
+	unsigned long   adaptive_bind_pacing;
 };
 
 /* HS.
@@ -877,8 +877,8 @@ typedef enum {
 } sna_dfc_fsm_bsm_ind;
 
 typedef enum {
-        SNA_HS_TYPE_FSP = 0,
-        SNA_HS_TYPE_BIDDER
+	SNA_HS_TYPE_FSP = 0,
+	SNA_HS_TYPE_BIDDER
 } sna_hs_type;
 
 typedef enum {
@@ -934,9 +934,9 @@ struct sna_c_table {
 };
 
 struct sna_pacing {
-        u_int8_t	type;
-        u_int8_t	rpc;
-        u_int8_t 	nws;
+	u_int8_t	type;
+	u_int8_t	rpc;
+	u_int8_t 	nws;
 };
 
 struct sna_bracket {
@@ -964,8 +964,8 @@ struct sna_hs_cb {
 	u_int8_t		rlwi;
 	u_int8_t        	first_ws;
 	u_int8_t        	unsolicited_ipm_outstanding;
-        u_int8_t        	adjust_ipm_ack_outstanding;
-        u_int8_t        	unsolicited_nws;
+	u_int8_t        	adjust_ipm_ack_outstanding;
+	u_int8_t        	unsolicited_nws;
 	u_int8_t		reserve_flag;
 	u_int8_t		segmenting;
 	u_int8_t		crypto;
@@ -1042,63 +1042,63 @@ typedef enum {
  */
 
 struct sna_hs_ps_connected {
-        __u8    ps_id;
-        __u8    bracket_id;
+	__u8    ps_id;
+	__u8    bracket_id;
 };
 
 struct sna_abend_notification {
-        unsigned char *abending_process;
-        __u8 process_id;
-        __u8 reason;
+	unsigned char *abending_process;
+	__u8 process_id;
+	__u8 reason;
 };
 
 struct sna_abort_hs {
-        __u8 hs_id;
-        __u8 sense_code;
+	__u8 hs_id;
+	__u8 sense_code;
 };
 
 struct sna_activate_session_rsp {
-        __u8 correlator;
-        __u8 type;
-        __u8 session_information;
-        __u8 error_type;
+	__u8 correlator;
+	__u8 type;
+	__u8 session_information;
+	__u8 error_type;
 };
 
 struct sna_allocate_rcb {
-        __u8 tcb_id;
-        __u8 specific_conv_group;
-        __u8 conversation_group_id;
-        __u8 *lu_name;
-        __u8 *mode_name;
-        __u8 immediate_session;
-        __u8 sync_level;
-        __u8 security_select;
+	__u8 tcb_id;
+	__u8 specific_conv_group;
+	__u8 conversation_group_id;
+	__u8 *lu_name;
+	__u8 *mode_name;
+	__u8 immediate_session;
+	__u8 sync_level;
+	__u8 security_select;
 };
 
 struct sna_bid {
-        __u8 hs_id;
+	__u8 hs_id;
 };
 
 struct sna_bid_rsp {
-        __u8 hs_id;
-        __u8 rti;
-        __u32 sense;
+	__u8 hs_id;
+	__u8 rti;
+	__u32 sense;
 };
 
 struct sna_bid_without_attach {
-        /* Blame IBM */
+	/* Blame IBM */
 };
 
 struct sna_bis_reply {
-        __u8 hs_id;
+	__u8 hs_id;
 };
 
 struct sna_bis_rq {
-        __u8 hs_id;
+	__u8 hs_id;
 };
 
 struct sna_bracket_freed {
-        __u8 bracket_id;
+	__u8 bracket_id;
 };
 
 struct sna_cos {
@@ -1199,7 +1199,7 @@ struct sna_tg_vector {
 	struct sna_tg_vector	*prev;
 
 	struct sna_tg_desc      desc;		/* Cv 0x46 */
-        struct sna_tg_chars     chars;		/* Cv 0x47 */
+	struct sna_tg_chars     chars;		/* Cv 0x47 */
 	struct sna_tg_trd	trd;
 };
 
@@ -1255,7 +1255,7 @@ struct sna_tg_update {
 	u_int8_t		tg_number;
 	u_int8_t		l_node_type;
 	u_int8_t		r_node_type;
-        u_int8_t		routing;
+	u_int8_t		routing;
 
 	u_int32_t		ls_index;
 	u_int32_t		port_index;
@@ -1266,16 +1266,16 @@ struct sna_tg_cb {
 	struct list_head 	list;
 
 	struct timeval          updated;
-        u_int32_t               frsn;
+	u_int32_t               frsn;
 	u_int8_t                l_node_type;	/* local */
 	u_int8_t		r_node_type;	/* remote */
-        u_int8_t                routing;
+	u_int8_t                routing;
 
 	sna_netid		plu_name;
 	u_int8_t                tg_number;
 	u_int32_t               ls_index;
-        u_int32_t               port_index;
-        u_int32_t               dlc_index;
+	u_int32_t               port_index;
+	u_int32_t               dlc_index;
 
 	/* we don't use these anymore. */
 	struct list_head	cos_list;
@@ -1355,7 +1355,7 @@ struct sna_rq_tg_vectors {
 };
 
 struct sna_confirmed {
-        __u8 bracket_id;
+	__u8 bracket_id;
 };
 
 struct sna_cosm_tg_cb {
@@ -1423,31 +1423,31 @@ struct sna_cosm_cb {
 };
 
 struct sna_conversation_failure {
-        __u8 rcb_id;
-        __u8 reason;
+	__u8 rcb_id;
+	__u8 reason;
 };
 
 struct sna_deallocate_rcb {
-        __u8 tcb_id;
-        __u8 rcb_id;
+	__u8 tcb_id;
+	__u8 rcb_id;
 };
 
 struct sna_init_hs {
-        __u8    hs_id;
-        __u8    lu_id;
-        __u8    pc_id;
-        __u8    type;
-        __u8    dynamic_buf_pool_id;
-        __u8    limit_buf_pool_id;
-        __u8    perm_buf_pool_id;
-        struct sna_lfsid lfsid;
-        __u8    tx_priority;
+	__u8    hs_id;
+	__u8    lu_id;
+	__u8    pc_id;
+	__u8    type;
+	__u8    dynamic_buf_pool_id;
+	__u8    limit_buf_pool_id;
+	__u8    perm_buf_pool_id;
+	struct sna_lfsid lfsid;
+	__u8    tx_priority;
 };
 
 struct sna_init_hs_rsp {
-        __u8 type;
-        __u8 sense;
-        __u8 hs_id;
+	__u8 type;
+	__u8 sense;
+	__u8 hs_id;
 };
 
 struct sna_init_signal {
@@ -1459,112 +1459,112 @@ struct sna_init_signal {
 };
 
 struct sna_lfsid_in_use_rsp {
-        __u8 path_control_id;
-        struct sna_lfsid *lfsid;
-        __u8 answer;
+	__u8 path_control_id;
+	struct sna_lfsid *lfsid;
+	__u8 answer;
 };
 
 struct sna_lfsid_in_use {
-        __u8 path_control_id;
-        struct sna_lfsid *lfsid;
-        __u8 answer;
+	__u8 path_control_id;
+	struct sna_lfsid *lfsid;
+	__u8 answer;
 };
 
 struct sna_pc_hs_disconnect {
-        __u8 path_control_id;
-        struct sna_lfsid *lfsid;
+	__u8 path_control_id;
+	struct sna_lfsid *lfsid;
 };
 
 struct sna_receive_error {
-        __u8 bracket_id;
+	__u8 bracket_id;
 };
 
 struct sna_request_to_send {
-        __u8 bracket_id;
+	__u8 bracket_id;
 };
 
 struct sna_rm_act_session_rq {
-        unsigned long tcb_id;
+	unsigned long tcb_id;
 	sna_netid plu_netid;
-        unsigned char mode_name[SNA_RESOURCE_NAME_LEN];
+	unsigned char mode_name[SNA_RESOURCE_NAME_LEN];
 };
 
 #define SNA_ACT_SESS_RETRY	0
 
 struct sna_rm_deactivate_conv_group {
-        __u8 tcb_id;
-        __u8 gid;
-        __u8 sense;
+	__u8 tcb_id;
+	__u8 gid;
+	__u8 sense;
 };
 
 struct sna_rm_deactivate_session {
-        __u8 tcb_id;
-        __u8 session_id;
-        __u8 type;
-        __u8 sense;
+	__u8 tcb_id;
+	__u8 session_id;
+	__u8 type;
+	__u8 sense;
 };
 
 struct sna_rm_hs_connected {
-        /* Blame IBM */
+	/* Blame IBM */
 };
 
 struct sna_rsp_to_request_to_send {
-        __u8 bracket_id;
+	__u8 bracket_id;
 };
 
 struct sna_rtr_rq {
-        __u8 hs_id;
+	__u8 hs_id;
 };
 
 struct sna_rtr_rsp {
-        __u8 hs_id;
-        __u8 rti;
-        __u8 sense;
+	__u8 hs_id;
+	__u8 rti;
+	__u8 sense;
 };
 
 struct sna_send_error {
-        /* Blame IBM */
+	/* Blame IBM */
 };
 
 struct sna_send_rtr {
-        /* Blame IBM */
+	/* Blame IBM */
 };
 
 struct sna_deactivate_session {
-        __u8 status;
-        __u8 correlator;
-        __u8 hs_id;
-        __u8 type;
-        __u8 sense;
+	__u8 status;
+	__u8 correlator;
+	__u8 hs_id;
+	__u8 type;
+	__u8 sense;
 };
 
 struct sna_sessend_signal {
-        __u8 sense;
-        __u8 fqpcid;
-        __u8 path_control_id;
+	__u8 sense;
+	__u8 fqpcid;
+	__u8 path_control_id;
 };
 
 struct sna_sessst_signal {
-        __u8 path_control_id;
+	__u8 path_control_id;
 };
 
 struct sna_start_tp_reply {
-        __u8 rcode;
-        __u8 tcb_id;
+	__u8 rcode;
+	__u8 tcb_id;
 };
 
 struct sna_terminate_ps {
-        __u8 tcb_id;
+	__u8 tcb_id;
 };
 
 struct sna_unbind_protocol_error {
-        __u8 tcb_id;
-        __u8 hs_id;
-        __u8 sense;
+	__u8 tcb_id;
+	__u8 hs_id;
+	__u8 sense;
 };
 
 struct sna_yield_session {
-        /* Blame IBM */
+	/* Blame IBM */
 };
 
 /* IPM.
@@ -1573,11 +1573,11 @@ struct sna_yield_session {
 #define SNA_RH_IPM_TYPE         0x830100
 
 struct sna_ipm {
-        __u8    type:2,
-                rscwrc:1,
-                rsv1:5;
-        __u16   format:1,
-                nws:15;
+	__u8    type:2,
+		rscwrc:1,
+		rsv1:5;
+	__u16   format:1,
+		nws:15;
 };
 
 /* IPM type indicators */
@@ -1630,7 +1630,7 @@ struct sna_pc_cb {
 	u_int8_t                intranode;
 	u_int8_t		whole_bind;
 	u_int8_t		whole_bind_piu_req;
-	u_int8_t		gen_odai_usage_opt_set;	
+	u_int8_t		gen_odai_usage_opt_set;
 	u_int8_t		limited_resource;
 	u_int16_t		tx_max_btu;
 	u_int16_t		rx_max_btu;
@@ -1639,20 +1639,20 @@ struct sna_pc_cb {
 };
 
 struct sna_pc_hs_table {
-        struct sna_pc_hs_table *next;
-        struct sna_pc_hs_table *prev;
+	struct sna_pc_hs_table *next;
+	struct sna_pc_hs_table *prev;
 
-        __u8    odai;   /* OAF/DAF Assignor indicator. */
-        __u8    oaf;    /* Origin Address field. */
-        __u8    daf;    /* Destination Address field. */
-        __u8    sidh;   /* Session identifier high (OAF). */
-        __u8    sidl;   /* Session identifier low (DAF). */
+	__u8    odai;   /* OAF/DAF Assignor indicator. */
+	__u8    oaf;    /* Origin Address field. */
+	__u8    daf;    /* Destination Address field. */
+	__u8    sidh;   /* Session identifier high (OAF). */
+	__u8    sidl;   /* Session identifier low (DAF). */
 
-        /* These below may be garbage, we'll see what works best. */
-        __u8    hs_id;
-        __u8    sc_id;
-        __u8    pc_id;
-        __u8    lfsid;
+	/* These below may be garbage, we'll see what works best. */
+	__u8    hs_id;
+	__u8    sc_id;
+	__u8    pc_id;
+	__u8    lfsid;
 };
 
 /* PS.
@@ -1666,75 +1666,75 @@ typedef enum {
 } sna_ps_errors;
 
 typedef enum {
-        ALLOCATE = 1,
-        CONFIRM,
-        CONFIRMED,
-        DEALLOCATE,
-        FLUSH,
-        GET_ATTRIBUTES,
-        POST_ON_RECEIPT,
-        PREPARE_TO_RECEIVE,
-        RECEIVE_AND_WAIT,
-        RECEIVE_IMMEDIATE,
-        REQUEST_TO_SEND,
-        SEND_DATA,
-        SEND_ERROR,
-        TEST,
-        MC_ALLOCATE,
-        MC_CONFIRM,
-        MC_CONFIRMED,
-        MC_DEALLOCATE,
-        MC_FLUSH,
-        MC_GET_ATTRIBUTES,
-        MC_POST_ON_RECEIPT,
-        MC_PREPARE_TO_RECEIVE,
-        MC_RECEIVE_AND_WAIT,
-        MC_REQUEST_TO_SEND,
-        MC_SEND_DATA,
-        MC_SEND_ERROR,
-        MC_TEST,
-        INITIALIZE_SESSION_LIMIT,
-        CHANGE_SESSION_LIMIT,
-        RESET_SESSION_LIMIT,
-        SET_LUCB,
-        SET_PARTNER_LU,
-        SET_MODE,
-        SET_MODE_OPTIONS,
-        SET_TRANSACTION_PROGRAM,
-        SET_PRIVILAEGED_FUNCTION,
-        SET_RESOURCE_SUPPORTED,
-        SET_SYNC_LEVEL_SUPPORTED,
-        SET_MC_FUNCTION_SUPPORTED_TP,
-        GET_LUCB,
-        GET_PARTNER_LU,
-        GET_MODE,
-        GET_LU_OPTION,
-        GET_MODE_OPTION,
-        GET_TRANSACTION_PROGRAM,
-        GET_PRIVILEGED_FUNCTION,
-        GET_RESOURCE_SUPPORTED,
-        GET_SYNC_LEVEL_SUPPORTED,
-        GET_MC_FUNCTION_SUPPORTED_LU,
-        GET_MC_FUNCTION_SUPPORTED_TP,
-        LIST_PARTNER_LU,
-        LIST_MODE,
-        LIST_LU_OPTION,
-        LIST_MODE_OPTION,
-        LIST_TRANSACTION_PROGRAM,
-        LIST_PRIVILEGED_FUNCTION,
-        LIST_RESOURCE_SUPPORTED,
-        LIST_SYNC_LEVEL_SUPPORTED,
-        LIST_MC_FUNCTION_SUPPORTED_LU,
-        LIST_MC_FUNCTION_SUPPORTED_TP,
-        PROCESS_SESSION_LIMIT,
-        ACTIVATE_SESSION,
-        DEACTIVATE_CONVERSATION_GROUP,
-        DEACTIVATE_SESSION,
-        SYNCPT,
-        BACKOUT,
-        GET_TP_PROPERTIES,
-        GET_TYPE,
-        WAIT
+	ALLOCATE = 1,
+	CONFIRM,
+	CONFIRMED,
+	DEALLOCATE,
+	FLUSH,
+	GET_ATTRIBUTES,
+	POST_ON_RECEIPT,
+	PREPARE_TO_RECEIVE,
+	RECEIVE_AND_WAIT,
+	RECEIVE_IMMEDIATE,
+	REQUEST_TO_SEND,
+	SEND_DATA,
+	SEND_ERROR,
+	TEST,
+	MC_ALLOCATE,
+	MC_CONFIRM,
+	MC_CONFIRMED,
+	MC_DEALLOCATE,
+	MC_FLUSH,
+	MC_GET_ATTRIBUTES,
+	MC_POST_ON_RECEIPT,
+	MC_PREPARE_TO_RECEIVE,
+	MC_RECEIVE_AND_WAIT,
+	MC_REQUEST_TO_SEND,
+	MC_SEND_DATA,
+	MC_SEND_ERROR,
+	MC_TEST,
+	INITIALIZE_SESSION_LIMIT,
+	CHANGE_SESSION_LIMIT,
+	RESET_SESSION_LIMIT,
+	SET_LUCB,
+	SET_PARTNER_LU,
+	SET_MODE,
+	SET_MODE_OPTIONS,
+	SET_TRANSACTION_PROGRAM,
+	SET_PRIVILAEGED_FUNCTION,
+	SET_RESOURCE_SUPPORTED,
+	SET_SYNC_LEVEL_SUPPORTED,
+	SET_MC_FUNCTION_SUPPORTED_TP,
+	GET_LUCB,
+	GET_PARTNER_LU,
+	GET_MODE,
+	GET_LU_OPTION,
+	GET_MODE_OPTION,
+	GET_TRANSACTION_PROGRAM,
+	GET_PRIVILEGED_FUNCTION,
+	GET_RESOURCE_SUPPORTED,
+	GET_SYNC_LEVEL_SUPPORTED,
+	GET_MC_FUNCTION_SUPPORTED_LU,
+	GET_MC_FUNCTION_SUPPORTED_TP,
+	LIST_PARTNER_LU,
+	LIST_MODE,
+	LIST_LU_OPTION,
+	LIST_MODE_OPTION,
+	LIST_TRANSACTION_PROGRAM,
+	LIST_PRIVILEGED_FUNCTION,
+	LIST_RESOURCE_SUPPORTED,
+	LIST_SYNC_LEVEL_SUPPORTED,
+	LIST_MC_FUNCTION_SUPPORTED_LU,
+	LIST_MC_FUNCTION_SUPPORTED_TP,
+	PROCESS_SESSION_LIMIT,
+	ACTIVATE_SESSION,
+	DEACTIVATE_CONVERSATION_GROUP,
+	DEACTIVATE_SESSION,
+	SYNCPT,
+	BACKOUT,
+	GET_TP_PROPERTIES,
+	GET_TYPE,
+	WAIT
 } ps_verbs;
 
 /* RM.
@@ -1746,38 +1746,38 @@ typedef enum {
 struct sna_local_lu_cb {
 	struct list_head 	list;
 	char                    use_name[SNA_RESOURCE_NAME_LEN];
-	
+
 	u_int32_t		index;
-	
-        sna_netid 		netid;
 
-	
-        __u8    		lu_name[SNA_RESOURCE_NAME_LEN];
-        __u8    		sync_point;
-        __u32   		lu_sess_limit;
+	sna_netid 		netid;
 
-        __u16   flags;
+
+	__u8    		lu_name[SNA_RESOURCE_NAME_LEN];
+	__u8    		sync_point;
+	__u32   		lu_sess_limit;
+
+	__u16   flags;
 };
 
 struct sna_remote_lu_cb {
 	struct list_head 	list;
 	char                    use_name[SNA_RESOURCE_NAME_LEN];
-	
+
 	u_int32_t		index;
 
 	u_int16_t		sessions;
-	
+
 	sna_netid		netid_plu;
 
 	int			parallel;		/* support parallel sessions. */
 
 	/* below needs to be cleaned up. */
-        sna_netid 		netid;
-        sna_netid 		netid_fqcp;
+	sna_netid 		netid;
+	sna_netid 		netid_fqcp;
 
-        __u8    		cnv_security;
+	__u8    		cnv_security;
 
-        __u16   		flags;
+	__u16   		flags;
 };
 
 #define SNA_MODE_MAX_SESSIONS		1200
@@ -1785,35 +1785,35 @@ struct sna_remote_lu_cb {
 #define SNA_MODE_MIN_CONLOSERS		10
 
 struct sna_lu_count {
-        u_int16_t       sessions;
-        u_int16_t       conwinners;
-        u_int16_t       conlosers;
+	u_int16_t       sessions;
+	u_int16_t       conwinners;
+	u_int16_t       conlosers;
 };
 
 struct sna_mode_cb {
 	struct list_head 	list;
 
 	u_int32_t		index;
-	
-        sna_netid 		netid;
-        sna_netid 		netid_plu;
+
+	sna_netid 		netid;
+	sna_netid 		netid_plu;
 
 	u_int8_t		mode_name[SNA_RESOURCE_NAME_LEN];
 
 	struct sna_lu_count    	active;
-        struct sna_lu_count    	pending;
+	struct sna_lu_count    	pending;
 	struct sna_lu_count	user_max;
-	
+
 	/* user specified general parameters. */
 	u_int16_t		tx_max_ru;
 	u_int16_t		rx_max_ru;
 	u_int8_t		tx_pacing;
 	u_int8_t		rx_pacing;
-	
-	/* need to cleaup the below. */	
+
+	/* need to cleaup the below. */
 	__u8	cos_name[SNA_RESOURCE_NAME_LEN];
-        __u32   crypto;         /* 0 = off / 1 = on */
-        __u16   flags;
+	__u32   crypto;         /* 0 = off / 1 = on */
+	__u16   flags;
 	__u16	auto_activation;
 };
 
@@ -1836,22 +1836,22 @@ struct sna_tp_cb {
 	pid_t			pid;
 
 	u_int32_t		state;
-	
+
 	struct sk_buff_head     receive_queue;
-        struct sk_buff_head     write_queue;
-        wait_queue_head_t       sleep;
+	struct sk_buff_head     write_queue;
+	wait_queue_head_t       sleep;
 
 	struct timeval		luw;
 	u_int16_t		luw_seq;
 
 	u_int8_t		rq_to_send_rcvd;
-	
+
 	int			immediate;
-	
+
 	/* cmrcv. */
 	u_int8_t		rx_mc_ll_pull_left;
 	u_int32_t		rx_req_len;	/* max_len. */
-	u_int32_t		rx_rcv_len;	/* total copied so far. */ 
+	u_int32_t		rx_rcv_len;	/* total copied so far. */
 	u_int32_t		*rx_buffer;	/* user buffer. */
 
 
@@ -1860,17 +1860,17 @@ struct sna_tp_cb {
 
 	/* information below is set by the user of the tp_cb struct. */
 	u_int8_t		ae_qualifier[1024];
-        u_int16_t		ae_qualifier_length;
-        u_int8_t		ae_qualifier_format;
+	u_int16_t		ae_qualifier_length;
+	u_int8_t		ae_qualifier_format;
 
 	u_int8_t		allocate_confirm;
 
 	u_int8_t		ap_title[1024];
-        u_int16_t		ap_title_length;
-        u_int8_t		ap_title_format;
+	u_int16_t		ap_title_length;
+	u_int8_t		ap_title_format;
 
 	u_int8_t		application_context_name[256];
-        u_int8_t		application_context_length;
+	u_int8_t		application_context_length;
 
 	u_int8_t		begin_transaction;
 
@@ -1921,7 +1921,7 @@ struct sna_tp_cb {
 	u_int8_t		processing_mode;
 
 	u_int8_t		receive_type;
-	
+
 	u_int8_t		return_control;
 
 	u_int8_t		security_password[11];
@@ -1936,8 +1936,8 @@ struct sna_tp_cb {
 
 	u_int8_t		sync_level;
 
-        u_int8_t		tp_name[65];
-        u_int8_t		tp_name_length;
+	u_int8_t		tp_name[65];
+	u_int8_t		tp_name_length;
 
 	u_int8_t		transaction_control;
 
@@ -1955,139 +1955,139 @@ struct sna_tp_cb {
 
 #ifdef NOT
 struct sna_session_info {
-        __u8    hs_id;
-        __u8    hs_type;
-        __u8    bracket_type;
-        __u8    send_ru_size;
-        __u8    limit_buf_pool_id;
-        __u8    perm_buf_pool_id;
-        __u8    session_id;
-        __u8    *random;
-        __u8    limit_resource;
+	__u8    hs_id;
+	__u8    hs_type;
+	__u8    bracket_type;
+	__u8    send_ru_size;
+	__u8    limit_buf_pool_id;
+	__u8    perm_buf_pool_id;
+	__u8    session_id;
+	__u8    *random;
+	__u8    limit_resource;
 };
 
 struct sna_security {
-        __u8    *profile;
-        __u8    *passwd;
-        __u8    *user_id;
+	__u8    *profile;
+	__u8    *passwd;
+	__u8    *user_id;
 };
 
 struct sna_abend_notify {
-        __u8    process;
-        __u8    process_id;
-        __u8    reason;
+	__u8    process;
+	__u8    process_id;
+	__u8    reason;
 };
 
 struct sna_free_lfsid {
-        __u8    pc_id;
-        __u8    lfsid;
+	__u8    pc_id;
+	__u8    lfsid;
 };
 
 struct sna_free_session {
-        __u8    hs_id;
+	__u8    hs_id;
 };
 
 struct sna_get_session {
-        __u8    tcb_id;
-        __u8    rcb_id;
-        __u8    type;
-        __u8    conv_gid;
+	__u8    tcb_id;
+	__u8    rcb_id;
+	__u8    type;
+	__u8    conv_gid;
 };
 
 struct sna_session_activated {
-        struct sna_session_info session_info;
-        __u8    *lu_name;
-        __u8    *mode_name;
+	struct sna_session_info session_info;
+	__u8    *lu_name;
+	__u8    *mode_name;
 };
 
 struct sna_session_allocated {
-        __u16   send_ru_size;
-        __u8    limit_buf_pool_id;
-        __u8    perm_buf_pool_id;
-        __u8    in_conver;
-        __u8    rcode;
+	__u16   send_ru_size;
+	__u8    limit_buf_pool_id;
+	__u8    perm_buf_pool_id;
+	__u8    in_conver;
+	__u8    rcode;
 };
 
 struct sna_session_deactivated {
-        __u8    hs_id;
-        __u8    reason;
-        __u32   sense;
+	__u8    hs_id;
+	__u8    reason;
+	__u32   sense;
 };
 
 struct sna_session_route_inop {
-        __u8    pc_id;
+	__u8    pc_id;
 };
 
 struct sna_act_sess_rsp {
-        __u8    correlator;
-        __u8    type;
-        __u8    err_type;
-        struct  sna_session_info sess_info;
+	__u8    correlator;
+	__u8    type;
+	__u8    err_type;
+	struct  sna_session_info sess_info;
 };
 
 struct sna_change_sessions {
-        __u8    tcb_id;
-        __u8    rsp;
-        __u8    *lu_name;
-        __u8    *mode_name;
-        __u8    delta;
+	__u8    tcb_id;
+	__u8    rsp;
+	__u8    *lu_name;
+	__u8    *mode_name;
+	__u8    delta;
 };
 
 struct sna_luw {
-        __u8    *fq_lu_name;
-        __u8    instance;
-        __u8    sequence;
+	__u8    *fq_lu_name;
+	__u8    instance;
+	__u8    sequence;
 };
 
 /* Transaction control block. */
 struct sna_tcb {
-        struct sna_tcb *next;
-        struct sna_tcb *prev;
+	struct sna_tcb *next;
+	struct sna_tcb *prev;
 
-        __u8    tcb_id;
-        __u8    tp_name;
-        __u8    own_lu_id;
+	__u8    tcb_id;
+	__u8    tp_name;
+	__u8    own_lu_id;
 
-        struct sna_luw luw_id;
-        struct sna_resource resource_list;
+	struct sna_luw luw_id;
+	struct sna_resource resource_list;
 
-        __u8    ctrl_cmpnt;
+	__u8    ctrl_cmpnt;
 
-        struct sna_security security;
+	struct sna_security security;
 };
 
 struct sna_scb {
-        __u8    hs_id;
-        __u8    session_id;
+	__u8    hs_id;
+	__u8    session_id;
 
-        struct sna_conver conversation;
+	struct sna_conver conversation;
 
-        __u8    *lu_name;
-        __u8    *mode_name;
+	__u8    *lu_name;
+	__u8    *mode_name;
 
-        __u8    rcb_id;
-        __u8    first_speaker;
-        __u8    send_ru_size;
-        __u8    limit_buf_pool_id;
-        __u8    perm_buf_pool_id;
-        __u8    bracket_id;
+	__u8    rcb_id;
+	__u8    first_speaker;
+	__u8    send_ru_size;
+	__u8    limit_buf_pool_id;
+	__u8    perm_buf_pool_id;
+	__u8    bracket_id;
 
-        __u8    rtr_owed;
-        __u8    *fq_name;
-        __u8    *random;
+	__u8    rtr_owed;
+	__u8    *fq_name;
+	__u8    *random;
 
-        __u8    limit_resource;
+	__u8    limit_resource;
 
-        struct timer *timer_unique_id;
+	struct timer *timer_unique_id;
 };
 
 struct sna_received_info {
-        __u8    type;
+	__u8    type;
 };
 
 struct sna_conver {
-        __u8    correlator;
-        __u8    gid;
+	__u8    correlator;
+	__u8    gid;
 };
 #endif
 
@@ -2109,27 +2109,27 @@ typedef enum {
 	SNA_RM_FSM_SCB_INPUT_S_YIELD_SESSION,
 	SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_PRI,
 	SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SEC,
-	SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SECURE	
+	SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SECURE
 } sna_rm_fsm_scb_input;
 
 typedef enum {
-        SNA_RM_SCB_TYPE_FSP = 0,
-        SNA_RM_SCB_TYPE_BIDDER
+	SNA_RM_SCB_TYPE_FSP = 0,
+	SNA_RM_SCB_TYPE_BIDDER
 } sna_rm_scb_type;
 
 struct sna_scb {
 	struct list_head        list;
 
-        u_int32_t               index;
+	u_int32_t               index;
 	u_int32_t		hs_index;
 	u_int32_t		rcb_index;
 	u_int32_t		session_index;
 	u_int32_t		bracket_index;
-        int                     type;   /* fsp or bidder. */
+	int                     type;   /* fsp or bidder. */
 
-        /* information for fsm_rcb_status() */
-        u_int32_t               input;
-        u_int32_t               state;
+	/* information for fsm_rcb_status() */
+	u_int32_t               input;
+	u_int32_t               state;
 };
 
 typedef enum {
@@ -2149,7 +2149,7 @@ typedef enum {
 
 typedef enum {
 	SNA_RM_RCB_TYPE_FSP = 0,
-        SNA_RM_RCB_TYPE_BIDDER,
+	SNA_RM_RCB_TYPE_BIDDER,
 	SNA_RM_RCB_TYPE_NONE
 } sna_rm_rcb_type;
 
@@ -2241,8 +2241,8 @@ typedef enum {
 } sna_rcb_ll_states;
 
 struct sna_post_info {
-        u_int8_t	fill;		/* LL or BUFFER. */
-        u_int16_t	max_len;
+	u_int8_t	fill;		/* LL or BUFFER. */
+	u_int16_t	max_len;
 };
 
 /* Resource control block. */
@@ -2258,18 +2258,18 @@ struct sna_rcb {
 	u_int32_t               bracket_index;
 	u_int32_t		session_index;
 	u_int32_t		conversation_index;
-	
+
 	int			type;	/* fsp or bidder. */
-	
+
 	/* information for fsm_rcb_status() */
-        u_int32_t               fsm_rcb_status_input;
-        u_int32_t               fsm_rcb_status_state;
+	u_int32_t               fsm_rcb_status_input;
+	u_int32_t               fsm_rcb_status_state;
 
 	/* fields used by ps. */
-        u_int32_t               fsm_conv_state;
-        u_int32_t               fsm_err_or_fail_state;
-        u_int32_t               fsm_post_state;
-	
+	u_int32_t               fsm_conv_state;
+	u_int32_t               fsm_err_or_fail_state;
+	u_int32_t               fsm_post_state;
+
 	/* all records from hs to ps use this. */
 	struct sk_buff_head	rm_to_ps_queue;		/* incomming data. */
 	struct sk_buff_head	hs_to_ps_queue;		/* incomming data. */
@@ -2279,7 +2279,7 @@ struct sna_rcb {
 	wait_queue_head_t       sleep;
 
 	u_int16_t		ps_to_tp_buffer_size;
-	
+
 	/* logical record processing. */
 	u_int8_t		ll_tx_state;	/* logical record status. */
 	u_int16_t		ll_tx_rec_size;	/* total size for current record. */
@@ -2288,99 +2288,99 @@ struct sna_rcb {
 	u_int8_t		ll_rx_rec_size;
 	u_int8_t		ll_rx_rec_bytes;
 	u_int8_t		end_of_chain_type;
-	
-	/* biu hold buffer and limits. */	
+
+	/* biu hold buffer and limits. */
 	u_int16_t               tx_max_btu;
-        u_int16_t               rx_max_btu;
+	u_int16_t               rx_max_btu;
 	struct sk_buff		*send_mu;
-	
+
 	/* fields used in conversation with tps. */
 	u_int8_t		rq_to_send_rcvd;
 	u_int8_t		sync_level;
 	struct sna_post_info	rx_post;
-	
-	/* everything below here needs to be verified. */	
-        __u8    lu_name_length;
-        __u8    lu_name[SNA_FQCP_NAME_LEN];
 
-        __u8    mode_name_length;
-        __u8    mode_name[SNA_RESOURCE_NAME_LEN];
+	/* everything below here needs to be verified. */
+	__u8    lu_name_length;
+	__u8    lu_name[SNA_FQCP_NAME_LEN];
 
-        __u8    tp_name_length;
-        __u8    tp_name[64];
+	__u8    mode_name_length;
+	__u8    mode_name[SNA_RESOURCE_NAME_LEN];
+
+	__u8    tp_name_length;
+	__u8    tp_name[64];
 
 /* Everything below here is questionable */
 
-        __u8    security_select;
+	__u8    security_select;
 
 //      struct sna_session_parm *sessions_parm_ptr;
 
 //      struct sna_post_cond post_conditions;
 
-        __u8    locks;
-        __u16   send_ru_size;
+	__u8    locks;
+	__u16   send_ru_size;
 
-        __u32   mapper_save_area;
-        __u16   mc_max_send_size;
-        __u8    mc_rq_to_send_rcvd;
+	__u32   mapper_save_area;
+	__u16   mc_max_send_size;
+	__u8    mc_rq_to_send_rcvd;
 };
 
 #ifdef NOT
 struct sna_tp {
-        struct sna_tp *next;
-        struct sna_tp *prev;
+	struct sna_tp *next;
+	struct sna_tp *prev;
 
-        __u8    *tp_name;
+	__u8    *tp_name;
 
-        struct sna_priv_funct priv_functs;
-        struct sna_rcb rcb;
+	struct sna_priv_funct priv_functs;
+	struct sna_rcb rcb;
 
-        __u8    verify_pip;
-        __u8    sub_pips;
+	__u8    verify_pip;
+	__u8    sub_pips;
 
-        struct sna_sync_level sync_level;
+	struct sna_sync_level sync_level;
 
-        __u8    max_tp;
-        __u8    tp_cnt;
-        __u8    status;
+	__u8    max_tp;
+	__u8    tp_cnt;
+	__u8    status;
 
-        struct sna_wait_init_rqs wait_init_rqs;
+	struct sna_wait_init_rqs wait_init_rqs;
 
-        struct sna_mc_funct mc_funct;
+	struct sna_mc_funct mc_funct;
 };
 
 struct sna_start_tp {
-        __u8    reply;
-        __u8    *tp_name;
-        __u8    security_select;
-        struct sna_security security;
-        __u8    tcb_id;
-        __u8    *pip_data;
-        __u8    fq_lu_name;
+	__u8    reply;
+	__u8    *tp_name;
+	__u8    security_select;
+	struct sna_security security;
+	__u8    tcb_id;
+	__u8    *pip_data;
+	__u8    fq_lu_name;
 };
 
 struct sna_plu {
-        struct sna_plu *next;
-        struct sna_plu *prev;
+	struct sna_plu *next;
+	struct sna_plu *prev;
 
-        __u8    *lu_name;
-        __u8    *fq_name;
-        __u8    parallel_lus;
+	__u8    *lu_name;
+	__u8    *fq_name;
+	__u8    parallel_lus;
 
-        struct sna_mode mode;
+	struct sna_mode mode;
 };
 
 struct sna_lucb {
-        struct sna_lucb *next;
-        struct sna_lucb *prev;
+	struct sna_lucb *next;
+	struct sna_lucb *prev;
 
-        __u8    lu_id;          /* LU ID. */
-        __u8    *fq_lu_name;
-        __u8    slimit;         /* Session limit. */
+	__u8    lu_id;          /* LU ID. */
+	__u8    *fq_lu_name;
+	__u8    slimit;         /* Session limit. */
 
-        struct sna_plu          plu;
-        struct sna_tp           tp;
-        struct sna_rand_data    random;
+	struct sna_plu          plu;
+	struct sna_tp           tp;
+	struct sna_rand_data    random;
 };
 #endif
 
@@ -2390,10 +2390,10 @@ struct sna_lucb {
 struct sna_ss_pinfo {
 	struct list_head list;
 
-        sna_netid netid;
+	sna_netid netid;
 
-        unsigned long   bind_reassembly;
-        unsigned long   adaptive_bind_pacing;
+	unsigned long   bind_reassembly;
+	unsigned long   adaptive_bind_pacing;
 };
 #endif	/* __KERNEL__ */
 #endif	/* __NET_SNA_CBS_H */

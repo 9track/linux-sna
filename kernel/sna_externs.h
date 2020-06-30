@@ -21,30 +21,28 @@ extern sna_netid *sna_char_to_netid(unsigned char *c);
 extern char *sna_pr_ether(unsigned char *ptr);
 extern char *sna_pr_netid(sna_netid *n);
 extern char *sna_pr_nodeid(sna_nodeid n);
+extern int sna_sock_register(int proto, const struct net_proto_family *ops);
+extern void sna_sock_unregister(int proto);
 
-extern void sna_ctrl_info_destroy(struct sna_ctrl_info *ctrl);
-extern struct sna_ctrl_info *sna_ctrl_info_create(int gfp_mask);
 extern struct sk_buff *sna_alloc_skb(unsigned int size, int gfp_mask);
 
-extern struct proc_dir_entry *proc_sna_create(const char *name,
-        mode_t mode, get_info_t *get_info);
+extern struct proc_dir_entry *proc_sna_create(const char *name, umode_t mode,
+	int (*show)(struct seq_file *, void *));
 extern void proc_sna_remove(const char *name);
 
 /* ASM. */
 extern struct sna_lfsid *sna_asm_assign_lfsid(u_int32_t pc_index, u_int32_t sm_index);
 extern int sna_asm_create(struct sna_nof_node *start);
 extern int sna_asm_destroy(struct sna_nof_node *delete);
-extern int sna_asm_get_info(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_asm_get_active_lfsids(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_asm_get_info(struct seq_file *m, void *v);
+extern int sna_asm_get_active_lfsids(struct seq_file *m, void *v);
 extern int sna_asm_activate_as(struct sna_asm_cb *as);
 extern int sna_asm_deactivate_as(u_int32_t index);
 extern struct sna_asm_cb *sna_asm_get_by_lfsid(struct sna_lfsid *lfsid);
 extern int sna_asm_rx(struct sna_asm_cb *as, struct sna_lfsid *lf, struct sk_buff *skb);
 extern int sna_asm_tx_bind(struct sna_lfsid *lf, u_int32_t pc_index, struct sk_buff *skb);
 extern struct sna_lfsid *sna_asm_lfsid_get_by_sidhl(u_int8_t odai, u_int8_t sidh,
-        u_int8_t sidl);
+	u_int8_t sidl);
 
 /* Attach. */
 extern int sna_attach_execute_tp(__u32 tcb_id, struct sk_buff *skb);
@@ -57,22 +55,19 @@ extern int sna_cosm_create(struct sna_nof_node *start);
 extern int sna_cosm_destroy(struct sna_nof_node *delete);
 extern void sna_cosm_init(void);
 extern void sna_cosm_cleanup(void);
-extern int sna_cosm_get_info(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_cosm_get_info(struct seq_file *m, void *v);
 extern int sna_cosm_define_cos(struct sna_nof_cos *cos);
 extern int sna_cosm_delete_cos(struct sna_nof_cos *cos);
 extern int sna_cosm_cos_tpf_vector(struct sna_cos_tpf_vector *cos);
-extern int sna_cosm_get_info_tg(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_cos_get_info_node(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_cosm_get_info_tg(struct seq_file *m, void *v);
+extern int sna_cos_get_info_node(struct seq_file *m, void *v);
 
 /* CPIC. */
 extern struct sna_tp_cb *sna_cpic_find_tcb_by_id(unsigned long tcb_id);
 extern unsigned long sna_cpic_create_tcb(int *err);
-extern int sna_cpic_ioctl(int cmd, void *arg);
+extern int sna_cpic_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg);
 extern int sna_cpic_setsockopt(struct socket *sock, int level, int optname,
-        char *optval, int optlen);
+	char *optval, int optlen);
 extern int sna_cpic_init(void);
 extern int sna_cpic_fini(void);
 extern struct sna_tcb *sna_cpic_find_tcb_by_daf(__u8 daf);
@@ -87,8 +82,8 @@ extern int sna_cs_xid_pkt_input(struct sk_buff *skb);
 extern struct sna_dlc_cb *sna_cs_dlc_get_by_index(u_int32_t index);
 extern struct sna_port_cb *sna_cs_port_get_by_index(u_int32_t index);
 
-extern struct sna_port_cb *sna_cs_find_port(struct sna_dlc_cb *dlc, 
-        char *saddr);
+extern struct sna_port_cb *sna_cs_find_port(struct sna_dlc_cb *dlc,
+	char *saddr);
 extern struct sna_dlc_cb *sna_cs_find_dlc_name(char *name);
 extern int sna_cs_connect_in(struct sna_ls_cb *ls);
 extern int sna_cs_rcv_xid(struct sk_buff *skb, struct net_device *dev);
@@ -107,18 +102,15 @@ extern int sna_cs_define_ls(struct sna_nof_ls *dls);
 extern int sna_cs_delete_ls(struct sna_nof_ls *dls);
 extern int sna_cs_start_ls(struct sna_nof_ls *sls);
 extern int sna_cs_stop_ls(struct sna_nof_ls *sls);
-extern u_int32_t sna_cs_activate_route(struct sna_tg_cb *tg, 
+extern u_int32_t sna_cs_activate_route(struct sna_tg_cb *tg,
 	sna_netid *remote_name, int *err);
-extern void sna_cs_connect_out(unsigned long data);
+extern void sna_cs_connect_out(struct timer_list *t);
 extern int sna_cs_xid_xchg_state(struct sk_buff *skb);
 
 #ifdef CONFIG_PROC_FS
-extern int sna_cs_get_info_dlc(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_cs_get_info_port(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_cs_get_info_ls(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_cs_get_info_dlc(struct seq_file *m, void *v);
+extern int sna_cs_get_info_port(struct seq_file *m, void *v);
+extern int sna_cs_get_info_ls(struct seq_file *m, void *v);
 #endif
 
 /* DLC. */
@@ -166,13 +158,13 @@ extern char *fatoe_strncpy(char *dest, char *src, size_t count);
 
 /* HS. */
 extern u_int32_t sna_hs_init(struct sna_lulu_cb *lulu, int *err);
-extern int sna_hs_init_finish(u_int32_t index, u_int32_t pc_index, 
+extern int sna_hs_init_finish(u_int32_t index, u_int32_t pc_index,
 	struct sna_lfsid *lf, struct sk_buff *skb);
 extern struct sna_hs_cb *sna_hs_get_by_index(u_int32_t index);
-extern int sna_hs_ps_connected(struct sna_hs_cb *hs, u_int32_t bracket_index, 
+extern int sna_hs_ps_connected(struct sna_hs_cb *hs, u_int32_t bracket_index,
 	u_int32_t tp_index);
 extern int sna_hs_process_lu_lu_session(int who, struct sk_buff *skb,
-        struct sna_rcb *rcb);
+	struct sna_rcb *rcb);
 extern int sna_hs_tx_ps_mu_data(struct sna_rcb *rcb, struct sk_buff *skb);
 extern int sna_hs_tx_ps_mu_req(struct sna_rcb *rcb, struct sk_buff *skb);
 extern int sna_hs_rx(struct sna_lfsid *lf, struct sk_buff *skb);
@@ -185,11 +177,10 @@ extern void sna_isr_cleanup(void);
 /* NOF. */
 extern int sna_nof_ioctl(int cmd, void *arg);
 extern int sna_nof_setsockopt(struct socket *sock, int level, int optname,
-        char *optval, int optlen);
+	char *optval, int optlen);
 extern int sna_nof_getsockopt(struct socket *sock, int level, int optname,
-        char *optval, int *len);
-extern int sna_nof_get_info(char *buffer, char **start,
-        off_t offset, int length);
+	char *optval, int *len);
+extern int sna_nof_get_info(struct seq_file *m, void *v);
 extern sna_nodeid sna_nof_find_nodeid(sna_netid *n);
 
 /* PC. */
@@ -197,8 +188,7 @@ extern u_int32_t sna_pc_init(struct sna_pc_cb *pc, int *err);
 extern int sna_pc_destroy(u_int32_t index);
 extern struct sna_pc_cb *sna_pc_find(unsigned char *pc_id);
 extern struct sna_pc_cb *sna_pc_find_by_netid(sna_netid *n);
-extern int sna_pc_get_info(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_pc_get_info(struct seq_file *m, void *v);
 extern int sna_pc_rx_mu(struct sk_buff *skb);
 extern int sna_pc_tx_mu(struct sna_pc_cb *pc, struct sk_buff *skb, struct sna_lfsid *lf);
 extern struct sna_pc_cb *sna_pc_get_by_index(u_int32_t index);
@@ -230,19 +220,16 @@ extern int sna_rm_stop_remote_lu(struct sna_nof_remote_lu *lu_n);
 extern int sna_rm_query_mode(char *arg);
 extern int sna_rm_query_lu(char *arg);
 extern int sna_rm_query_plu(char *arg);
-extern int sna_rm_get_info_mode(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_rm_get_info_local_lu(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_rm_get_info_remote_lu(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_rm_get_info_mode(struct seq_file *m, void *v);
+extern int sna_rm_get_info_local_lu(struct seq_file *m, void *v);
+extern int sna_rm_get_info_remote_lu(struct seq_file *m, void *v);
 extern int sna_rm_session_activated_proc(struct sna_lulu_cb *lulu);
 extern struct sna_remote_lu_cb *sna_rm_remote_lu_get_by_name(sna_netid *id);
 extern struct sna_mode_cb *sna_rm_mode_get_by_name(char *mode_name);
 extern struct sna_remote_lu_cb *sna_rm_remote_lu_get_by_index(u_int32_t index);
 extern struct sna_mode_cb *sna_rm_mode_get_by_index(u_int32_t index);
-extern struct sna_tp_cb *sna_rm_start_tp(u_int8_t *tp_name,       
-        u_int8_t *mode_name, sna_netid *remote_name, int *err);
+extern struct sna_tp_cb *sna_rm_start_tp(u_int8_t *tp_name,
+	u_int8_t *mode_name, sna_netid *remote_name, int *err);
 extern struct sna_tp_cb *sna_rm_tp_get_by_pid(pid_t pid);
 extern struct sna_tp_cb *sna_rm_tp_get_by_index(u_int32_t index);
 extern int sna_rm_get_session(struct sna_tp_cb *tp);
@@ -265,10 +252,10 @@ extern int sna_sm_proc_unbind_req(struct sna_lfsid *lf, struct sk_buff *skb);
 extern int sna_sm_proc_cinit_sig_rsp(u_int32_t lulu_index, u_int32_t pc_index);
 extern int sna_sm_proc_init_sig_neg_rsp(u_int32_t lulu_index);
 extern int sna_sm_lu_mode_session_limit(struct sna_remote_lu_cb *remote_lu,
-        struct sna_mode_cb *mode, int type, int state);
+	struct sna_mode_cb *mode, int type, int state);
 extern int sna_sm_fsm_status(struct sna_lulu_cb *lulu);
 extern int sna_sm_proc_activate_session(struct sna_mode_cb *mode,
-        struct sna_remote_lu_cb *remote_lu, u_int32_t tp_index, int type);
+	struct sna_remote_lu_cb *remote_lu, u_int32_t tp_index, int type);
 extern struct sna_lulu_cb *sna_sm_lulu_get_by_index(u_int32_t index);
 
 /* SS. */
@@ -287,16 +274,14 @@ extern int sna_tdm_create(struct sna_nof_node *start);
 extern int sna_tdm_destroy(struct sna_nof_node *delete);
 extern void sna_tdm_init(void);
 extern void sna_tdm_cleanup(void);
-extern int sna_tdm_get_info(char *buffer, char **start,
-        off_t offset, int length);
-extern int sna_tdm_get_info_tg(char *buffer, char **start,
-        off_t offset, int length);
+extern int sna_tdm_get_info(struct seq_file *m, void *v);
+extern int sna_tdm_get_info_tg(struct seq_file *m, void *v);
 extern int sna_tdm_define_node_chars(struct sna_nof_node *n);
 extern int sna_tdm_tg_update(sna_netid *name, struct sna_tg_update *update);
 struct sna_tg_cb *sna_tdm_request_tg_vectors(sna_netid *remote_name);
 extern struct sna_tdm_node_cb *sna_tdm_find_node_entry(sna_netid *netid);
 extern struct sna_tg_cb *sna_tdm_find_tg(struct sna_tdm_node_cb *n,
-        unsigned char tg_num);
+	unsigned char tg_num);
 extern struct sna_tg_cb *sna_tdm_find_tg_by_id(unsigned char tg_num);
 extern int sna_tdm_init_tg_update(struct sna_tg_update *tg);
 extern struct sna_tg_cb *sna_tdm_find_tg_by_mac(char *mac);

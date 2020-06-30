@@ -10,33 +10,11 @@
  *
  * See the GNU General Public License for more details.
  */
- 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
+
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
-#include <linux/skbuff.h>
-#include <net/datalink.h>
-#include <net/sock.h>
-#include <linux/proc_fs.h>
-#include <linux/stat.h>
-#include <linux/init.h>
 #include <linux/sna.h>
-
 #include <linux/appc.h>
 #include <linux/cpic.h>
 #include <net/cpic.h>
@@ -55,7 +33,6 @@ static u_int32_t	sna_remote_lu_system_index	= 1;
 static u_int32_t	sna_rcb_system_index		= 1;
 static u_int32_t	sna_bracket_index		= 1;
 static u_int32_t	sna_conversation_correlator 	= 1;
-static u_int32_t	sna_correlator_cnt 		= 1;
 
 static u_int32_t sna_rm_conversation_new_index(void)
 {
@@ -64,241 +41,241 @@ static u_int32_t sna_rm_conversation_new_index(void)
 
 static u_int32_t sna_rm_bracket_new_index(void)
 {
-        return ++sna_bracket_index;
+	return ++sna_bracket_index;
 }
 
 struct sna_tp_cb *sna_rm_tp_get_by_pid(pid_t pid)
 {
-        struct list_head *le;
-        struct sna_tp_cb *tp;
+	struct list_head *le;
+	struct sna_tp_cb *tp;
 
-        sna_debug(5, "init: %d\n", pid);
-        list_for_each(le, &tp_list) {
-                tp = list_entry(le, struct sna_tp_cb, list);
-                sna_debug(5, "%d %d\n", tp->pid, pid);
-                if (tp->pid == pid)
-                        return tp;
-        }
-        return NULL;
+	sna_debug(5, "init: %d\n", pid);
+	list_for_each(le, &tp_list) {
+		tp = list_entry(le, struct sna_tp_cb, list);
+		sna_debug(5, "%d %d\n", tp->pid, pid);
+		if (tp->pid == pid)
+			return tp;
+	}
+	return NULL;
 }
 
 struct sna_tp_cb *sna_rm_tp_get_by_name(u_int8_t *name)
 {
 	struct list_head *le;
-        struct sna_tp_cb *tp;
+	struct sna_tp_cb *tp;
 
-        sna_debug(5, "init: %s\n", name);
-        list_for_each(le, &tp_list) {
-                tp = list_entry(le, struct sna_tp_cb, list);
+	sna_debug(5, "init: %s\n", name);
+	list_for_each(le, &tp_list) {
+		tp = list_entry(le, struct sna_tp_cb, list);
 		if (!strcmp(tp->tp_name, name))
-                        return tp;
-        }
-        return NULL;
+			return tp;
+	}
+	return NULL;
 }
 
 struct sna_tp_cb *sna_rm_tp_get_by_index(u_int32_t index)
 {
-        struct list_head *le;
-        struct sna_tp_cb *tp;
+	struct list_head *le;
+	struct sna_tp_cb *tp;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &tp_list) {
-                tp = list_entry(le, struct sna_tp_cb, list);
-                sna_debug(5, "%d %d\n", tp->index, index);
-                if (tp->index == index)
-                        return tp;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &tp_list) {
+		tp = list_entry(le, struct sna_tp_cb, list);
+		sna_debug(5, "%d %d\n", tp->index, index);
+		if (tp->index == index)
+			return tp;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_rm_tp_new_index(void)
 {
 	sna_debug(5, "init\n");
-        for (;;) {
-                if (++sna_tp_system_index <= 0)
-                        sna_tp_system_index = 1;
-                if (sna_rm_tp_get_by_index(sna_tp_system_index) == NULL)
-                        return sna_tp_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_tp_system_index <= 0)
+			sna_tp_system_index = 1;
+		if (sna_rm_tp_get_by_index(sna_tp_system_index) == NULL)
+			return sna_tp_system_index;
+	}
+	return 0;
 }
 
 struct sna_remote_lu_cb *sna_rm_remote_lu_get_by_index(u_int32_t index)
 {
-        struct sna_remote_lu_cb *lu;
-        struct list_head *le;
+	struct sna_remote_lu_cb *lu;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &remote_lu_list) {
-                lu = list_entry(le, struct sna_remote_lu_cb, list);
-                if (lu->index == index)
-                        return lu;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &remote_lu_list) {
+		lu = list_entry(le, struct sna_remote_lu_cb, list);
+		if (lu->index == index)
+			return lu;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_rm_remote_lu_new_index(void)
 {
 	sna_debug(5, "init\n");
-        for (;;) {
-                if (++sna_remote_lu_system_index <= 0)
-                        sna_remote_lu_system_index = 1;
-                if (sna_rm_remote_lu_get_by_index(sna_remote_lu_system_index) == NULL)
-                        return sna_remote_lu_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_remote_lu_system_index <= 0)
+			sna_remote_lu_system_index = 1;
+		if (sna_rm_remote_lu_get_by_index(sna_remote_lu_system_index) == NULL)
+			return sna_remote_lu_system_index;
+	}
+	return 0;
 }
 
 static struct sna_local_lu_cb *sna_rm_local_lu_get_by_index(u_int32_t index)
 {
-        struct sna_local_lu_cb *lu;
-        struct list_head *le;
+	struct sna_local_lu_cb *lu;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &local_lu_list) {
-                lu = list_entry(le, struct sna_local_lu_cb, list);
-                if (lu->index == index)
-                        return lu;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &local_lu_list) {
+		lu = list_entry(le, struct sna_local_lu_cb, list);
+		if (lu->index == index)
+			return lu;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_rm_local_lu_new_index(void)
 {
 	sna_debug(5, "init\n");
-        for (;;) {
-                if (++sna_local_lu_system_index <= 0)
-                        sna_local_lu_system_index = 1;
-                if (sna_rm_local_lu_get_by_index(sna_local_lu_system_index) == NULL)
-                        return sna_local_lu_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_local_lu_system_index <= 0)
+			sna_local_lu_system_index = 1;
+		if (sna_rm_local_lu_get_by_index(sna_local_lu_system_index) == NULL)
+			return sna_local_lu_system_index;
+	}
+	return 0;
 }
 
 struct sna_mode_cb *sna_rm_mode_get_by_index(u_int32_t index)
 {
-        struct sna_mode_cb *mode;
-        struct list_head *le;
+	struct sna_mode_cb *mode;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &mode_list) {
-                mode = list_entry(le, struct sna_mode_cb, list);
-                if (mode->index == index)
-                        return mode;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &mode_list) {
+		mode = list_entry(le, struct sna_mode_cb, list);
+		if (mode->index == index)
+			return mode;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_rm_mode_new_index(void)
 {
 	sna_debug(5, "init\n");
-        for (;;) {
-                if (++sna_mode_system_index <= 0)
-                        sna_mode_system_index = 1;
-                if (sna_rm_mode_get_by_index(sna_mode_system_index) == NULL)
-                        return sna_mode_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_mode_system_index <= 0)
+			sna_mode_system_index = 1;
+		if (sna_rm_mode_get_by_index(sna_mode_system_index) == NULL)
+			return sna_mode_system_index;
+	}
+	return 0;
 }
 
 struct sna_mode_cb *sna_rm_mode_get_by_name(char *mode_name)
 {
-        struct sna_mode_cb *mode;
-        struct list_head *le;
+	struct sna_mode_cb *mode;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &mode_list) {
-                mode = list_entry(le, struct sna_mode_cb, list);
-                sna_debug(5, "m->mode(%s), mode(%s)\n",
-                        mode->mode_name, mode_name);
-                if (!strcmp(mode->mode_name, mode_name))
-                        return mode;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &mode_list) {
+		mode = list_entry(le, struct sna_mode_cb, list);
+		sna_debug(5, "m->mode(%s), mode(%s)\n",
+			mode->mode_name, mode_name);
+		if (!strcmp(mode->mode_name, mode_name))
+			return mode;
+	}
+	return NULL;
 }
 
 struct sna_local_lu_cb *sna_rm_local_lu_get_by_alias(char *alias)
 {
 	struct sna_local_lu_cb *lu;
-        struct list_head *le;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &local_lu_list) {
-                lu = list_entry(le, struct sna_local_lu_cb, list);
-                if (!strcmp(lu->use_name, alias))
-                        return lu;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &local_lu_list) {
+		lu = list_entry(le, struct sna_local_lu_cb, list);
+		if (!strcmp(lu->use_name, alias))
+			return lu;
+	}
+	return NULL;
 }
 
 struct sna_local_lu_cb *sna_rm_local_lu_get_by_name(char *lu_name)
 {
-        struct sna_local_lu_cb *lu;
-        struct list_head *le;
+	struct sna_local_lu_cb *lu;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &local_lu_list) {
-                lu = list_entry(le, struct sna_local_lu_cb, list);
-                if (!strcmp(lu->lu_name, lu_name))
-                        return lu;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &local_lu_list) {
+		lu = list_entry(le, struct sna_local_lu_cb, list);
+		if (!strcmp(lu->lu_name, lu_name))
+			return lu;
+	}
+	return NULL;
 }
 
 struct sna_remote_lu_cb *sna_rm_remote_lu_get_by_alias(char *alias)
 {
-        struct sna_remote_lu_cb *lu;
-        struct list_head *le;
+	struct sna_remote_lu_cb *lu;
+	struct list_head *le;
 
-        sna_debug(5, "init: -%s-\n", alias);
-        list_for_each(le, &remote_lu_list) {
-                lu = list_entry(le, struct sna_remote_lu_cb, list);
+	sna_debug(5, "init: -%s-\n", alias);
+	list_for_each(le, &remote_lu_list) {
+		lu = list_entry(le, struct sna_remote_lu_cb, list);
 		sna_debug(5, "lu->use_name=`%s`\n", lu->use_name);
-                if (!strcmp(lu->use_name, alias))
-                        return lu;
-        }
-        return NULL;
+		if (!strcmp(lu->use_name, alias))
+			return lu;
+	}
+	return NULL;
 }
 
 struct sna_remote_lu_cb *sna_rm_remote_lu_get_by_name(sna_netid *id)
 {
-        struct sna_remote_lu_cb *plu;
-        struct list_head *le;
+	struct sna_remote_lu_cb *plu;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &remote_lu_list) {
-                plu = list_entry(le, struct sna_remote_lu_cb, list);
-                if (!strcmp(plu->netid_plu.net, id->net)
-                        && !strcmp(plu->netid_plu.name, id->name))
-                        return plu;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &remote_lu_list) {
+		plu = list_entry(le, struct sna_remote_lu_cb, list);
+		if (!strcmp(plu->netid_plu.net, id->net)
+			&& !strcmp(plu->netid_plu.name, id->name))
+			return plu;
+	}
+	return NULL;
 }
 
 struct sna_rcb *sna_rm_rcb_get_by_index(u_int32_t index)
 {
-        struct sna_rcb *rcb;
-        struct list_head *le;
+	struct sna_rcb *rcb;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &rcb_list) {
-                rcb = list_entry(le, struct sna_rcb, list);
-                if (rcb->index == index)
-                        return rcb;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &rcb_list) {
+		rcb = list_entry(le, struct sna_rcb, list);
+		if (rcb->index == index)
+			return rcb;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_rm_rcb_new_index(void)
 {
 	sna_debug(5, "init\n");
-        for (;;) {
-                if (++sna_rcb_system_index <= 0)
-                        sna_rcb_system_index = 1;
-                if (sna_rm_rcb_get_by_index(sna_rcb_system_index) == NULL)
-                        return sna_rcb_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_rcb_system_index <= 0)
+			sna_rcb_system_index = 1;
+		if (sna_rm_rcb_get_by_index(sna_rcb_system_index) == NULL)
+			return sna_rcb_system_index;
+	}
+	return 0;
 }
 
 int sna_rm_send_attach_to_ps(__u32 tcb_id, __u32 rcb_id, struct sk_buff *skb)
@@ -310,13 +287,12 @@ int sna_rm_send_attach_to_ps(__u32 tcb_id, __u32 rcb_id, struct sk_buff *skb)
 
 int sna_rm_create_ps(__u32 *tcb_id, __u32 *rcb_id, struct sk_buff *skb)
 {
-	struct sna_tcb *tcb;
-
 	sna_debug(5, "init\n");
 #ifdef NOT
+	struct sna_tcb *tcb;
 	struct snathdr *th = (struct snathdr *)skb->data;
 	int err;
-	
+
 	sna_debug(5, "sna_rm_create_ps DAF is %02X\n", th->fid.f2.daf);
 	*tcb_id = sna_cpic_create_tcb(&err);
 	if (err < 0)
@@ -342,7 +318,7 @@ int sna_rm_proc_attach(struct sk_buff *skb)
 {
 	sna_debug(5, "init\n");
 	sna_debug(5, "ATTACH INBOUND HAS HIT RM.. READY!\n");
-	
+
 #ifdef NOT
 	__u32 tcb_id = 0, rcb_id = 0;
 
@@ -350,98 +326,98 @@ int sna_rm_proc_attach(struct sk_buff *skb)
 	sna_rm_send_attach_to_ps(tcb_id, rcb_id, skb);
 
 	/* old. */
-        struct sna_scb *scb;
-        __u8 tcb_id, rcb_id, err;
+	struct sna_scb *scb;
+	__u8 tcb_id, rcb_id, err;
 
-        tcb_id = 0;
-        rcb_id = 0;
+	tcb_id = 0;
+	rcb_id = 0;
 
-        scb = sna_search_scb();
+	scb = sna_search_scb();
 
-        if (FSM_SCB_STATUS != PENDING_ATTACH)
-                sna_send_deactivate_session(ACTIVE, scb->hs_id, ABNORMAL, 0x20030000);
-        else {
-                err = sna_attach_chk(fmh5, mu->layer.hs_to_rm.hs_id);
-                switch (err) {
-                        case 0xFFFFFFFF:
-                                sna_send_deactivate_session(ACTIVE, scb->hs_id,
-                                        ABNORMAL, 0x080F6051);
-                                sna_free_buffer(mu);
-                                break;
+	if (FSM_SCB_STATUS != PENDING_ATTACH)
+		sna_send_deactivate_session(ACTIVE, scb->hs_id, ABNORMAL, 0x20030000);
+	else {
+		err = sna_attach_chk(fmh5, mu->layer.hs_to_rm.hs_id);
+		switch (err) {
+			case 0xFFFFFFFF:
+				sna_send_deactivate_session(ACTIVE, scb->hs_id,
+					ABNORMAL, 0x080F6051);
+				sna_free_buffer(mu);
+				break;
 
 
-                        case 0x10086040:
-                                sna_send_deactivate_session(ACTIVE, scb->hs_id,
-                                        ABNORMAL, 0x10086040);
-                                sna_free_buffer(mu);
-                                break;
+			case 0x10086040:
+				sna_send_deactivate_session(ACTIVE, scb->hs_id,
+					ABNORMAL, 0x10086040);
+				sna_free_buffer(mu);
+				break;
 
-                        case 0x10086011:
-                                sna_send_deactivate_session(ACTIVE, scb->hs_id,
-                                        ABNORMAL, 0x10086011);
-                                sna_free_buffer(mu);
-                                break;
-                }
+			case 0x10086011:
+				sna_send_deactivate_session(ACTIVE, scb->hs_id,
+					ABNORMAL, 0x10086011);
+				sna_free_buffer(mu);
+				break;
+		}
 
-                if (fmh5->fmh5cmd == ATTACH) {
-                        if (err == 0x00000000) {
-                                tp = sna_search_tp();   /* ??? */
+		if (fmh5->fmh5cmd == ATTACH) {
+			if (err == 0x00000000) {
+				tp = sna_search_tp();   /* ??? */
 
-                                /* Spell insane for now */
-                                if (err == 0x00000000
-                                        || tp->instance_cnt
-                                        < tp->instance_limit)
+				/* Spell insane for now */
+				if (err == 0x00000000
+					|| tp->instance_cnt
+					< tp->instance_limit)
 
-                                        err = sna_ps_creation_proc(mu, tcb_id,rcb_id, tp, create_rc);
-                                        if(err == SUCCESS)
-                                        {
-                                                sna_fsm_scb_status(r, attach, undefined);
-                                                scb->rcb_id = rcb_id;
-                                                sna_connect_rcb_and_scb(rcb_id,
+					err = sna_ps_creation_proc(mu, tcb_id,rcb_id, tp, create_rc);
+					if(err == SUCCESS)
+					{
+						sna_fsm_scb_status(r, attach, undefined);
+						scb->rcb_id = rcb_id;
+						sna_connect_rcb_and_scb(rcb_id,
 mu->layer.hs_to_rm.hs_id);
-                                                sna_send_attach_to_ps(mu, tcb_id, rcb_id, sense_code);
-                                        }
-                                        else
-                                        {
-                                                if(tp->tp_cnt > 0
-                                                        && err == 0)
-                                                {
-                                                        sna_queue_attach_proc(mu);
-                                                }
-                                                else
-                                                {
-                                                        sna_send_deactivate_session(active, mu->layer.hs_to_rm.hs_id, abnormal, 0x08640000);
-                                                        bm_free(FREE, mu);
-                                                }
-                                                if(tp->tp_cnt == 0)
-                                                        sna_purge_queued_requests(tp);
-                                        }
+						sna_send_attach_to_ps(mu, tcb_id, rcb_id, sense_code);
+					}
+					else
+					{
+						if(tp->tp_cnt > 0
+							&& err == 0)
+						{
+							sna_queue_attach_proc(mu);
+						}
+						else
+						{
+							sna_send_deactivate_session(active, mu->layer.hs_to_rm.hs_id, abnormal, 0x08640000);
+							bm_free(FREE, mu);
+						}
+						if(tp->tp_cnt == 0)
+							sna_purge_queued_requests(tp);
+					}
 
-                                        sna_queue_attach(mu);
-                                }
-                                else
-                                {
-                                        mu->tp = NULL;
-                                        sna_ps_creation_proc(mu, tcb_id, rcb_id, tp, create_rc);
-                                        if(create_rc == SUCCESS)
-                                        {
-                                                sna_fsm_scb_status(r, attach, undefined);
-                                                scb->rcb_id = rcb_id;
-                                                sna_connect_rcb_and_scb(rcb_id,
+					sna_queue_attach(mu);
+				}
+				else
+				{
+					mu->tp = NULL;
+					sna_ps_creation_proc(mu, tcb_id, rcb_id, tp, create_rc);
+					if(create_rc == SUCCESS)
+					{
+						sna_fsm_scb_status(r, attach, undefined);
+						scb->rcb_id = rcb_id;
+						sna_connect_rcb_and_scb(rcb_id,
 mu->layer.hs_to_rm.hs_id);
-                                                sna_send_attach_to_ps(mu, tcb_id, rcb_id, sense_code);
-                                        }
-                                        else
-                                        {
-                                                sna_send_deactivate_session(active, mu->layer.hs_to_rm.hs_id, abnormal, 0x08640000);
-                                                bm_free(FREE, mu);
-                                        }
-                                }
-                        }
-                }
-        }
+						sna_send_attach_to_ps(mu, tcb_id, rcb_id, sense_code);
+					}
+					else
+					{
+						sna_send_deactivate_session(active, mu->layer.hs_to_rm.hs_id, abnormal, 0x08640000);
+						bm_free(FREE, mu);
+					}
+				}
+			}
+		}
+	}
 #endif
-        return 0;
+	return 0;
 }
 
 int sna_rm_process_hs_to_rm(struct sk_buff *skb)
@@ -457,38 +433,36 @@ int sna_rm_process_hs_to_rm(struct sk_buff *skb)
 int sna_rm_delete_local_lu(struct sna_nof_local_lu *dlu)
 {
 	struct list_head *le, *se;
-        struct sna_local_lu_cb *lu;
+	struct sna_local_lu_cb *lu;
 
 	sna_debug(5, "init\n");
 	list_for_each_safe(le, se, &local_lu_list) {
 		lu = list_entry(le, struct sna_local_lu_cb, list);
-                if (!strcmp(lu->lu_name, dlu->lu_name)) {
+		if (!strcmp(lu->lu_name, dlu->lu_name)) {
 			list_del(&lu->list);
-                        kfree(lu);
-                        sna_mod_dec_use_count();
-                        return 0;
-                }
-        }
-        return -ENOENT;
+			kfree(lu);
+			return 0;
+		}
+	}
+	return -ENOENT;
 }
 
 int sna_rm_delete_remote_lu(struct sna_nof_remote_lu *dplu)
 {
 	struct list_head *le, *se;
-        struct sna_remote_lu_cb *plu;
+	struct sna_remote_lu_cb *plu;
 
 	sna_debug(5, "init\n");
 	list_for_each_safe(le, se, &remote_lu_list) {
 		plu = list_entry(le, struct sna_remote_lu_cb, list);
-                if (!strcmp(plu->netid_plu.net, dplu->netid_plu.net)
+		if (!strcmp(plu->netid_plu.net, dplu->netid_plu.net)
 			&& !strcmp(plu->netid_plu.name, dplu->netid_plu.name)) {
 			list_del(&plu->list);
-                        kfree(plu);
-                        sna_mod_dec_use_count();
-                        return 0;
-                }
-        }
-        return -ENOENT;
+			kfree(plu);
+			return 0;
+		}
+	}
+	return -ENOENT;
 }
 
 int sna_rm_delete_mode(struct sna_nof_mode *dm)
@@ -502,7 +476,6 @@ int sna_rm_delete_mode(struct sna_nof_mode *dm)
 		if (!strcmp(mode->mode_name, dm->mode_name)) {
 			list_del(&mode_list);
 			kfree(mode);
-			sna_mod_dec_use_count();
 			return 0;
 		}
 	}
@@ -514,9 +487,9 @@ int sna_rm_define_local_lu(struct sna_nof_local_lu *dlu)
 	struct sna_local_lu_cb *lu;
 
 	sna_debug(5, "init\n");
-        lu = sna_rm_local_lu_get_by_name(dlu->lu_name);
-        if (lu)
-                return -EEXIST;
+	lu = sna_rm_local_lu_get_by_name(dlu->lu_name);
+	if (lu)
+		return -EEXIST;
 	new(lu, GFP_ATOMIC);
 	if (!lu)
 		return -ENOMEM;
@@ -526,22 +499,21 @@ int sna_rm_define_local_lu(struct sna_nof_local_lu *dlu)
 	lu->index	= sna_rm_local_lu_new_index();
 	lu->sync_point	= dlu->sync_point;
 	lu->lu_sess_limit=dlu->lu_sess_limit;
-        lu->flags      	= SNA_UP;
+	lu->flags      	= SNA_UP;
 	list_add_tail(&lu->list, &local_lu_list);
-        sna_mod_inc_use_count();
 	return 0;
 }
 
 int sna_rm_start_remote_lu(struct sna_nof_remote_lu *lu_n)
 {
-        struct sna_remote_lu_cb *lu;
+	struct sna_remote_lu_cb *lu;
 	struct sna_mode_cb *mode;
 	int err;
 
-        sna_debug(5, "init\n");
-        lu = sna_rm_remote_lu_get_by_alias(lu_n->use_name);
-        if (!lu)
-                return -ENOENT;
+	sna_debug(5, "init\n");
+	lu = sna_rm_remote_lu_get_by_alias(lu_n->use_name);
+	if (!lu)
+		return -ENOENT;
 	mode = sna_rm_mode_get_by_name("SNASVCMG");
 	if (!mode)
 		return -ENOENT;
@@ -558,8 +530,8 @@ int sna_rm_stop_remote_lu(struct sna_nof_remote_lu *lu_n)
 
 	sna_debug(5, "init\n");
 	lu = sna_rm_remote_lu_get_by_alias(lu_n->use_name);
-        if (!lu)
-                return -ENOENT;
+	if (!lu)
+		return -ENOENT;
 	return err;
 }
 
@@ -583,7 +555,6 @@ int sna_rm_define_remote_lu(struct sna_nof_remote_lu *lu)
 	plu->cnv_security=lu->cnv_security;
 	plu->flags	= SNA_UP;
 	list_add_tail(&plu->list, &remote_lu_list);
-	sna_mod_inc_use_count();
 	return 0;
 }
 
@@ -620,25 +591,24 @@ int sna_rm_define_mode(struct sna_nof_mode *dm)
 	mode->pending.conwinners	= 0;
 	mode->pending.conlosers		= 0;
 	list_add_tail(&mode->list, &mode_list);
-	sna_mod_inc_use_count();
 	return 0;
 }
 
 int sna_mode_ginfo(struct sna_mode_cb *mode, char *buf, int len)
 {
-        struct modereq mr;
-        int done = 0;
+	struct modereq mr;
+	int done = 0;
 
 	sna_debug(10, "sna_mode_ginfo\n");
-        if (!buf) {
-                done += sizeof(mr);
-                return done;
-        }
-        if (len < (int)sizeof(mr))
-                return done;
-        memset(&mr, 0, sizeof(struct modereq));
+	if (!buf) {
+		done += sizeof(mr);
+		return done;
+	}
+	if (len < (int)sizeof(mr))
+		return done;
+	memset(&mr, 0, sizeof(struct modereq));
 
-        /* Move the data here */
+	/* Move the data here */
 	memcpy(&mr.netid, &mode->netid, sizeof(sna_netid));
 	memcpy(&mr.plu_name, &mode->netid_plu, sizeof(sna_netid));
 	strncpy(mr.mode_name, mode->mode_name, SNA_RESOURCE_NAME_LEN);
@@ -661,29 +631,29 @@ int sna_mode_ginfo(struct sna_mode_cb *mode, char *buf, int len)
 	mr.pend_conwinners	= mode->pending.conwinners;
 	mr.pend_conlosers	= mode->pending.conlosers;
 
-        if (copy_to_user(buf, &mr, sizeof(struct modereq)))
-                return -EFAULT;
-        buf  += sizeof(struct modereq);
-        len  -= sizeof(struct modereq);
-        done += sizeof(struct modereq);
-        return done;
+	if (copy_to_user(buf, &mr, sizeof(struct modereq)))
+		return -EFAULT;
+	buf  += sizeof(struct modereq);
+	len  -= sizeof(struct modereq);
+	done += sizeof(struct modereq);
+	return done;
 }
 
 int sna_lu_ginfo(struct sna_local_lu_cb *lu, char *buf, int len)
 {
-        struct lureq lr;
-        int done = 0;
+	struct lureq lr;
+	int done = 0;
 
-        sna_debug(10, "sna_lu_ginfo\n");
-        if (!buf) {
-                done += sizeof(lr);
-                return done;
-        }
-        if (len < (int)sizeof(lr))
-                return done;
-        memset(&lr, 0, sizeof(struct lureq));
+	sna_debug(10, "sna_lu_ginfo\n");
+	if (!buf) {
+		done += sizeof(lr);
+		return done;
+	}
+	if (len < (int)sizeof(lr))
+		return done;
+	memset(&lr, 0, sizeof(struct lureq));
 
-        /* Move the data here */
+	/* Move the data here */
 	memcpy(&lr.netid, &lu->netid, sizeof(sna_netid));
 	strncpy(lr.name, lu->lu_name, SNA_RESOURCE_NAME_LEN);
 	lr.sync_point		= lu->sync_point;
@@ -691,29 +661,29 @@ int sna_lu_ginfo(struct sna_local_lu_cb *lu, char *buf, int len)
 	lr.proc_id		= lu->index;
 	lr.flags		= lu->flags;
 
-        if (copy_to_user(buf, &lr, sizeof(struct lureq)))
-                return -EFAULT;
-        buf += sizeof(struct lureq);
-        len -= sizeof(struct lureq);
-        done += sizeof(struct lureq);
-        return done;
+	if (copy_to_user(buf, &lr, sizeof(struct lureq)))
+		return -EFAULT;
+	buf += sizeof(struct lureq);
+	len -= sizeof(struct lureq);
+	done += sizeof(struct lureq);
+	return done;
 }
 
 int sna_plu_ginfo(struct sna_remote_lu_cb *plu, char *buf, int len)
 {
-        struct plureq pr;
-        int done = 0;
+	struct plureq pr;
+	int done = 0;
 
-        sna_debug(10, "sna_plu_ginfo\n");
-        if (!buf) {
-                done += sizeof(pr);
-                return done;
-        }
-        if (len < (int)sizeof(pr))
-                return done;
-        memset(&pr, 0, sizeof(struct plureq));
+	sna_debug(10, "sna_plu_ginfo\n");
+	if (!buf) {
+		done += sizeof(pr);
+		return done;
+	}
+	if (len < (int)sizeof(pr))
+		return done;
+	memset(&pr, 0, sizeof(struct plureq));
 
-        /* Move the data here */
+	/* Move the data here */
 	memcpy(&pr.netid, &plu->netid, sizeof(sna_netid));
 	memcpy(&pr.plu_name, &plu->netid_plu, sizeof(sna_netid));
 	memcpy(&pr.fqcp_name, &plu->netid_fqcp, sizeof(sna_netid));
@@ -722,12 +692,12 @@ int sna_plu_ginfo(struct sna_remote_lu_cb *plu, char *buf, int len)
 	pr.proc_id	= plu->index;
 	pr.flags	= plu->flags;
 
-        if (copy_to_user(buf, &pr, sizeof(struct plureq)))
-                return -EFAULT;
-        buf  += sizeof(struct plureq);
-        len  -= sizeof(struct plureq);
-        done += sizeof(struct plureq);
-        return done;
+	if (copy_to_user(buf, &pr, sizeof(struct plureq)))
+		return -EFAULT;
+	buf  += sizeof(struct plureq);
+	len  -= sizeof(struct plureq);
+	done += sizeof(struct plureq);
+	return done;
 }
 
 int sna_rm_query_mode(char *arg)
@@ -740,62 +710,62 @@ int sna_rm_query_mode(char *arg)
 
 	sna_debug(5, "init\n");
 	if (copy_from_user(&mc, arg, sizeof(mc)))
-                return -EFAULT;
-        pos = mc.modec_buf;
-        len = mc.mode_len;
+		return -EFAULT;
+	pos = mc.modec_buf;
+	len = mc.mode_len;
 
-        /*
-         * Get the data and put it into the structure
-         */
-        total = 0;
+	/*
+	 * Get the data and put it into the structure
+	 */
+	total = 0;
 	list_for_each(le, &mode_list) {
 		mode = list_entry(le, struct sna_mode_cb, list);
-                if (pos == NULL)
-                	done = sna_mode_ginfo(mode, NULL, 0);
-                else
-                        done = sna_mode_ginfo(mode,pos+total,len-total);
-                if (done < 0)
-                	return -EFAULT;
-                total += done;
-        }
-        mc.mode_len = total;
-        if (copy_to_user(arg, &mc, sizeof(mc)))
-                return -EFAULT;
-        return 0;
+		if (pos == NULL)
+			done = sna_mode_ginfo(mode, NULL, 0);
+		else
+			done = sna_mode_ginfo(mode,pos+total,len-total);
+		if (done < 0)
+			return -EFAULT;
+		total += done;
+	}
+	mc.mode_len = total;
+	if (copy_to_user(arg, &mc, sizeof(mc)))
+		return -EFAULT;
+	return 0;
 }
 
 int sna_rm_query_lu(char *arg)
 {
 	struct sna_local_lu_cb *lu;
 	struct list_head *le;
-        int len, total, done;
+	int len, total, done;
 	struct luconf lc;
 	char *pos;
 
 	sna_debug(5, "init\n");
-        if (copy_from_user(&lc, arg, sizeof(lc)))
-                return -EFAULT;
-        pos = lc.luc_buf;
-        len = lc.lu_len;
+	if (copy_from_user(&lc, arg, sizeof(lc)))
+		return -EFAULT;
+	pos = lc.luc_buf;
+	len = lc.lu_len;
 
-        /*
-         * Get the data and put it into the structure
-         */
-        total = 0;
+	/*
+	 * Get the data and put it into the structure
+	 */
+	total = 0;
 	list_for_each(le, &local_lu_list) {
 		lu = list_entry(le, struct sna_local_lu_cb, list);
-                if (pos == NULL)
-                	done = sna_lu_ginfo(lu, NULL, 0);
-                else
-                        done = sna_lu_ginfo(lu,pos+total,len-total);
-                if (done < 0)
-                        return -EFAULT;
-                total += done;
-        }
-        lc.lu_len = total;
-        if (copy_to_user(arg, &lc, sizeof(lc)))
-                return -EFAULT;
-        return 0;
+		if (pos == NULL)
+			done = sna_lu_ginfo(lu, NULL, 0);
+		else
+			done = sna_lu_ginfo(lu,pos+total,len-total);
+		if (done < 0)
+			return -EFAULT;
+		total += done;
+	}
+	lc.lu_len = total;
+	if (copy_to_user(arg, &lc, sizeof(lc)))
+		return -EFAULT;
+	return 0;
 }
 
 int sna_rm_query_plu(char *arg)
@@ -807,29 +777,29 @@ int sna_rm_query_plu(char *arg)
 	char *pos;
 
 	sna_debug(5, "init\n");
-        if (copy_from_user(&pc, arg, sizeof(pc)))
-                return -EFAULT;
-        pos = pc.pluc_buf;
-        len = pc.plu_len;
+	if (copy_from_user(&pc, arg, sizeof(pc)))
+		return -EFAULT;
+	pos = pc.pluc_buf;
+	len = pc.plu_len;
 
-        /*
-         * Get the data and put it into the structure
-         */
-        total = 0;
+	/*
+	 * Get the data and put it into the structure
+	 */
+	total = 0;
 	list_for_each(le, &remote_lu_list) {
 		plu = list_entry(le, struct sna_remote_lu_cb, list);
-                if (pos == NULL)
-	                done = sna_plu_ginfo(plu, NULL, 0);
-                else
-                        done = sna_plu_ginfo(plu, pos+total, len-total);
-                if (done < 0)
-                        return -EFAULT;
-                total += done;
-        }
-        pc.plu_len = total;
-        if (copy_to_user(arg, &pc, sizeof(pc)))
-                return -EFAULT;
-        return 0;
+		if (pos == NULL)
+			done = sna_plu_ginfo(plu, NULL, 0);
+		else
+			done = sna_plu_ginfo(plu, pos+total, len-total);
+		if (done < 0)
+			return -EFAULT;
+		total += done;
+	}
+	pc.plu_len = total;
+	if (copy_to_user(arg, &pc, sizeof(pc)))
+		return -EFAULT;
+	return 0;
 }
 
 static int sna_rm_fsm_scb_input_r_pos_bid_rsp(struct sna_scb *scb)
@@ -849,9 +819,9 @@ out:	return err;
 
 static int sna_rm_fsm_scb_input_s_get_session(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->type != SNA_RM_SCB_TYPE_FSP)
 		goto out;
 	if (scb->state != SNA_RM_FSM_SCB_STATE_SESSION_ACTIVATION
@@ -864,9 +834,9 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_r_bid(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_FREE)
 		goto out;
 	err = 0;
@@ -876,9 +846,9 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_r_attach(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_PENDING_ATTACH)
 		goto out;
 	err = 0;
@@ -888,9 +858,9 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_r_fmh_12(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_PENDING_FMH12)
 		goto out;
 	err = 0;
@@ -900,9 +870,9 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_r_free_session(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_PENDING_ATTACH
 		&& scb->state != SNA_RM_FSM_SCB_STATE_IN_USE)
 		goto out;
@@ -913,9 +883,9 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_s_yield_session(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_SESSION_ACTIVATION)
 		goto out;
 	err = 0;
@@ -925,9 +895,9 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_r_session_activated_pri(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state == SNA_RM_FSM_SCB_STATE_SESSION_ACTIVATION)
 		err = 0;
 	return err;
@@ -935,9 +905,9 @@ static int sna_rm_fsm_scb_input_r_session_activated_pri(struct sna_scb *scb)
 
 static int sna_rm_fsm_scb_input_r_session_activated_sec(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_SESSION_ACTIVATION)
 		goto out;
 	err = 0;
@@ -947,13 +917,13 @@ out:    return err;
 
 static int sna_rm_fsm_scb_input_r_session_activated_secure(struct sna_scb *scb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (scb->state != SNA_RM_FSM_SCB_STATE_SESSION_ACTIVATION)
-                goto out;
-        err = 0;
-        scb->state = SNA_RM_FSM_SCB_STATE_PENDING_FMH12;
+		goto out;
+	err = 0;
+	scb->state = SNA_RM_FSM_SCB_STATE_PENDING_FMH12;
 out:    return err;
 }
 
@@ -966,35 +936,35 @@ static int sna_rm_fsm_scb_status(struct sna_scb *scb)
 		case SNA_RM_FSM_SCB_INPUT_R_POS_BID_RSP:
 			err = sna_rm_fsm_scb_input_r_pos_bid_rsp(scb);
 			break;
-        	case SNA_RM_FSM_SCB_INPUT_S_GET_SESSION:
+		case SNA_RM_FSM_SCB_INPUT_S_GET_SESSION:
 			err = sna_rm_fsm_scb_input_s_get_session(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_BID:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_BID:
 			err = sna_rm_fsm_scb_input_r_bid(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_ATTACH:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_ATTACH:
 			err = sna_rm_fsm_scb_input_r_attach(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_FMH_12:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_FMH_12:
 			err = sna_rm_fsm_scb_input_r_fmh_12(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_FREE_SESSION:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_FREE_SESSION:
 			err = sna_rm_fsm_scb_input_r_free_session(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_S_YIELD_SESSION:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_S_YIELD_SESSION:
 			err = sna_rm_fsm_scb_input_s_yield_session(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_PRI:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_PRI:
 			err = sna_rm_fsm_scb_input_r_session_activated_pri(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SEC:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SEC:
 			err = sna_rm_fsm_scb_input_r_session_activated_sec(scb);
-                        break;
-        	case SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SECURE:
+			break;
+		case SNA_RM_FSM_SCB_INPUT_R_SESSION_ACTIVATED_SECURE:
 			err = sna_rm_fsm_scb_input_r_session_activated_secure(scb);
-                        break;
+			break;
 	}
-        return err;
+	return err;
 }
 
 static int sna_rm_fsm_rcb_input_s_get_session(struct sna_rcb *rcb)
@@ -1014,9 +984,9 @@ out:	return err;
 
 static int sna_rm_fsm_rcb_input_r_pos_bid_rsp(struct sna_rcb *rcb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (rcb->type != SNA_RM_RCB_TYPE_BIDDER)
 		goto out;
 	if (rcb->fsm_rcb_status_state != SNA_RM_FSM_RCB_STATE_PENDING_SCB)
@@ -1028,23 +998,23 @@ out:    return err;
 
 static int sna_rm_fsm_rcb_input_r_neg_bid_rsp(struct sna_rcb *rcb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (rcb->type != SNA_RM_RCB_TYPE_BIDDER)
-                goto out;
-        if (rcb->fsm_rcb_status_state != SNA_RM_FSM_RCB_STATE_PENDING_SCB)
-                goto out;
-        err = 0;
-        rcb->fsm_rcb_status_state = SNA_RM_FSM_RCB_STATE_FREE;
+		goto out;
+	if (rcb->fsm_rcb_status_state != SNA_RM_FSM_RCB_STATE_PENDING_SCB)
+		goto out;
+	err = 0;
+	rcb->fsm_rcb_status_state = SNA_RM_FSM_RCB_STATE_FREE;
 out:    return err;
 }
 
 static int sna_rm_fsm_rcb_input_r_attach_hs(struct sna_rcb *rcb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (rcb->fsm_rcb_status_state != SNA_RM_FSM_RCB_STATE_FREE)
 		goto out;
 	err = 0;
@@ -1054,14 +1024,14 @@ out:    return err;
 
 static int sna_rm_fsm_rcb_input_s_allocate_rcb(struct sna_rcb *rcb)
 {
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	/* this can not be enforced, due to at allocate time we don't know type.
- 	* though by default we set type to FSP, so we are okay.
- 	*/
- 	if (rcb->type != SNA_RM_RCB_TYPE_FSP)
- 		goto out;
+	* though by default we set type to FSP, so we are okay.
+	*/
+	if (rcb->type != SNA_RM_RCB_TYPE_FSP)
+		goto out;
 	if (rcb->fsm_rcb_status_state == SNA_RM_FSM_RCB_STATE_FREE)
 		err = 0;
 out:    return err;
@@ -1069,9 +1039,9 @@ out:    return err;
 
 static int sna_rm_fsm_rcb_input_s_deallocate_rcb(struct sna_rcb *rcb)
 {
-        int err = 0;
+	int err = 0;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (rcb->fsm_rcb_status_state == SNA_RM_FSM_RCB_STATE_FREE)
 		goto out;
 	if (rcb->fsm_rcb_status_state != SNA_RM_FSM_RCB_STATE_IN_USE) {
@@ -1110,16 +1080,7 @@ static int sna_rm_fsm_rcb_status(struct sna_rcb *rcb)
 			err = sna_rm_fsm_rcb_input_s_deallocate_rcb(rcb);
 			break;
 	}
-        return err;
-}
-
-/* maintain the status of a bidder half-session with respect to BIS_RQ and
- * BIS_REPLY.
- */
-static int sna_rm_fsm_bis(int signal)
-{
-        sna_debug(5, "init\n");
-        return 0;
+	return err;
 }
 
 static int sna_rm_connect_rcb_and_scb(struct sna_rcb *rcb, struct sna_scb *scb)
@@ -1144,7 +1105,7 @@ static int sna_rm_connect_rcb_and_scb(struct sna_rcb *rcb, struct sna_scb *scb)
  */
 static int sna_rm_set_rcb_and_scb_fields(struct sna_rcb *rcb, struct sna_scb *scb)
 {
-        struct sna_hs_cb *hs;
+	struct sna_hs_cb *hs;
 	int err = -ENOENT;
 
 	sna_debug(5, "init\n");
@@ -1162,10 +1123,10 @@ static int sna_rm_set_rcb_and_scb_fields(struct sna_rcb *rcb, struct sna_scb *sc
 		scb->input = SNA_RM_FSM_SCB_INPUT_R_POS_BID_RSP;
 		rcb->fsm_rcb_status_input = SNA_RM_FSM_RCB_INPUT_R_POS_BID_RSP;
 	}
-        err = sna_rm_fsm_scb_status(scb);
+	err = sna_rm_fsm_scb_status(scb);
 	if (err < 0)
 		sna_debug(5, "fsm_scb_status failed `%d'.\n", err);
-        err = sna_rm_fsm_rcb_status(rcb);
+	err = sna_rm_fsm_rcb_status(rcb);
 	if (err < 0)
 		sna_debug(5, "fsm_rcb_status failed `%d'.\n", err);
 out:	return err;
@@ -1177,8 +1138,8 @@ struct sna_rcb *sna_rm_create_rcb(struct sna_tp_cb *tp)
 
 	sna_debug(5, "init\n");
 	new(rcb, GFP_ATOMIC);
-        if (!rcb)
-                return NULL;
+	if (!rcb)
+		return NULL;
 	rcb->index			= sna_rm_rcb_new_index();
 	rcb->bracket_index		= sna_rm_bracket_new_index();
 	rcb->conversation_index 	= sna_rm_conversation_new_index();
@@ -1200,14 +1161,14 @@ struct sna_rcb *sna_rm_create_rcb(struct sna_tp_cb *tp)
 	list_add_tail(&rcb->list, &rcb_list);
 	rcb->fsm_rcb_status_input = SNA_RM_FSM_RCB_INPUT_S_ALLOCATE_RCB;
 	sna_rm_fsm_rcb_status(rcb);
-        return rcb;
+	return rcb;
 }
 
 static struct sna_rcb *sna_rm_test_for_free_fsp_session(struct sna_tp_cb *tp)
 {
 	struct sna_mode_cb *mode;
-        struct sna_rcb *rcb;
-        struct sna_scb *scb;
+	struct sna_rcb *rcb;
+	struct sna_scb *scb;
 	int err;
 
 	sna_debug(5, "init\n");
@@ -1224,24 +1185,24 @@ static struct sna_rcb *sna_rm_test_for_free_fsp_session(struct sna_tp_cb *tp)
 	/* check partner lu security level and sync level.
 	 * return error if unable to support either.
 	 */
-        err = sna_rm_set_rcb_and_scb_fields(rcb, scb);
+	err = sna_rm_set_rcb_and_scb_fields(rcb, scb);
 	if (err < 0)
 		sna_debug(5, "set_rcb_and_scb failed\n");
-        err = sna_rm_connect_rcb_and_scb(rcb, scb);
+	err = sna_rm_connect_rcb_and_scb(rcb, scb);
 	if (err < 0)
 		sna_debug(5, "connect_rcb_and_scb failed\n");
 
 	/* this would be better moved to a session count manager. */
 	mode->active.sessions++;
 	mode->active.conwinners++;
-        return rcb;
+	return rcb;
 }
 
 struct sna_rcb *sna_rm_alloc_rcb(struct sna_tp_cb *tp)
 {
-        struct sna_rcb *rcb;
+	struct sna_rcb *rcb;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	if (tp->immediate)
 		rcb = sna_rm_test_for_free_fsp_session(tp);
 	else
@@ -1254,7 +1215,7 @@ static int sna_rm_successful_session_activation(struct sna_mode_cb *mode,
 {
 	struct sna_tp_cb *tp;
 	struct sna_rcb *rcb;
-	
+
 	sna_debug(5, "init\n");
 	tp = sna_rm_tp_get_by_index(lulu->tp_index);
 	if (!tp) {
@@ -1262,7 +1223,7 @@ static int sna_rm_successful_session_activation(struct sna_mode_cb *mode,
 		goto out;
 	}
 
-	/* finish setting up any activation data. 
+	/* finish setting up any activation data.
 	 * -- this seems very similar to sna_rm_set_rcb_and_scb_fields()
 	 *
 	 * I think we have some confusion over the use of scb.
@@ -1273,7 +1234,7 @@ static int sna_rm_successful_session_activation(struct sna_mode_cb *mode,
 		goto out;
 	}
 	rcb->hs_index = lulu->hs_index;
-	
+
 	tp->state = SNA_TP_STATE_ACTIVE;
 	wake_up_interruptible(&tp->sleep);
 out:	return 0;
@@ -1292,44 +1253,44 @@ int sna_rm_session_activated_proc(struct sna_lulu_cb *lulu)
 	remote_lu = sna_rm_remote_lu_get_by_index(lulu->remote_lu_index);
 	if (!remote_lu)
 		return -ENOENT;
-        mode->active.sessions++;
-        if (lulu->type == SNA_RM_RCB_TYPE_FSP)
-                mode->active.conwinners++;
-        else
-                mode->active.conlosers++;
-        err = sna_rm_successful_session_activation(mode, remote_lu, lulu);
-        if (err < 0)
-                sna_debug(5, "session activation failed `%d'.\n", err);
+	mode->active.sessions++;
+	if (lulu->type == SNA_RM_RCB_TYPE_FSP)
+		mode->active.conwinners++;
+	else
+		mode->active.conlosers++;
+	err = sna_rm_successful_session_activation(mode, remote_lu, lulu);
+	if (err < 0)
+		sna_debug(5, "session activation failed `%d'.\n", err);
 	return err;
 }
 
 int sna_rm_wait_for_session_activated(struct sna_tp_cb *tp, int seconds)
 {
-        DECLARE_WAITQUEUE(wait, current);
-        int rc, timeout = seconds * HZ;
+	DECLARE_WAITQUEUE(wait, current);
+	int rc, timeout = seconds * HZ;
 
-        sna_debug(5, "init\n");
-        add_wait_queue_exclusive(&tp->sleep, &wait);
-        for (;;) {
-                __set_current_state(TASK_INTERRUPTIBLE);
-                rc = 0;
-                if (tp->state != SNA_TP_STATE_ACTIVE)
-                        timeout = schedule_timeout(timeout);
-                if (tp->state == SNA_TP_STATE_ACTIVE)
-                        break;
-                rc = -EAGAIN;
-                if (tp->state == SNA_TP_STATE_RESET)
-                        break;
-                rc = -ERESTARTSYS;
-                if (signal_pending(current))
-                        break;
-                rc = -EAGAIN;
-                if (!timeout)
-                        break;
-        }
-        __set_current_state(TASK_RUNNING);
-        remove_wait_queue(&tp->sleep, &wait);
-        return rc;
+	sna_debug(5, "init\n");
+	add_wait_queue_exclusive(&tp->sleep, &wait);
+	for (;;) {
+		__set_current_state(TASK_INTERRUPTIBLE);
+		rc = 0;
+		if (tp->state != SNA_TP_STATE_ACTIVE)
+			timeout = schedule_timeout(timeout);
+		if (tp->state == SNA_TP_STATE_ACTIVE)
+			break;
+		rc = -EAGAIN;
+		if (tp->state == SNA_TP_STATE_RESET)
+			break;
+		rc = -ERESTARTSYS;
+		if (signal_pending(current))
+			break;
+		rc = -EAGAIN;
+		if (!timeout)
+			break;
+	}
+	__set_current_state(TASK_RUNNING);
+	remove_wait_queue(&tp->sleep, &wait);
+	return rc;
 }
 
 static int sna_rm_send_activate_session(struct sna_mode_cb *mode,
@@ -1337,7 +1298,7 @@ static int sna_rm_send_activate_session(struct sna_mode_cb *mode,
 {
 	int err;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	mode->pending.sessions++;
 	if (type == SNA_RM_RCB_TYPE_FSP)
 		mode->pending.conwinners++;
@@ -1355,7 +1316,7 @@ static int sna_rm_session_activation_polarity(struct sna_mode_cb *mode,
 	struct sna_remote_lu_cb *remote_lu)
 {
 	sna_debug(5, "init\n");
-	if (mode->pending.sessions + mode->active.sessions 
+	if (mode->pending.sessions + mode->active.sessions
 		>= mode->user_max.sessions)
 		return SNA_RM_RCB_TYPE_NONE;
 	if (mode->pending.sessions + mode->active.sessions
@@ -1377,7 +1338,7 @@ int sna_rm_get_session(struct sna_tp_cb *tp)
 	struct sna_mode_cb *mode;
 	struct sna_rcb *rcb;
 	int err = -ENOENT;
-	
+
 	sna_debug(5, "init\n");
 	rcb = sna_rm_rcb_get_by_index(tp->rcb_index);
 	if (!rcb)
@@ -1397,7 +1358,7 @@ int sna_rm_get_session(struct sna_tp_cb *tp)
 	/* try and find an unused session over this lu/mode pair.
 	 * we don't support this at the moment so we just allocate
 	 * a new session every time.
-	 */	
+	 */
 
 	/* we need to do some checking here on activation/pending limits.
 	 * specs are confusing here, so now we just allow user to allocate
@@ -1414,7 +1375,7 @@ int sna_rm_get_session(struct sna_tp_cb *tp)
 			break;
 		case SNA_RM_RCB_TYPE_BIDDER:
 		case SNA_RM_RCB_TYPE_FSP:
-			err = sna_rm_send_activate_session(mode, remote_lu, 
+			err = sna_rm_send_activate_session(mode, remote_lu,
 				tp->index, err);
 			break;
 		default:
@@ -1438,18 +1399,18 @@ static struct sna_tp_cb *sna_rm_create_tcb_and_ps(u_int8_t *tp_name,
 	sna_debug(5, "init\n");
 	*err = -ENOMEM;
 	new(tp, GFP_ATOMIC);
-        if (!tp)
-                return NULL;
-        tp->index 		= sna_rm_tp_new_index();
+	if (!tp)
+		return NULL;
+	tp->index 		= sna_rm_tp_new_index();
 	tp->mode_index		= 0;
 	tp->local_lu_index	= 0;
 	tp->remote_lu_index	= 0;
 	tp->luw_seq             = 1;
 	do_gettimeofday(&tp->luw);
-        init_waitqueue_head(&tp->sleep);
-        skb_queue_head_init(&tp->receive_queue);
-        skb_queue_head_init(&tp->write_queue);
-	
+	init_waitqueue_head(&tp->sleep);
+	skb_queue_head_init(&tp->receive_queue);
+	skb_queue_head_init(&tp->write_queue);
+
 	/* set mode, plu, tp_name if passed by the caller. */
 	if (mode)
 		tp->mode_index          = mode->index;
@@ -1457,30 +1418,30 @@ static struct sna_tp_cb *sna_rm_create_tcb_and_ps(u_int8_t *tp_name,
 		tp->remote_lu_index     = remote_lu->index;
 	if (tp_name) {
 		tp->tp_name_length 	= strlen(tp_name);
-		strncpy(tp->tp_name, tp_name, tp->tp_name_length);
+		strcpy(tp->tp_name, tp_name);
 	}
 
 	/* set appc conversation defaults. */
 	tp->conversation_type   = AC_CONVERSATION_TYPE_MAPPED;
 	tp->rx_mc_ll_pull_left	= 0;
-	
+
 	*err = sna_ps_init(tp);
 	if (*err < 0) {
 		kfree(tp);
 		tp = NULL;
 	} else {
-        	list_add_tail(&tp->list, &tp_list);
+		list_add_tail(&tp->list, &tp_list);
 		sna_tp_active_count++;
 	}
 	return tp;
 }
 
 /* sna_rm_start_tp - entrance point for all sna transaction programs.
- * this function is called by cpic/appc when a tp is initialized. 
+ * this function is called by cpic/appc when a tp is initialized.
  *
  * if we allowed the user to define tp parameters, we would enforce them here.
  */
-struct sna_tp_cb *sna_rm_start_tp(u_int8_t *tp_name, 
+struct sna_tp_cb *sna_rm_start_tp(u_int8_t *tp_name,
 	u_int8_t *mode_name, sna_netid *remote_name, int *err)
 {
 	struct sna_remote_lu_cb *remote_lu = NULL;
@@ -1492,8 +1453,6 @@ struct sna_tp_cb *sna_rm_start_tp(u_int8_t *tp_name,
 	mode 	  = sna_rm_mode_get_by_name(mode_name);
 	remote_lu = sna_rm_remote_lu_get_by_name(remote_name);
 	tp = sna_rm_create_tcb_and_ps(tp_name, mode, remote_lu, err);
-	if (tp)
-		sna_mod_inc_use_count();
 	return tp;
 }
 
@@ -1505,150 +1464,90 @@ int sna_rm_create(struct sna_nof_node *node)
 
 int sna_rm_destroy(struct sna_nof_node *d)
 {
-        struct list_head *le, *se;
-        struct sna_mode_cb *mode;
-        struct sna_remote_lu_cb *plu;
-        struct sna_local_lu_cb *lu;
+	struct list_head *le, *se;
+	struct sna_mode_cb *mode;
+	struct sna_remote_lu_cb *plu;
+	struct sna_local_lu_cb *lu;
 
 	sna_debug(5, "init\n");
-        list_for_each_safe(le, se, &mode_list) {
-                mode = list_entry(le, struct sna_mode_cb, list);
-                list_del(&mode->list);
-                kfree(mode);
-                sna_mod_dec_use_count();
-        }
-        list_for_each_safe(le, se, &local_lu_list) {
-                lu = list_entry(le, struct sna_local_lu_cb, list);
-                list_del(&lu->list);
-                kfree(lu);
-                sna_mod_dec_use_count();
-        }
-        list_for_each_safe(le, se, &remote_lu_list) {
-                plu = list_entry(le, struct sna_remote_lu_cb, list);
-                list_del(&plu->list);
-                kfree(plu);
-                sna_mod_dec_use_count();
-        }
-        return 0;
+	list_for_each_safe(le, se, &mode_list) {
+		mode = list_entry(le, struct sna_mode_cb, list);
+		list_del(&mode->list);
+		kfree(mode);
+	}
+	list_for_each_safe(le, se, &local_lu_list) {
+		lu = list_entry(le, struct sna_local_lu_cb, list);
+		list_del(&lu->list);
+		kfree(lu);
+	}
+	list_for_each_safe(le, se, &remote_lu_list) {
+		plu = list_entry(le, struct sna_remote_lu_cb, list);
+		list_del(&plu->list);
+		kfree(plu);
+	}
+	return 0;
 }
 
 #ifdef CONFIG_PROC_FS
-int sna_rm_get_info_local_lu(char *buffer, char **start,
-        off_t offset, int length)
+int sna_rm_get_info_local_lu(struct seq_file *m, void *v)
 {
-	off_t pos = 0, begin = 0;
 	struct sna_local_lu_cb *lu;
 	struct list_head *le;
-        int len = 0;
 
-        len += sprintf(buffer, "%-6s%-18s%-9s%-11s%-14s%-5s\n",
-                "lu_id", "netid.node", "lu_name", "sync_point",
+	seq_printf(m, "%-6s%-18s%-9s%-11s%-14s%-5s\n",
+		"lu_id", "netid.node", "lu_name", "sync_point",
 		"lu_sess_limit", "flags");
 	list_for_each(le, &local_lu_list) {
 		lu = list_entry(le, struct sna_local_lu_cb, list);
-                len += sprintf(buffer + len, "%-6d%-18s%-9s%-11d%-14d%04X\n",
-                        lu->index, sna_pr_netid(&lu->netid), 
+		seq_printf(m, "%-6d%-18s%-9s%-11d%-14d%04X\n",
+			lu->index, sna_pr_netid(&lu->netid),
 			lu->lu_name, lu->sync_point,
 			lu->lu_sess_limit, lu->flags);
+	}
 
-                /* Are we still dumping unwanted data then discard the record */
-		pos = begin + len;
-                if (pos < offset) {
-                        len = 0;        /* Keep dumping into the buffer start */
-                        begin = pos;
-                }
-                if (pos > offset + length)       /* We have dumped enough */
-                        break;
-        }
-
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-	return len;
+	return 0;
 }
 
-int sna_rm_get_info_remote_lu(char *buffer, char **start,
-        off_t offset, int length)
+int sna_rm_get_info_remote_lu(struct seq_file *m, void *v)
 {
-        off_t pos = 0, begin = 0;
 	struct sna_remote_lu_cb *plu;
 	struct list_head *le;
-        int len = 0;
 
-        len += sprintf(buffer, "%-7s%-18s%-18s%-18s%-12s%-12s%-5s\n",
-                "plu_id", "netid.node", "netid.plu", "netid.fqcp",
+	seq_printf(m, "%-7s%-18s%-18s%-18s%-12s%-12s%-5s\n",
+		"plu_id", "netid.node", "netid.plu", "netid.fqcp",
 		"parallel_ss", "cnv_security", "flags");
 	list_for_each(le, &remote_lu_list) {
 		plu = list_entry(le, struct sna_remote_lu_cb, list);
-                len += sprintf(buffer + len, "%-7d%-17s%-17s%-17s%-12d%-12d%04X\n",
-			plu->index, sna_pr_netid(&plu->netid), 
-			sna_pr_netid(&plu->netid_plu), 
+		seq_printf(m, "%-7d%-17s%-17s%-17s%-12d%-12d%04X\n",
+			plu->index, sna_pr_netid(&plu->netid),
+			sna_pr_netid(&plu->netid_plu),
 			sna_pr_netid(&plu->netid_fqcp),
 			plu->parallel, plu->cnv_security, plu->flags);
+	}
 
-                /* Are we still dumping unwanted data then discard the record */
-		pos = begin + len;
-                if (pos < offset) {
-                        len = 0;        /* Keep dumping into the buffer start */
-                        begin = pos;
-                }
-                if (pos > offset + length)       /* We have dumped enough */
-                        break;
-        }
-
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 
-int sna_rm_get_info_mode(char *buffer, char **start,
-        off_t offset, int length)
+int sna_rm_get_info_mode(struct seq_file *m, void *v)
 {
 	struct sna_mode_cb *mode;
-        off_t pos = 0, begin = 0;
 	struct list_head *le;
-        int len = 0;
 
-        len += sprintf(buffer, "%-8s%-18s%-18s%-10s%-10s%-10s%-10s%-10s%-7s%-5s\n", 
-		"mode_id", "netid.node", 
+	seq_printf(m, "%-8s%-18s%-18s%-10s%-10s%-10s%-10s%-10s%-7s%-5s\n",
+		"mode_id", "netid.node",
 		"netid.plu", "mode_name", "tx_pacing", "rx_pacing",
 		"max_tx_ru", "max_rx_ru", "crypto", "flags");
 	list_for_each(le, &mode_list) {
 		mode = list_entry(le, struct sna_mode_cb, list);
-                len += sprintf(buffer + len, "%-8d%-17s%-17s%-8s%-10d%-10d%-10d%-10d%-7d%04X\n",
-			mode->index, sna_pr_netid(&mode->netid), 
-			sna_pr_netid(&mode->netid_plu), mode->mode_name, 
+		seq_printf(m, "%-8d%-17s%-17s%-8s%-10d%-10d%-10d%-10d%-7d%04X\n",
+			mode->index, sna_pr_netid(&mode->netid),
+			sna_pr_netid(&mode->netid_plu), mode->mode_name,
 			mode->tx_pacing,
 			mode->rx_pacing, mode->tx_max_ru, mode->rx_max_ru,
 			mode->crypto, mode->flags);
+	}
 
-                /* Are we still dumping unwanted data then discard the record */
-		pos = begin + len;
-                if (pos < offset) {
-                        len = 0;        /* Keep dumping into the buffer start */
-			begin = pos;
-                }
-                if (pos > offset + length)       /* We have dumped enough */
-                        break;
-        }
-
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-        if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 #endif
 
@@ -1741,14 +1640,14 @@ static int sna_activate_needed_sessions(__u8 *lu_name, __u8 *mode_name)
 	lucb = sna_search_lucb(lu_name);		/* ??? */
 	mode = sna_search_mode(lucb, mode_name);	/* ??? */
 
-	while((polarity = sna_session_activation_polarity(lu_name, mode_name)) 
+	while((polarity = sna_session_activation_polarity(lu_name, mode_name))
 		!= NULL)
 	{
 		if(polarity == SNA_SESSION_FIRST_SPEAKER)
-			sna_send_activate_session(lu_name, mode_name, 
+			sna_send_activate_session(lu_name, mode_name,
 				SNA_SESSION_FIRST_SPEAKER);
 		else	/* Bidder */
-			sna_send_activate_session(lu_name, mode_name, 
+			sna_send_activate_session(lu_name, mode_name,
 				SNA_SESSION_BIDDER);
 
 	}
@@ -1758,7 +1657,7 @@ static int sna_activate_needed_sessions(__u8 *lu_name, __u8 *mode_name)
 	{
 		polarity = sna_session_activation_polarity(lu_name, mode_name);
 		if(polarity == SNA_SESSION_FIRST_SPEAKER)
-			sna_send_activate_session(lu_name, mode_name, 
+			sna_send_activate_session(lu_name, mode_name,
 				SNA_SESSION_FIRST_SPEAKER);
 	}
 
@@ -1786,7 +1685,7 @@ static int sna_activate_session_rsp_proc(struct sna_mu *mu)
 				mode->active->conlosers++;
 			mode->active->sessions++;
 
-			sna_successful_session_activation(pending_act->lu_name, 
+			sna_successful_session_activation(pending_act->lu_name,
 				pending_act->mode_name,act_sess_rsp->sess_info);
 		}
 		else
@@ -1917,7 +1816,7 @@ static int sna_bid_proc(struct sna_mu *mu)
 					}
 				}
 				else
-					send_deactivate_session(active, 
+					send_deactivate_session(active,
 						bid->hs_id,abnormal,0x20030000);
 			}
 		}
@@ -1971,7 +1870,7 @@ static int sna_bid_rsp_proc(struct sna_mu *mu)
 			sna_fsm_rcb_status(R, NEG_BID_RSP, UNDEFINED);
 			if(rsp->sense == 0x08140000)
 				remember_LU_owes_rtr;
-			
+
 			get_session = rcb->get_session;
 			sna_get_session_proc(get_session);
 		}
@@ -2045,12 +1944,12 @@ static int sna_change_sessions_proc(struct sna_mu *mu)
 
 		if(mode->termination_cnt > 0)
 		{
-			sna_deactivate_pending_sessions(chg_sess->lu_name, 
+			sna_deactivate_pending_sessions(chg_sess->lu_name,
 				chg_sess->mode_name);
 		}
 		if(mode->termination_cnt > 0)
 		{
-			sna_deactivate_free_sessions(chg_sess->lu_name, 
+			sna_deactivate_free_sessions(chg_sess->lu_name,
 				chg_sess->mode_name);
 		}
 	}
@@ -2080,7 +1979,7 @@ static int sna_check_for_bis_reply(__u8 hs_id)
 	struct sna_get_session *get_session;
 
 	mode = sna_search_mode(hs_id);
-	if(mode->drain_self == SNA_RM_FALSE 
+	if(mode->drain_self == SNA_RM_FALSE
 		|| (sna_get_waiting_gsess(mode->lu_name,mode->mode_name)==NULL))
 	{
 		if(sess_free_brackets(hs_id))
@@ -2130,7 +2029,7 @@ static int sna_create_scb(unsigned char *lu_name, unsigned char *mode_name,
 	return (0);
 }
 
-static int sna_deactivate_free_sessions(unsigned char *lu_name, 
+static int sna_deactivate_free_sessions(unsigned char *lu_name,
 	unsigned char *mode_name)
 {
 	struct sna_scb *scb;
@@ -2148,7 +2047,7 @@ static int sna_deactivate_free_sessions(unsigned char *lu_name,
 }
 
 /* Saving it for a little later, when fsp functions firm up */
-static int sna_deactivate_pending_sessions(unsigned char *lu_name, 
+static int sna_deactivate_pending_sessions(unsigned char *lu_name,
 	unsigned char *mode_name)
 {
 	struct sna_mode *mode;
@@ -2191,7 +2090,7 @@ static int sna_enqueue_free_scb(__u8 hs_id)
 	return (0);
 }
 
-static int sna_first_speaker_proc(struct sna_get_session *get_session, 
+static int sna_first_speaker_proc(struct sna_get_session *get_session,
 	__u8 hs_id)
 {
 	struct sna_scb *scb;
@@ -2286,7 +2185,7 @@ static int sna_free_session_proc(struct sna_mu *mu)
 
 static int sna_ps_abend_proc(struct sna_mu *mu)
 {
-	struct sna_abend_notify *abend 
+	struct sna_abend_notify *abend
 		= (struct sna_abend_notify *)mu->record_ptr;
 	struct sna_tcb *tcb;
 	struct sna_scb *scb;
@@ -2304,7 +2203,7 @@ static int sna_ps_abend_proc(struct sna_mu *mu)
 		{
 			if(sna_fsm_rcb_status() == FREE)
 				mode = sna_search_mode(rcb->lu_name, rcb->mode_name);
-			if(sna_fsm_rcb_status() == IN_USE 
+			if(sna_fsm_rcb_status() == IN_USE
 				|| sna_fsm_rcb_status() == PENDING_SCB)
 			{
 				scb = sna_search_scb(rcb->hs_id);
@@ -2358,7 +2257,7 @@ static int sna_ps_abend_proc(struct sna_mu *mu)
 	return (0);
 }
 
-static int sna_ps_creation_proc(struct sna_mu *mu, __u8 *tcb_id, __u8 *rcb_id, 
+static int sna_ps_creation_proc(struct sna_mu *mu, __u8 *tcb_id, __u8 *rcb_id,
 	struct sna_tp *target_tp)
 {
 	struct sna_scb *scb;
@@ -2380,7 +2279,7 @@ static int sna_ps_creation_proc(struct sna_mu *mu, __u8 *tcb_id, __u8 *rcb_id,
 	else
 		tcb->security.user_id = NULL;
 
-	if(attach->security.profile != NULL) 
+	if(attach->security.profile != NULL)
 		tcb->security.profile = attach->security.profile;
 	else
 		tcb->security.profile = NULL;
@@ -2451,7 +2350,7 @@ static int sna_ps_termination_proc(struct sna_mu *mu)
 	tp  = sna_search_tp(term_ps);
 	if(tp != sna_NULL)
 	{
-		if(queued_init_req(tp) == SNA_RM_TRUE 
+		if(queued_init_req(tp) == SNA_RM_TRUE
 			&& tp->max_tp != tp->tp_cnt)
 		{
 			switch(first_queued_req_rec_type)
@@ -2486,7 +2385,7 @@ static int sna_ps_termination_proc(struct sna_mu *mu)
 					tcb->luw_id.fq_lu_name = start_tp->fq_lu_name;
 					sna_complete_luw_id(tcb);
 					tcb->ctrl_cmpnt = tp;
-					if(start_tp->security_select 
+					if(start_tp->security_select
 						== SNA_SECURITY_PGM)
 					{
 						tcb->security = start_tp->security;
@@ -2692,7 +2591,7 @@ static int sna_rm_timer_deactivate_session_proc(struct sna_rm_timer_pop *rm_time
 	if(scb != NULL)
 	{
 		if(scb_in_free_ses_pool && scb->first_speaker == SNA_RM_TRUE
-			&& mode->active.conwinners + mode->pending.conwinners 
+			&& mode->active.conwinners + mode->pending.conwinners
 			> mode->auto_activate_limit)
 		{
 			new(rm_deactivate, GFP_ATOMIC);
@@ -2778,7 +2677,7 @@ static int sna_security_proc(struct sna_mu *mu)
 		|| fmh12->length != 10
 		|| fmh12->security_reply != expected)
 	{
-		sna_send_deactivate_session(ACTIVE, scb->hs_id, ABNORMAL, 
+		sna_send_deactivate_session(ACTIVE, scb->hs_id, ABNORMAL,
 			0x080F6051);
 	}
 	else
@@ -2853,7 +2752,7 @@ static int sna_send_bis_rq(__u8 hs_id)
 	return (0);
 }
 
-static int sna_send_deactivate_session(__u8 status, __u8 correlator, __u8 type, 
+static int sna_send_deactivate_session(__u8 status, __u8 correlator, __u8 type,
 	__u32 sense)
 {
 	struct sna_pending_activation *pending;
@@ -3102,9 +3001,9 @@ static int sna_session_deactivation_polarity(unsigned char *lu_name, unsigned ch
 	mode = sna_search_mode(lu_name, mode_name);
 	if(mode->term_count == 0)
 		return (DEACTIVATE);
-	conwinner_cnt = mode->active.conwinners + mode->pending.conwinners 
+	conwinner_cnt = mode->active.conwinners + mode->pending.conwinners
 		- mode->terminator.conwinners;
-	conloser_cnt = mode->active.conlosers + mode->pending.conlosers 
+	conloser_cnt = mode->active.conlosers + mode->pending.conlosers
 		- mode->termination.conlosers;
 
 	if(conwinner_cnt <= mode->min_conwinners
@@ -3131,7 +3030,7 @@ static int sna_session_deactivation_polarity(unsigned char *lu_name, unsigned ch
 	{
 		return (SNA_SESSION_EITHER);
 	}
-	
+
 	return (0);
 }
 
@@ -3154,10 +3053,10 @@ static int sna_should_send_bis(__u8 hs_id)
 	{
 		case (RESET):
 			polarity = sna_session_deactivation_polarity(lu_name, mode_name);
-			if(polarity == SNA_SESSION_EITHER 
+			if(polarity == SNA_SESSION_EITHER
 				|| polarity_mode->polarity)
 			{
-				if(mode->drain_self == SNA_RM_FALSE 
+				if(mode->drain_self == SNA_RM_FALSE
 					|| !waiting_req())
 					return (SNA_RM_TRUE);
 				if(pending_rm_deactivate_session)
@@ -3244,7 +3143,7 @@ static int sna_start_tp_security_valid(struct sna_start_tp *start_tp)
 
 	if(limit_access_to_tp)
 	{
-		if(sna_access_ok(start_tp->security.user_id, 
+		if(sna_access_ok(start_tp->security.user_id,
 			start_tp->security.profile))
 		{
 			return (SNA_RM_TRUE);
@@ -3254,11 +3153,11 @@ static int sna_start_tp_security_valid(struct sna_start_tp *start_tp)
 			return (SNA_RM_FALSE);
 		}
 	}
-		
+
 	return (SNA_RM_TRUE);
 }
 
-static int sna_successful_session_activation(unsigned char *lu_name, 
+static int sna_successful_session_activation(unsigned char *lu_name,
 	unsigned char *mode_name, struct sna_session_information *info)
 {
 	struct sna_scb *scb;

@@ -11,32 +11,12 @@
  * See the GNU General Public License for more details.
  */
 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
-#include <linux/skbuff.h>
-#include <net/datalink.h>
-#include <net/sock.h>
-#include <linux/proc_fs.h>
-#include <linux/stat.h>
-#include <linux/init.h>
 #include <linux/time.h>
 #include <linux/list.h>
+#include <linux/sna.h>
 
 #ifdef CONFIG_SNA_LLC
 #include <net/llc_if.h>
@@ -46,41 +26,39 @@
 #include <linux/llc.h>
 #endif  /* CONFIG_SNA_LLC */
 
-#include <linux/sna.h>
-
 static LIST_HEAD(lulu_list);
 static u_int32_t sna_lulu_system_index = 0;
 
 struct sna_lulu_cb *sna_sm_lulu_get_by_index(u_int32_t index)
 {
-        struct sna_lulu_cb *lulu;
-        struct list_head *le;
+	struct sna_lulu_cb *lulu;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &lulu_list) {
-                lulu = list_entry(le, struct sna_lulu_cb, list);
-                if (lulu->index == index)
-                        return lulu;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &lulu_list) {
+		lulu = list_entry(le, struct sna_lulu_cb, list);
+		if (lulu->index == index)
+			return lulu;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_sm_lulu_new_index(void)
 {
-        for (;;) {
-                if (++sna_lulu_system_index <= 0)
-                        sna_lulu_system_index = 1;
-                if (sna_sm_lulu_get_by_index(sna_lulu_system_index) == NULL)
-                        return sna_lulu_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_lulu_system_index <= 0)
+			sna_lulu_system_index = 1;
+		if (sna_sm_lulu_get_by_index(sna_lulu_system_index) == NULL)
+			return sna_lulu_system_index;
+	}
+	return 0;
 }
 
 struct sna_lulu_cb *sna_sm_lulu_get_by_fqpcid(sna_fqpcid *fqpcid)
 {
 	struct sna_lulu_cb *lulu;
 	struct list_head *le;
-	
+
 	sna_debug(5, "init\n");
 	list_for_each(le, &lulu_list) {
 		lulu = list_entry(le, struct sna_lulu_cb, list);
@@ -90,6 +68,7 @@ struct sna_lulu_cb *sna_sm_lulu_get_by_fqpcid(sna_fqpcid *fqpcid)
 	return NULL;
 }
 
+#ifdef SNA_UNUSED
 static int sna_sm_build_bind_cv(__u8 type, __u8 *cv_start)
 {
 	int len = 0;
@@ -140,40 +119,41 @@ static int sna_sm_build_bind_cv(__u8 type, __u8 *cv_start)
 
 	return len;
 }
+#endif
 
 /* Build +RSP(BIND). */
+#ifdef CONFIG_SNA_LLC
+#ifdef OLD_LLC
 static int sna_sm_build_bind_rsp_pos(struct sk_buff *skb, int t)
 {
-        struct ethhdr *eth_hdr = skb->mac.ethernet;
-        struct net_device *dev = skb->dev;
+	sna_debug(5, "sna_sm_build_bind_rsp\n");
+
+	struct ethhdr *eth_hdr = skb->mac.ethernet;
+	struct net_device *dev = skb->dev;
 	struct sna_rcb *rcb = NULL;
 	struct sk_buff *newskb;
 	struct sna_bind *bind;
 	int size, len = 0;
 
-	sna_debug(5, "sna_sm_build_bind_rsp\n");
+	/* Device + Datalink + XID */
+	size = dev->hard_header_len + LLC_TYPE2_SIZE + 250;
+	newskb = alloc_skb(size, GFP_ATOMIC);
 
-#ifdef CONFIG_SNA_LLC
-#ifdef OLD_LLC
-        /* Device + Datalink + XID */
-        size = dev->hard_header_len + LLC_TYPE2_SIZE + 250;
-        newskb = alloc_skb(size, GFP_ATOMIC);
-
-        skb_reserve(newskb, 200);
+	skb_reserve(newskb, 200);
 	skb_reserve(newskb, sizeof(struct snarhdr));
 	skb_reserve(newskb, sizeof(struct sna_fid2));
 
-        skb_reserve(newskb, LLC_TYPE2_SIZE);
-        skb_reserve(newskb, dev->hard_header_len);
-        newskb->dev = dev;
+	skb_reserve(newskb, LLC_TYPE2_SIZE);
+	skb_reserve(newskb, dev->hard_header_len);
+	newskb->dev = dev;
 
 	if (t == BIND_S_BIND || t == BIND_S_PR_BIND
 		|| t == BIND_S_PR_BIND_W_AF) {
 		if (t == BIND_S_BIND_W_AF)
 			bind = (struct sna_bind *)skb_push(newskb,
-                                sizeof(struct sna_bind) + 61 + 45 + 21);
+				sizeof(struct sna_bind) + 61 + 45 + 21);
 		else
-			bind = (struct sna_bind *)skb_push(newskb, 
+			bind = (struct sna_bind *)skb_push(newskb,
 				sizeof(struct sna_bind) + 61 + 45);
 
 		memset(bind, 0, sizeof(struct sna_bind));
@@ -199,7 +179,7 @@ static int sna_sm_build_bind_rsp_pos(struct sk_buff *skb, int t)
 
 		if (t == BIND_S_PR_BIND_W_AF) {
 			bind->shs_max_ru_size   = 0x86;
-                        bind->phs_max_ru_size   = 0x86;
+			bind->phs_max_ru_size   = 0x86;
 		} else {
 			bind->shs_max_ru_size	= 0x87;
 			bind->phs_max_ru_size	= 0x87;
@@ -221,20 +201,20 @@ static int sna_sm_build_bind_rsp_pos(struct sk_buff *skb, int t)
 		bind->lu6_level		= 0x02;
 		bind->ps1_flags		= 0x16;
 		bind->ps2_flags		= 0x23;
-	
+
 		len += sna_sm_build_bind_user_data(&bind->raw);
 
 		if (t == BIND_S_PR_BIND_W_AF)
-			len += sna_sm_build_bind_cv(CV_ROUTE_SEL, 
+			len += sna_sm_build_bind_cv(CV_ROUTE_SEL,
 				&bind->raw + len); /* +20 */
 		len += sna_sm_build_bind_cv(CV_COS_TPF, &bind->raw + len); /* +11 */
-       	 	len += sna_sm_build_bind_cv(CV_FQ_PCID, &bind->raw + len); /* +21 */
+		len += sna_sm_build_bind_cv(CV_FQ_PCID, &bind->raw + len); /* +21 */
 		sna_dfc_init_th_rh(newskb, rcb);
 
 		if (t == BIND_S_PR_BIND) {
 			newskb->h.raw[0] = 0xEB;
-                	newskb->h.raw[1] = 0x80;
-                	newskb->h.raw[2] = 0x00;
+			newskb->h.raw[1] = 0x80;
+			newskb->h.raw[2] = 0x00;
 		}
 
 		if (t == BIND_S_PR_BIND_W_AF) {
@@ -242,7 +222,7 @@ static int sna_sm_build_bind_rsp_pos(struct sk_buff *skb, int t)
 			newskb->h.raw[1] = 0x80;
 			newskb->h.raw[2] = 0x00;
 			newskb->nh.raw[2] = 0x02;
-                	newskb->nh.raw[3] = 0x01;
+			newskb->nh.raw[3] = 0x01;
 		}
 	} else {
 		skb_push(newskb, 3);
@@ -257,9 +237,9 @@ static int sna_sm_build_bind_rsp_pos(struct sk_buff *skb, int t)
 		newskb->h.raw[2] = 0x00;
 		newskb->nh.raw[0] = 0x2D;
 		newskb->nh.raw[1] = 0x00;
-                if (t == BIND_S_PR_FMD_W_AF) {
+		if (t == BIND_S_PR_FMD_W_AF) {
 			newskb->nh.raw[2] = 0x00; // 0x02;
-                        newskb->nh.raw[3] = 0x01;
+			newskb->nh.raw[3] = 0x01;
 		} else {
 			newskb->nh.raw[2] = 0x01;
 			newskb->nh.raw[3] = 0x00;
@@ -269,11 +249,11 @@ static int sna_sm_build_bind_rsp_pos(struct sk_buff *skb, int t)
 	}
 
 	llc_data(0x04, 0x04, eth_hdr->h_source, newskb, dev);
+
+	return 0;
+}
 #endif	/* OLD_LLC */
 #endif	/* CONFIG_SNA_LLC */
-
-        return 0;
-}
 
 static int sna_sm_bind_rsp_state_err(struct sna_lulu_cb *lulu, struct sk_buff *skb)
 {
@@ -281,17 +261,19 @@ static int sna_sm_bind_rsp_state_err(struct sna_lulu_cb *lulu, struct sk_buff *s
 	return 0;
 }
 
+#ifdef SNA_UNUSED
 static int sna_sm_bind_req_state_err(struct sna_lulu_cb *lulu, struct sk_buff *skb)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
+#endif
 
 /* Check if the received RSP(BIND) correlates with a previously sent BIND. */
 static struct sna_lulu_cb *sna_sm_correlate_bind_rsp(struct sna_lfsid *lf, struct sk_buff *skb)
 {
 	struct sna_lulu_cb *lulu;
-	sna_fqpcid *fqpcid;
+/*	sna_fqpcid *fqpcid;*/
 
 	sna_debug(5, "init\n");
 	lulu = sna_sm_lulu_get_by_index(lf->sm_index);
@@ -309,31 +291,33 @@ static struct sna_lulu_cb *sna_sm_correlate_bind_rsp(struct sna_lfsid *lf, struc
 	 * if (lf->sm_index != lulu->index)
 	 * 	return NULL;
 	 */
-        return lulu;
+	return lulu;
 }
 
 /* Check if the received RSP(UNBIND) correlates with a known session. */
+#ifdef SNA_UNUSED
 static struct sna_lulu_cb *sna_sm_correlate_unbind_req(struct sna_lfsid *lf, struct sk_buff *skb)
 {
 	struct sna_lulu_cb *lulu;
-	sna_fqpcid *fqpcid;
+/*	sna_fqpcid *fqpcid;*/
 
 	sna_debug(5, "init\n");
 	lulu = sna_sm_lulu_get_by_index(lf->sm_index);
-        if (!lulu)
-                return NULL;
-        /* validate bind by extracting the fqpcid control vector. 
-         * fqpcid = sna_sm_bind_extract_fqpcid(skb);
-         * if (!fqpcid)
-         *      return NULL;
-         * lulu = sna_sm_lulu_get_by_fqpcid(fqpcid);
-         * if (!lulu)
-         *      return NULL;
-         * if (!lf->sm_index != lulu->index)
-         * 	return NULL;
-         */
-        return lulu;
+	if (!lulu)
+		return NULL;
+	/* validate bind by extracting the fqpcid control vector.
+	 * fqpcid = sna_sm_bind_extract_fqpcid(skb);
+	 * if (!fqpcid)
+	 *      return NULL;
+	 * lulu = sna_sm_lulu_get_by_fqpcid(fqpcid);
+	 * if (!lulu)
+	 *      return NULL;
+	 * if (!lf->sm_index != lulu->index)
+	 * 	return NULL;
+	 */
+	return lulu;
 }
+#endif
 
 /* Check BIND for semantic and state errors, create a half-session process,
  * reserve required buffers. If no errors occur, build and send a +RSP(BIND),
@@ -360,11 +344,11 @@ int sna_sm_proc_bind_req(struct sna_lfsid *lf, struct sk_buff *skb)
 
 	if (bstate == BIND_S_PR_BIND) {
 		/* Send +RSP FMD BIND */
-                sna_sm_build_bind_rsp_pos(skb, BIND_S_PR_FMD);
+		sna_sm_build_bind_rsp_pos(skb, BIND_S_PR_FMD);
 		bstate = BIND_S_PR_FMD;
 		kfree_skb(skb);
 		return 0;
-	}	
+	}
 
 	if (bstate == BIND_S_PR_FMD) {
 		/* Send BIND w/ real oaf/daf */
@@ -389,55 +373,55 @@ int sna_sm_proc_bind_req(struct sna_lfsid *lf, struct sk_buff *skb)
 	}
 	kfree_skb(skb);
 
-        struct sna_local *local;
-        struct sna_mu *mu_new;
-        struct sna_lu_lu_cb *lulu_cb;
-        struct sna_partner_lu *plu;
+	struct sna_local *local;
+	struct sna_mu *mu_new;
+	struct sna_lu_lu_cb *lulu_cb;
+	struct sna_partner_lu *plu;
 
-        err = sna_check_semantic(mu);
-        if (err < 0) {
-                local->sense = err; 
-                return -1;
-        }
+	err = sna_check_semantic(mu);
+	if (err < 0) {
+		local->sense = err;
+		return -1;
+	}
 
-        err = sna_bind_rq_state_error(mu);
-        if (err < 0) {
-                local->sense = err;
-                return (-1);
-        }
+	err = sna_bind_rq_state_error(mu);
+	if (err < 0) {
+		local->sense = err;
+		return (-1);
+	}
 
-        plu->active_session_params.parallel = bind_rq_rcv->parallel;
+	plu->active_session_params.parallel = bind_rq_rcv->parallel;
 	new(lulu_cb, GFP_ATOMIC);
 	if (!lulu_cb)
 		return -ENOMEM;
-        sna_init_lulu_cb_bind(mu, lulu_cb);
-        lulu_cb->hs_id = unique_hs_id();
-        sna_build_bind_rsp_pos(mu, lulu_cb, mu_new);
-        err = sna_reserve_constant_buffers(lulu_cb);
-        if (!err)
-                err = sna_reserver_variable_buffers(lulu_cb, bind_rq_rcv);
-        if (!err) {
-                lulu_cb->session_id = sna_get_session_id();
-                sna_build_and_send_init_hs(lulu_cb, bind_image);
-        }
+	sna_init_lulu_cb_bind(mu, lulu_cb);
+	lulu_cb->hs_id = unique_hs_id();
+	sna_build_bind_rsp_pos(mu, lulu_cb, mu_new);
+	err = sna_reserve_constant_buffers(lulu_cb);
+	if (!err)
+		err = sna_reserver_variable_buffers(lulu_cb, bind_rq_rcv);
+	if (!err) {
+		lulu_cb->session_id = sna_get_session_id();
+		sna_build_and_send_init_hs(lulu_cb, bind_image);
+	}
 
-        if (!err) {
-                send_to_asm(mu_new);
-                fsm_status(mu_new, lulu_cb);
-        } else {
-                if (mu->bind_ru.fqpcid != NULL)
-                        sna_build_and_send_unbind_rq(mu,CLEANUP,local->sense);
-                else {
-                        if (buffer_err == 0)
-                                bm(FREE, mu_new);
-                        sna_build_and_send_bind_rsp_neg(mu);
-                }
+	if (!err) {
+		send_to_asm(mu_new);
+		fsm_status(mu_new, lulu_cb);
+	} else {
+		if (mu->bind_ru.fqpcid != NULL)
+			sna_build_and_send_unbind_rq(mu,CLEANUP,local->sense);
+		else {
+			if (buffer_err == 0)
+				bm(FREE, mu_new);
+			sna_build_and_send_bind_rsp_neg(mu);
+		}
 
-                if (lulu_cb != NULL)
-                        sna_cleanup_lu_lu_session(lulu_cb);
-        }
+		if (lulu_cb != NULL)
+			sna_cleanup_lu_lu_session(lulu_cb);
+	}
 #endif
-        return 0;
+	return 0;
 }
 
 /* Check if the received RSP(BIND) correlator with the previously sent BIND. If
@@ -459,7 +443,7 @@ int sna_sm_proc_bind_rsp(struct sna_lfsid *lf, struct sk_buff *skb)
 		kfree_skb(skb);
 		goto out;
 	}
-	if (skb->h.rh->rti == SNA_RH_RTI_NEG) {
+	if (sna_transport_header(skb)->rti == SNA_RH_RTI_NEG) {
 		sna_debug(5, "negative bind response\n");
 		lulu->input = SNA_SM_FSM_INPUT_NEG_BIND_RSP;
 		goto done;
@@ -474,19 +458,19 @@ int sna_sm_proc_bind_rsp(struct sna_lfsid *lf, struct sk_buff *skb)
 	if (!remote_lu) {
 		sna_debug(5, "lost remote lu\n");
 		lulu->input = SNA_SM_FSM_INPUT_POS_BIND_RSP_NG;
-                goto done;
+		goto done;
 	}
 	err = sna_hs_init_finish(lulu->hs_index, lulu->pc_index, lf, skb);
 	if (err < 0) {
 		sna_debug(5, "unable to save bind image\n");
 		lulu->input = SNA_SM_FSM_INPUT_POS_BIND_RSP_NG;
-                goto done;
-        }
+		goto done;
+	}
 	remote_lu->sessions++;
 	lulu->input = SNA_SM_FSM_INPUT_POS_BIND_RSP_OK;
 done:	err = sna_sm_fsm_status(lulu);
-        if (err < 0)
-                sna_debug(5, "fsm_status error `%d'.\n", err);
+	if (err < 0)
+		sna_debug(5, "fsm_status error `%d'.\n", err);
 out:    kfree_skb(skb);
 	return err;
 }
@@ -500,72 +484,74 @@ int sna_sm_proc_unbind_req(struct sna_lfsid *lf, struct sk_buff *skb)
 {
 	sna_debug(5, "init\n");
 #ifdef NOT
-        struct sna_lu_lu_cb *lulu_cb;
+	struct sna_lu_lu_cb *lulu_cb;
 
-        correlate = sna_correlator_unbind_rq(mu);
-        sna_build_and_send_unbind_rsp(mu);
-        if (correlate)
-                fsm_status(mu, lulu_cb);
+	correlate = sna_correlator_unbind_rq(mu);
+	sna_build_and_send_unbind_rsp(mu);
+	if (correlate)
+		fsm_status(mu, lulu_cb);
 #endif
-        return 0;
+	return 0;
 }
 
+#ifdef SNA_UNUSED
 static u_int32_t sna_sm_bind_ru_unfold(u_int8_t a, u_int8_t b)
 {
-        u_int32_t i, c;
-        for (i = 1, c = 2; i < b; i++)
-                c = c * 2;
-        return a * c;
+	u_int32_t i, c;
+	for (i = 1, c = 2; i < b; i++)
+		c = c * 2;
+	return a * c;
 }
+#endif
 
 static u_int8_t sna_sm_bind_ru_fold(u_int32_t n)
 {
-        u_int8_t b;
-        if (n < 8)
-                return 0x80;
-        if (n >= 491520)
-                return 0xFF;
-        for (b = 0; n > 15; b++)
-                n = n / 2;
-        return (((u_int8_t)n) << 4) | (((u_int8_t)b));
+	u_int8_t b;
+	if (n < 8)
+		return 0x80;
+	if (n >= 491520)
+		return 0xFF;
+	for (b = 0; n > 15; b++)
+		n = n / 2;
+	return (((u_int8_t)n) << 4) | (((u_int8_t)b));
 }
 
 static int sna_sm_user_data_nonce(struct sk_buff *skb)
 {
-        u_int8_t n_data[8];
-        u_int8_t *len, *key, *rsv;
-        struct timeval t;
+	u_int8_t n_data[8];
+	u_int8_t *len, *key, *rsv;
+	struct timeval t;
 
-        sna_debug(5, "init\n");
-        len = (u_int8_t *)skb_put(skb, 1);
-        key = (u_int8_t *)skb_put(skb, 1);
-        rsv = (u_int8_t *)skb_put(skb, 1);
-        do_gettimeofday(&t);
-        memcpy(n_data, &t, 8);
-        fatoe_strncpy(n_data, n_data, 8);
-        memcpy(skb_put(skb, 8), n_data, 8);
-        *key = SNA_USER_DATA_NONCE;
-        *len = 2 + 8;
-        return *len + 1;
+	sna_debug(5, "init\n");
+	len = (u_int8_t *)skb_put(skb, 1);
+	key = (u_int8_t *)skb_put(skb, 1);
+	rsv = (u_int8_t *)skb_put(skb, 1);
+	do_gettimeofday(&t);
+	memcpy(n_data, &t, 8);
+	fatoe_strncpy(n_data, n_data, 8);
+	memcpy(skb_put(skb, 8), n_data, 8);
+	*key = SNA_USER_DATA_NONCE;
+	*len = 2 + 8;
+	return *len + 1;
 }
 
 static int sna_sm_user_data_network_name(sna_netid *name, int slu, struct sk_buff *skb)
 {
-        u_int8_t name_len, name_flat[17];
+	u_int8_t name_len, name_flat[17];
 	u_int8_t *len, *key;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	len = (u_int8_t *)skb_put(skb, 1);
-        key = (u_int8_t *)skb_put(skb, 1);
-        name_len = sna_netid_to_char(name, name_flat);
-        fatoe_strncpy(name_flat, name_flat, name_len);
-        memcpy(skb_put(skb, name_len), name_flat, name_len);
+	key = (u_int8_t *)skb_put(skb, 1);
+	name_len = sna_netid_to_char(name, name_flat);
+	fatoe_strncpy(name_flat, name_flat, name_len);
+	memcpy(skb_put(skb, name_len), name_flat, name_len);
 	if (slu)
 		*key = SNA_USER_DATA_SLU_NETWORK_NAME;
 	else
 		*key = SNA_USER_DATA_PLU_NETWORK_NAME;
 	*len = name_len + 1;
-        return *len + 1;
+	return *len + 1;
 }
 
 static int sna_sm_user_data_session_instance(struct sna_lulu_cb *lulu,
@@ -574,10 +560,10 @@ static int sna_sm_user_data_session_instance(struct sna_lulu_cb *lulu,
 	u_int8_t *len, *key, *format;
 	u_int8_t data_len = 4;
 	u_int32_t data;
-	
+
 	sna_debug(5, "init\n");
-        len 	= (u_int8_t *)skb_put(skb, 1);
-        key 	= (u_int8_t *)skb_put(skb, 1);
+	len 	= (u_int8_t *)skb_put(skb, 1);
+	key 	= (u_int8_t *)skb_put(skb, 1);
 	format	= (u_int8_t *)skb_put(skb, 1);
 	data = htonl(lulu->hs_index);
 	atoe_strncpy((u_int8_t *)&data, (u_int8_t *)&data, data_len);
@@ -603,7 +589,7 @@ static int sna_sm_user_data_mode(u_int8_t *name, struct sk_buff *skb)
 	return *len + 1;
 }
 
-static int sna_sm_bind_pkt_append_user_data(struct sna_lulu_cb *lulu, 
+static int sna_sm_bind_pkt_append_user_data(struct sna_lulu_cb *lulu,
 	struct sk_buff *skb)
 {
 	u_int8_t *user_len, *user_key;
@@ -744,7 +730,7 @@ static int sna_sm_bind_pkt_init(struct sna_lulu_cb *lulu, struct sk_buff *skb)
 	bind->sec_tx_win_size	= mode->tx_pacing;
 	bind->adaptive_pacing	= 1;				/* non-static. */
 	bind->sec_rx_win_size	= mode->rx_pacing;
-	bind->sec_max_ru_size	= sna_sm_bind_ru_fold(mode->rx_max_ru);	
+	bind->sec_max_ru_size	= sna_sm_bind_ru_fold(mode->rx_max_ru);
 	bind->pri_max_ru_size	= sna_sm_bind_ru_fold(mode->tx_max_ru);
 	bind->pri_stagi		= 1; // 0;			/* non-static. */
 	bind->pri_tx_win_size	= mode->tx_pacing;
@@ -785,7 +771,7 @@ static int sna_sm_bind_pkt_init(struct sna_lulu_cb *lulu, struct sk_buff *skb)
 
 	/* setup remote name. */
 	len += sna_sm_bind_pkt_append_name(&lulu->remote_name, skb);
-	
+
 	/* setup control vectors. */
 	if (bind->ctrl_vectors) {
 		len += sna_vector_cos_tpf(mode->cos_name, 1, 0, skb);
@@ -825,7 +811,7 @@ static int sna_sm_build_and_send_bind_req(struct sna_lulu_cb *lulu)
 		sna_debug(5, "tx_bind failed `%d'.\n", err);
 		kfree_skb(skb);
 	}
-        return err;
+	return err;
 }
 
 /* Get the address (LFSID structure) for the session. Create a half-session
@@ -844,8 +830,8 @@ static int sna_sm_prepare_to_send_bind(struct sna_lulu_cb *lulu)
 		goto out;
 	memcpy(&lulu->lfsid, lf, sizeof(struct sna_lfsid));
 	lulu->hs_index = sna_hs_init(lulu, &err);
-        if (err < 0)
-                sna_debug(5, "hs_init failed `%d'.\n", err);
+	if (err < 0)
+		sna_debug(5, "hs_init failed `%d'.\n", err);
 out:	return err;
 }
 
@@ -865,7 +851,7 @@ int sna_sm_proc_cinit_sig_rsp(u_int32_t lulu_index, u_int32_t pc_index)
 	struct sna_mode_cb *mode;
 	struct sna_pc_cb *pc;
 	int err;
-	
+
 	sna_debug(5, "init\n");
 	lulu = sna_sm_lulu_get_by_index(lulu_index);
 	if (!lulu) {
@@ -877,41 +863,41 @@ int sna_sm_proc_cinit_sig_rsp(u_int32_t lulu_index, u_int32_t pc_index)
 	remote_lu = sna_rm_remote_lu_get_by_index(lulu->remote_lu_index);
 	if (!remote_lu) {
 		lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG;
-                goto done;
+		goto done;
 	}
 	mode = sna_rm_mode_get_by_index(lulu->mode_index);
-        if (!mode) {
+	if (!mode) {
 		lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG;
-                goto done;
+		goto done;
 	}
-	if (sna_sm_lu_mode_session_limit(remote_lu, mode, 
+	if (sna_sm_lu_mode_session_limit(remote_lu, mode,
 		lulu->type, SNA_SM_S_STATE_BIND_SENT)) {
 		lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG;
-                goto done;
-        }
+		goto done;
+	}
 	pc = sna_pc_get_by_index(pc_index);
 	if (!pc) {
 		lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG;
-                goto done;
-        }
-	if (pc->tx_max_btu < mode->tx_max_ru 
+		goto done;
+	}
+	if (pc->tx_max_btu < mode->tx_max_ru
 		|| pc->rx_max_btu < mode->rx_max_ru) {
 		lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG;
-                goto done;
-        }
+		goto done;
+	}
 	/* need to check if there is already an active session
 	 * to this remote_lu and if the remote_lu supports parallel
 	 * sessions.
 	 */
-        err = sna_sm_prepare_to_send_bind(lulu);
+	err = sna_sm_prepare_to_send_bind(lulu);
 	if (err < 0) {
 		lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG;
-                goto done;
-        }
+		goto done;
+	}
 	lulu->input = SNA_SM_FSM_INPUT_CINIT_SIGNAL_OK;
 done:	err = sna_sm_fsm_status(lulu);
-        if (err < 0)
-                sna_debug(5, "fsm_status error `%d'.\n", err);
+	if (err < 0)
+		sna_debug(5, "fsm_status error `%d'.\n", err);
 out:	return err;
 }
 
@@ -922,7 +908,7 @@ out:	return err;
  */
 int sna_sm_proc_init_sig_neg_rsp(u_int32_t lulu_index)
 {
-        struct sna_lulu_cb *lulu;
+	struct sna_lulu_cb *lulu;
 	int err;
 
 	sna_debug(5, "init\n");
@@ -931,18 +917,18 @@ int sna_sm_proc_init_sig_neg_rsp(u_int32_t lulu_index)
 		return -ENOENT;
 	lulu->input = SNA_SM_FSM_INPUT_INIT_SIGNAL_NEG_RSP;
 	err = sna_sm_fsm_status(lulu);
-        if (err < 0)
-                sna_debug(5, "fsm_status error `%d'.\n", err);
-        return err;
+	if (err < 0)
+		sna_debug(5, "fsm_status error `%d'.\n", err);
+	return err;
 }
 
-/* Build and send an INIT_SIGNAL record to the control point. 
+/* Build and send an INIT_SIGNAL record to the control point.
  *
  * @lulu: lulu control block.
  */
 static int sna_sm_build_and_send_init_sig(struct sna_lulu_cb *lulu)
 {
-        struct sna_init_signal init;
+	struct sna_init_signal init;
 	struct sna_mode_cb *mode;
 
 	sna_debug(5, "init\n");
@@ -967,12 +953,12 @@ static int sna_sm_build_and_send_init_sig(struct sna_lulu_cb *lulu)
  * @state: state of the activation (enum sna_sm_session_state).
  */
 int sna_sm_lu_mode_session_limit(struct sna_remote_lu_cb *remote_lu,
-        struct sna_mode_cb *mode, int type, int state)
+	struct sna_mode_cb *mode, int type, int state)
 {
 	int bidder_limit, fsp_limit, total_limit;
 	int bidder_cnt, fsp_cnt;
 	int err = 0;
-	
+
 	sna_debug(5, "init\n");
 	switch (state) {
 		case SNA_SM_S_STATE_ACTIVE:
@@ -987,29 +973,24 @@ int sna_sm_lu_mode_session_limit(struct sna_remote_lu_cb *remote_lu,
 		default:
 			return -EINVAL;
 	}
-        total_limit     = mode->user_max.sessions;
-        fsp_limit       = mode->user_max.conwinners;
-        bidder_limit    = mode->user_max.conlosers;
+	total_limit     = mode->user_max.sessions;
+	fsp_limit       = mode->user_max.conwinners;
+	bidder_limit    = mode->user_max.conlosers;
 	if (fsp_cnt + bidder_cnt > total_limit) {
 		err = 1;	/* 0x08050000 */
 		goto out;
 	}
-        if (total_limit - bidder_limit == fsp_cnt 
+	if (total_limit - bidder_limit == fsp_cnt
 		&& type == SNA_SM_S_TYPE_FSP && remote_lu->parallel) {
 		err = 1;	/* 0x08050001 */
 		goto out;
 	}
-	if (total_limit - fsp_limit == bidder_cnt 
+	if (total_limit - fsp_limit == bidder_cnt
 		&& type == SNA_SM_S_TYPE_BIDDER) {
 		err = 1;	/* 0x08050001 */
 		goto out;
 	}
 out:	return err;
-}
-
-static int sna_sm_build_and_send_act_sess_rsp_neg(int correlator, int retry)
-{
-	return 0;
 }
 
 /* Get the fully-qualified procedure correlation identifier (FQPCID) from the
@@ -1033,50 +1014,50 @@ static int sna_sm_fsm_output_a(struct sna_lulu_cb *lulu)
 
 static int sna_sm_fsm_output_b(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_c(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_d(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_e(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_f(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_g(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_h(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_i(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 /* call build_and_send_sesst_sig(lulu);
@@ -1084,50 +1065,50 @@ static int sna_sm_fsm_output_i(struct sna_lulu_cb *lulu)
  */
 static int sna_sm_fsm_output_j(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_k(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_l(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_m(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_n(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_p(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_q(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_r(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 /* call build_and_send_act_sess_rsp_pos(lulu).
@@ -1135,30 +1116,30 @@ static int sna_sm_fsm_output_r(struct sna_lulu_cb *lulu)
 static int sna_sm_fsm_output_s(struct sna_lulu_cb *lulu)
 {
 	int err;
-	
-        sna_debug(5, "init\n");
+
+	sna_debug(5, "init\n");
 	err = sna_rm_session_activated_proc(lulu);
 	if (err < 0)
 		sna_debug(5, "session activated failed `%d'.\n", err);
-        return err;
+	return err;
 }
 
 static int sna_sm_fsm_output_t(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_u(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 static int sna_sm_fsm_output_v(struct sna_lulu_cb *lulu)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 /* this is a linux addition to the standard state machine.
@@ -1171,11 +1152,11 @@ static int sna_sm_fsm_output_x(struct sna_lulu_cb *lulu)
 
 	sna_debug(5, "init\n");
 	err = sna_sm_build_and_send_bind_req(lulu);
-        if (err < 0)
+	if (err < 0)
 		sna_debug(5, "build and send failed\n");
 	return err;
 }
-	
+
 static int sna_sm_fsm_output(struct sna_lulu_cb *lulu, int action)
 {
 	int err = -EINVAL;
@@ -1185,64 +1166,64 @@ static int sna_sm_fsm_output(struct sna_lulu_cb *lulu, int action)
 		case SNA_SM_FSM_OUTPUT_A:
 			err = sna_sm_fsm_output_a(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_B:
+		case SNA_SM_FSM_OUTPUT_B:
 			err = sna_sm_fsm_output_b(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_C:
+		case SNA_SM_FSM_OUTPUT_C:
 			err = sna_sm_fsm_output_c(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_D:
+		case SNA_SM_FSM_OUTPUT_D:
 			err = sna_sm_fsm_output_d(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_E:
+		case SNA_SM_FSM_OUTPUT_E:
 			err = sna_sm_fsm_output_e(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_F:
+		case SNA_SM_FSM_OUTPUT_F:
 			err = sna_sm_fsm_output_f(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_G:
+		case SNA_SM_FSM_OUTPUT_G:
 			err = sna_sm_fsm_output_g(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_H:
+		case SNA_SM_FSM_OUTPUT_H:
 			err = sna_sm_fsm_output_h(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_I:
+		case SNA_SM_FSM_OUTPUT_I:
 			err = sna_sm_fsm_output_i(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_J:
+		case SNA_SM_FSM_OUTPUT_J:
 			err = sna_sm_fsm_output_j(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_K:
+		case SNA_SM_FSM_OUTPUT_K:
 			err = sna_sm_fsm_output_k(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_L:
+		case SNA_SM_FSM_OUTPUT_L:
 			err = sna_sm_fsm_output_l(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_M:
+		case SNA_SM_FSM_OUTPUT_M:
 			err = sna_sm_fsm_output_m(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_N:
+		case SNA_SM_FSM_OUTPUT_N:
 			err = sna_sm_fsm_output_n(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_P:
+		case SNA_SM_FSM_OUTPUT_P:
 			err = sna_sm_fsm_output_p(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_Q:
+		case SNA_SM_FSM_OUTPUT_Q:
 			err = sna_sm_fsm_output_q(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_R:
+		case SNA_SM_FSM_OUTPUT_R:
 			err = sna_sm_fsm_output_r(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_S:
+		case SNA_SM_FSM_OUTPUT_S:
 			err = sna_sm_fsm_output_s(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_T:
+		case SNA_SM_FSM_OUTPUT_T:
 			err = sna_sm_fsm_output_t(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_U:
+		case SNA_SM_FSM_OUTPUT_U:
 			err = sna_sm_fsm_output_u(lulu);
 			break;
-        	case SNA_SM_FSM_OUTPUT_V:
+		case SNA_SM_FSM_OUTPUT_V:
 			err = sna_sm_fsm_output_v(lulu);
 			break;
 		case SNA_SM_FSM_OUTPUT_X:
@@ -1314,8 +1295,8 @@ static int sna_sm_fsm_input_pos_bind_rsp_ok(struct sna_lulu_cb *lulu)
 	 */
 	lulu->input = SNA_SM_FSM_INPUT_POS_INIT_HS_RSP;
 	err = sna_sm_fsm_status(lulu);
-        if (err < 0)
-                sna_debug(5, "fsm_status error `%d'.\n", err);
+	if (err < 0)
+		sna_debug(5, "fsm_status error `%d'.\n", err);
 out:	return err;
 }
 
@@ -1339,7 +1320,7 @@ static int sna_sm_fsm_input_neg_bind_rsp(struct sna_lulu_cb *lulu)
 	if (lulu->state != SNA_SM_FSM_STATE_PND_BIN_RSP)
 		goto out;
 	lulu->state = SNA_SM_FSM_STATE_RES;
-        err = sna_sm_fsm_output(lulu, SNA_SM_FSM_OUTPUT_E);
+	err = sna_sm_fsm_output(lulu, SNA_SM_FSM_OUTPUT_E);
 out:	return err;
 }
 
@@ -1376,16 +1357,16 @@ static int sna_sm_fsm_input_neg_init_hs_rsp(struct sna_lulu_cb *lulu)
 
 	sna_debug(5, "init\n");
 	switch (lulu->state) {
-                case SNA_SM_FSM_STATE_PND_INI_HS_RSP_PLU:
+		case SNA_SM_FSM_STATE_PND_INI_HS_RSP_PLU:
 			lulu->state = SNA_SM_FSM_STATE_RES;
 			err = sna_sm_fsm_output(lulu, SNA_SM_FSM_OUTPUT_H);
-                        break;
-                case SNA_SM_FSM_STATE_PND_INI_HS_RSP_SLU:
+			break;
+		case SNA_SM_FSM_STATE_PND_INI_HS_RSP_SLU:
 			lulu->state = SNA_SM_FSM_STATE_RES;
 			err = sna_sm_fsm_output(lulu, SNA_SM_FSM_OUTPUT_N);
-                        break;
-        }
-        return err;
+			break;
+	}
+	return err;
 }
 
 static int sna_sm_fsm_input_deactivate_session(struct sna_lulu_cb *lulu)
@@ -1428,54 +1409,54 @@ int sna_sm_fsm_status(struct sna_lulu_cb *lulu)
 {
 	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	switch (lulu->input) {
 		case SNA_SM_FSM_INPUT_ACTIVATE_SESSION:
 			err = sna_sm_fsm_input_activate_session(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_INIT_SIGNAL_NEG_RSP:
+		case SNA_SM_FSM_INPUT_INIT_SIGNAL_NEG_RSP:
 			err = sna_sm_fsm_input_init_signal_neg_rsp(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_CINIT_SIGNAL_OK:
+		case SNA_SM_FSM_INPUT_CINIT_SIGNAL_OK:
 			err = sna_sm_fsm_input_cinit_signal_ok(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG:
+		case SNA_SM_FSM_INPUT_CINIT_SIGNAL_NG:
 			err = sna_sm_fsm_input_cinit_signal_ng(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_POS_BIND_RSP_OK:
+		case SNA_SM_FSM_INPUT_POS_BIND_RSP_OK:
 			err = sna_sm_fsm_input_pos_bind_rsp_ok(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_POS_BIND_RSP_NG:
+		case SNA_SM_FSM_INPUT_POS_BIND_RSP_NG:
 			err = sna_sm_fsm_input_pos_bind_rsp_ng(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_NEG_BIND_RSP:
+		case SNA_SM_FSM_INPUT_NEG_BIND_RSP:
 			err = sna_sm_fsm_input_neg_bind_rsp(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_BIND:
+		case SNA_SM_FSM_INPUT_BIND:
 			err = sna_sm_fsm_input_bind(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_POS_INIT_HS_RSP:
+		case SNA_SM_FSM_INPUT_POS_INIT_HS_RSP:
 			err = sna_sm_fsm_input_pos_init_hs_rsp(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_NEG_INIT_HS_RSP:
+		case SNA_SM_FSM_INPUT_NEG_INIT_HS_RSP:
 			err = sna_sm_fsm_input_neg_init_hs_rsp(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_DEACTIVATE_SESSION:
+		case SNA_SM_FSM_INPUT_DEACTIVATE_SESSION:
 			err = sna_sm_fsm_input_deactivate_session(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_UNBIND:
+		case SNA_SM_FSM_INPUT_UNBIND:
 			err = sna_sm_fsm_input_unbind(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_SESSION_ROUTE_INOP:
+		case SNA_SM_FSM_INPUT_SESSION_ROUTE_INOP:
 			err = sna_sm_fsm_input_session_route_inop(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_ABORT_HS:
+		case SNA_SM_FSM_INPUT_ABORT_HS:
 			err = sna_sm_fsm_input_abort_hs(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_RM_ABEND:
+		case SNA_SM_FSM_INPUT_RM_ABEND:
 			err = sna_sm_fsm_input_rm_abend(lulu);
 			break;
-        	case SNA_SM_FSM_INPUT_HS_ABEND:
+		case SNA_SM_FSM_INPUT_HS_ABEND:
 			err = sna_sm_fsm_input_hs_abend(lulu);
 			break;
 	}
@@ -1492,7 +1473,7 @@ int sna_sm_fsm_status(struct sna_lulu_cb *lulu)
  * @remote_name: remote lu name.
  * @mode_name: mode name session needs to use.
  * @type: first speaker (conwinner) or bidder (conloser).
- * 
+ *
  * 3.5.15 - (lu62peer.boo)
  */
 int sna_sm_proc_activate_session(struct sna_mode_cb *mode,
@@ -1502,7 +1483,7 @@ int sna_sm_proc_activate_session(struct sna_mode_cb *mode,
 	int err;
 
 	sna_debug(5, "init\n");
-	if (sna_sm_lu_mode_session_limit(remote_lu, mode, 
+	if (sna_sm_lu_mode_session_limit(remote_lu, mode,
 		type, SNA_SM_S_STATE_INIT_SENT))
 		return -EUSERS;
 	new(lulu, GFP_ATOMIC);
@@ -1516,7 +1497,7 @@ int sna_sm_proc_activate_session(struct sna_mode_cb *mode,
 	lulu->tp_index		= tp_index;
 	lulu->type		= type;
 	lulu->state		= SNA_SM_FSM_STATE_RES;
-        err = sna_sm_get_fqpcid(lulu);
+	err = sna_sm_get_fqpcid(lulu);
 	if (err < 0) {
 		sna_debug(5, "get_fqpcid failed `%d'\n", err);
 		return err;
@@ -1526,7 +1507,7 @@ int sna_sm_proc_activate_session(struct sna_mode_cb *mode,
 	err = sna_sm_fsm_status(lulu);
 	if (err < 0)
 		sna_debug(5, "fsm_status error `%d'.\n", err);
-        return err;
+	return err;
 }
 
 /* LU session manager (SM) is responsible for creating the RM process and for
@@ -1900,7 +1881,7 @@ static int sna_bind_rsp_state_err(struct sna_mu *mu, struct sna_lu_lu_cb *lulucb
 }
 
 /* Betermine whether or not session limits are exceeded for a received BIND. */
-static int sna_bind_session_limit_exceeded(unsigned char *plu_fqlu_name, 
+static int sna_bind_session_limit_exceeded(unsigned char *plu_fqlu_name,
 	struct sna_mode *mode, int type)
 {
 	struct sna_local *local;
@@ -2099,7 +2080,7 @@ static int sna_build_and_send_sess_activated(struct sna_lulu_cb *lulu_cb)
 /* Build and send SESSION_DEACTIVATED to RM to indicate that an active session
  * has been deactivated.
  */
-static int sna_build_and_send_sess_deactivated(__u8 hs_id, __u8 reason, 
+static int sna_build_and_send_sess_deactivated(__u8 hs_id, __u8 reason,
 	__u8 sense)
 {
 	struct sna_session_deactivated *deactivated;
@@ -2123,7 +2104,7 @@ static int sna_build_and_send_sess_deactivated(__u8 hs_id, __u8 reason,
  * record. The SLU sends it only if it has already sent a SESSST_SIGNAL
  * record to SS.
  */
-static int sna_build_and_send_sessend_sig(struct sna_lulu_cb *lulu_cb, 
+static int sna_build_and_send_sessend_sig(struct sna_lulu_cb *lulu_cb,
 	__u8 sense)
 {
 	struct sna_sessend_signal *sessend_signal;
@@ -2158,7 +2139,7 @@ static int sna_build_and_send_sessst_sig(struct sna_lu_lu_cb *lulu_cb)
 }
 
 /* Build and send an UNBIND. */
-static int sna_build_and_send_unbind_rq(unsigned char *buf, __u8 cleanup, 
+static int sna_build_and_send_unbind_rq(unsigned char *buf, __u8 cleanup,
 	__u8 sense)
 {
 	struct sna_mu *mu;
@@ -2324,7 +2305,7 @@ static int sna_process_lfsid_in_use(struct sna_lfsid_in_use *lfsid_in_use)
 	struct sna_lfsid_in_use_rsp *lfsid_in_use_rsp;
 
 	/* find activate or pending session ?? */
-	
+
 	new(lfsid_in_use_rsp, GFP_ATOMIC);
 
 	lfsid_in_use_rsp->pc_id = lfsid_in_use->pc_id;

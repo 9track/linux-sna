@@ -9,32 +9,10 @@
  *
  * See the GNU General Public License for more details.
  */
- 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
+
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
-#include <linux/skbuff.h>
-#include <net/datalink.h>
-#include <net/sock.h>
-#include <linux/proc_fs.h>
-#include <linux/stat.h>
-#include <linux/init.h>
-#include <linux/ctype.h>
 #include <linux/sna.h>
 
 #ifdef CONFIG_SNA_LLC
@@ -60,31 +38,31 @@ int sna_loopback_xmit(struct sk_buff *skb)
 #ifdef CONFIG_SNA_LLC
 static inline u16 sna_dlc_llc_protocol_type(u16 arphrd)
 {
-        u16 rc = htons(ETH_P_802_2);
+	u16 rc = htons(ETH_P_802_2);
 
-        if (arphrd == ARPHRD_IEEE802)
-                rc = htons(ETH_P_TR_802_2);
-        return rc;
+	if (arphrd == ARPHRD_IEEE802)
+		rc = htons(ETH_P_TR_802_2);
+	return rc;
 }
 
 static inline u_int8_t sna_dlc_llc_header_len(u_int8_t type)
 {
-        u_int8_t len = LLC_PDU_LEN_U;
+	u_int8_t len = LLC_PDU_LEN_U;
 
-        if (type == LLC_TEST_PRIM || type == LLC_XID_PRIM) {
-                len = LLC_PDU_LEN_U;
-        } else if (type == LLC_DATA_PRIM)
-                len = LLC_PDU_LEN_I;
-        return len;
+	if (type == LLC_TEST_PRIM || type == LLC_XID_PRIM) {
+		len = LLC_PDU_LEN_U;
+	} else if (type == LLC_DATA_PRIM)
+		len = LLC_PDU_LEN_I;
+	return len;
 }
 
 static int sna_dlc_llc_send_llc1(struct llc_sap *sap, struct sk_buff *skb,
 	struct sna_dlc_llc_addr *addr, int primitive, int type)
 {
 	union llc_u_prim_data prim_data;
-        struct llc_prim_if_block prim;
+	struct llc_prim_if_block prim;
 	int err;
-	
+
 	sna_debug(5, "init %p\n", sna_dlc_llc_send_llc1);
 	if (!sap) {
 		sna_debug(5, "!sap\n");
@@ -102,17 +80,17 @@ static int sna_dlc_llc_send_llc1(struct llc_sap *sap, struct sk_buff *skb,
 		sna_debug(5, "!addr\n");
 		return -EINVAL;
 	}
-        prim.data                 = &prim_data;
-        prim.sap                  = sap;
-        prim.prim                 = primitive;
+	prim.data                 = &prim_data;
+	prim.sap                  = sap;
+	prim.prim                 = primitive;
 	prim.type		  = type;
-        prim_data.test.skb        = skb;
-        prim_data.test.saddr.lsap = sap->laddr.lsap;
-        prim_data.test.daddr.lsap = addr->dsap;
-        skb->protocol = sna_dlc_llc_protocol_type(addr->arphrd);
-        memcpy(prim_data.test.saddr.mac, skb->dev->dev_addr, IFHWADDRLEN);
-        memcpy(prim_data.test.daddr.mac, addr->dmac, IFHWADDRLEN);
-        err = sap->req(&prim);
+	prim_data.test.skb        = skb;
+	prim_data.test.saddr.lsap = sap->laddr.lsap;
+	prim_data.test.daddr.lsap = addr->dsap;
+	skb->protocol = sna_dlc_llc_protocol_type(addr->arphrd);
+	memcpy(prim_data.test.saddr.mac, skb->dev->dev_addr, IFHWADDRLEN);
+	memcpy(prim_data.test.daddr.mac, addr->dmac, IFHWADDRLEN);
+	err = sap->req(&prim);
 	return err;
 }
 
@@ -120,55 +98,55 @@ static int sna_dlc_llc_send_conn(struct llc_sap *sap,
 	struct sna_dlc_llc_addr *addr, struct net_device *dev, u_int16_t link)
 {
 	union llc_u_prim_data prim_data;
-        struct llc_prim_if_block prim;
+	struct llc_prim_if_block prim;
 
 	sna_debug(5, "init\n");
-        prim.data           = &prim_data;
-        prim.sap            = sap;
-        prim.prim           = LLC_CONN_PRIM;
-        prim_data.conn.dev  = dev;
-        prim_data.conn.link = link;
-        prim_data.conn.sk   = NULL;
-        prim_data.conn.pri  = 0;
-        prim_data.conn.saddr.lsap = sap->laddr.lsap;
-        prim_data.conn.daddr.lsap = addr->dsap;
-        memcpy(prim_data.conn.saddr.mac, dev->dev_addr, IFHWADDRLEN);
-        memcpy(prim_data.conn.daddr.mac, addr->dmac, IFHWADDRLEN);
-        return sap->req(&prim);
+	prim.data           = &prim_data;
+	prim.sap            = sap;
+	prim.prim           = LLC_CONN_PRIM;
+	prim_data.conn.dev  = dev;
+	prim_data.conn.link = link;
+	prim_data.conn.sk   = NULL;
+	prim_data.conn.pri  = 0;
+	prim_data.conn.saddr.lsap = sap->laddr.lsap;
+	prim_data.conn.daddr.lsap = addr->dsap;
+	memcpy(prim_data.conn.saddr.mac, dev->dev_addr, IFHWADDRLEN);
+	memcpy(prim_data.conn.daddr.mac, addr->dmac, IFHWADDRLEN);
+	return sap->req(&prim);
 }
 
 static int sna_dlc_llc_send_disc(struct llc_sap *sap, struct sock *sk, u_int16_t link)
 {
-        union llc_u_prim_data prim_data;
-        struct llc_prim_if_block prim;
-        int rc;
+	union llc_u_prim_data prim_data;
+	struct llc_prim_if_block prim;
+	int rc;
 
 	sna_debug(5, "init\n");
-        prim.data           = &prim_data;
-        prim.sap            = sap;
-        prim.prim           = LLC_DISC_PRIM;
-        prim_data.disc.sk   = sk;
-        prim_data.disc.link = link;
-        rc = sap->req(&prim);
+	prim.data           = &prim_data;
+	prim.sap            = sap;
+	prim.prim           = LLC_DISC_PRIM;
+	prim_data.disc.sk   = sk;
+	prim_data.disc.link = link;
+	rc = sap->req(&prim);
 	return rc;
 }
 
 static int sna_dlc_llc_send_data(struct llc_sap *sap, struct sock *sk,
 	struct sk_buff *skb)
 {
-        union llc_u_prim_data prim_data;
-        struct llc_prim_if_block prim;
-        int rc;
+	union llc_u_prim_data prim_data;
+	struct llc_prim_if_block prim;
+	int rc;
 
 	sna_debug(5, "init\n");
-        prim.data          = &prim_data;
-        prim.sap           = sap;
-        prim.prim          = LLC_DATA_PRIM;
-        prim_data.data.skb = skb;
-        prim_data.data.pri = 0;
-        prim_data.data.sk  = sk;
-        skb->protocol      = sna_dlc_llc_protocol_type(0);
-        rc = sap->req(&prim);
+	prim.data          = &prim_data;
+	prim.sap           = sap;
+	prim.prim          = LLC_DATA_PRIM;
+	prim_data.data.skb = skb;
+	prim_data.data.pri = 0;
+	prim_data.data.sk  = sk;
+	skb->protocol      = sna_dlc_llc_protocol_type(0);
+	rc = sap->req(&prim);
 	return rc;
 }
 
@@ -189,34 +167,34 @@ static void sna_dlc_llc_ind_test_cmd(struct llc_sap *sap,
 		goto out;
 	memset(&addr, 0, sizeof(addr));
 	addr.ssap = prim_data->daddr.lsap;
-        memcpy(addr.smac, prim_data->daddr.mac, IFHWADDRLEN);
-        addr.dsap = prim_data->saddr.lsap;
-        memcpy(addr.dmac, prim_data->saddr.mac, IFHWADDRLEN);
-	sna_dlc_llc_send_llc1(sap, skb2, &addr, LLC_TEST_PRIM, 
+	memcpy(addr.smac, prim_data->daddr.mac, IFHWADDRLEN);
+	addr.dsap = prim_data->saddr.lsap;
+	memcpy(addr.dmac, prim_data->saddr.mac, IFHWADDRLEN);
+	sna_dlc_llc_send_llc1(sap, skb2, &addr, LLC_TEST_PRIM,
 		LLC_PRIM_TYPE_RESP);
 out:	return;
 }
 
-static void sna_dlc_llc_ind_test_rsp(struct llc_sap *sap, 
+static void sna_dlc_llc_ind_test_rsp(struct llc_sap *sap,
 	struct llc_prim_test *prim_data)
 {
 	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
-	ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac, 
+	sna_debug(5, "init\n");
+	ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac,
 		&prim_data->saddr.lsap);
-        if (!ls) {
+	if (!ls) {
 		sna_debug(5, "rouge test rsp\n");
 		return;
 	}
 	ls->co_status = CO_R_TEST_R;
-        sna_cs_connect_out((unsigned long)ls);
+	sna_cs_connect_out(&ls->retry);
 	return;
 }
 
 static void sna_dlc_llc_ind_test(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_test *prim_data = &prim->data->test;
+	struct llc_prim_test *prim_data = &prim->data->test;
 	struct llc_sap *sap = prim->sap;
 
 	if (prim_data->pri == LLC_PRIM_TYPE_REQ)
@@ -233,8 +211,8 @@ static void sna_dlc_llc_ind_xid_cmd(struct llc_prim_xid *prim_data)
 
 	sna_debug(5, "init\n");
 	ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac,
-                &prim_data->saddr.lsap);
-        if (!ls) {
+		&prim_data->saddr.lsap);
+	if (!ls) {
 		sna_debug(5, "rouge xid cmd\n");
 		return;
 	}
@@ -242,30 +220,30 @@ static void sna_dlc_llc_ind_xid_cmd(struct llc_prim_xid *prim_data)
 	if (!skb2)
 		return;
 	ls->xid_count++;
-        ls->xid_input           = sna_cs_xid_pkt_input(skb);
-        ls->xid_direction       = XID_DIR_INBOUND;
-        if (ls->xid_last_rx) {
-                kfree_skb(ls->xid_last_rx);
+	ls->xid_input           = sna_cs_xid_pkt_input(skb);
+	ls->xid_direction       = XID_DIR_INBOUND;
+	if (ls->xid_last_rx) {
+		kfree_skb(ls->xid_last_rx);
 		ls->xid_last_rx = NULL;
 	}
-        ls->xid_last_rx                 = skb2;
-        ls->xid_last_rx_direction       = ls->xid_direction;
-        sna_cs_connect_in(ls);
+	ls->xid_last_rx                 = skb2;
+	ls->xid_last_rx_direction       = ls->xid_direction;
+	sna_cs_connect_in(ls);
 	return;
 }
 
 static void sna_dlc_llc_ind_xid_rsp(struct llc_prim_xid *prim_data)
 {
 	struct sk_buff *skb2, *skb = prim_data->skb;
-        struct sna_ls_cb *ls;
+	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init: %p\n", sna_dlc_llc_ind_xid_rsp);
+	sna_debug(5, "init: %p\n", sna_dlc_llc_ind_xid_rsp);
 	ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac,
-                &prim_data->saddr.lsap);
-        if (!ls) {
-                sna_debug(5, "rouge xid rsp\n");
-                return;
-        }
+		&prim_data->saddr.lsap);
+	if (!ls) {
+		sna_debug(5, "rouge xid rsp\n");
+		return;
+	}
 	skb2 = skb_copy(skb, GFP_ATOMIC);
 	if (!skb2)
 		return;
@@ -273,24 +251,24 @@ static void sna_dlc_llc_ind_xid_rsp(struct llc_prim_xid *prim_data)
 	ls->xid_input 		= sna_cs_xid_pkt_input(skb);
 	ls->xid_direction	= XID_DIR_INBOUND;
 	if (ls->xid_last_rx) {
-                kfree_skb(ls->xid_last_rx);
+		kfree_skb(ls->xid_last_rx);
 		ls->xid_last_rx = NULL;
 	}
-        ls->xid_last_rx         	= skb2;
+	ls->xid_last_rx         	= skb2;
 	ls->xid_last_rx_direction	= ls->xid_direction;
-        sna_cs_connect_out((unsigned long)ls);
+	sna_cs_connect_out(&ls->retry);
 	return;
 }
 
 static void sna_dlc_llc_ind_xid(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_xid *prim_data = &prim->data->xid;
+	struct llc_prim_xid *prim_data = &prim->data->xid;
 
 	sna_debug(5, "init\n");
 	if (prim_data->pri == LLC_PRIM_TYPE_REQ)
-                sna_dlc_llc_ind_xid_cmd(prim_data);
-        else
-                sna_dlc_llc_ind_xid_rsp(prim_data);
+		sna_dlc_llc_ind_xid_cmd(prim_data);
+	else
+		sna_dlc_llc_ind_xid_rsp(prim_data);
 	return;
 }
 
@@ -302,43 +280,43 @@ static void sna_dlc_llc_ind_dataunit(struct llc_prim_if_block *prim)
 
 static void sna_dlc_llc_ind_conn(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_conn *prim_data = &prim->data->conn;
-        struct sna_ls_cb *ls;
+	struct llc_prim_conn *prim_data = &prim->data->conn;
+	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
-        ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac,
-                &prim_data->saddr.lsap);
-        if (!ls) {
-                sna_debug(5, "rouge ind conn (SETMODE)\n");
-                return;
-        }
+	sna_debug(5, "init\n");
+	ls = sna_cs_ls_get_by_addr(prim_data->saddr.mac,
+		&prim_data->saddr.lsap);
+	if (!ls) {
+		sna_debug(5, "rouge ind conn (SETMODE)\n");
+		return;
+	}
 	LLC_SK(prim_data->sk)->link = ls->index;
 	ls->llc_sk		= prim_data->sk;
-        ls->xid_input 		= XID_IN_SETMODE;
+	ls->xid_input 		= XID_IN_SETMODE;
 	ls->xid_direction	= XID_DIR_INBOUND;
-        sna_cs_connect_out((unsigned long)ls);
+	sna_cs_connect_out(&ls->retry);
 	return;
 }
 
 static void sna_dlc_llc_ind_data(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_data *prim_data = &prim->data->data;
+	struct llc_prim_data *prim_data = &prim->data->data;
 	struct sk_buff *skb2, *skb = prim_data->skb;
 
-        sna_debug(5, "init\n");
-        skb2 = skb_copy(skb, GFP_ATOMIC);
-        if (!skb2)
-                return;
-        sna_pc_rx_mu(skb2);
+	sna_debug(5, "init\n");
+	skb2 = skb_copy(skb, GFP_ATOMIC);
+	if (!skb2)
+		return;
+	sna_pc_rx_mu(skb2);
 	return;
 }
 
 static void sna_dlc_llc_ind_disc(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_disc *prim_data = &prim->data->disc;
+	struct llc_prim_disc *prim_data = &prim->data->disc;
 	struct sna_port_cb *port;
 	struct sna_ls_cb *ls;
-	
+
 	sna_debug(5, "init\n");
 	port = sna_cs_port_get_by_addr(&prim->sap->laddr.lsap);
 	if (!port) {
@@ -359,44 +337,44 @@ static void sna_dlc_llc_ind_disc(struct llc_prim_if_block *prim)
 int sna_dlc_llc_indicate(struct llc_prim_if_block *prim)
 {
 	switch (prim->prim) {
-                case LLC_TEST_PRIM:
-                        sna_dlc_llc_ind_test(prim);          
+		case LLC_TEST_PRIM:
+			sna_dlc_llc_ind_test(prim);
 			break;
-                case LLC_XID_PRIM:
-                        sna_dlc_llc_ind_xid(prim);           
+		case LLC_XID_PRIM:
+			sna_dlc_llc_ind_xid(prim);
 			break;
-                case LLC_DATAUNIT_PRIM:
-                        sna_dlc_llc_ind_dataunit(prim);      
+		case LLC_DATAUNIT_PRIM:
+			sna_dlc_llc_ind_dataunit(prim);
 			break;
-                case LLC_CONN_PRIM:
-                        sna_dlc_llc_ind_conn(prim);          
+		case LLC_CONN_PRIM:
+			sna_dlc_llc_ind_conn(prim);
 			break;
-                case LLC_DATA_PRIM:
-                        sna_dlc_llc_ind_data(prim);          
+		case LLC_DATA_PRIM:
+			sna_dlc_llc_ind_data(prim);
 			break;
-                case LLC_DISC_PRIM:
-                        sna_dlc_llc_ind_disc(prim);          
+		case LLC_DISC_PRIM:
+			sna_dlc_llc_ind_disc(prim);
 			break;
-                case LLC_RESET_PRIM:
-                case LLC_FLOWCONTROL_PRIM:
-                default:                                
+		case LLC_RESET_PRIM:
+		case LLC_FLOWCONTROL_PRIM:
+		default:
 			break;
-        }
-        return 0;
+	}
+	return 0;
 }
 
 static void sna_dlc_llc_conf_conn(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_conn *prim_data = &prim->data->conn;
+	struct llc_prim_conn *prim_data = &prim->data->conn;
 	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
-        ls = sna_cs_ls_get_by_addr(LLC_SK(prim_data->sk)->daddr.mac,
-                &LLC_SK(prim_data->sk)->daddr.lsap);
-        if (!ls) {
-                sna_debug(5, "rouge connection rsp\n");
-                return;
-        }
+	sna_debug(5, "init\n");
+	ls = sna_cs_ls_get_by_addr(LLC_SK(prim_data->sk)->daddr.mac,
+		&LLC_SK(prim_data->sk)->daddr.lsap);
+	if (!ls) {
+		sna_debug(5, "rouge connection rsp\n");
+		return;
+	}
 	if (!prim->data->conn.status) {
 		ls->llc_sk	= prim_data->sk;
 		ls->xid_input 	= XID_IN_ACTIVE;
@@ -410,51 +388,51 @@ static void sna_dlc_llc_conf_conn(struct llc_prim_if_block *prim)
 
 static void sna_dlc_llc_conf_data(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_data *prim_data = &prim->data->data;
+	struct llc_prim_data *prim_data = &prim->data->data;
 	sna_debug(5, "init\n");
 	return;
 }
 
 static void sna_dlc_llc_conf_disc(struct llc_prim_if_block *prim)
 {
-        struct llc_prim_disc *prim_data = &prim->data->disc;
+	struct llc_prim_disc *prim_data = &prim->data->disc;
 	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
-        ls = sna_cs_ls_get_by_addr(LLC_SK(prim_data->sk)->daddr.mac,
-                &LLC_SK(prim_data->sk)->daddr.lsap);
-        if (!ls) {
-                sna_debug(5, "rouge disconnect rsp\n");
-                return;
-        }
-        ls->xid_input = XID_IN_RESET;
-	sna_cs_connect_out((unsigned long)ls);
+	sna_debug(5, "init\n");
+	ls = sna_cs_ls_get_by_addr(LLC_SK(prim_data->sk)->daddr.mac,
+		&LLC_SK(prim_data->sk)->daddr.lsap);
+	if (!ls) {
+		sna_debug(5, "rouge disconnect rsp\n");
+		return;
+	}
+	ls->xid_input = XID_IN_RESET;
+	sna_cs_connect_out(&ls->retry);
 	return;
 }
 
 int sna_dlc_llc_confirm(struct llc_prim_if_block *prim)
 {
-        switch (prim->prim) {
-                case LLC_CONN_PRIM:
-                        sna_dlc_llc_conf_conn(prim);         
+	switch (prim->prim) {
+		case LLC_CONN_PRIM:
+			sna_dlc_llc_conf_conn(prim);
 			break;
-                case LLC_DATA_PRIM:
-                        sna_dlc_llc_conf_data(prim);         
+		case LLC_DATA_PRIM:
+			sna_dlc_llc_conf_data(prim);
 			break;
-                case LLC_DISC_PRIM:
-                        sna_dlc_llc_conf_disc(prim);         
+		case LLC_DISC_PRIM:
+			sna_dlc_llc_conf_disc(prim);
 			break;
-                case LLC_RESET_PRIM:                    
+		case LLC_RESET_PRIM:
 			break;
-                default:
-                        sna_debug(5, "unknown prim %d\n",
-                               prim->prim);
-                        break;
-        }
-        return 0;
+		default:
+			sna_debug(5, "unknown prim %d\n",
+			       prim->prim);
+			break;
+	}
+	return 0;
 }
 
-static int sna_dlc_llc_tx_test_c(struct sna_dlc_cb *dlc, 
+static int sna_dlc_llc_tx_test_c(struct sna_dlc_cb *dlc,
 	struct sna_port_cb *port, struct sna_ls_cb *ls)
 {
 	struct net_device *dev = dlc->dev;
@@ -480,7 +458,7 @@ static int sna_dlc_llc_tx_test_c(struct sna_dlc_cb *dlc,
 		LLC_TEST_PRIM, LLC_PRIM_TYPE_REQ);
 }
 
-static int sna_dlc_llc_tx_xid_c(struct sna_dlc_cb *dlc, 
+static int sna_dlc_llc_tx_xid_c(struct sna_dlc_cb *dlc,
 	struct sna_port_cb *port, struct sna_ls_cb *ls, struct sk_buff *skb)
 {
 	struct net_device *dev = dlc->dev;
@@ -488,44 +466,44 @@ static int sna_dlc_llc_tx_xid_c(struct sna_dlc_cb *dlc,
 
 	sna_debug(5, "init %p\n", sna_dlc_llc_tx_xid_c);
 	addr.arphrd     = dlc->type;
-        addr.dsap       = ls->plu_port;
-        addr.ssap       = port->saddr[0];
-        memcpy(&addr.dmac, ls->plu_mac_addr, IFHWADDRLEN);
-        memcpy(&addr.smac, dev->dev_addr, IFHWADDRLEN);	
+	addr.dsap       = ls->plu_port;
+	addr.ssap       = port->saddr[0];
+	memcpy(&addr.dmac, ls->plu_mac_addr, IFHWADDRLEN);
+	memcpy(&addr.smac, dev->dev_addr, IFHWADDRLEN);
 	skb->dev = dev;
 	return sna_dlc_llc_send_llc1(port->llc_dl, skb, &addr,
-                LLC_XID_PRIM, LLC_PRIM_TYPE_REQ);
+		LLC_XID_PRIM, LLC_PRIM_TYPE_REQ);
 }
 
-static int sna_dlc_llc_tx_xid_r(struct sna_dlc_cb *dlc, 
-        struct sna_port_cb *port, struct sna_ls_cb *ls, struct sk_buff *skb)
+static int sna_dlc_llc_tx_xid_r(struct sna_dlc_cb *dlc,
+	struct sna_port_cb *port, struct sna_ls_cb *ls, struct sk_buff *skb)
 {
-        struct net_device *dev = dlc->dev;
-        struct sna_dlc_llc_addr addr;
+	struct net_device *dev = dlc->dev;
+	struct sna_dlc_llc_addr addr;
 
 	sna_debug(5, "init\n");
-        addr.arphrd     = dlc->type;
-        addr.dsap       = ls->plu_port;
-        addr.ssap       = port->saddr[0];
-        memcpy(&addr.dmac, ls->plu_mac_addr, IFHWADDRLEN);
-        memcpy(&addr.smac, dev->dev_addr, IFHWADDRLEN);
+	addr.arphrd     = dlc->type;
+	addr.dsap       = ls->plu_port;
+	addr.ssap       = port->saddr[0];
+	memcpy(&addr.dmac, ls->plu_mac_addr, IFHWADDRLEN);
+	memcpy(&addr.smac, dev->dev_addr, IFHWADDRLEN);
 	skb->dev = dev;
-        return sna_dlc_llc_send_llc1(port->llc_dl, skb, &addr,
-                LLC_XID_PRIM, LLC_PRIM_TYPE_RESP);
+	return sna_dlc_llc_send_llc1(port->llc_dl, skb, &addr,
+		LLC_XID_PRIM, LLC_PRIM_TYPE_RESP);
 }
 
 static int sna_dlc_llc_tx_conn_c(struct sna_dlc_cb *dlc,
-        struct sna_port_cb *port, struct sna_ls_cb *ls)
+	struct sna_port_cb *port, struct sna_ls_cb *ls)
 {
 	struct net_device *dev = dlc->dev;
-        struct sna_dlc_llc_addr addr;
+	struct sna_dlc_llc_addr addr;
 
-        sna_debug(5, "init\n");
-        addr.arphrd     = dlc->type;
-        addr.dsap       = ls->plu_port;
-        addr.ssap       = port->saddr[0];
-        memcpy(&addr.dmac, ls->plu_mac_addr, IFHWADDRLEN);
-        memcpy(&addr.smac, dev->dev_addr, IFHWADDRLEN);
+	sna_debug(5, "init\n");
+	addr.arphrd     = dlc->type;
+	addr.dsap       = ls->plu_port;
+	addr.ssap       = port->saddr[0];
+	memcpy(&addr.dmac, ls->plu_mac_addr, IFHWADDRLEN);
+	memcpy(&addr.smac, dev->dev_addr, IFHWADDRLEN);
 	return sna_dlc_llc_send_conn(port->llc_dl, &addr, dev, ls->index);
 }
 
@@ -537,27 +515,27 @@ static int sna_dlc_llc_tx_disc_c(struct sna_port_cb *port, struct sna_ls_cb *ls)
 	return sna_dlc_llc_send_disc(port->llc_dl, ls->llc_sk, ls->index);
 }
 
-static int sna_dlc_llc_tx_data_c(struct sna_dlc_cb *dlc, 
+static int sna_dlc_llc_tx_data_c(struct sna_dlc_cb *dlc,
 	struct sna_port_cb *port, struct sna_ls_cb *ls, struct sk_buff *skb)
 {
 	struct net_device *dev = dlc->dev;
 
-        sna_debug(5, "init\n");
-        if (!ls->llc_sk)
-                return -EINVAL;
+	sna_debug(5, "init\n");
+	if (!ls->llc_sk)
+		return -EINVAL;
 	skb->dev = dev;
-        return sna_dlc_llc_send_data(port->llc_dl, ls->llc_sk, skb);
+	return sna_dlc_llc_send_data(port->llc_dl, ls->llc_sk, skb);
 }
 
 #endif	/* CONFIG_SNA_LLC */
 
-int sna_dlc_test_req(struct sna_ls_cb *ls) 
+int sna_dlc_test_req(struct sna_ls_cb *ls)
 {
 	struct sna_port_cb *port;
 	struct sna_dlc_cb *dlc;
 	int err = -EINVAL;
 
-	sna_debug(5, "init\n");	
+	sna_debug(5, "init\n");
 	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
 	if (!dlc)
 		goto out;
@@ -579,17 +557,17 @@ int sna_dlc_xid_min_len(struct sna_ls_cb *ls)
 	struct sna_port_cb *port;
 	struct sna_dlc_cb *dlc;
 	int size = -ENOENT;
-       
+
 	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
-        if (!dlc)
-                goto out;
+	if (!dlc)
+		goto out;
 	port = sna_cs_port_get_by_index(ls->port_index);
 	if (!port)
 		goto out;
 	size = dlc->dev->hard_header_len;
 	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
-                case SNA_PORT_TYPE_LLC:
+		case SNA_PORT_TYPE_LLC:
 			size += sna_dlc_llc_header_len(LLC_XID_PRIM);
 			break;
 #endif
@@ -611,134 +589,134 @@ int sna_dlc_xid_req(struct sna_ls_cb *ls, struct sk_buff *skb)
 
 	sna_debug(5, "init\n");
 	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
-        if (!dlc)
-                goto out;
-        port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
-                goto out;
-        switch (port->type) {
+	if (!dlc)
+		goto out;
+	port = sna_cs_port_get_by_index(ls->port_index);
+	if (!port)
+		goto out;
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
 		case SNA_PORT_TYPE_LLC:
-                        err = sna_dlc_llc_tx_xid_c(dlc, port, ls, skb);
-                        break;
+			err = sna_dlc_llc_tx_xid_c(dlc, port, ls, skb);
+			break;
 #endif  /* CONFIG_SNA_LLC */
-        }
+	}
 out:	return err;
 }
 
 int sna_dlc_xid_rsp(struct sna_ls_cb *ls, struct sk_buff *skb)
 {
 	struct sna_port_cb *port;
-        struct sna_dlc_cb *dlc;
+	struct sna_dlc_cb *dlc;
 	int err = -EINVAL;
 
 	sna_debug(5, "init\n");
 	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
-        if (!dlc)
-                goto out;
-        port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
-                goto out;
-        switch (port->type) {
+	if (!dlc)
+		goto out;
+	port = sna_cs_port_get_by_index(ls->port_index);
+	if (!port)
+		goto out;
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
 		case SNA_PORT_TYPE_LLC:
-                        err = sna_dlc_llc_tx_xid_r(dlc, port, ls, skb);
-                        break;
+			err = sna_dlc_llc_tx_xid_r(dlc, port, ls, skb);
+			break;
 #endif  /* CONFIG_SNA_LLC */
-        }
+	}
 out:	return err;
 }
 
 int sna_dlc_disc_req(struct sna_ls_cb *ls)
 {
 	struct sna_port_cb *port;
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
-        port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
-                goto out;
-        switch (port->type) {
+	sna_debug(5, "init\n");
+	port = sna_cs_port_get_by_index(ls->port_index);
+	if (!port)
+		goto out;
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
-                case SNA_PORT_TYPE_LLC:
-                        err = sna_dlc_llc_tx_disc_c(port, ls);
-                        break;
+		case SNA_PORT_TYPE_LLC:
+			err = sna_dlc_llc_tx_disc_c(port, ls);
+			break;
 #endif  /* CONFIG_SNA_LLC */
-        }
+	}
 out:    return err;
 }
 
 int sna_dlc_conn_req(struct sna_ls_cb *ls)
 {
 	struct sna_port_cb *port;
-        struct sna_dlc_cb *dlc;
-        int err = -EINVAL;
+	struct sna_dlc_cb *dlc;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
-        dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
-        if (!dlc)
-                goto out;
-        port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
-                goto out;
-        switch (port->type) {
+	sna_debug(5, "init\n");
+	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
+	if (!dlc)
+		goto out;
+	port = sna_cs_port_get_by_index(ls->port_index);
+	if (!port)
+		goto out;
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
-                case SNA_PORT_TYPE_LLC:
-                        err = sna_dlc_llc_tx_conn_c(dlc, port, ls);
-                        break;
+		case SNA_PORT_TYPE_LLC:
+			err = sna_dlc_llc_tx_conn_c(dlc, port, ls);
+			break;
 #endif  /* CONFIG_SNA_LLC */
-        }
+	}
 out:    return err;
 }
 
 int sna_dlc_data_min_len(struct sna_ls_cb *ls)
 {
-        struct sna_port_cb *port;
-        struct sna_dlc_cb *dlc;
-        int size = -ENOENT;
+	struct sna_port_cb *port;
+	struct sna_dlc_cb *dlc;
+	int size = -ENOENT;
 
-        dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
-        if (!dlc)
-                goto out;
-        port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
-                goto out;
-        size = dlc->dev->hard_header_len;
-        switch (port->type) {
+	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
+	if (!dlc)
+		goto out;
+	port = sna_cs_port_get_by_index(ls->port_index);
+	if (!port)
+		goto out;
+	size = dlc->dev->hard_header_len;
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
-                case SNA_PORT_TYPE_LLC:
-                        size += sna_dlc_llc_header_len(LLC_DATA_PRIM);
-                        break;
+		case SNA_PORT_TYPE_LLC:
+			size += sna_dlc_llc_header_len(LLC_DATA_PRIM);
+			break;
 #endif
-        }
+	}
 out:    return size;
 }
 
 int sna_dlc_data_reserve(struct sna_ls_cb *ls, struct sk_buff *skb)
 {
-        skb_reserve(skb, sna_dlc_data_min_len(ls));
-        return 0;
+	skb_reserve(skb, sna_dlc_data_min_len(ls));
+	return 0;
 }
 
 int sna_dlc_data_req(struct sna_ls_cb *ls, struct sk_buff *skb)
 {
 	struct sna_port_cb *port;
 	struct sna_dlc_cb *dlc;
-        int err = -EINVAL;
+	int err = -EINVAL;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
-        if (!dlc)
-                goto out;
-        port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
-                goto out;
-        switch (port->type) {
+	if (!dlc)
+		goto out;
+	port = sna_cs_port_get_by_index(ls->port_index);
+	if (!port)
+		goto out;
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
-                case SNA_PORT_TYPE_LLC:
-                        err = sna_dlc_llc_tx_data_c(dlc, port, ls, skb);
-                        break;
+		case SNA_PORT_TYPE_LLC:
+			err = sna_dlc_llc_tx_data_c(dlc, port, ls, skb);
+			break;
 #endif  /* CONFIG_SNA_LLC */
-        }
+	}
 out:    return err;
 }

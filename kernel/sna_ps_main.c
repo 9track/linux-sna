@@ -10,31 +10,10 @@
  *
  * See the GNU General Public License for more details.
  */
- 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
+
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
-#include <linux/skbuff.h>
-#include <net/datalink.h>
-#include <net/sock.h>
-#include <linux/proc_fs.h>
-#include <linux/stat.h>
-#include <linux/init.h>
 #include <linux/sna.h>
 #include <linux/cpic.h>
 #include <net/cpic.h>
@@ -54,32 +33,32 @@ int sna_ps_process_fmh5(__u32 tcb_id, __u32 rcb_id, struct sk_buff *skb)
 	sna_attach_execute_tp(tcb_id, skb);
 
 #ifdef NOT
-        struct sna_tcb *tcb;
-        struct sna_rcb *rcb;
-        __u8 code;
+	struct sna_tcb *tcb;
+	struct sna_rcb *rcb;
+	__u8 code;
 
-        code = sense;
+	code = sense;
 
-        rcb = search_rcb(mu->rcb_id);
-        sna_init_attached_rcb(rcb, mu_with_attach);
+	rcb = search_rcb(mu->rcb_id);
+	sna_init_attached_rcb(rcb, mu_with_attach);
 
-        move_to_head(rcb->hs_to_ps_buffer_list, mu_with_attach);
+	move_to_head(rcb->hs_to_ps_buffer_list, mu_with_attach);
 
-        if(code == OK)
-        {
-                sna_ps_attach_chk(rcb, code);
-                if(pip != NULL)
-                        sna_receive_pip_field_from_hs(rcb, pip, code);
-                sna_ps_pip_chk(pip, code);
-        }
+	if(code == OK)
+	{
+		sna_ps_attach_chk(rcb, code);
+		if(pip != NULL)
+			sna_receive_pip_field_from_hs(rcb, pip, code);
+		sna_ps_pip_chk(pip, code);
+	}
 
-        if(code == OK)
-                sna_upm_execute(tcb->tp_name, rcb->rcb_id, pip);
-        else
-                sna_attach_error_proc(rcb, code);
+	if(code == OK)
+		sna_upm_execute(tcb->tp_name, rcb->rcb_id, pip);
+	else
+		sna_attach_error_proc(rcb, code);
 #endif
 
-        return (0);
+	return (0);
 }
 
 #ifdef NOT
@@ -230,7 +209,7 @@ static int sna_attach_error_proc(struct sna_rcb *rcb, __u8 code/sense)
 #endif
 
 /**
- * this procedure receives all verbs issued by the tp and routes them to the 
+ * this procedure receives all verbs issued by the tp and routes them to the
  * appropriate ps component (e.g., basic conversation verbs to ps.conv,
  * and control-operator verbs to ps.copr) for processing.
  *
@@ -247,7 +226,7 @@ static int sna_attach_error_proc(struct sna_rcb *rcb, __u8 code/sense)
 int sna_ps_verb_router(int verb, struct sna_tp_cb *tp)
 {
 	int err = -EINVAL;
-	
+
 	sna_debug(5, "init: %d\n", verb);
 	switch (verb) {
 		case ALLOCATE:

@@ -10,29 +10,14 @@
  *
  * See the GNU General Public License for more details.
  */
- 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
+
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
 #include <linux/skbuff.h>
+#include <linux/netdevice.h>
 #include <net/datalink.h>
 #include <net/sock.h>
-#include <linux/proc_fs.h>
 #include <linux/list.h>
 
 #include <linux/sna.h>
@@ -42,20 +27,20 @@ static LIST_HEAD(asm_list);
 /* Display a Path Control ID */
 char *sna_asm_pr_pcid(unsigned char *ptr)
 {
-        static char buff[64];
+	static char buff[64];
 
-        sprintf(buff, "%02X%02X%02X%02X%02X%02X%02X%02X",
-                (ptr[0] & 0377), (ptr[1] & 0377), (ptr[2] & 0377),
-                (ptr[3] & 0377), (ptr[4] & 0377), (ptr[5] & 0377),
-                (ptr[6] & 0377), (ptr[7] & 0377));
-        return buff;
+	sprintf(buff, "%02X%02X%02X%02X%02X%02X%02X%02X",
+		(ptr[0] & 0377), (ptr[1] & 0377), (ptr[2] & 0377),
+		(ptr[3] & 0377), (ptr[4] & 0377), (ptr[5] & 0377),
+		(ptr[6] & 0377), (ptr[7] & 0377));
+	return buff;
 }
 
 struct sna_asm_cb *sna_asm_get_by_index(u_int32_t index)
 {
 	struct sna_asm_cb *a;
 	struct list_head *le;
-	
+
 	sna_debug(5, "init: %d\n", index);
 	list_for_each(le, &asm_list) {
 		a = list_entry(le, struct sna_asm_cb, list);
@@ -69,50 +54,50 @@ struct sna_asm_cb *sna_asm_get_by_index(u_int32_t index)
 struct sna_asm_cb *sna_asm_get_by_lfsid(struct sna_lfsid *lfsid)
 {
 	struct sna_lfsid_block *l;
-        struct list_head *le, *be;
+	struct list_head *le, *be;
 	struct sna_asm_cb *a;
 	int i;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &asm_list) {
-                a = list_entry(le, struct sna_asm_cb, list);
-                list_for_each(be, &a->blk_list) {
-                        l = list_entry(be, struct sna_lfsid_block, list);
-                        for (i = 0; i < 256; i++) {
+	sna_debug(5, "init\n");
+	list_for_each(le, &asm_list) {
+		a = list_entry(le, struct sna_asm_cb, list);
+		list_for_each(be, &a->blk_list) {
+			l = list_entry(be, struct sna_lfsid_block, list);
+			for (i = 0; i < 256; i++) {
 				if (l->l[i].odai == lfsid->odai
-					&& l->l[i].sidh == l->l[i].sidh
-					&& l->l[i].sidl == l->l[i].sidl)
-                                        return a;
-                        }
-                }
-        }
+					&& l->l[i].sidh == lfsid->sidh
+					&& l->l[i].sidl == lfsid->sidl)
+					return a;
+			}
+		}
+	}
 	return NULL;
 }
 
-struct sna_lfsid *sna_asm_lfsid_get_by_sidhl(u_int8_t odai, u_int8_t sidh, 
+struct sna_lfsid *sna_asm_lfsid_get_by_sidhl(u_int8_t odai, u_int8_t sidh,
 	u_int8_t sidl)
 {
 	struct sna_lfsid_block *l;
-        struct list_head *le, *se;
+	struct list_head *le, *se;
 	struct sna_asm_cb *a;
 	int i;
 
 	sna_debug(5, "init: odai:%d sidh:%d sidl:%d\n", odai, sidh, sidl);
 	list_for_each(le, &asm_list) {
-                a = list_entry(le, struct sna_asm_cb, list);
-                list_for_each(se, &a->blk_list) {
-                        l = list_entry(se, struct sna_lfsid_block, list);
-                        for (i = 0; i < 256; i++) {
+		a = list_entry(le, struct sna_asm_cb, list);
+		list_for_each(se, &a->blk_list) {
+			l = list_entry(se, struct sna_lfsid_block, list);
+			for (i = 0; i < 256; i++) {
 				sna_debug(5, "l->odai=%d l->sidh=%d l->sidl=%d\n",
 					l->l[i].odai, l->l[i].sidh, l->l[i].sidl);
 				if (l->l[i].odai == odai
-                                        && l->l[i].sidh == sidh
-                                        && l->l[i].sidl == sidl)
-                                        return &l->l[i];
-                        }
-                }
-        }
-        return NULL;
+					&& l->l[i].sidh == sidh
+					&& l->l[i].sidl == sidl)
+					return &l->l[i];
+			}
+		}
+	}
+	return NULL;
 }
 
 int sna_asm_activate_as(struct sna_asm_cb *as)
@@ -122,24 +107,24 @@ int sna_asm_activate_as(struct sna_asm_cb *as)
 		return -EEXIST;
 	INIT_LIST_HEAD(&as->blk_list);
 	list_add_tail(&as->list, &asm_list);
-        return 0;
+	return 0;
 }
 
 int sna_asm_deactivate_as(u_int32_t index)
 {
 	struct list_head *le, *se;
 	struct sna_asm_cb *a;
-	
+
 	sna_debug(5, "init\n");
 	list_for_each_safe(le, se, &asm_list) {
 		a = list_entry(le, struct sna_asm_cb, list);
 		if (a->index == index) {
 			list_del(&a->list);
-                        kfree(a);
-                        return 0;
-                }
-        }
-        return -ENOENT;
+			kfree(a);
+			return 0;
+		}
+	}
+	return -ENOENT;
 }
 
 static int sna_asm_set_sidhl(struct sna_asm_cb *a, struct sna_lfsid *lf)
@@ -147,35 +132,35 @@ static int sna_asm_set_sidhl(struct sna_asm_cb *a, struct sna_lfsid *lf)
 	struct sna_lfsid_block *l;
 	u_int8_t sidh_s = 0x01; // 0x02;
 	u_int8_t sidl_s = 0x00;
-	struct list_head *le;	
+	struct list_head *le;
 	int i;
 
 	sna_debug(5, "init\n");
 	/* locate a unique sidh. */
-        list_for_each(le, &a->blk_list) {
+	list_for_each(le, &a->blk_list) {
 		l = list_entry(le, struct sna_lfsid_block, list);
-                for (i = 0; i < 256; i++) {
+		for (i = 0; i < 256; i++) {
 			if (l->l[i].sidh == sidh_s) {
 				sidh_s++;
 				if (sidh_s > 0xFE)
 					return -EUSERS;
 				continue;
 			}
-                }
-        }
+		}
+	}
 
 	/* locate a unique sidl. */
 	list_for_each(le, &a->blk_list) {
-                l = list_entry(le, struct sna_lfsid_block, list);
-                for (i = 0; i < 256; i++) {
-                        if (l->l[i].sidl == sidl_s) {
-                                sidl_s++;
-                                if (sidl_s > 0xFF)
-                                        return -EUSERS;
-                                continue;
-                        }
-                }
-        }
+		l = list_entry(le, struct sna_lfsid_block, list);
+		for (i = 0; i < 256; i++) {
+			if (l->l[i].sidl == sidl_s) {
+				sidl_s++;
+				if (sidl_s > 0xFF)
+					return -EUSERS;
+				continue;
+			}
+		}
+	}
 
 	lf->sidh = sidh_s;
 	lf->sidl = sidl_s;
@@ -225,18 +210,18 @@ rstart:	/* search for a free lfsid */
 	goto rstart;	/* just added 256 addresses, lets try it again */
 }
 
-int sna_asm_free_lfsid(u_int32_t pc_index, u_int32_t sm_index, 
+int sna_asm_free_lfsid(u_int32_t pc_index, u_int32_t sm_index,
 	struct sna_lfsid *lf)
 {
-        struct sna_lfsid_block *l;
+	struct sna_lfsid_block *l;
 	struct sna_asm_cb *a;
 	struct list_head *le;
-        int i;
+	int i;
 
 	sna_debug(5, "init\n");
-        a = sna_asm_get_by_index(pc_index);
-        if (!a)
-                return -ENOENT;
+	a = sna_asm_get_by_index(pc_index);
+	if (!a)
+		return -ENOENT;
 
 	/* locate the lfsid */
 	list_for_each(le, &a->blk_list) {
@@ -257,7 +242,7 @@ int sna_asm_free_lfsid(u_int32_t pc_index, u_int32_t sm_index,
 /* zero terminated list of ru request codes we support. */
 u_int8_t sna_asm_ru_supported[] = {
 	SNA_RU_RC_BIND,
-	SNA_RU_RC_UNBIND, 
+	SNA_RU_RC_UNBIND,
 	0
 };
 
@@ -296,14 +281,14 @@ int sna_asm_rx(struct sna_asm_cb *as, struct sna_lfsid *lf, struct sk_buff *skb)
 	/* route the mu, we need to handle bind pacing. */
 	switch (err) {
 		case SNA_RU_RC_BIND:
-			if (skb->h.rh->rri) {   
+			if (sna_transport_header(skb)->rri) {
 				err = sna_sm_proc_bind_rsp(lf, skb);
-                        } else {
-                                err = sna_sm_proc_bind_req(lf, skb);
-                        }
+			} else {
+				err = sna_sm_proc_bind_req(lf, skb);
+			}
 			goto out;
 		case SNA_RU_RC_UNBIND:
-			if (skb->h.rh->rri) {
+			if (sna_transport_header(skb)->rri) {
 				err = 0;	/* discard unbind/rsp */
 			} else {
 				err = sna_sm_proc_unbind_req(lf, skb);
@@ -324,7 +309,7 @@ out:	return err;
 int sna_asm_tx_bind(struct sna_lfsid *lf, u_int32_t pc_index, struct sk_buff *skb)
 {
 	struct sna_pc_cb *pc;
-	
+
 	sna_debug(5, "init\n");
 	pc = sna_pc_get_by_index(pc_index);
 	if (!pc)
@@ -335,67 +320,46 @@ int sna_asm_tx_bind(struct sna_lfsid *lf, u_int32_t pc_index, struct sk_buff *sk
 
 int sna_asm_create(struct sna_nof_node *node)
 {
-        sna_debug(5, "init\n");
-        return 0;
+	sna_debug(5, "init\n");
+	return 0;
 }
 
 int sna_asm_destroy(struct sna_nof_node *delete)
 {
 	sna_debug(5, "init\n");
-        return 0;
+	return 0;
 }
 
 #ifdef CONFIG_PROC_FS
-int sna_asm_get_info(char *buffer, char **start,
-        off_t offset, int length)
+int sna_asm_get_info(struct seq_file *m, void *v)
 {
-        off_t pos = 0, begin = 0;
 	struct sna_asm_cb *a;
 	struct list_head *le;
-        int len = 0;
 
-        len += sprintf(buffer, "%-9s%-8s%-6s%-5s%-6s%-9s%-8s%-9s\n", 
-		"pc_id", "max_btu", "intra", "odai", "godai", 
+	seq_printf(m, "%-9s%-8s%-6s%-5s%-6s%-9s%-8s%-9s\n",
+		"pc_id", "max_btu", "intra", "odai", "godai",
 		"dep_lulu", "bpacing", "dbpacing");
 
 	list_for_each(le, &asm_list) {
 		a = list_entry(le, struct sna_asm_cb, list);
-                len += sprintf(buffer + len, "%-9d%-8d%-6d%-5d%-6d%-9d%-8d%-9d\n",
+		seq_printf(m, "%-9d%-8d%-6d%-5d%-6d%-9d%-8d%-9d\n",
 			a->index, a->rx_max_btu, a->intranode,
 			a->odai, a->gen_odai_usage_opt_set, a->dlus_lu_reg,
 			a->tx_adaptive_bind_pacing, a->adptv_bind_pacing);
+	}
 
-                /* Are we still dumping unwanted data then discard the record */
-		pos = begin + len;
-                if (pos < offset) {
-                        len = 0;        /* Keep dumping into the buffer start */
-			begin = pos;
-                }
-                if (pos > offset + length)       /* We have dumped enough */
-                        break;
-        }
-
-	/* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 
-int sna_asm_get_active_lfsids(char *buffer, char **start,
-        off_t offset, int length)
+int sna_asm_get_active_lfsids(struct seq_file *m, void *v)
 {
 	struct sna_lfsid_block *l;
 	struct list_head *le, *se;
-	off_t pos = 0, begin = 0;
-        struct sna_asm_cb *a;
-        int i, len = 0;
+	struct sna_asm_cb *a;
+	int i;
 
-        /* output the asm data for the /proc filesystem. */
-        len += sprintf(buffer, "%-9s%-6s%-6s%-5s%-6s%-5s\n", 
+	/* output the asm data for the /proc filesystem. */
+	seq_printf(m, "%-9s%-6s%-6s%-5s%-6s%-5s\n",
 		"pc_id", "intra", "sm_id", "odai", "sidh", "sidl");
 	list_for_each(le, &asm_list) {
 		a = list_entry(le, struct sna_asm_cb, list);
@@ -403,7 +367,7 @@ int sna_asm_get_active_lfsids(char *buffer, char **start,
 			l = list_entry(se, struct sna_lfsid_block, list);
 			for (i = 0; i < 256; i++) {
 				if (l->l[i].active) {
-                			len += sprintf(buffer + len, 
+					seq_printf(m,
 						"%-9d%-6d%-6d%-5d%-6d%-5d\n",
 						a->index,
 						a->intranode,
@@ -414,23 +378,8 @@ int sna_asm_get_active_lfsids(char *buffer, char **start,
 				}
 			}
 		}
-                /* Are we still dumping unwanted data then discard the record */
-		pos = begin + len;
-                if (pos < offset) {
-                        len   = 0;        /* Keep dumping into the buffer start */
-			begin = pos;
-                }
-                if (pos > offset + length)       /* We have dumped enough */
-                        break;
-        }
+	}
 
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 #endif

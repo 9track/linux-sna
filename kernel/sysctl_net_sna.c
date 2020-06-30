@@ -11,8 +11,7 @@
  * See the GNU General Public License for more details.
  */
 
-#include <linux/config.h>
-#include <linux/mm.h>
+#include <linux/netdevice.h>
 #include <linux/sysctl.h>
 
 extern __u32   	sysctl_max_link_stations_cnt;
@@ -35,65 +34,113 @@ extern u_int32_t sysctl_test_retry_limit;
 
 
 #ifdef CONFIG_SYSCTL
-ctl_table sna_table[] = {
-	{NET_SNA_MAX_LINK_STATIONS, "max_link_station_count",
-        &sysctl_max_link_stations_cnt, sizeof(__u32), 0644, NULL,
-        &proc_dointvec_jiffies},
-        {NET_SNA_MAX_LU, "max_lu_count",
-        &sysctl_max_lu_cnt, sizeof(__u32), 0644, NULL,
-        &proc_dointvec_jiffies},
-        {NET_SNA_MAX_MODE, "max_mode_count", &sysctl_max_mode_cnt,
-        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
+static struct ctl_table sna_table[] = {
+	{
+		.procname = "max_link_station_count",
+		.data = &sysctl_max_link_stations_cnt,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_lu_count",
+		.data = &sysctl_max_lu_cnt,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_mode_count",
+		.data = &sysctl_max_mode_cnt,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
 
-	/* xid. */	
-        {NET_SNA_XID_RETRY_LIMIT, "xid_retry_limit", &sysctl_xid_retry_limit,
-        sizeof(u_int32_t), 0644, NULL, &proc_dointvec_jiffies},
-	{NET_SNA_XID_IDLE_LIMIT, "xid_idle_limit", &sysctl_xid_idle_limit,
-	sizeof(u_int32_t), 0644, NULL, &proc_dointvec_jiffies},
-	{NET_SNA_TEST_RETRY_LIMIT, "test_retry_limit", &sysctl_test_retry_limit,
-	sizeof(u_int32_t), 0644, NULL, &proc_dointvec_jiffies},
+	/* xid. */
+	{
+		.procname = "xid_retry_limit",
+		.data = &sysctl_xid_retry_limit,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "xid_idle_limit",
+		.data = &sysctl_xid_idle_limit,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "test_retry_limit",
+		.data = &sysctl_test_retry_limit,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
 
-        {NET_SNA_MIA, "max_inbound_activations",
-        &sysctl_max_inbound_activations, sizeof(__u32), 0644, NULL,
-        &proc_dointvec_jiffies},
-        {NET_SNA_MOA, "max_outbound_activations",
-        &sysctl_max_outbound_activations, sizeof(__u32), 0644, NULL,
-        &proc_dointvec_jiffies},
-        {NET_SNA_MAX_BTU, "max_btu_size", &sysctl_max_btu_size,
-        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-        {NET_SNA_MAX_TX_RU, "max_tx_ru_size", &sysctl_max_tx_ru_size,
-        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-        {NET_SNA_MAX_RX_RU, "max_rx_ru_size", &sysctl_max_rx_ru_size,
-        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-	{NET_SNA_MAX_AUTO_ACT, "max_auto_activation_limit",
-        &sysctl_max_auto_activation_limit,
-        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-        {NET_SNA_DEBUG, "debug_level", &sna_debug_level,
-        sizeof(__u32), 0644, NULL, &proc_dointvec_jiffies},
-	{0}
-};
-
-static ctl_table sna_dir_table[] = {
-        {NET_SNA, "sna", NULL, 0, 0555, sna_table},
-        {0}
-};
-
-static ctl_table sna_root_table[] = {
-        {CTL_NET, "net", NULL, 0, 0555, sna_dir_table},
-        {0}
+	{
+		.procname = "max_inbound_activations",
+		.data = &sysctl_max_inbound_activations,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_outbound_activations",
+		.data = &sysctl_max_outbound_activations,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_btu_size",
+		.data = &sysctl_max_btu_size,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_tx_ru_size",
+		.data = &sysctl_max_tx_ru_size,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_rx_ru_size",
+		.data = &sysctl_max_rx_ru_size,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "max_auto_activation_limit",
+		.data = &sysctl_max_auto_activation_limit,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{
+		.procname = "debug_level",
+		.data = &sna_debug_level,
+		.maxlen = sizeof(__u32),
+		.mode = 0644,
+		.proc_handler = proc_dointvec_jiffies,
+	},
+	{ }
 };
 
 static struct ctl_table_header *sna_table_header;
 
 void sna_register_sysctl(void)
 {
-	sna_table_header = register_sysctl_table(sna_root_table, 1);
-	return;
+	sna_table_header = register_net_sysctl(&init_net, "net/sna", sna_table);
 }
 
 void sna_unregister_sysctl(void)
 {
-	unregister_sysctl_table(sna_table_header);
-	return;
+	unregister_net_sysctl_table(sna_table_header);
 }
 #endif

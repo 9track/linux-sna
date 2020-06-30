@@ -13,6 +13,13 @@
 #ifndef _LINUX_SNA_H
 #define _LINUX_SNA_H
 
+#include <linux/netdevice.h>
+
+#define SNAPROTO_DEFAULT	0
+#define SNAPROTO_ATTACH		1
+#define SNAPROTO_CPIC		2
+#define SNA_MAX_PROTO		(SNAPROTO_CPIC)
+
 #define SNA_USE_NAME_LEN	40
 #define SNA_NETWORK_NAME_LEN    9
 #define SNA_RESOURCE_NAME_LEN   9
@@ -20,8 +27,8 @@
 #define SNA_PORT_ADDR_LEN       12
 
 typedef struct {
-        unsigned char net[SNA_NETWORK_NAME_LEN];
-        unsigned char name[SNA_RESOURCE_NAME_LEN];
+	unsigned char net[SNA_NETWORK_NAME_LEN];
+	unsigned char name[SNA_RESOURCE_NAME_LEN];
 } sna_netid;
 
 typedef u_int32_t       sna_nodeid;
@@ -50,10 +57,10 @@ typedef enum {
 } sna_node_types;
 
 typedef enum {
-        SNA_LS_ROLE_SEC = 0,
-        SNA_LS_ROLE_PRI,
-        SNA_LS_ROLE_RSV,
-        SNA_LS_ROLE_NEG
+	SNA_LS_ROLE_SEC = 0,
+	SNA_LS_ROLE_PRI,
+	SNA_LS_ROLE_RSV,
+	SNA_LS_ROLE_NEG
 } sna_ls_role;
 
 typedef enum {
@@ -63,60 +70,82 @@ typedef enum {
 } sna_ls_direction;
 
 struct sna_nof_cpic {
-        int             action;
+	int             action;
 
-        sna_netid       netid;
-        sna_netid       netid_plu;
+	sna_netid       netid;
+	sna_netid       netid_plu;
 
-        unsigned char   sym_dest_name[9];
-        unsigned char   mode_name[9];
-        unsigned char   tp_name[64];
-        unsigned char   service_tp;
-        unsigned short  security_level;
-        unsigned char   username[10];
-        unsigned char   password[10];
+	unsigned char   sym_dest_name[9];
+	unsigned char   mode_name[9];
+	unsigned char   tp_name[64];
+	unsigned char   service_tp;
+	unsigned short  security_level;
+	unsigned char   username[10];
+	unsigned char   password[10];
 };
 
 struct cpicsreq {
-        struct cpicsreq         *next;
-        struct cpicsreq         *prev;
+	struct cpicsreq         *next;
+	struct cpicsreq         *prev;
 
-        char                    netid[18];
-        char                    netid_plu[18];
-        char                    sym_dest_name[9];
-        char                    mode_name[9];
-        char                    tp_name[65];
-        unsigned char           service_tp;
-        unsigned char           security_level;
-        char                    username[11];
-        char                    password[11];
-        unsigned short          flags;
-        unsigned long           proc_id;
+	char                    netid[18];
+	char                    netid_plu[18];
+	char                    sym_dest_name[9];
+	char                    mode_name[9];
+	char                    tp_name[65];
+	unsigned char           service_tp;
+	unsigned char           security_level;
+	char                    username[11];
+	char                    password[11];
+	unsigned short          flags;
+	unsigned long           proc_id;
 };
 
 struct cpicsconf {
-        int     cpics_len;
-        char    cpics_net[9];
-        char    cpics_name[9];
-        char    cpics_plunet[9];
-        char    cpics_pluname[9];
-        char    cpics_sym_dest_name[9];
+	int     cpics_len;
+	char    cpics_net[9];
+	char    cpics_name[9];
+	char    cpics_plunet[9];
+	char    cpics_pluname[9];
+	char    cpics_sym_dest_name[9];
 
-        union {
-                char            *cpicsc_buf;
-                struct cpicsreq   *cpicsc_req;
-        } cpicsc_cpicscu;
+	union {
+		char            *cpicsc_buf;
+		struct cpicsreq   *cpicsc_req;
+	} cpicsc_cpicscu;
 };
 
 struct sna_qcpics {
-        struct sna_qcpics *next;
-        struct cpicsreq   data;
+	struct sna_qcpics *next;
+	struct cpicsreq   data;
 };
 
 #define cpicsc_buf cpicsc_cpicscu.cpicsc_buf         /* buffer address       */
 #define cpicsc_req cpicsc_cpicscu.cpicsc_req         /* array of structures  */
 
 #ifdef __KERNEL__
+
+#include <linux/skbuff.h>
+#include <net/sna_formats.h>
+
+static inline sna_rh *sna_transport_header(const struct sk_buff *skb)
+{
+       return (sna_rh *)skb_transport_header(skb);
+}
+
+static inline sna_fid2 *sna_network_header(const struct sk_buff *skb)
+{
+       return (sna_fid2 *)skb_network_header(skb);
+}
+
+#define SNA_SKB_CB(skb) ((struct sna_skb_cb *)(skb)->cb)
+struct sna_skb_cb {
+	u_int32_t       bracket_id;
+	u_int8_t        fmh;
+	u_int8_t        hs_ps_type;
+	u_int8_t        type;
+	u_int8_t        reason;
+};
 
 extern char sna_sw_prd_version[];
 extern char sna_sw_prd_release[];
@@ -128,9 +157,6 @@ extern char sna_vendor[];
 
 extern u_int32_t sna_debug_level;
 
-extern void sna_mod_inc_use_count(void);
-extern void sna_mod_dec_use_count(void);
-
 extern int hexdump(unsigned char *pkt_data, int pkt_len);
 extern int sna_utok(void *uaddr, int ulen, void *kaddr);
 extern int sna_ktou(void *kaddr, int klen, void *uaddr);
@@ -140,8 +166,8 @@ extern int sna_ktou(void *kaddr, int klen, void *uaddr);
 #define sna_debug(level, format, arg...)
 #else
 #define sna_debug(level, format, arg...) \
-        if(sna_debug_level >= level)  \
-                printk(KERN_EMERG __FILE__ ":" __FUNCTION__ ": " format, ## arg)
+	if(sna_debug_level >= level)  \
+		printk(KERN_EMERG "%s:%s: " format, __FILE__, __FUNCTION__, ## arg)
 #endif  /* SNA_DEBUG */
 
 #define new(ptr, flag)	do { 				\
@@ -155,7 +181,7 @@ extern int sna_ktou(void *kaddr, int klen, void *uaddr);
 	if (ptr)					\
 		memset(ptr, 0, size);			\
 } while (0)
-		
+
 /* Linux-SNA MU header types */
 #define SNA_MU_BIND_RQ_SEND             0x01
 #define SNA_MU_BIND_RSP_SEND            0x02
@@ -262,25 +288,25 @@ struct cosreq {
 	struct cosreq		*prev;
 
 	unsigned char   name[SNA_RESOURCE_NAME_LEN];
-        unsigned short  weight;
-        unsigned short  tx_priority;
+	unsigned short  weight;
+	unsigned short  tx_priority;
 	unsigned char   default_cos_invalid;
-        unsigned char   default_cos_null;
+	unsigned char   default_cos_null;
 };
 
 struct cosconf {
-        int     cos_len;
-        char    cos_name[SNA_RESOURCE_NAME_LEN];
+	int     cos_len;
+	char    cos_name[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char            *cosc_buf;
-                struct cosreq   *cosc_req;
-        } cosc_coscu;
+	union {
+		char            *cosc_buf;
+		struct cosreq   *cosc_req;
+	} cosc_coscu;
 };
 
 struct sna_qcos {
-        struct sna_qcos *next;
-        struct cosreq   data;
+	struct sna_qcos *next;
+	struct cosreq   data;
 };
 
 #define cosc_buf cosc_coscu.cosc_buf              /* buffer address       */
@@ -294,9 +320,9 @@ struct plureq {
 	sna_netid	plu_name;
 	sna_netid	fqcp_name;
 	unsigned char		parallel_ss;
-        unsigned char   	cnv_security;
-        unsigned long   	proc_id;
-        unsigned short  	flags;
+	unsigned char   	cnv_security;
+	unsigned long   	proc_id;
+	unsigned short  	flags;
 };
 
 struct pluconf {
@@ -308,15 +334,15 @@ struct pluconf {
 	char	plu_fqcpnet[SNA_NETWORK_NAME_LEN];
 	char	plu_fqcpname[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char            *pluc_buf;
-                struct plureq	*pluc_req;
-        } pluc_plucu;
+	union {
+		char            *pluc_buf;
+		struct plureq	*pluc_req;
+	} pluc_plucu;
 };
 
 struct sna_qplu {
-        struct sna_qplu *next;
-        struct plureq   data;
+	struct sna_qplu *next;
+	struct plureq   data;
 };
 
 #define pluc_buf pluc_plucu.pluc_buf              /* buffer address       */
@@ -331,24 +357,24 @@ struct lureq {
 	unsigned char		sync_point;
 	unsigned long		lu_sess_limit;
 	unsigned long   	proc_id;
-        unsigned short  	flags;
+	unsigned short  	flags;
 };
 
 struct luconf {
 	int             lu_len;
-        char            lu_net[SNA_NETWORK_NAME_LEN];
-        char            lu_name[SNA_RESOURCE_NAME_LEN];
+	char            lu_net[SNA_NETWORK_NAME_LEN];
+	char            lu_name[SNA_RESOURCE_NAME_LEN];
 	char		lu_luname[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char              *luc_buf;
-                struct lureq      *luc_req;
-        } luc_lucu;
+	union {
+		char              *luc_buf;
+		struct lureq      *luc_req;
+	} luc_lucu;
 };
 
 struct sna_qlu {
-        struct sna_qlu *next;
-        struct lureq   data;
+	struct sna_qlu *next;
+	struct lureq   data;
 };
 
 #define luc_buf luc_lucu.luc_buf              /* buffer address       */
@@ -365,42 +391,42 @@ struct modereq {
 	sna_netid		netid;
 	sna_netid		plu_name;
 	unsigned long		tx_pacing;
-        unsigned long   	rx_pacing;
-        unsigned long   	max_tx_ru;
-        unsigned long   	max_rx_ru;
-        unsigned long   	crypto;
-        unsigned long   	proc_id;
-        unsigned short  	flags;
+	unsigned long   	rx_pacing;
+	unsigned long   	max_tx_ru;
+	unsigned long   	max_rx_ru;
+	unsigned long   	crypto;
+	unsigned long   	proc_id;
+	unsigned short  	flags;
 
 	unsigned short  	auto_activation;
-        unsigned long   	max_sessions;
-        unsigned long   	min_conlosers;
-        unsigned long   	min_conwinners;
+	unsigned long   	max_sessions;
+	unsigned long   	min_conlosers;
+	unsigned long   	min_conwinners;
 
-        unsigned long   	act_sessions;
-        unsigned long   	act_conwinners;
-        unsigned long   	act_conlosers;
+	unsigned long   	act_sessions;
+	unsigned long   	act_conwinners;
+	unsigned long   	act_conlosers;
 
-        unsigned long   	pend_sessions;
-        unsigned long   	pend_conwinners;
-        unsigned long   	pend_conlosers;
+	unsigned long   	pend_sessions;
+	unsigned long   	pend_conwinners;
+	unsigned long   	pend_conlosers;
 };
 
 struct modeconf {
 	int             mode_len;
-        char            mode_net[SNA_NETWORK_NAME_LEN];
-        char            mode_name[SNA_RESOURCE_NAME_LEN];
+	char            mode_net[SNA_NETWORK_NAME_LEN];
+	char            mode_name[SNA_RESOURCE_NAME_LEN];
 	char		mode_modename[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char              *modec_buf;
-                struct modereq      *modec_req;
-        } modec_modecu;
+	union {
+		char              *modec_buf;
+		struct modereq      *modec_req;
+	} modec_modecu;
 };
 
 struct sna_qmode {
-        struct sna_qmode *next;
-        struct modereq   data;
+	struct sna_qmode *next;
+	struct modereq   data;
 };
 
 #define modec_buf modec_modecu.modec_buf              /* buffer address       */
@@ -415,13 +441,13 @@ struct lsreq {
 	u_int8_t		use_name[SNA_USE_NAME_LEN];
 	u_int8_t		dev_name[SNA_RESOURCE_NAME_LEN];
 	u_int8_t		port_name[SNA_RESOURCE_NAME_LEN];
-	
+
 	u_int32_t		index;
 	u_int32_t		flags;
 
 	u_int32_t		retries;
 	u_int32_t		xid_count;
-	
+
 	u_int32_t		state;
 	u_int32_t		co_status;
 	u_int32_t		xid_state;
@@ -430,53 +456,53 @@ struct lsreq {
 	u_int8_t		effective_tg;
 
 	u_int16_t               tx_max_btu;
-        u_int16_t               rx_max_btu;
-        u_int16_t               tx_window;
-        u_int16_t               rx_window;
-	
+	u_int16_t               rx_max_btu;
+	u_int16_t               tx_window;
+	u_int16_t               rx_window;
+
 	/* destination link station. */
-        sna_netid               plu_name;
-        sna_nodeid              plu_node_id;
-        u_int8_t                plu_mac_addr[6];
-        u_int8_t                plu_port;
+	sna_netid               plu_name;
+	sna_nodeid              plu_node_id;
+	u_int8_t                plu_mac_addr[6];
+	u_int8_t                plu_port;
 
 	/* user defined link station options. */
 	int                     role;
-        int                     direction;
-        int                     xid_init_method;
-        int                     byteswap;
-        int                     retry_on_fail;
-        int                     retry_times;
-        int                     autoact;
-        int                     autodeact;
-        int                     tg_number;
-        int                     cost_per_byte;
-        int                     cost_per_connect_time;
-        int                     effective_capacity;
-        int                     propagation_delay;
-        int                     security;
-        int                     user1;
-        int                     user2;
-        int                     user3;
+	int                     direction;
+	int                     xid_init_method;
+	int                     byteswap;
+	int                     retry_on_fail;
+	int                     retry_times;
+	int                     autoact;
+	int                     autodeact;
+	int                     tg_number;
+	int                     cost_per_byte;
+	int                     cost_per_connect_time;
+	int                     effective_capacity;
+	int                     propagation_delay;
+	int                     security;
+	int                     user1;
+	int                     user2;
+	int                     user3;
 };
 
 struct lsconf {
-        int             ls_len;
-        char            ls_net[SNA_NETWORK_NAME_LEN];
-        char            ls_name[SNA_RESOURCE_NAME_LEN];
-        char            ls_devname[SNA_RESOURCE_NAME_LEN];
-        char            ls_portname[SNA_RESOURCE_NAME_LEN];
+	int             ls_len;
+	char            ls_net[SNA_NETWORK_NAME_LEN];
+	char            ls_name[SNA_RESOURCE_NAME_LEN];
+	char            ls_devname[SNA_RESOURCE_NAME_LEN];
+	char            ls_portname[SNA_RESOURCE_NAME_LEN];
 	char		ls_lsname[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char              *lsc_buf;
-                struct lsreq      *lsc_req;
-        } lsc_lscu;
+	union {
+		char              *lsc_buf;
+		struct lsreq      *lsc_req;
+	} lsc_lscu;
 };
 
 struct sna_qls {
-        struct sna_qls *next;
-        struct lsreq   data;
+	struct sna_qls *next;
+	struct lsreq   data;
 };
 
 #define lsc_buf lsc_lscu.lsc_buf              /* buffer address       */
@@ -488,14 +514,14 @@ struct portreq {
 
 	sna_netid		netid;
 	u_int8_t		use_name[SNA_USE_NAME_LEN];
-        u_int8_t            	dev_name[SNA_RESOURCE_NAME_LEN];
+	u_int8_t            	dev_name[SNA_RESOURCE_NAME_LEN];
 
 	u_int16_t		type;
 	u_int16_t		index;
 	u_int32_t		flags;
-	
+
 	u_int32_t		ls_qlen;
-	
+
 	char			saddr[12];
 
 	u_int32_t		btu;
@@ -506,21 +532,21 @@ struct portreq {
 };
 
 struct portconf {
-        int             port_len;
-        char            port_net[SNA_NETWORK_NAME_LEN];
-        char            port_name[SNA_RESOURCE_NAME_LEN];
-        char            port_devname[SNA_RESOURCE_NAME_LEN];
+	int             port_len;
+	char            port_net[SNA_NETWORK_NAME_LEN];
+	char            port_name[SNA_RESOURCE_NAME_LEN];
+	char            port_devname[SNA_RESOURCE_NAME_LEN];
 	char		port_portname[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char              *portc_buf;
-                struct portreq    *portc_req;
-        } portc_portcu;
+	union {
+		char              *portc_buf;
+		struct portreq    *portc_req;
+	} portc_portcu;
 };
 
 struct sna_qport {
-        struct sna_qport *next;
-        struct portreq   data;
+	struct sna_qport *next;
+	struct portreq   data;
 };
 
 #define portc_buf portc_portcu.portc_buf              /* buffer address       */
@@ -531,31 +557,31 @@ struct dlcreq {
 	struct dlcreq		*prev;
 
 	u_int8_t		dev_name[SNA_RESOURCE_NAME_LEN];
-	
+
 	u_int32_t		index;
 	u_int32_t		flags;
 	u_int16_t		type;
 	u_int16_t		mtu;
-	u_int8_t		dev_addr[8];
-	
+	u_int8_t		dev_addr[MAX_ADDR_LEN];
+
 	struct portreq		*port;
 };
 
 struct dlconf {
-        int             dlc_len;
-        char            dlc_net[SNA_NETWORK_NAME_LEN];
-        char            dlc_name[SNA_RESOURCE_NAME_LEN];
+	int             dlc_len;
+	char            dlc_net[SNA_NETWORK_NAME_LEN];
+	char            dlc_name[SNA_RESOURCE_NAME_LEN];
 	char		dlc_devname[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char             *dlc_buf;
-                struct dlcreq    *dlc_req;
-        } dlc_dlcu;
+	union {
+		char             *dlc_buf;
+		struct dlcreq    *dlc_req;
+	} dlc_dlcu;
 };
 
 struct sna_qdlc {
-        struct sna_qdlc *next;
-        struct dlcreq   data;
+	struct sna_qdlc *next;
+	struct dlcreq   data;
 };
 
 #define dlc_buf dlc_dlcu.dlc_buf              /* buffer address       */
@@ -566,26 +592,26 @@ struct snareq {
 	char		name[SNA_RESOURCE_NAME_LEN];
 	sna_nodeid	nodeid;
 	unsigned short  type;           /* Node type. */
-        unsigned short  lu_seg;         /* Is LU segmenting supported. */
-        unsigned short   bind_seg;      /* Is Bind segmenting supported. */
-        unsigned long    max_lus;	/* Max LU sessions */
+	unsigned short  lu_seg;         /* Is LU segmenting supported. */
+	unsigned short   bind_seg;      /* Is Bind segmenting supported. */
+	unsigned long    max_lus;	/* Max LU sessions */
 	unsigned short	node_status;
 };
 
 struct snaconf {
-        int             snac_len;
+	int             snac_len;
 	char		snac_net[SNA_NETWORK_NAME_LEN];
 	char		snac_name[SNA_RESOURCE_NAME_LEN];
 
-        union {
-                char             *snac_buf;
-                struct snareq    *snac_req;
-        } snac_snacu;
+	union {
+		char             *snac_buf;
+		struct snareq    *snac_req;
+	} snac_snacu;
 };
 
 struct sna_qsna {
-        struct sna_qsna *next;
-        struct snareq   data;
+	struct sna_qsna *next;
+	struct snareq   data;
 };
 
 #define snac_buf snac_snacu.snac_buf              /* buffer address       */
@@ -599,10 +625,10 @@ struct sna_all_info {
 	char		name[SNA_RESOURCE_NAME_LEN];
 	sna_nodeid	nodeid;
 	unsigned short  type;           /* Node type. */
-        unsigned short  lu_seg;         /* Is LU segmenting supported. */
-        unsigned short  bind_seg;      	/* Is Bind segmenting supported. */
-        unsigned long   max_lus;       	/* Max LU sessions */
-	unsigned short	node_status;	
+	unsigned short  lu_seg;         /* Is LU segmenting supported. */
+	unsigned short  bind_seg;      	/* Is Bind segmenting supported. */
+	unsigned long   max_lus;       	/* Max LU sessions */
+	unsigned short	node_status;
 
 	struct modereq		*mode;
 	struct plureq		*plu;
@@ -626,16 +652,17 @@ typedef enum {
 	SNA_RESET_SESSION_LIMIT,
 } sna_nof_commands;
 
-#define SIOCGNODE       0x1000
-#define SIOCGDLC        0x1001
-#define SIOCGPORT       0x1002
-#define SIOCGLS         0x1003
-#define SIOCGMODE       0x1004
-#define SIOCGLU         0x1005
-#define SIOCGPLU        0x1006
-#define SIOCGCPICS      0x1007
-#define SIOCGPS         0x1008
-#define SIOCGCOS        0x1009
+#define SIOCGNODE	(SIOCPROTOPRIVATE + 0)
+#define SIOCGDLC	(SIOCPROTOPRIVATE + 1)
+#define SIOCGPORT	(SIOCPROTOPRIVATE + 2)
+#define SIOCGLS		(SIOCPROTOPRIVATE + 3)
+#define SIOCGMODE	(SIOCPROTOPRIVATE + 4)
+#define SIOCGLU		(SIOCPROTOPRIVATE + 5)
+#define SIOCGPLU	(SIOCPROTOPRIVATE + 6)
+#define SIOCGCPICS	(SIOCPROTOPRIVATE + 7)
+#define SIOCGPS		(SIOCPROTOPRIVATE + 8)
+#define SIOCGCOS	(SIOCPROTOPRIVATE + 9)
+#define SIOCCPICC	(SIOCPROTOPRIVATE + 10)
 
 typedef enum {
 	SNA_NOF_NODE = 0,
@@ -706,35 +733,35 @@ struct sna_nof_adjacent_node {
 struct sna_nof_cos {
 	int		action;
 	unsigned char   name[SNA_RESOURCE_NAME_LEN];
-        unsigned short  weight;
-        unsigned short  tx_priority;
+	unsigned short  weight;
+	unsigned short  tx_priority;
 	unsigned char   default_cos_invalid;
-        unsigned char   default_cos_null;
+	unsigned char   default_cos_null;
 
 	/* Tg Characteristics */
 	unsigned short	tg_rsn;
 	unsigned short  min_cost_per_connect;
-        unsigned short  max_cost_per_connect;
-        unsigned short  min_cost_per_byte;
-        unsigned short  max_cost_per_byte;
-        unsigned short  min_security;
-        unsigned short  max_security;
-        unsigned short  min_propagation_delay;
-        unsigned short  max_propagation_delay;
-        unsigned short  min_effective_capacity;
-        unsigned short  max_effective_capacity;
-        unsigned short  min_user1;
-        unsigned short  max_user1;
-        unsigned short  min_user2;
-        unsigned short  max_user2;
-        unsigned short  min_user3;
-        unsigned short  max_user3;
+	unsigned short  max_cost_per_connect;
+	unsigned short  min_cost_per_byte;
+	unsigned short  max_cost_per_byte;
+	unsigned short  min_security;
+	unsigned short  max_security;
+	unsigned short  min_propagation_delay;
+	unsigned short  max_propagation_delay;
+	unsigned short  min_effective_capacity;
+	unsigned short  max_effective_capacity;
+	unsigned short  min_user1;
+	unsigned short  max_user1;
+	unsigned short  min_user2;
+	unsigned short  max_user2;
+	unsigned short  min_user3;
+	unsigned short  max_user3;
 
 	/* Node Characteristics */
 	unsigned short  node_rsn;
-        unsigned short  min_route_resistance;
+	unsigned short  min_route_resistance;
 	unsigned short	max_route_resistance;
-        unsigned short  min_node_congested;
+	unsigned short  min_node_congested;
 	unsigned short	max_node_congested;
 };
 
@@ -785,10 +812,10 @@ struct sna_nof_isr_tuning {
 struct sna_nof_ls {
 	int 		action;
 	char		use_name[SNA_USE_NAME_LEN];
-	
+
 	sna_netid 	netid;
 	char    	name[SNA_RESOURCE_NAME_LEN];	/* eth0 */
-        char    	saddr[SNA_PORT_ADDR_LEN];       /* 0x04 */
+	char    	saddr[SNA_PORT_ADDR_LEN];       /* 0x04 */
 
 	sna_netid 	plu_name;
 	sna_nodeid	plu_node_id;
@@ -799,18 +826,18 @@ struct sna_nof_ls {
 	int		direction;
 	int 		byteswap;
 	int 		retry_on_fail;
-        int 		retry_times;
-        int 		autoact;
-        int 		autodeact;
-        int 		tg_number;
-        int 		cost_per_byte;
-        int 		cost_per_connect_time;
-        int 		effective_capacity;
-        int 		propagation_delay;
-        int 		security;
-        int 		user1;
-        int 		user2;
-        int 		user3;
+	int 		retry_times;
+	int 		autoact;
+	int 		autodeact;
+	int 		tg_number;
+	int 		cost_per_byte;
+	int 		cost_per_connect_time;
+	int 		effective_capacity;
+	int 		propagation_delay;
+	int 		security;
+	int 		user1;
+	int 		user2;
+	int 		user3;
 
 	unsigned long  	deact_type;
 };
@@ -818,7 +845,7 @@ struct sna_nof_ls {
 struct sna_nof_local_lu {
 	int 		action;
 	char            use_name[SNA_USE_NAME_LEN];
-	
+
 	sna_netid 	netid;
 	unsigned char 	lu_name[SNA_RESOURCE_NAME_LEN];
 	unsigned char	sync_point;
@@ -853,7 +880,7 @@ struct sna_nof_mode {
 struct sna_nof_remote_lu {
 	int 		action;
 	char            use_name[SNA_USE_NAME_LEN];
-	
+
 	sna_netid 	netid;
 	sna_netid 	netid_plu;
 	sna_netid 	netid_fqcp;
@@ -871,14 +898,14 @@ struct sna_nof_remote_lu {
 struct sna_nof_port {
 	int		action;
 	char		use_name[SNA_USE_NAME_LEN];
-	
+
 	sna_netid 	netid;
 	char		name[SNA_RESOURCE_NAME_LEN];	/* eth0 */
 	char		saddr[SNA_PORT_ADDR_LEN];	/* 0x4 */
 	unsigned long	btu;		/* Max Rx/Tx BTU size. */
 	unsigned long	mia;		/* Max inbound activations */
 	unsigned long	moa;		/* Max outbound activations */
-	
+
 	unsigned long	link_station_txrx;
 	unsigned long	max_nonack_xid;
 
@@ -906,7 +933,7 @@ struct sna_nof_tp {
 
 struct sna_nof_node {
 	int 			action;
-	
+
 	sna_netid 		netid;	/* Local NetID.Node. */
 	sna_nodeid		nodeid;		/* Local Block and PU ID. */
 	unsigned char		type;		/* Node type. */
@@ -936,11 +963,11 @@ struct sna_nof_node {
 	unsigned long		*resource_service_search;
 	unsigned long		general_odai_usage_supp;
 
-        unsigned char           route_resistance;
-        unsigned char           quiescing;
-	
+	unsigned char           route_resistance;
+	unsigned char           quiescing;
+
 	unsigned long 		deact_type;
-};	
+};
 
 /* SNA Network qualified name is registered or not. */
 #define SNA_NOF_NO_NETID_REG		0x0
@@ -955,18 +982,18 @@ struct sna_nof_node {
 #define SNA_NOF_MS_FOCAL_POINT		0x1
 
 typedef enum {
-        CO_FAIL = 0,
-        CO_RESET,
-        CO_ACTIVE,
-        CO_S_TEST_C,
-        CO_R_TEST_R,
-        CO_TEST_OK,
+	CO_FAIL = 0,
+	CO_RESET,
+	CO_ACTIVE,
+	CO_S_TEST_C,
+	CO_R_TEST_R,
+	CO_TEST_OK,
 } connect_out_status;
 
 typedef enum {
-        SNA_LS_STATE_DEFINED = 0,
-        SNA_LS_STATE_ACTIVATED,
-        SNA_LS_STATE_ACTIVE
+	SNA_LS_STATE_DEFINED = 0,
+	SNA_LS_STATE_ACTIVATED,
+	SNA_LS_STATE_ACTIVE
 } sna_ls_state_enum;
 
 #ifdef __KERNEL__

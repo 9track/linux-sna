@@ -522,13 +522,13 @@ struct sna_send_error {
 };
 
 struct sna_mc_send_error {
-        unsigned char   tp_id[8];
-        unsigned long   conv_id;
-        unsigned char   rts_rcvd;
-        unsigned char   err_type;
-        unsigned char   err_dir;
-        unsigned short  log_dlen;
-        unsigned char   *log_dptr;
+	unsigned char   tp_id[8];
+	unsigned long   conv_id;
+	unsigned char   rts_rcvd;
+	unsigned char   err_type;
+	unsigned char   err_dir;
+	unsigned short  log_dlen;
+	unsigned char   *log_dptr;
 };
 
 struct sna_change_session_limit {
@@ -735,7 +735,7 @@ struct sna_signoff {
 #endif
 
 extern void appc(unsigned short opcode, unsigned char opext,
-        unsigned short rcpri, unsigned long rcsec, void *uaddr);
+	unsigned short rcpri, unsigned long rcsec, void *uaddr);
 
 #ifdef __KERNEL__
 

@@ -10,31 +10,10 @@
  *
  * See the GNU General Public License for more details.
  */
- 
-#include <linux/config.h>
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
+
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/errno.h>
-#include <linux/skbuff.h>
-#include <linux/stat.h>
-#include <linux/init.h>
-#include <linux/netdevice.h>
-#include <net/datalink.h>
-#include <net/sock.h>
-#include <asm/byteorder.h>
-#include <linux/uio.h>
-#include <linux/unistd.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <net/sock.h>
-#include <linux/proc_fs.h>
 #include <linux/sna.h>
 
 static LIST_HEAD(hs_list);
@@ -43,45 +22,45 @@ static u_int32_t sna_hs_system_index = 0;
 struct sna_hs_cb *sna_hs_get_by_lfsid(struct sna_lfsid *lf)
 {
 	struct sna_hs_cb *hs;
-        struct list_head *le;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &hs_list) {
-                hs = list_entry(le, struct sna_hs_cb, list);
+	sna_debug(5, "init\n");
+	list_for_each(le, &hs_list) {
+		hs = list_entry(le, struct sna_hs_cb, list);
 		if (hs->lfsid.odai == lf->odai
 			&& hs->lfsid.sidh == lf->sidh
 			&& hs->lfsid.sidl == lf->sidl)
-                        return hs;
-        }
-        return NULL;
+			return hs;
+	}
+	return NULL;
 }
 
 struct sna_hs_cb *sna_hs_get_by_index(u_int32_t index)
 {
-        struct sna_hs_cb *hs;
-        struct list_head *le;
+	struct sna_hs_cb *hs;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &hs_list) {
-                hs = list_entry(le, struct sna_hs_cb, list);
-                if (hs->index == index)
-                        return hs;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &hs_list) {
+		hs = list_entry(le, struct sna_hs_cb, list);
+		if (hs->index == index)
+			return hs;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_hs_new_index(void)
 {
-        for (;;) {
-                if (++sna_hs_system_index <= 0)
-                        sna_hs_system_index = 1;
-                if (sna_hs_get_by_index(sna_hs_system_index) == NULL)
-                        return sna_hs_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_hs_system_index <= 0)
+			sna_hs_system_index = 1;
+		if (sna_hs_get_by_index(sna_hs_system_index) == NULL)
+			return sna_hs_system_index;
+	}
+	return 0;
 }
 
-int sna_hs_init_finish(u_int32_t index, u_int32_t pc_index, 
+int sna_hs_init_finish(u_int32_t index, u_int32_t pc_index,
 	struct sna_lfsid *lf, struct sk_buff *skb)
 {
 	struct sna_hs_cb *hs;
@@ -123,7 +102,6 @@ u_int32_t sna_hs_init(struct sna_lulu_cb *lulu, int *err)
 	hs->lulu_index		= lulu->index;
 	hs->type		= lulu->type;
 	list_add(&hs->list, &hs_list);
-	sna_mod_inc_use_count();
 out:	return hs_index;
 }
 
@@ -137,7 +115,6 @@ int sna_hs_destroy(u_int32_t index)
 		return 0;
 	list_del(&hs->list);
 	kfree(hs);
-	sna_mod_dec_use_count();
 	return 0;
 }
 
@@ -151,19 +128,19 @@ int sna_hs_ps_connected(struct sna_hs_cb *hs, u_int32_t bracket_index, u_int32_t
 
 int sna_hs_tx_ps_mu_data(struct sna_rcb *rcb, struct sk_buff *skb)
 {
-        int err;
+	int err;
 
-        sna_debug(5, "init\n");
-        err = sna_dfc_send_from_ps_data(skb, rcb);
-        if (err < 0)
-                sna_debug(5, "dfc send from ps failed `%d'.\n", err);
-        return err;
+	sna_debug(5, "init\n");
+	err = sna_dfc_send_from_ps_data(skb, rcb);
+	if (err < 0)
+		sna_debug(5, "dfc send from ps failed `%d'.\n", err);
+	return err;
 }
 
 int sna_hs_tx_ps_mu_req(struct sna_rcb *rcb, struct sk_buff *skb)
 {
 	int err;
-	
+
 	sna_debug(5, "init\n");
 	err = sna_dfc_send_from_ps_req(skb, rcb);
 	if (err < 0)

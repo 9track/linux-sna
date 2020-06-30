@@ -21,82 +21,82 @@
 
 #ifdef NOT
 struct sna_sender {
-        __u8 id;
-        __u8 type;
+	__u8 id;
+	__u8 type;
 };
 
 struct sna_bind_rq_send {
-        __u8 lu_id;
-        struct sna_sender *sender;
-        __u8 hs_id;
-        __u8 trans_prior;
-        struct sna_lfsid *lfsid;
-        __u8 path_id;
-        __u8 parallel;
-        __u8 adaptive_pace;
+	__u8 lu_id;
+	struct sna_sender *sender;
+	__u8 hs_id;
+	__u8 trans_prior;
+	struct sna_lfsid *lfsid;
+	__u8 path_id;
+	__u8 parallel;
+	__u8 adaptive_pace;
 };
 
 struct sna_bind_rsp_send {
-        struct sna_sender *sender;
-        struct sna_lfsid *lfsid;
-        __u8 hs_id;
-        __u8 trans_prior;
-        __u8 path_id;
-        __u8 free_lfsid;
-        __u8 parallel;
-        __u8 adaptive_pace;
+	struct sna_sender *sender;
+	struct sna_lfsid *lfsid;
+	__u8 hs_id;
+	__u8 trans_prior;
+	__u8 path_id;
+	__u8 free_lfsid;
+	__u8 parallel;
+	__u8 adaptive_pace;
 };
 
 struct sna_unbind_rq {
-        struct sna_sender *sender;
-        struct sna_lfsid *lfsid;
-        __u8 hs_id;
-        __u8 trans_prior;
-        __u8 free_lfsid;
-        __u8 path_id;
-        __u8 parallel;
-        __u8 adaptaive_pace;
+	struct sna_sender *sender;
+	struct sna_lfsid *lfsid;
+	__u8 hs_id;
+	__u8 trans_prior;
+	__u8 free_lfsid;
+	__u8 path_id;
+	__u8 parallel;
+	__u8 adaptaive_pace;
 };
 
 struct sna_unbind_rsp_send {
-        __u8 lu_id;
-        struct sna_sender *sender;
-        __u8 hs_id;
-        __u8 trans_prior;
-        __u8 free_lfsid;
-        __u8 path_id;
-        __u8 parallel;
-        __u8 adaptive_pace;
+	__u8 lu_id;
+	struct sna_sender *sender;
+	__u8 hs_id;
+	__u8 trans_prior;
+	__u8 free_lfsid;
+	__u8 path_id;
+	__u8 parallel;
+	__u8 adaptive_pace;
 };
 
 struct sna_pc_character {
-        __u16 max_send_btu_size;
-        __u16 max_rcv_btu_size;
-        __u8 adjacent_node_bind_reasm;
-        __u8 limit_resource;
+	__u16 max_send_btu_size;
+	__u16 max_rcv_btu_size;
+	__u8 adjacent_node_bind_reasm;
+	__u8 limit_resource;
 };
 
 struct sna_bind_rq_rcv {
-        struct sna_sender *sender;
-        struct sna_lfsid *lfsid;
-        __u8 hs_id;
-        __u8 trans_prior;
-        __u8 free_lfsid;
-        __u8 path_id;
-        struct sna_pc_character *pc_characteristics;
-        __u8 parallel;
-        __u8 adaptive_pace;
+	struct sna_sender *sender;
+	struct sna_lfsid *lfsid;
+	__u8 hs_id;
+	__u8 trans_prior;
+	__u8 free_lfsid;
+	__u8 path_id;
+	struct sna_pc_character *pc_characteristics;
+	__u8 parallel;
+	__u8 adaptive_pace;
 };
 
 struct sna_bind_rsp_rcv {
-        struct sna_sender *sender;
-        struct sna_lfsid *lfsid;
-        __u8 hs_id;
-        __u8 tx_priority;
-        __u8 free_lfsid;
-        __u8 path_id;
-        __u8 parallel;
-        __u8 adaptive_pace;
+	struct sna_sender *sender;
+	struct sna_lfsid *lfsid;
+	__u8 hs_id;
+	__u8 tx_priority;
+	__u8 free_lfsid;
+	__u8 path_id;
+	__u8 parallel;
+	__u8 adaptive_pace;
 };
 #endif
 
@@ -112,8 +112,8 @@ struct sna_bind_rsp_rcv {
 /* Compression header */
 struct sna_ru_compress
 {
-        unsigned char   compress:4,     /* Compression algorithm */
-                        length:4;       /* Uncmprssd data type/cmprssn hdr sz */        __u16           size;
+	unsigned char   compress:4,     /* Compression algorithm */
+			length:4;       /* Uncmprssd data type/cmprssn hdr sz */        __u16           size;
 };
 
 /* SCB data type */
@@ -124,8 +124,8 @@ struct sna_ru_compress
 
 struct sna_ru_compress_scb
 {
-        __u8    type:2,         /* SCB type */
-                count:6;        /* Uncompressed size of following data */
+	__u8    type:2,         /* SCB type */
+		count:6;        /* Uncompressed size of following data */
 };
 
 /* LZ command indicators */
@@ -136,29 +136,29 @@ struct sna_ru_compress_scb
 /* LZ control sequence header */
 struct sna_lz_9bit
 {
-        __u16   cntl:9,         /* 9 bit LZ compression */
-                cmd:7;          /* LZ command */
+	__u16   cntl:9,         /* 9 bit LZ compression */
+		cmd:7;          /* LZ command */
 };
 
 struct sna_lz_10bit
 {
-        __u16   cntl:10,        /* 10 bit LZ compression */
-                cmd:6;          /* LZ command */
+	__u16   cntl:10,        /* 10 bit LZ compression */
+		cmd:6;          /* LZ command */
 };
 
 struct sna_lz_12bit
 {
-        __u16   cntl:12,        /* 12 but LZ compression  */
-                cmd:4;          /* LZ command */
+	__u16   cntl:12,        /* 12 but LZ compression  */
+		cmd:4;          /* LZ command */
 };
 
 struct sna_ru_compress_lz
 {
-        union {
-                struct sna_lz_9bit      9bit;
-                struct sna_lz_10bit     10bit;
-                struct sna_lz_12bit     12bit;
-        } size;
+	union {
+		struct sna_lz_9bit      9bit;
+		struct sna_lz_10bit     10bit;
+		struct sna_lz_12bit     12bit;
+	} size;
 };
 #endif
 
@@ -166,97 +166,97 @@ struct sna_ru_compress_lz
  */
 
 static unsigned char const ebcdic_to_rotated[256] = {
-          0,   1,   2,   3,   4,   5,   6,   7,         /* 0 -     7 */
-          8,   9,  10,  11,  12,  13,  14,  15,         /* 8 -    15 */
-         16,  17,  18,  19,  20,  21,  22,  23,         /* 16 -   23 */
-         24,  25,  26,  27,  28,  29,  30,  31,         /* 24 -   31 */
-         32,  33,  34,  35,  36,  37,  38,  39,         /* 32 -   39 */
-         40,  41,  42,  43,  44,  45,  46,  47,         /* 40 -   47 */
-         48,  49,  50,  51,  52,  53,  54,  55,         /* 48 -   55 */
-         56,  57,  58,  59,  60,  61,  62,  63,         /* 56 -   63 */
-         1,  65,  66,  67,  68,  69,  70,  71,          /* 64 -   71 */
-         72,  73,  74,  75,  76,  77,  78,  79,         /* 72 -   79 */
-         80,  81,  82,  83,  84,  85,  86,  87,         /* 80 -   87 */
-         88,  89,  90, 109,  92,  93,  94,  95,         /* 88 -   95 */
-         96,  97,  98,  99, 100, 101, 102, 103,         /* 96 -  103 */
-        104, 105, 106, 107, 108, 109, 110, 111,         /* 104 - 111 */
-        112, 113, 114, 115, 116, 117, 118, 119,         /* 112 - 119 */
-        120, 121, 122, 237, 241, 125, 126, 127,         /* 120 - 127 */
-        128, 129, 130, 131, 132, 133, 134, 135,         /* 128 - 135 */
-        136, 137, 138, 139, 140, 141, 142, 143,         /* 136 - 143 */
-        144, 145, 146, 147, 148, 149, 150, 151,         /* 144 - 151 */
-        152, 153, 154, 155, 156, 157, 158, 159,         /* 152 - 159 */
-        160, 161, 162, 163, 164, 165, 166, 167,         /* 160 - 167 */
-        168, 169, 170, 171, 172, 173, 174, 175,         /* 168 - 175 */
-        176, 177, 178, 179, 180, 181, 182, 183,         /* 176 - 183 */
-        184, 185, 186, 187, 188, 189, 190, 191,         /* 184 - 191 */
-        192,   7,  11,  14,  19,  23,  27,  31,         /* 192 - 199 */
-         35,  39, 202, 203, 204, 205, 206, 207,         /* 200 - 207 */
-        208,  71,  75,  79,  83,  87,  91,  95,         /* 208 - 215 */
-         99, 103, 218, 219, 220, 221, 222, 223,         /* 216 - 223 */
-        224, 225, 139, 143, 147, 151, 155, 159,         /* 224 - 231 */
-        163, 167, 234, 235, 236, 237, 238, 239,         /* 232 - 239 */
-        195, 199, 203, 207, 211, 215, 219, 223,         /* 240 - 247 */
-        227, 231, 250, 251, 252, 253, 254, 255          /* 248 - 255 */
+	  0,   1,   2,   3,   4,   5,   6,   7,         /* 0 -     7 */
+	  8,   9,  10,  11,  12,  13,  14,  15,         /* 8 -    15 */
+	 16,  17,  18,  19,  20,  21,  22,  23,         /* 16 -   23 */
+	 24,  25,  26,  27,  28,  29,  30,  31,         /* 24 -   31 */
+	 32,  33,  34,  35,  36,  37,  38,  39,         /* 32 -   39 */
+	 40,  41,  42,  43,  44,  45,  46,  47,         /* 40 -   47 */
+	 48,  49,  50,  51,  52,  53,  54,  55,         /* 48 -   55 */
+	 56,  57,  58,  59,  60,  61,  62,  63,         /* 56 -   63 */
+	 1,  65,  66,  67,  68,  69,  70,  71,          /* 64 -   71 */
+	 72,  73,  74,  75,  76,  77,  78,  79,         /* 72 -   79 */
+	 80,  81,  82,  83,  84,  85,  86,  87,         /* 80 -   87 */
+	 88,  89,  90, 109,  92,  93,  94,  95,         /* 88 -   95 */
+	 96,  97,  98,  99, 100, 101, 102, 103,         /* 96 -  103 */
+	104, 105, 106, 107, 108, 109, 110, 111,         /* 104 - 111 */
+	112, 113, 114, 115, 116, 117, 118, 119,         /* 112 - 119 */
+	120, 121, 122, 237, 241, 125, 126, 127,         /* 120 - 127 */
+	128, 129, 130, 131, 132, 133, 134, 135,         /* 128 - 135 */
+	136, 137, 138, 139, 140, 141, 142, 143,         /* 136 - 143 */
+	144, 145, 146, 147, 148, 149, 150, 151,         /* 144 - 151 */
+	152, 153, 154, 155, 156, 157, 158, 159,         /* 152 - 159 */
+	160, 161, 162, 163, 164, 165, 166, 167,         /* 160 - 167 */
+	168, 169, 170, 171, 172, 173, 174, 175,         /* 168 - 175 */
+	176, 177, 178, 179, 180, 181, 182, 183,         /* 176 - 183 */
+	184, 185, 186, 187, 188, 189, 190, 191,         /* 184 - 191 */
+	192,   7,  11,  14,  19,  23,  27,  31,         /* 192 - 199 */
+	 35,  39, 202, 203, 204, 205, 206, 207,         /* 200 - 207 */
+	208,  71,  75,  79,  83,  87,  91,  95,         /* 208 - 215 */
+	 99, 103, 218, 219, 220, 221, 222, 223,         /* 216 - 223 */
+	224, 225, 139, 143, 147, 151, 155, 159,         /* 224 - 231 */
+	163, 167, 234, 235, 236, 237, 238, 239,         /* 232 - 239 */
+	195, 199, 203, 207, 211, 215, 219, 223,         /* 240 - 247 */
+	227, 231, 250, 251, 252, 253, 254, 255          /* 248 - 255 */
 };
 
 static unsigned char const ebcdic_to_ascii_sna[256] =
 {
-          0,   1,   2,   3,   4,   5,   6,   7,         /* 0 -     7 */
-          8,   9,  10,  11,  12,  13,  14,  15,         /* 8 -    15 */
-         16,  17,  18,  19,  20,  21,  22,  23,         /* 16 -   23 */
-         24,  25,  26,  27,  28,  29,  30,  31,
-         32,  33,  34,  35,  36,  37,  38,  39,
-         40,  41,  42,  43,  44,  45,  46,  47,
-         48,  49,  50,  51,  52,  53,  54,  55,
-         56,  57,  58,  59,  60,  61,  62,  63,
-         32,  65,  66,  67,  68,  69,  70,  71,
-         72,  73,  74,  75,  76,  77,  78,  79,
-         80,  81,  82,  83,  84,  85,  86,  87,
-         88,  89,  90,  91,  92,  93,  94,  95,
-         96,  97,  98,  99, 100, 101, 102, 103,
-        104, 105, 106, 107, 108, 109, 110, 111,
-        112, 113, 114, 115, 116, 117, 118, 119,
-        120, 121, 122, 123, 124, 125, 126, 127,
-        128, 129, 130, 131, 132, 133, 134, 135,
-        136, 137, 138, 139, 140, 141, 142, 143,
-        144, 145, 146, 147, 148, 149, 150, 151,
-        152, 153, 154, 155, 156, 157, 158, 159,
-        160, 161, 162, 163, 164, 165, 166, 167,
-        168, 169, 170, 171, 172, 173, 174, 175,
-        176, 177, 178, 179, 180, 181, 182, 183,
-        184, 185, 186, 187, 188, 189, 190, 191,
-        192,  65,  66,  67,  68,  69,  70,  71,
-         72,  73, 202, 203, 204, 205, 206, 207,
-        208,  74,  75,  76,  77,  78,  79,  80,
-         81,  82, 218, 219, 220, 221, 222, 223,
-        224, 225,  83,  84,  85,  86,  87,  88,
-         89,  90, 234, 235, 236, 237, 238, 239,
-        240, 241, 242, 243, 244, 245, 246, 247,
-        248, 249, 250, 251, 252, 253, 254, 255
+	  0,   1,   2,   3,   4,   5,   6,   7,         /* 0 -     7 */
+	  8,   9,  10,  11,  12,  13,  14,  15,         /* 8 -    15 */
+	 16,  17,  18,  19,  20,  21,  22,  23,         /* 16 -   23 */
+	 24,  25,  26,  27,  28,  29,  30,  31,
+	 32,  33,  34,  35,  36,  37,  38,  39,
+	 40,  41,  42,  43,  44,  45,  46,  47,
+	 48,  49,  50,  51,  52,  53,  54,  55,
+	 56,  57,  58,  59,  60,  61,  62,  63,
+	 32,  65,  66,  67,  68,  69,  70,  71,
+	 72,  73,  74,  75,  76,  77,  78,  79,
+	 80,  81,  82,  83,  84,  85,  86,  87,
+	 88,  89,  90,  91,  92,  93,  94,  95,
+	 96,  97,  98,  99, 100, 101, 102, 103,
+	104, 105, 106, 107, 108, 109, 110, 111,
+	112, 113, 114, 115, 116, 117, 118, 119,
+	120, 121, 122, 123, 124, 125, 126, 127,
+	128, 129, 130, 131, 132, 133, 134, 135,
+	136, 137, 138, 139, 140, 141, 142, 143,
+	144, 145, 146, 147, 148, 149, 150, 151,
+	152, 153, 154, 155, 156, 157, 158, 159,
+	160, 161, 162, 163, 164, 165, 166, 167,
+	168, 169, 170, 171, 172, 173, 174, 175,
+	176, 177, 178, 179, 180, 181, 182, 183,
+	184, 185, 186, 187, 188, 189, 190, 191,
+	192,  65,  66,  67,  68,  69,  70,  71,
+	 72,  73, 202, 203, 204, 205, 206, 207,
+	208,  74,  75,  76,  77,  78,  79,  80,
+	 81,  82, 218, 219, 220, 221, 222, 223,
+	224, 225,  83,  84,  85,  86,  87,  88,
+	 89,  90, 234, 235, 236, 237, 238, 239,
+	240, 241, 242, 243, 244, 245, 246, 247,
+	248, 249, 250, 251, 252, 253, 254, 255
 };
 
 static unsigned char const ascii_to_ebcdic_sna[256] =
 {
-          0,   1,   2,   3,  55,  45,  46,  47,         /* 0  -    7 */
-         22,   5,  37,  11,  12,  13,  14,  15,         /* 8  -   15 */
-         16,   0,   0,   0,   0,  61,  50,  38,         /* 16 -   23 */
-         24,  25,  63,  39,   0,   0,   0,   0,         /* 24 -   31 */
-         64,   0, 127, 123,  80, 108,  91, 121,         /* 32 -   39 */
-         77,  93,  53,  78, 107,  96,  75,  97,         /* 40 -   47 */
-        240, 241, 242, 243, 244, 245, 246, 247,         /* 48 -   55 */
-        248, 249, 122,  94,  76, 126, 110, 111,         /* 56 -   63 */
-        124, 193, 194, 195, 196, 197, 198, 199,         /* 64 -   71 */
-        200, 201, 209, 210, 211, 212, 213, 214,         /* 72 -   79 */
-        215, 216, 217, 226, 227, 228, 229, 230,         /* 80 -   87 */
-        231, 232, 233,  74, 224,   0,  95, 109,         /* 88 -   95 */
-        125, 129, 130, 131, 132, 133, 134, 135,         /* 96 -  103 */
-        136, 137, 145, 146, 147, 148, 149, 150,         /* 104 - 111 */
-        151, 152, 153, 162, 163, 164, 165, 166,         /* 112 - 119 */
-        167, 168, 169, 192, 106, 208, 161,   7,         /* 120 - 127 */
-          0,   0,   0,   0,   0,   0,   0,   0,		/* 128 - 135 */
-          0,   0,   0,   0,   0,   0,   0,   0,		/* 136 - 143 */
-          0,   0,   0,   0,   0,   0,   0		/* 144 - 150 */
+	  0,   1,   2,   3,  55,  45,  46,  47,         /* 0  -    7 */
+	 22,   5,  37,  11,  12,  13,  14,  15,         /* 8  -   15 */
+	 16,   0,   0,   0,   0,  61,  50,  38,         /* 16 -   23 */
+	 24,  25,  63,  39,   0,   0,   0,   0,         /* 24 -   31 */
+	 64,   0, 127, 123,  80, 108,  91, 121,         /* 32 -   39 */
+	 77,  93,  53,  78, 107,  96,  75,  97,         /* 40 -   47 */
+	240, 241, 242, 243, 244, 245, 246, 247,         /* 48 -   55 */
+	248, 249, 122,  94,  76, 126, 110, 111,         /* 56 -   63 */
+	124, 193, 194, 195, 196, 197, 198, 199,         /* 64 -   71 */
+	200, 201, 209, 210, 211, 212, 213, 214,         /* 72 -   79 */
+	215, 216, 217, 226, 227, 228, 229, 230,         /* 80 -   87 */
+	231, 232, 233,  74, 224,   0,  95, 109,         /* 88 -   95 */
+	125, 129, 130, 131, 132, 133, 134, 135,         /* 96 -  103 */
+	136, 137, 145, 146, 147, 148, 149, 150,         /* 104 - 111 */
+	151, 152, 153, 162, 163, 164, 165, 166,         /* 112 - 119 */
+	167, 168, 169, 192, 106, 208, 161,   7,         /* 120 - 127 */
+	  0,   0,   0,   0,   0,   0,   0,   0,		/* 128 - 135 */
+	  0,   0,   0,   0,   0,   0,   0,   0,		/* 136 - 143 */
+	  0,   0,   0,   0,   0,   0,   0		/* 144 - 150 */
 };
 
 /* FM.
@@ -266,31 +266,29 @@ static unsigned char const ascii_to_ebcdic_sna[256] =
 #define SNA_FMH_TYPE_1			1
 #define SNA_FMH_TYPE_2                  2
 #define SNA_FMH_TYPE_3			3
-#define SNA_FMH_TYPE_4                  4        
+#define SNA_FMH_TYPE_4                  4
 #define SNA_FMH_TYPE_5                  5       /* attach. */
-#define SNA_FMH_TYPE_6                  6        
+#define SNA_FMH_TYPE_6                  6
 #define SNA_FMH_TYPE_7                  7      	/* error. */
-#define SNA_FMH_TYPE_10                 10      
+#define SNA_FMH_TYPE_10                 10
 #define SNA_FMH_TYPE_12                 12	/* security. */
 #define SNA_FMH_TYPE_18			18
 #define SNA_FMH_TYPE_19			19
 
 /* simply a structure to make getting the len and type easy. */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-        u_int8_t        len                     __attribute__ ((packed));
-        u_int8_t        type:7,
-                        rsv1:1                  __attribute__ ((packed));
+	u_int8_t        len;
+	u_int8_t        type:7,
+			rsv1:1;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-        u_int8_t        len                     __attribute__ ((packed));
-        u_int8_t        rsv1:1,
-                        type:7                  __attribute__ ((packed));
+	u_int8_t        len;
+	u_int8_t        rsv1:1,
+			type:7;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fmh;
-#pragma pack()
 
 /* FMH command codes. */
 #define SNA_FMH_CMD_ATTACH		0x02FF
@@ -358,23 +356,23 @@ typedef struct {
 /* SNA Function Managment 1 header */
 struct sna_fmh1
 {
-        __u8    medium:4,       /* Desired medium for data */
-                lsubaddr:4;     /* Logical subaddress */
-        __u8    sri:1,          /* Stack Reference indicator */
-                dmsel:1,        /* Demand select */
-                rsv_1:2,        /* Reserved */
-                dsp:4;          /* Data stream profiles */
-        __u8    dssel:3,        /* Destination selection */
-                dst:1,          /* Data set transmission */
-                rsv_2:1,        /* Reserved */
-                cmi:1,          /* FMH-1 SCB compression indicator */
-                cpi:1,          /* Compaction indicator */
-                rsv_3:1;        /* Reserved */
-        __u8    ecrl;           /* Exchange record length */
-        __u16   rsv_4;          /* Reserved */
-        __u8    dslen;          /* Length of destination name */
+	__u8    medium:4,       /* Desired medium for data */
+		lsubaddr:4;     /* Logical subaddress */
+	__u8    sri:1,          /* Stack Reference indicator */
+		dmsel:1,        /* Demand select */
+		rsv_1:2,        /* Reserved */
+		dsp:4;          /* Data stream profiles */
+	__u8    dssel:3,        /* Destination selection */
+		dst:1,          /* Data set transmission */
+		rsv_2:1,        /* Reserved */
+		cmi:1,          /* FMH-1 SCB compression indicator */
+		cpi:1,          /* Compaction indicator */
+		rsv_3:1;        /* Reserved */
+	__u8    ecrl;           /* Exchange record length */
+	__u16   rsv_4;          /* Reserved */
+	__u8    dslen;          /* Length of destination name */
 
-        unsigned char *dsname;  /* Destination name, unlimited length */
+	unsigned char *dsname;  /* Destination name, unlimited length */
 };
 
 /* FMH-2 function indicators */
@@ -407,10 +405,10 @@ struct sna_fmh1
 /* SNA Function Managment 2 and 3 header */
 struct sna_fmh2
 {
-        __u8    sri:1,          /* Stack reference indicator */
-                fmh2cmd:7;      /* FMH-2 function to be performed */
+	__u8    sri:1,          /* Stack reference indicator */
+		fmh2cmd:7;      /* FMH-2 function to be performed */
 
-        unsigned char *fmh2opt; /* Parameter fields, unlimited length */
+	unsigned char *fmh2opt; /* Parameter fields, unlimited length */
 };
 
 /* FMH-4 block transmission type indicators */
@@ -441,101 +439,99 @@ struct sna_fmh2
 /* SNA Function Managment 4 header */
 struct sna_fmh4
 {
-        __u8    fmh4fxct;       /* Length of fixed length parameters */
-        __u8    fmh4tt1;        /* Block transmission type */
-        __u8    fm4htt2;        /* Block transmission type qualifier */
-        __u8    fmh4cmd;        /* Command */
-        __u8    rsv1:2,         /* Reserved */
-                f4rdescr:2,     /* Record descriptor flag */
-                rsv2:2,         /* Reserved */
-                fmh4bdtf:1,     /* Block data transform flag */
-                fmh4rdtf:1;     /* Reserved */
-        __u8    fmh4lbn;        /* Length of FMH4BN */
+	__u8    fmh4fxct;       /* Length of fixed length parameters */
+	__u8    fmh4tt1;        /* Block transmission type */
+	__u8    fm4htt2;        /* Block transmission type qualifier */
+	__u8    fmh4cmd;        /* Command */
+	__u8    rsv1:2,         /* Reserved */
+		f4rdescr:2,     /* Record descriptor flag */
+		rsv2:2,         /* Reserved */
+		fmh4bdtf:1,     /* Block data transform flag */
+		fmh4rdtf:1;     /* Reserved */
+	__u8    fmh4lbn;        /* Length of FMH4BN */
 
-        __u8    *fmh4bn;        /* Name of block */
+	__u8    *fmh4bn;        /* Name of block */
 
-        __u8    fmh4lbdt;       /* Length of FMH4BDT */
+	__u8    fmh4lbdt;       /* Length of FMH4BDT */
 
-        unsigned char fmh4bdt;  /* Block data transform */
+	unsigned char fmh4bdt;  /* Block data transform */
 
-        __u8    fmh4lvid;       /* Length of FMH4VID */
+	__u8    fmh4lvid;       /* Length of FMH4VID */
 
-        unsigned char fmh4vid;  /* Version identifier */
+	unsigned char fmh4vid;  /* Version identifier */
 };
 
 struct fmh5_sec_access
 {
-        __u8    length;         /* Length */
-        __u8    type;           /* Subfield type */
-        unsigned char data;     /* Security data about receiver */
+	__u8    length;         /* Length */
+	__u8    type;           /* Subfield type */
+	unsigned char data;     /* Security data about receiver */
 };
 
 /* PIP header */
 struct piph
 {
-        __u16   length;
-        __u16   gds;            /* GDS indicator */
+	__u16   length;
+	__u16   gds;            /* GDS indicator */
 
-        /* PIP sub-fields of structure piph, unlimited length */
-        unsigned char sub_pip;
+	/* PIP sub-fields of structure piph, unlimited length */
+	unsigned char sub_pip;
 };
 
 /* SNA Function Managment 5 header ATTACH (LU 6.2) */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u_int8_t	len			__attribute__ ((packed));
+	u_int8_t	len;
 	u_int8_t	type:7,
-			rsv1:1			__attribute__ ((packed));
-	u_int16_t	cmd			__attribute__ ((packed));
+			rsv1:1;
+	u_int16_t	cmd;
 	u_int8_t	rsv2:2,
 			xaid:1,
 			pipi:1,
 			spwdi:1,
 			pvid:2,
-			vid:1			__attribute__ ((packed));
-	u_int8_t	fix_len			__attribute__ ((packed));
-	u_int8_t	rsrc_type		__attribute__ ((packed));
-	u_int8_t	rsv3			__attribute__ ((packed));
+			vid:1;
+	u_int8_t	fix_len;
+	u_int8_t	rsrc_type;
+	u_int8_t	rsv3;
 	u_int8_t	rsv4:6,
-			sync_level:2		__attribute__ ((packed));	
+			sync_level:2;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u_int8_t	len			__attribute__ ((packed));
+	u_int8_t	len;
 	u_int8_t	rsv1:1,
-			type:7			__attribute__ ((packed));
-	u_int16_t	cmd			__attribute__ ((packed));
+			type:7;
+	u_int16_t	cmd;
 	u_int8_t	vid:1,
 			pvid:2,
 			spwdi:1,
 			pipi:1,
 			xaid:1,
-			rsv2:2			__attribute__ ((packed));
-	u_int8_t	fix_len			__attribute__ ((packed));
-	u_int8_t	rsrc_type		__attribute__ ((packed));
-	u_int8_t	rsv3			__attribute__ ((packed));
+			rsv2:2;
+	u_int8_t	fix_len;
+	u_int8_t	rsrc_type;
+	u_int8_t	rsv3;
 	u_int8_t	sync_level:2,
-			rsv4:6			__attribute__ ((packed));
+			rsv4:6;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fmh5;
-#pragma pack()
 
 #ifdef NOT_LU62
 
 /* SNA Function Managment 5 header (Not LU 6.2) */
 struct sna_fmh5
 {
-        __u8    length;         /* Length of FMH-5 + Length byte */
-        __u8    frag:1,         /* FMH concatenation */
-                type:7;         /* FMH type - 0000101 */
-        __u8    fmh5cmd;        /* Command code */
-        __u8    fmh5mod;        /* Modifier */
-        __u8    fmh5fxct;       /* Fixed length parameters */
-        __u8    attdsp;
-        __u8    attdba;
+	__u8    length;         /* Length of FMH-5 + Length byte */
+	__u8    frag:1,         /* FMH concatenation */
+		type:7;         /* FMH type - 0000101 */
+	__u8    fmh5cmd;        /* Command code */
+	__u8    fmh5mod;        /* Modifier */
+	__u8    fmh5fxct;       /* Fixed length parameters */
+	__u8    attdsp;
+	__u8    attdba;
 
-        unsigned char *names;   /* Resource names, unlimited length */
+	unsigned char *names;   /* Resource names, unlimited length */
 };
 
 #endif  /* CONFIG_SNA_LU62 */
@@ -543,64 +539,62 @@ struct sna_fmh5
 /* SNA Function Managment 6 header */
 struct sna_fmh6
 {
-        __u8    length;         /* Length of FMH-6 + Length byte */
-        __u8    frag:1,         /* FMH concatenation */
-                type:7;         /* FMH type - 0000110 */
-        __u8    fmh6cmd;        /* Command code */
-        __u8    fmh6lnsz:1,     /* Length of parameter length fields */
-                rsv1:7;         /* Reserved */
+	__u8    length;         /* Length of FMH-6 + Length byte */
+	__u8    frag:1,         /* FMH concatenation */
+		type:7;         /* FMH type - 0000110 */
+	__u8    fmh6cmd;        /* Command code */
+	__u8    fmh6lnsz:1,     /* Length of parameter length fields */
+		rsv1:7;         /* Reserved */
 
-        /* Many variable lenth params */
+	/* Many variable lenth params */
 };
 
 /* SNA Function Managment 7 header ERROR (LU 6.2) */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u_int8_t	len		__attribute__ ((packed));
+	u_int8_t	len;
 	u_int8_t	type:7,
-			rsv1:1		__attribute__ ((packed));
-	u_int32_t	sense		__attribute__ ((packed));
+			rsv1:1;
+	u_int32_t	sense;
 	u_int8_t	rsv2:7,
-			logi:1		__attribute__ ((packed));
+			logi:1;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u_int8_t	len		__attribute__ ((packed));
+	u_int8_t	len;
 	u_int8_t	rsv1:1,
-			type:7		__attribute__ ((packed));
-	u_int32_t	sense		__attribute__ ((packed));
+			type:7;
+	u_int32_t	sense;
 	u_int8_t	logi:1,
-			rsv2:7		__attribute__ ((packed));
+			rsv2:7;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fmh7;
-#pragma pack()
 
 
 /* SNA Function Managment 8 header (LU 6.1) */
 struct sna_fmh8
 {
-        __u8    *raw;
+	__u8    *raw;
 };
 
 /* SNA Function Managment 10 header */
 struct sna_fmh10
 {
-        __u8    length;         /* Length of FMH-10 + Length byte */
-        __u8    frag:1,         /* FMH concatenation */
-                type:7;         /* FMH type - 0001010 */
-        __u16   spccmd;         /* Sync point command */
-        __u16   spcmod;         /* Sync point modifier */
+	__u8    length;         /* Length of FMH-10 + Length byte */
+	__u8    frag:1,         /* FMH concatenation */
+		type:7;         /* FMH type - 0001010 */
+	__u16   spccmd;         /* Sync point command */
+	__u16   spcmod;         /* Sync point modifier */
 };
 
 /* SNA Function Managment 12 header SECURITY (LU 6.2) */
 struct sna_fmh12
 {
-        __u8    length;         /* Length of FMH-12 + Length byte */
-        __u8    rsv1:1,         /* Reserved */
-                type:7;         /* FMH type - 0001100 */
+	__u8    length;         /* Length of FMH-12 + Length byte */
+	__u8    rsv1:1,         /* Reserved */
+		type:7;         /* FMH type - 0001100 */
 
-        unsigned char fmh12mac[7];      /* DES Message Authentication Code */
+	unsigned char fmh12mac[7];      /* DES Message Authentication Code */
 };
 
 /* GDS.
@@ -683,35 +677,35 @@ struct sna_fmh12
  */
 #define SNA_GDS_CHG_NUM_SESS            0x1210
 typedef struct {
-        __u8    rsv1:4,
-                service_flag:4;
-        __u8    reply_mod;
-        __u8    action;
-        __u8    rsv2:3,
-                src_lu_drain:1,
-                rsv3:3,
-                dst_lu_drain:1;
-        __u8    rsv4:7,
-                sess_deact_resp:1;
-        __u16   rsv5:1,
-                max_sess_cnt:15;
-        __u16   rsv6:1,
-                src_g_min_cont_win:15;
-        __u16   rsv7:1,
-                dst_g_min_cont_win:15;
-        __u8    rsv8:7,
-                affect_mode_names:1;
-        __u8    mode_name_len;
-        __u8    mode_name;                      /* Start of Mode Name */
+	__u8    rsv1:4,
+		service_flag:4;
+	__u8    reply_mod;
+	__u8    action;
+	__u8    rsv2:3,
+		src_lu_drain:1,
+		rsv3:3,
+		dst_lu_drain:1;
+	__u8    rsv4:7,
+		sess_deact_resp:1;
+	__u16   rsv5:1,
+		max_sess_cnt:15;
+	__u16   rsv6:1,
+		src_g_min_cont_win:15;
+	__u16   rsv7:1,
+		dst_g_min_cont_win:15;
+	__u8    rsv8:7,
+		affect_mode_names:1;
+	__u8    mode_name_len;
+	__u8    mode_name;                      /* Start of Mode Name */
 } gds_chg_num_sess;
 
 struct sna_gds {
-        __u16   cvlen:16;
-        __u16   cvid:16;
+	__u16   cvlen:16;
+	__u16   cvid:16;
 
-        union {
+	union {
 
-        } cv;
+	} cv;
 };
 
 /* HPR.
@@ -734,17 +728,17 @@ struct sna_gds {
 /* HPR Network Layer Header (NHDR) */
 struct sna_nhdr
 {
-        __u8    sm:3,           /* Switching mode */
-                __pad1:2,
-                tpf:2,          /* Transmission priority field */
-                __pad2:1;
-        __u8    ftype:4,        /* Function type */
-                tsdata:1,       /* Time-sensitive packet indicator */
-                slow1:1,        /* Slowdown (minor) indicator */
-                slow2:1,        /* Slowdown (significant) indicator */
-                __pad3:1;
+	__u8    sm:3,           /* Switching mode */
+		__pad1:2,
+		tpf:2,          /* Transmission priority field */
+		__pad2:1;
+	__u8    ftype:4,        /* Function type */
+		tsdata:1,       /* Time-sensitive packet indicator */
+		slow1:1,        /* Slowdown (minor) indicator */
+		slow2:1,        /* Slowdown (significant) indicator */
+		__pad3:1;
 
-        /* Variable length data fields */
+	/* Variable length data fields */
 };
 
 /* PS.
@@ -753,79 +747,79 @@ struct sna_nhdr
 /* Flag structures for PS10 header */
 struct psh10_prepare
 {
-        __u8    luname:1,       /* LU names indicator */
-                wait:1,         /* Wait for outcome indicator */
-                __pad1:3,
-                locks:1,        /* LOCKS parameter indicator */
-                __pad2:2;
+	__u8    luname:1,       /* LU names indicator */
+		wait:1,         /* Wait for outcome indicator */
+		__pad1:3,
+		locks:1,        /* LOCKS parameter indicator */
+		__pad2:2;
 };
 
 struct psh10_rqcommit
 {
-        __u8    luwid:1,        /* Support of the New LUWID PS header */
-                wait:1,         /* Wait for outcome indicator */
-                reliable:1,     /* Resource reliability indicator */
-                sprq:1,         /* OK to leave out sync-point request */
-                rreport:1,      /* Initiator read-only reporting */
-                locks:1,        /* LOCKS parameter indicator */
-                __pad1:2;
+	__u8    luwid:1,        /* Support of the New LUWID PS header */
+		wait:1,         /* Wait for outcome indicator */
+		reliable:1,     /* Resource reliability indicator */
+		sprq:1,         /* OK to leave out sync-point request */
+		rreport:1,      /* Initiator read-only reporting */
+		locks:1,        /* LOCKS parameter indicator */
+		__pad1:2;
 };
 
 struct psh10_committed
 {
-        __u8    __pad1:1,
-                resync:1,       /* Resync processing status */
-                sluwid:1,       /* Source of next LUWID */
-                sprq:1,         /* OK to leave out sync-point request */
-                ifexcpt:1,      /* Implied Forget expectation indicator */
-                __pad2:3;
+	__u8    __pad1:1,
+		resync:1,       /* Resync processing status */
+		sluwid:1,       /* Source of next LUWID */
+		sprq:1,         /* OK to leave out sync-point request */
+		ifexcpt:1,      /* Implied Forget expectation indicator */
+		__pad2:3;
 };
 
 struct psh10_forget
 {
-        __u8    luwid:1,        /* Support of the New LUWID PS header */
-                resync:1,       /* Resync processing status */
-                __pad1:6;
+	__u8    luwid:1,        /* Support of the New LUWID PS header */
+		resync:1,       /* Resync processing status */
+		__pad1:6;
 };
 
 struct psh10_hm
 {
-        __u8    __pad1:2,
-                sluwid:1,       /* Source of next LUWID */
-                __pad2:5;
+	__u8    __pad1:2,
+		sluwid:1,       /* Source of next LUWID */
+		__pad2:5;
 };
 
 struct psh10_nluwid
 {
-        __u8    __pad1;
+	__u8    __pad1;
 };
 
 /* PS10 header */
 struct sna_psh10
 {
-        __u8    length;         /* Length */
+	__u8    length;         /* Length */
 
-        __u8    rsv:1,
-                type:7;
+	__u8    rsv:1,
+		type:7;
 
-        union {
-                struct psh10_prepare    prepare;
-                struct psh10_rqcommit   rqcommit;
-                struct psh10_committed  committed;
-                struct psh10_forget     forget;
-                struct psh10_hm         hm;
-                struct psh10_nluwid     nluwid;
-        } flags;
+	union {
+		struct psh10_prepare    prepare;
+		struct psh10_rqcommit   rqcommit;
+		struct psh10_committed  committed;
+		struct psh10_forget     forget;
+		struct psh10_hm         hm;
+		struct psh10_nluwid     nluwid;
+	} flags;
 
-        __u8    spptype;        /* Sync-point command type */
+	__u8    spptype;        /* Sync-point command type */
 
-        /* Command specific data here */
+	/* Command specific data here */
 
-        __u16   flowmod;        /* Modifier specifying next flow */
+	__u16   flowmod;        /* Modifier specifying next flow */
 
-        unsigned char sndlen[7];        /* Number of bytes sent */
+	unsigned char sndlen[7];        /* Number of bytes sent */
 
-        /* All kinds of variable length structures */
+	/* All kinds of variable length structures */
 };
 
 /* TH.
@@ -857,211 +851,199 @@ struct sna_psh10
 /* FID0 and FID1 formats are used between adjacent subarea nodes when
  * either or both nodes do not support ER and VR protocols.
  */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	efi:1,
 			rsv1:1,
 			mpf:2,
-			format:4	__attribute__ ((packed));
-	u_int8_t        rsv2            __attribute__ ((packed));
-        u_int16_t       daf             __attribute__ ((packed));
-        u_int16_t       oaf             __attribute__ ((packed));
-       	u_int16_t       snf             __attribute__ ((packed));      
-        u_int16_t       dcf             __attribute__ ((packed));
+			format:4;
+	u_int8_t        rsv2;
+	u_int16_t       daf;
+	u_int16_t       oaf;
+	u_int16_t       snf;
+	u_int16_t       dcf;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	format:4,
-        		mpf:2,
-                	rsv1:1,
-                 	efi:1		__attribute__ ((packed));
-        u_int8_t    	rsv2		__attribute__ ((packed));
-        u_int16_t   	daf		__attribute__ ((packed));
-        u_int16_t	oaf		__attribute__ ((packed));
-        u_int16_t	snf		__attribute__ ((packed));
-        u_int16_t   	dcf		__attribute__ ((packed));
+			mpf:2,
+			rsv1:1,
+			efi:1;
+	u_int8_t    	rsv2;
+	u_int16_t   	daf;
+	u_int16_t	oaf;
+	u_int16_t	snf;
+	u_int16_t   	dcf;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fid0;
-#pragma pack()
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	efi:1,
 			odai:1,
 			mpf:2,
-			format:4	__attribute__ ((packed));
-        u_int8_t        rsv1            __attribute__ ((packed));
-        u_int8_t        daf             __attribute__ ((packed));
-        u_int8_t        oaf             __attribute__ ((packed));
-        u_int16_t       snf             __attribute__ ((packed));
+			format:4;
+	u_int8_t        rsv1;
+	u_int8_t        daf;
+	u_int8_t        oaf;
+	u_int16_t       snf;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	format:4,
 			mpf:2,
 			odai:1,
-			efi:1		__attribute__ ((packed));
-        u_int8_t	rsv1    	__attribute__ ((packed));
-        u_int8_t	daf     	__attribute__ ((packed));
-        u_int8_t	oaf     	__attribute__ ((packed));
-	u_int16_t	snf		__attribute__ ((packed));
+			efi:1;
+	u_int8_t	rsv1;
+	u_int8_t	daf;
+	u_int8_t	oaf;
+	u_int16_t	snf;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fid2;
-#pragma pack()
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	efi:1,
 			rsv1:1,
 			mpf:2,
-			format:4	__attribute__ ((packed));
-	u_int8_t	lsid		__attribute__ ((packed));
+			format:4;
+	u_int8_t	lsid;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	format:4,
 			mpf:2,
 			rsv1:1,
-			efi:1		__attribute__ ((packed));
-	u_int8_t	lsid		__attribute__ ((packed));
+			efi:1;
+	u_int8_t	lsid;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fid3;
-#pragma pack()
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	ntwk_prty:1,
 			vr_pac_cnt_ind:1,
 			er_vr_supp_ind:1,
 			tg_sweep:1,
-			format:4	__attribute__ ((packed));
+			format:4;
 	u_int8_t	piubf:2,
 			hft:2,
 			rsv1:2,
-			tgsf:2		__attribute__ ((packed));
+			tgsf:2;
 	u_int8_t	ern:4,
 			nlp_cnt:3,
-			nlpoi:1		__attribute__ ((packed));
+			nlpoi:1;
 	u_int8_t	tpf:2,
 			rsv2:2,
-			vrn:4		__attribute__ ((packed));
+			vrn:4;
 	u_int16_t	tg_snf:12,
 			vr_sqti:2,
 			tg_nonfifo_ind:1,
-			vr_cwi:1	__attribute__ ((packed));
+			vr_cwi:1;
 	u_int16_t	vr_snf_send:12,
 			vr_rwi:1,
 			vr_cwri:1,
 			vrprs:1,
-			vrprp:1		__attribute__ ((packed));
-        u_int32_t       dsaf            __attribute__ ((packed));
-        u_int32_t       osaf            __attribute__ ((packed));
+			vrprp:1;
+	u_int32_t       dsaf;
+	u_int32_t       osaf;
 	u_int8_t	efi:1,
 			rsv4:1,
 			mpf:2,
 			snai:1,
-			rsv3:3		__attribute__ ((packed));
-        u_int8_t        rsv5            __attribute__ ((packed));
-        u_int16_t       def             __attribute__ ((packed));
-        u_int16_t       oef             __attribute__ ((packed));
-        u_int16_t       snf             __attribute__ ((packed));
-        u_int16_t       dcf             __attribute__ ((packed));
+			rsv3:3;
+	u_int8_t        rsv5;
+	u_int16_t       def;
+	u_int16_t       oef;
+	u_int16_t       snf;
+	u_int16_t       dcf;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	format:4,
 			tg_sweep:1,
 			er_vr_supp_ind:1,
-                	vr_pac_cnt_ind:1,
-                	ntwk_prty:1	__attribute__ ((packed));
-        u_int8_t	tgsf:2,
-                	rsv1:2,
-                	hft:2,
-                	piubf:2		__attribute__ ((packed));
-        u_int8_t	nlpoi:1,
-                	nlp_cnt:3,
-                	ern:4		__attribute__ ((packed));
-        u_int8_t	vrn:4,
-                	rsv2:2,
-                	tpf:2		__attribute__ ((packed));
-        u_int16_t	vr_cwi:1,
-                	tg_nonfifo_ind:1,
-                	vr_sqti:2,
-                	tg_snf:12	__attribute__ ((packed));
-        u_int16_t	vrprq:1,
-                	vrprs:1,
-                	vr_cwri:1,
-                	vr_rwi:1,
-                	vr_snf_send:12	__attribute__ ((packed));
-        u_int32_t	dsaf		__attribute__ ((packed));
-        u_int32_t	osaf		__attribute__ ((packed));
-        u_int8_t    	rsv3:3,
-                	snai:1,
-                	mpf:2,
-                	rsv4:1,
-                	efi:1		__attribute__ ((packed));
-        u_int8_t	rsv5		__attribute__ ((packed));
-        u_int16_t	def		__attribute__ ((packed));
-        u_int16_t	oef		__attribute__ ((packed));
-        u_int16_t	snf		__attribute__ ((packed));
-        u_int16_t	dcf		__attribute__ ((packed));
+			vr_pac_cnt_ind:1,
+			ntwk_prty:1;
+	u_int8_t	tgsf:2,
+			rsv1:2,
+			hft:2,
+			piubf:2;
+	u_int8_t	nlpoi:1,
+			nlp_cnt:3,
+			ern:4;
+	u_int8_t	vrn:4,
+			rsv2:2,
+			tpf:2;
+	u_int16_t	vr_cwi:1,
+			tg_nonfifo_ind:1,
+			vr_sqti:2,
+			tg_snf:12;
+	u_int16_t	vrprq:1,
+			vrprs:1,
+			vr_cwri:1,
+			vr_rwi:1,
+			vr_snf_send:12;
+	u_int32_t	dsaf;
+	u_int32_t	osaf;
+	u_int8_t    	rsv3:3,
+			snai:1,
+			mpf:2,
+			rsv4:1,
+			efi:1;
+	u_int8_t	rsv5;
+	u_int16_t	def;
+	u_int16_t	oef;
+	u_int16_t	snf;
+	u_int16_t	dcf;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fid4;
-#pragma pack()
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	efi:1,
 			rsv1:1,
 			mpf:2,
-			format:4	__attribute__ ((packed));
-	u_int8_t        rsv2            __attribute__ ((packed));
-        u_int16_t       snf             __attribute__ ((packed));
-        u_int8_t        sa[8]           __attribute__ ((packed));
+			format:4;
+	u_int8_t        rsv2;
+	u_int16_t       snf;
+	u_int8_t        sa[8];
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	format:4,
 			mpf:2,
 			rsv1:1,
-			efi:1		__attribute__ ((packed));
-	u_int8_t	rsv2		__attribute__ ((packed));
-	u_int16_t	snf		__attribute__ ((packed));
-	u_int8_t	sa[8]		__attribute__ ((packed));
+			efi:1;
+	u_int8_t	rsv2;
+	u_int16_t	snf;
+	u_int8_t	sa[8];
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fid5;
-#pragma pack()
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	rsv1:4,
-			format:4	__attribute__ ((packed));
-        u_int8_t        rsv2             __attribute__ ((packed));
-        u_int8_t        c_format         __attribute__ ((packed));
-        u_int8_t        c_type           __attribute__ ((packed));
-        u_int16_t       c_snf            __attribute__ ((packed));
-        u_int8_t        rsv3[18]         __attribute__ ((packed));
-        u_int16_t       dcf              __attribute__ ((packed));
+			format:4;
+	u_int8_t        rsv2;
+	u_int8_t        c_format;
+	u_int8_t        c_type;
+	u_int16_t       c_snf;
+	u_int8_t        rsv3[18];
+	u_int16_t       dcf;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	format:4,
-			rsv1:4		 __attribute__ ((packed));
-	u_int8_t	rsv2		 __attribute__ ((packed));
-	u_int8_t	c_format	 __attribute__ ((packed));
-	u_int8_t	c_type		 __attribute__ ((packed));
-	u_int16_t	c_snf		 __attribute__ ((packed));
-        u_int8_t	rsv3[18]	 __attribute__ ((packed));
-        u_int16_t	dcf		 __attribute__ ((packed));
+			rsv1:4;
+	u_int8_t	rsv2;
+	u_int8_t	c_format;
+	u_int8_t	c_type;
+	u_int16_t	c_snf;
+	u_int8_t	rsv3[18];
+	u_int16_t	dcf;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_fidf;
-#pragma pack()
 
 /* RH.
  */
@@ -1069,10 +1051,10 @@ typedef struct {
 #define SNA_RH_RRI_REQ          0
 #define SNA_RH_RRI_RSP          1
 
-#define SNA_RH_RU_FMD           0 
-#define SNA_RH_RU_NC            1 
-#define SNA_RH_RU_DFC           2 
-#define SNA_RH_RU_SC            3 
+#define SNA_RH_RU_FMD           0
+#define SNA_RH_RU_NC            1
+#define SNA_RH_RU_DFC           2
+#define SNA_RH_RU_SC            3
 
 #define SNA_RH_FI_NO_FMH        0
 #define SNA_RH_FI_FMH           1
@@ -1131,8 +1113,7 @@ typedef struct {
 #define SNA_RH_CEBI_NO_CEB      0
 #define SNA_RH_CEBI_CEB         1
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	eci:1,
 			bci:1,
@@ -1140,7 +1121,7 @@ typedef struct {
 			fi:1,
 			rsv1:1,
 			ru:2,
-			rri:1		__attribute__ ((packed));
+			rri:1;
 	u_int8_t	pi:1,
 			qri:1,
 			rlwi:1,
@@ -1148,7 +1129,7 @@ typedef struct {
 			rti:1,
 			dr2i:1,
 			llci:1,
-			dr1i:1		__attribute__ ((packed));
+			dr1i:1;
 	u_int8_t	cebi:1,
 			pdi:1,
 			edi:1,
@@ -1156,7 +1137,7 @@ typedef struct {
 			rsv3:1,
 			cdi:1,
 			ebi:1,
-			bbi:1		__attribute__ ((packed));
+			bbi:1;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	rri:1,
 			ru:2,
@@ -1164,7 +1145,7 @@ typedef struct {
 			fi:1,
 			sdi:1,
 			bci:1,
-			eci:1		__attribute__ ((packed));
+			eci:1;
 	u_int8_t	dr1i:1,
 			llci:1,
 			dr2i:1,
@@ -1172,20 +1153,19 @@ typedef struct {
 			rsv2:1,
 			rlwi:1,
 			qri:1,
-			pi:1		__attribute__ ((packed));
+			pi:1;
 	u_int8_t	bbi:1,
-       			ebi:1,
+			ebi:1,
 			cdi:1,
 			rsv3:1,
 			csi:1,
 			edi:1,
 			pdi:1,
-			cebi:1		__attribute__ ((packed));   
+			cebi:1;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_rh;
-#pragma pack()
 
 #define SNA_IPM_TYPE_SOLICIT	0
 #define SNA_IPM_TYPE_UNSOLICIT	1
@@ -1194,35 +1174,33 @@ typedef struct {
 #define SNA_IPM_RWI_OFF		0
 #define SNA_IPM_RWI_ON		1
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	rsv0:5,
 			rwi:1,
-			type:2		__attribute__ ((packed));
-	u_int16_t       nws             __attribute__ ((packed));
+			type:2;
+	u_int16_t       nws;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t	type:2,
 			rwi:1,
-    			rsv0:5		__attribute__ ((packed));
-	u_int16_t	nws		__attribute__ ((packed));
+			rsv0:5;
+	u_int16_t	nws;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_ipm;
-#pragma pack()
 
 /* RU.
  */
 
 /* ABCONN (Abandon Connection) */
 struct sna_abconn {
-        __u16 ena;
+	__u16 ena;
 };
 
 /* ABCONNOUT (Abandon Connect Out) */
 struct sna_abconnout {
-        __u16 ena;
+	__u16 ena;
 };
 
 /* Type of activation indicators */
@@ -1230,218 +1208,218 @@ struct sna_abconnout {
 #define ERP     0x2
 
 struct sna_sscp_id {
-        __u8    format:4,
-                pu_type:4;
-        char    id[4];
+	__u8    format:4,
+		pu_type:4;
+	char    id[4];
 };
 
 /* ACTDRM (Activate Cross-Domain Resource Manager) */
 struct sna_actcdrm {
-        __u8    request;        /* 0x14 */
-        __u8    format:4,
-                type_activation:4;
-        __u8    fm_profile;
-        __u8    ts_profile;
-        char    contents_id[7];
-        struct  sna_sscp_id *sscp_id;
-        __u8    __pad1:2,
-                primary_hs_rcv_win_size:6;
+	__u8    request;        /* 0x14 */
+	__u8    format:4,
+		type_activation:4;
+	__u8    fm_profile;
+	__u8    ts_profile;
+	char    contents_id[7];
+	struct  sna_sscp_id *sscp_id;
+	__u8    __pad1:2,
+		primary_hs_rcv_win_size:6;
 };
 
 /* ACTCONNIN (Activate Conect In) */
 struct sna_actconnin {
-        /* 0-2 NS header */
-        __u16   ena;
-        __u8    incoming_call:1,
-                info_rq:1,
-                __pad1:6;
+	/* 0-2 NS header */
+	__u16   ena;
+	__u8    incoming_call:1,
+		info_rq:1,
+		__pad1:6;
 };
 
 /* ACTLINK (Activate Link) */
 struct sna_actlink {
-        /* 0-2 NS header */
-        __u16   ena;
-        __u8    switched_subarea:1,
-                sub_llink:1,
-                __pad1:6;
+	/* 0-2 NS header */
+	__u16   ena;
+	__u8    switched_subarea:1,
+		sub_llink:1,
+		__pad1:6;
 };
 
 /* ACTLU (Activate Logical Unit) */
 struct sna_actlu {
-        __u8    request_code;
-        __u8    eami:1,         /* Enhanced Addr. Management Indicator */
-                sdai:1,         /* Static/dynamic addr. indicator */
-                __pad1:4,
-                type_activation:2;
-        __u8    fm_profile:4,
-                ts_profile:4;
+	__u8    request_code;
+	__u8    eami:1,         /* Enhanced Addr. Management Indicator */
+		sdai:1,         /* Static/dynamic addr. indicator */
+		__pad1:4,
+		type_activation:2;
+	__u8    fm_profile:4,
+		ts_profile:4;
 };
 
 /* ACTPU (Activate Physical Unit) */
 struct sna_actpu {
-        __u8    request_code;
-        __u8    format:4,
-                type_activation:4;
-        __u8    fm_profile:4,
-                ts_profile:4;
-        struct sna_sscp_id *sscp_id;
+	__u8    request_code;
+	__u8    format:4,
+		type_activation:4;
+	__u8    fm_profile:4,
+		ts_profile:4;
+	struct sna_sscp_id *sscp_id;
 };
 
 /* ACTTRACE (Activate Trace) */
 struct sna_trace_bit {
-        __u8    tx_group:1,
-                piu:1,
-                __pad1:2,
-                scanner_internal:1,
-                __pad2:1,
-                all_frames:1,
-                link:1;
+	__u8    tx_group:1,
+		piu:1,
+		__pad1:2,
+		scanner_internal:1,
+		__pad2:1,
+		all_frames:1,
+		link:1;
 };
 
 struct sna_acttrace {
-        /* 0-2 NS header */
-        __u16   ena;
-        struct sna_trace_bit *trace;
+	/* 0-2 NS header */
+	__u16   ena;
+	struct sna_trace_bit *trace;
 
-        /* Some trace specific trailers */
+	/* Some trace specific trailers */
 };
 
 /* ADDLINK (Add Link) */
 struct sna_addlink {
-        /* 0-2 NS header */
-        __u16   ena;
-        __u16   __pad1;
-        __u8    size_llink_id;
-        /* 8-n llink ID */
+	/* 0-2 NS header */
+	__u16   ena;
+	__u16   __pad1;
+	__u8    size_llink_id;
+	/* 8-n llink ID */
 };
 
 /* ADDLINKSTA (Add Link Station) */
 struct sna_fid_bit {
-        __u8    fid0:1,
-                fid1:1,
-                fid2:1,
-                fid3:1,
-                fid4:1,
-                __pad1:3;
+	__u8    fid0:1,
+		fid1:1,
+		fid2:1,
+		fid3:1,
+		fid4:1,
+		__pad1:3;
 };
 
 struct sna_addlinksta {
-        /* 0-2 NS header */
-        __u16   ena;
-        struct  sna_fid_bit *fid;
-        __u8    __pad1;
-        __u8    size_linksta_id;
-        /* 8-n Link station ID */
+	/* 0-2 NS header */
+	__u16   ena;
+	struct  sna_fid_bit *fid;
+	__u8    __pad1;
+	__u8    size_linksta_id;
+	/* 8-n Link station ID */
 };
 
 /* ANA (Assign Network Addresses) */
 struct sna_ana {
-        /* Retired */
+	/* Retired */
 };
 
 /* BFCINIT (BF Control Initiate) */
 struct sna_bfcinit {
-        /* 0-2 NS header */
-        __u16   ena;
-        __u8    format:4,
-                __pad1:4;
-        __u8    __pad2:1,
-                sub_source:1,
-                save_rscv:1,
-                copy_rscv:1,
-                sub_names:2,
-                ext_bind:1,
-                __pad3:1;
-        char    __pad4[4];
-        __u16   size_bind_image;
-        /* Bind Image */
-        /* Other variable length goodies */
+	/* 0-2 NS header */
+	__u16   ena;
+	__u8    format:4,
+		__pad1:4;
+	__u8    __pad2:1,
+		sub_source:1,
+		save_rscv:1,
+		copy_rscv:1,
+		sub_names:2,
+		ext_bind:1,
+		__pad3:1;
+	char    __pad4[4];
+	__u16   size_bind_image;
+	/* Bind Image */
+	/* Other variable length goodies */
 };
 
 /* BFCLEANUP (BF Cleanup) */
 struct sna_bfcleanup {
-        /* 0-2 NS header, 0x812629 */
-        __u16   ena;
-        __u8    format:4,
-                __pad1:4;
-        __u16   __pad2;
+	/* 0-2 NS header, 0x812629 */
+	__u16   ena;
+	__u8    format:4,
+		__pad1:4;
+	__u16   __pad2;
 
-        /* Session keys */
-        /* Control Vectors */
+	/* Session keys */
+	/* Control Vectors */
 };
 
 /* BFINIT (BF Initiate) */
 struct sna_bfinit {
-        /* 0-2 NS header, 0x812681 */
-        __u16   ena;
-        __u8    format:4,
-                __pad1:4;
-        __u16   size_bind_image;
+	/* 0-2 NS header, 0x812681 */
+	__u16   ena;
+	__u8    format:4,
+		__pad1:4;
+	__u16   size_bind_image;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* BFSESSEND (BF Session Ended) */
 struct sna_bfsessend {
-        /* 0-2 NS header, 0x812688 */
-        __u16   ena;
-        __u8    format:4,
-                lu_role:1,
-                __pad1:4;
-        __u8    cause;
-        __u8    __pad2;
+	/* 0-2 NS header, 0x812688 */
+	__u16   ena;
+	__u8    format:4,
+		lu_role:1,
+		__pad1:4;
+	__u8    cause;
+	__u8    __pad2;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* BFSESSINFO (BF Session Information) */
 struct sna_bfsessinfo {
-        /* 0-2 NS header, 0x81268C */
-        __u16   ena;
-        __u8    format:4,
-                __pad1:4;
-        __u8    als_takeover:1,
-                lu_takeover:1,
-                auth_lu:1,
-                sdai:1,
-                static_lu_addr_status:1,
-                __pad2:3;
-        __u16   __pad3;
-        __u8    size_lu_name;
+	/* 0-2 NS header, 0x81268C */
+	__u16   ena;
+	__u8    format:4,
+		__pad1:4;
+	__u8    als_takeover:1,
+		lu_takeover:1,
+		auth_lu:1,
+		sdai:1,
+		static_lu_addr_status:1,
+		__pad2:3;
+	__u16   __pad3;
+	__u8    size_lu_name;
 
-        /* Network Qualified LU name */
-        /* Control Vectors */
+	/* Network Qualified LU name */
+	/* Control Vectors */
 };
 
 /* BFSESSST (BF Session Started) */
 struct sna_bfsessst {
-        /* 0-2 NS header, 0x812686 */
-        __u16   ena;
-        __u8    format:4,
-                __pad4;
+	/* 0-2 NS header, 0x812686 */
+	__u16   ena;
+	__u8    format:4,
+		__pad4;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* BFTERM (BF Terminate) */
 struct sna_bfterm {
-        /* 0-2 NS header, 0x812683 */
-        __u16   ena;
-        __u8    format:4,
-                __pad1:4;
-        __u8    cause;
-        __u8    __pad2;
+	/* 0-2 NS header, 0x812683 */
+	__u16   ena;
+	__u8    format:4,
+		__pad1:4;
+	__u8    cause;
+	__u8    __pad2;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* BID (BID) Not for LU6.2 */
 struct sna_nonlu62_bid {
-        __u8    request_code;
+	__u8    request_code;
 };
 
 #define SNA_USER_DATA_MODE		0x02
@@ -1503,294 +1481,292 @@ struct sna_nonlu62_bid {
  * parameters to help determine whether it will response positively or
  * negativly to BIND.
  */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u_int8_t	rc			__attribute__ ((packed));
+	u_int8_t	rc;
 	u_int8_t	type:4,
-			format:4		__attribute__ ((packed));
-	u_int8_t	fm_profile		__attribute__ ((packed));
-	u_int8_t	ts_profile		__attribute__ ((packed));
+			format:4;
+	u_int8_t	fm_profile;
+	u_int8_t	ts_profile;
 	u_int8_t	p_tx_end_bracket:1,
 			p_compression:1,
 			p_rsv1:2,
 			p_chain_rsp:2,
 			p_req_mode:1,
-			p_chain_use:1		__attribute__ ((packed));
+			p_chain_use:1;
 	u_int8_t	s_tx_end_bracket:1,
 			s_compression:1,
 			s_rsv1:2,
 			s_chain_rsp:2,
 			s_req_mode:1,
-			s_chain_use:1		__attribute__ ((packed));
+			s_chain_use:1;
 	u_int8_t	bind_queue:1,
 			rsv2:2,
 			alt_code_set:1,
 			bracket_term:1,
 			brackets:1,
 			fm_header:1,
-			whole_biu:1		__attribute__ ((packed));
+			whole_biu:1;
 	u_int8_t	hdx_ff_reset:1,
 			ctrl_vectors:1,
 			alt_code_proc_id:2,
 			contention:1,
 			recovery:1,
-			flow_mode:2		__attribute__ ((packed));
+			flow_mode:2;
 	u_int8_t	sec_tx_win_size:6,
 			rsv3:1,
-			sec_stagi:1		__attribute__ ((packed));
+			sec_stagi:1;
 	u_int8_t	sec_rx_win_size:6,
 			rsv4:1,
-			adaptive_pacing:1	__attribute__ ((packed));
-	u_int8_t	sec_max_ru_size		__attribute__ ((packed));
-	u_int8_t	pri_max_ru_size		__attribute__ ((packed));
+			adaptive_pacing:1;
+	u_int8_t	sec_max_ru_size;
+	u_int8_t	pri_max_ru_size;
 	u_int8_t	pri_tx_win_size:6,
 			rsv5:1,
-			pri_stagi:1		__attribute__ ((packed));
+			pri_stagi:1;
 	u_int8_t	pri_rx_win_size:6,
-			rsv6:2			__attribute__ ((packed));
+			rsv6:2;
 	u_int8_t	lu_type:7,
-			ps_usage:1		__attribute__ ((packed));
-	u_int8_t	lu6_level		__attribute__ ((packed));
-	u_int8_t	rsv7[6]			__attribute__ ((packed));
+			ps_usage:1;
+	u_int8_t	lu6_level;
+	u_int8_t	rsv7[6];
 	u_int8_t	rsv8:6,
 			xt_security_sense:1,
-			xt_security:1		__attribute__ ((packed));
+			xt_security:1;
 	u_int8_t	persist_verification:1,
 			already_verified:1,
 			password_sub:1,
 			lulu_verification:1,
 			access_security:1,
-			rsv9:3			__attribute__ ((packed));
+			rsv9:3;
 	u_int8_t	chg_num_sessions_gds:1,
 			parallel_session:1,
 			session_reinit:2,
 			rsv11:1,
 			sync_level:2,
-			rsv10:1			__attribute__ ((packed));
+			rsv10:1;
 	u_int8_t	lcc:2,
 			rsv13:4,
 			limited_resource:1,
-			rsv12:1			__attribute__ ((packed));
+			rsv12:1;
 	u_int8_t	crypto_len:4,
 			crypto_supp:2,
-			rsv14:2			__attribute__ ((packed));
+			rsv14:2;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u_int8_t	rc			__attribute__ ((packed));
+	u_int8_t	rc;
 	u_int8_t	format:4,
-			type:4			__attribute__ ((packed));
-	u_int8_t	fm_profile		__attribute__ ((packed));
-	u_int8_t	ts_profile		__attribute__ ((packed));
+			type:4;
+	u_int8_t	fm_profile;
+	u_int8_t	ts_profile;
 	u_int8_t	p_chain_use:1,
 			p_req_mode:1,
 			p_chain_rsp:2,
 			p_rsv1:2,
 			p_compression:1,
-			p_tx_end_bracket:1	__attribute__ ((packed));
+			p_tx_end_bracket:1;
 	u_int8_t	s_chain_use:1,
-                        s_req_mode:1,
-                        s_chain_rsp:2,
-                        s_rsv1:2,
-                        s_compression:1,
-                        s_tx_end_bracket:1      __attribute__ ((packed));
+			s_req_mode:1,
+			s_chain_rsp:2,
+			s_rsv1:2,
+			s_compression:1,
+			s_tx_end_bracket:1;
 	u_int8_t	whole_biu:1,
 			fm_header:1,
 			brackets:1,
 			bracket_term:1,
 			alt_code_set:1,
 			rsv2:2,
-			bind_queue:1		__attribute__ ((packed));
+			bind_queue:1;
 	u_int8_t	flow_mode:2,
 			recovery:1,
 			contention:1,
 			alt_code_proc_id:2,
 			ctrl_vectors:1,
-			hdx_ff_reset:1		__attribute__ ((packed));
+			hdx_ff_reset:1;
 	u_int8_t	sec_stagi:1,
 			rsv3:1,
-			sec_tx_win_size:6	__attribute__ ((packed));
+			sec_tx_win_size:6;
 	u_int8_t	adaptive_pacing:1,
 			rsv4:1,
-			sec_rx_win_size:6	__attribute__ ((packed));
-	u_int8_t	sec_max_ru_size		__attribute__ ((packed));
-	u_int8_t	pri_max_ru_size		__attribute__ ((packed));
+			sec_rx_win_size:6;
+	u_int8_t	sec_max_ru_size;
+	u_int8_t	pri_max_ru_size;
 	u_int8_t	pri_stagi:1,
 			rsv5:1,
-			pri_tx_win_size:6	__attribute__ ((packed));
+			pri_tx_win_size:6;
 	u_int8_t	rsv6:2,
-			pri_rx_win_size:6	__attribute__ ((packed));
+			pri_rx_win_size:6;
 	u_int8_t	ps_usage:1,
-			lu_type:7		__attribute__ ((packed));
-	u_int8_t	lu6_level		__attribute__ ((packed));
-	u_int8_t	rsv7[6]			__attribute__ ((packed));
+			lu_type:7;
+	u_int8_t	lu6_level;
+	u_int8_t	rsv7[6];
 	u_int8_t	xt_security:1,
 			xt_security_sense:1,
-			rsv8:6			__attribute__ ((packed));
+			rsv8:6;
 	u_int8_t	rsv9:3,
 			access_security:1,
 			lulu_verification:1,
 			password_sub:1,
 			already_verified:1,
-			persist_verification:1	__attribute__ ((packed));
+			persist_verification:1;
 	u_int8_t	rsv10:1,
 			sync_level:2,
 			rsv11:1,
 			session_reinit:2,
 			parallel_session:1,
-			chg_num_sessions_gds:1	__attribute__ ((packed));
+			chg_num_sessions_gds:1;
 	u_int8_t	rsv12:1,
 			limited_resource:1,
 			rsv13:4,
-			lcc:2			__attribute__ ((packed));
+			lcc:2;
 	u_int8_t	rsv14:2,
 			crypto_supp:2,
-			crypto_len:4		__attribute__ ((packed));
+			crypto_len:4;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_ru_bind;
-#pragma pack()
 
 typedef struct {
-        __u8    chain_sel:1,
-                request_mode:1,
-                chain_rsp_proto:2,
-                phase2_sync_point:1,
-                __pad1:1,
-                scbi:1,
-                send_end_bracket:1;
+	__u8    chain_sel:1,
+		request_mode:1,
+		chain_rsp_proto:2,
+		phase2_sync_point:1,
+		__pad1:1,
+		scbi:1,
+		send_end_bracket:1;
 } sna_fm_usage_bit;
 
 struct sna_reason_bit {
-        __u8    plu:1,
-                bind:1,
-                setup_rej_plu:1,
-                setup_rej_slu:1,
-                __pad1:4;
+	__u8    plu:1,
+		bind:1,
+		setup_rej_plu:1,
+		setup_rej_slu:1,
+		__pad1:4;
 };
 
 /* CANCEL (Cancel) */
 struct sna_cancel {
-        __u8    request_code;
+	__u8    request_code;
 };
 
 /* CDCINIT (Cross-Domain Control Initiate) */
 struct sna_cdcinit {
-        /* 0-2 NS header, 0x81864B */
-        __u8    format:4,
-                __pad1:4;
-        __u8    __pad2:7,
-                xrf_bind:1;
-        char    pcid[7];
+	/* 0-2 NS header, 0x81864B */
+	__u8    format:4,
+		__pad1:4;
+	__u8    __pad2:7,
+		xrf_bind:1;
+	char    pcid[7];
 
-        /* Session pair identifiers */
+	/* Session pair identifiers */
 };
 
 /* CDINIT (Cross-Domain Initiate) */
 struct sna_cdinit {
-        /* 0-2 NS header, 0x818641 */
-        __u8    format:4,
-                __pad1:4;
+	/* 0-2 NS header, 0x818641 */
+	__u8    format:4,
+		__pad1:4;
 
-        /* A mess of stuff after here */
+	/* A mess of stuff after here */
 };
 
 /* CDSESSEND (Cross-Domain Session Ended) */
 struct sna_cdsessend {
-        /* 0-2 NS header, 0x818648 */
-        char    pcid[7];
-        __u8    format:4,
-                __pad1:4;
+	/* 0-2 NS header, 0x818648 */
+	char    pcid[7];
+	__u8    format:4,
+		__pad1:4;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* CDSESSSF (Cross-Domain Session Setup Failure) */
 struct sna_cdsesssf {
-        /* Retired */
+	/* Retired */
 };
 
 /* CDSESSST (Cross-Domain Session Started) */
 struct sna_cdsessst {
-        /* 0-2 NS header, 0x818646 */
-        char    pcid[7];
-        __u8    __pad1;
+	/* 0-2 NS header, 0x818646 */
+	char    pcid[7];
+	__u8    __pad1;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* CDSESSTF (Cross-Domain Session Takedown Failure) */
 struct sna_cdsesstf {
-        /* Retired */
+	/* Retired */
 };
 
 struct sna_cdtaked {
-        /* 0-2 NS header, 0x818649 */
-        char    pcid[7];
-        __u8    type:2,
-                takedown:2,
-                sscp_sscp_term:1,
-                __pad1:3;
-        struct  sna_reason_bit *reason;
+	/* 0-2 NS header, 0x818649 */
+	char    pcid[7];
+	__u8    type:2,
+		takedown:2,
+		sscp_sscp_term:1,
+		__pad1:3;
+	struct  sna_reason_bit *reason;
 };
 
 /* CDTAKEDC (Cross-Domain Takedown Complete) */
 struct sna_cdtakedc {
-        /* 0-2 NS header, 0x81864A */
-        char    pcid[7];
-        __u8    type;
-        __u8    status;
+	/* 0-2 NS header, 0x81864A */
+	char    pcid[7];
+	__u8    type;
+	__u8    status;
 };
 
 /* CDTERM (Cross-Domain Terminate) */
 struct sna_cdterm {
-        /* 0-2 NS header, 0x818643 */
-        __u8    format:4,
-                __pad1:4;
-        __u8    type:2,
-                termination_type:1,
-                send_dactlu_to_dlu:1,
-                __pad2:1,
-                __pad3:2,
-                __termination:1;
-        char    pcid[7];
-        __u8    network:1,
-                normal:1,
-                reason_code:1,
-                sess_setup:1,
-                cinit_cterm_err:1,
-                bind_unbind_err:1,
-                setup_taked_rej:1,
-                setup_rej:1;
-        __u16   __pad4;
+	/* 0-2 NS header, 0x818643 */
+	__u8    format:4,
+		__pad1:4;
+	__u8    type:2,
+		termination_type:1,
+		send_dactlu_to_dlu:1,
+		__pad2:1,
+		__pad3:2,
+		__termination:1;
+	char    pcid[7];
+	__u8    network:1,
+		normal:1,
+		reason_code:1,
+		sess_setup:1,
+		cinit_cterm_err:1,
+		bind_unbind_err:1,
+		setup_taked_rej:1,
+		setup_rej:1;
+	__u16   __pad4;
 
-        /* Session Keys */
-        /* Control Vectors */
+	/* Session Keys */
+	/* Control Vectors */
 };
 
 /* CHASE (Chase) */
 struct sna_chase {
-        __u8    request_code;
+	__u8    request_code;
 };
 
 /* CINIT (Control Initiate) */
 struct sna_cinit {
-        /* 0-2 NS header, 0x810601 */
-        __u8    format:4,
-                __pad1:4;
-        __u8    init_lu_olu:1,
-                sub_source:1,
-                lu_olu:1,
-                __pad2:1,
-                name_sub:2,
-                ext_bind:1,
-                bind_xrf:1;
-        char    sess_key[4];
-        __u16   size_bind_image;
+	/* 0-2 NS header, 0x810601 */
+	__u8    format:4,
+		__pad1:4;
+	__u8    init_lu_olu:1,
+		sub_source:1,
+		lu_olu:1,
+		__pad2:1,
+		name_sub:2,
+		ext_bind:1,
+		bind_xrf:1;
+	char    sess_key[4];
+	__u16   size_bind_image;
 
-        /* Lots of variable length crap */
+	/* Lots of variable length crap */
 };
 
 /* RU packet type */
@@ -1813,7 +1789,7 @@ struct sna_cinit {
 
 /* Begin/End chain indicator */
 #define RU_BC_FIRST_TRUE	1
-#define RU_BC_FIRST_FALSE	0 
+#define RU_BC_FIRST_FALSE	0
 #define RU_EC_LAST_TRUE		1
 #define RU_EC_LAST_FALSE	0
 
@@ -2178,11 +2154,9 @@ struct sna_ru_bindf {
 /* BIS (Bracket Initiation Stopped). BIS is sent by the half-session to
  * indicate that it will not attempt to begin any more brackets.
  */
-#pragma pack(1)
-typedef struct {
-	u_int8_t rc	__attribute__ ((packed));
+typedef struct __attribute__ ((packed)) {
+	u_int8_t rc;
 } sna_ru_bis;
-#pragma pack()
 
 /* CANCEL (Cancel). CANCEL may be sent by a half-session to terminate a
  * partially sent chain of FMD requests. CANCEL may be sent only when
@@ -2817,12 +2791,10 @@ struct sna_ru_lcp {
  * value. In general, LUSTAT is used to report about failures and error
  * recovery conditions for a local device of an LU.
  */
-#pragma pack(1)
-typedef struct {
-	u_int8_t	rq_code		__attribute__ ((packed));
-	u_int32_t	status		__attribute__ ((packed));
+typedef struct __attribute__ ((packed)) {
+	u_int8_t	rq_code;
+	u_int32_t	status;
 } sna_ru_lustat;
-#pragma pack()
 
 /* NC_ACTVR (Activate Virtual-Route). NC_ACTVR initializes the state and
  * attributes of the VR at each of its end nodes.
@@ -3007,7 +2979,7 @@ struct sna_ru_nmvt {
 	__u8	*ms_ctrl_vectors;
 };
 
-/* PROCSTAT (Procedure Status). PROCSTAT reports to the SSCP either the 
+/* PROCSTAT (Procedure Status). PROCSTAT reports to the SSCP either the
  * successful completion or the failure of the load operation. If the procedure
  * failed, the request code of the failing RU and sense data are included as
  * parameters in the PROCSTAT RU.
@@ -3348,16 +3320,14 @@ struct sna_ru_shutd {
  * four-byte value, of which the first two bytes are the signal code and the
  * last two bytes are the signal extension value.
  */
-#pragma pack(1)
-typedef struct {
-	u_int8_t	rq_code		__attribute__ ((packed));
-	u_int16_t	signal_code	__attribute__ ((packed));
-	u_int16_t	signal_ext	__attribute__ ((packed));
+typedef struct __attribute__ ((packed)) {
+	u_int8_t	rq_code;
+	u_int16_t	signal_code;
+	u_int16_t	signal_ext;
 } sna_ru_sig;
-#pragma pack()
 
-/* STSN (Set and Test Sequence Numbers). STSN is sent by the primary 
- * half-session sync point manager to resynchronize the values of the 
+/* STSN (Set and Test Sequence Numbers). STSN is sent by the primary
+ * half-session sync point manager to resynchronize the values of the
  * half-session sequence numbers, for one or both of the normal flows at both
  * ends of the session. The RU is not used for LU 6.2.
  */
@@ -3423,47 +3393,43 @@ struct sna_ru_testmode {
 /* UNBIND (Unbind Session). UNBIND is sent to deactivate an active session
  * between the two LUs.
  */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u_int8_t        rc              __attribute__ ((packed));
-        u_int8_t        type            __attribute__ ((packed));
-        u_int32_t       sense           __attribute__ ((packed));
+	u_int8_t        rc;
+	u_int8_t        type;
+	u_int32_t       sense;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u_int8_t	rc		__attribute__ ((packed));
-	u_int8_t	type		__attribute__ ((packed));
-	u_int32_t	sense		__attribute__ ((packed));
+	u_int8_t	rc;
+	u_int8_t	type;
+	u_int32_t	sense;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_ru_unbind;
-#pragma pack()
 
 /* UNBINDF (Unbind Failure). UNBINDF is sent, with no-response requested, by
  * the PLU to notify the SSCP that the attempt to deactivate the session
  * between the specified LUs has failed (for example, because of a path failure)
  */
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
-	u_int32_t	rc:24		__attribute__ ((packed));
-	u_int32_t	sense		__attribute__ ((packed));
+	u_int32_t	rc:24;
+	u_int32_t	sense;
 	u_int8_t	rsv2:5,
 			takedown:1,
 			unbind:1,
-			rsv1:1		__attribute__ ((packed));
+			rsv1:1;
 #elif defined(__BIG_ENDIAN_BITFIELD)
-	u_int32_t       rc:24           __attribute__ ((packed));
-        u_int32_t       sense           __attribute__ ((packed));
+	u_int32_t       rc:24;
+	u_int32_t       sense;
 	u_int8_t	rsv1:1,
 			unbind:1,
 			takedown:1,
-			rsv2:5		__attribute__ ((packed));
+			rsv2:5;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_ru_unbindf;
-#pragma pack()
 
 /* RU NS Header indicators. */
 #define SNA_RU_NS_CONTACT		0x010201
@@ -3627,18 +3593,18 @@ struct sna_nmvt
 {
 //         sna_ru_request  *ru_request;
 
-        unsigned char __pad1[2];
+	unsigned char __pad1[2];
 
-        __u16   __pad2:2,
-                __pad3:2,
-                prid:12;        /* Procedure related identifier */
+	__u16   __pad2:2,
+		__pad3:2,
+		prid:12;        /* Procedure related identifier */
 
-        __u8    si:1,           /* Solicitation indicator */
-                seqf:2,
-                sals:1,         /* SNA Address List subvector indicator */
-                __pad4:4;
+	__u8    si:1,           /* Solicitation indicator */
+		seqf:2,
+		sals:1,         /* SNA Address List subvector indicator */
+		__pad4:4;
 
-        unsigned char msvect;   /* One or more MS major vectors */
+	unsigned char msvect;   /* One or more MS major vectors */
 };
 
 /* Record formatted maintenance statistics headers */
@@ -3653,16 +3619,16 @@ struct sna_nmvt
 
 struct recfms_request
 {
-        __u8    solic:1,        /* Solicitation indicator */
-                nlri:1,         /* Not-last request indicator */
-                rqcode:6;       /* Request-specific type code */
+	__u8    solic:1,        /* Solicitation indicator */
+		nlri:1,         /* Not-last request indicator */
+		rqcode:6;       /* Request-specific type code */
 
-        unsigned char nid[5];   /* 48 bit Node Identification */
+	unsigned char nid[5];   /* 48 bit Node Identification */
 
-        __u32   blk:12,         /* Block number */
-                blkid:20;       /* Block ID number */
+	__u32   blk:12,         /* Block number */
+		blkid:20;       /* Block ID number */
 
-        __u16   __pad1;
+	__u16   __pad1;
 };
 
 #ifdef NOT
@@ -3712,7 +3678,7 @@ struct recfms_request
 #define ALERT_MN_CHNL_ADPTR     0x14    /* channel adapter */
 #define ALERT_MN_LOOP_ADPTR     0x15    /* loop adapter */
 #define ALERT_MN_DIR_ADPTR      0x16    /* adapter for direct attach devices */
-#deifne ALERT_MN_MISC_ADPTR     0x17    /* miscellaneous adapter */
+#define ALERT_MN_MISC_ADPTR     0x17    /* miscellaneous adapter */
 #define ALERT_MN_S390_CHNL      0x18    /* System/390 channel */
 #define ALERT_MN_LINK           0x19    /* transmiss medium-ownership unknwn */
 #define ALERT_MN_LINK_COMN      0x1A    /* common carrier transmission medium */#define ALERT_MN_LINK_CUST      0x1B    /* customer transmission medium */
@@ -3773,50 +3739,50 @@ struct recfms_request
 
 struct recfms_alert
 {
-        __u8    alert:2,        /* 00 - Alert */
-                acode:6;        /* Alert type code - 0000 */
+	__u8    alert:2,        /* 00 - Alert */
+		acode:6;        /* Alert type code - 0000 */
 
-        unsigned char nid[5];   /* 48 bit Node Identification */
+	unsigned char nid[5];   /* 48 bit Node Identification */
 
-        __u32   blk:12,         /* Block number */
-                blkid:20;       /* Block ID number */
-        __u16   __pad1;
+	__u32   blk:12,         /* Block number */
+		blkid:20;       /* Block ID number */
+	__u16   __pad1;
 
-        /* Alert classification */
-        __u8    aformat:2,      /* Alert Class Format */
-                __pad2:6;
-        __u8    atype:4,        /* Alert type, see Alert codes */
-                amjcause:4;     /* Alert major cause */
-        __u8    amncause;       /* Alert minor cause */
-        __u8    __pad3;
-        __u8    actcode;        /* User action code */
-        __u8    __pad4;
+	/* Alert classification */
+	__u8    aformat:2,      /* Alert Class Format */
+		__pad2:6;
+	__u8    atype:4,        /* Alert type, see Alert codes */
+		amjcause:4;     /* Alert major cause */
+	__u8    amncause;       /* Alert minor cause */
+	__u8    __pad3;
+	__u8    actcode;        /* User action code */
+	__u8    __pad4;
 
-        unsigned char cnmvectors;       /* Appended CNM vectors */
+	unsigned char cnmvectors;       /* Appended CNM vectors */
 };
 
 struct sna_sdlc_stats
 {
-        struct recfms_request *request; /* header */
-        __u16   wvfcs;
-        __u16   vfcs;
+	struct recfms_request *request; /* header */
+	__u16   wvfcs;
+	__u16   vfcs;
 };
 
 struct sna_summary_err
 {
-        struct recfms_request *request; /* header */
-        __u16   errcnt:1,       /* 1 if product error counter is valid */
-                commcnt:1,      /* 1 if comm adapter error counter is valid */
-                negcnt:1,       /* 1 if SNA neg response counter is valid */
-                __pad1:5;
+	struct recfms_request *request; /* header */
+	__u16   errcnt:1,       /* 1 if product error counter is valid */
+		commcnt:1,      /* 1 if comm adapter error counter is valid */
+		negcnt:1,       /* 1 if SNA neg response counter is valid */
+		__pad1:5;
 
-        __u8    __pad2;
+	__u8    __pad2;
 
-        __u8    __pad3:7,
-                commflag:1;     /* Comm adapter err flg RECFMS types 02 or 03 */
-        __u16   prodcnt;        /* Product error counter */
-        __u16   comadptr;       /* Communication adapter error counter */
-        __u16   snaneg;         /* SNA neg resps originating at this node */
+	__u8    __pad3:7,
+		commflag:1;     /* Comm adapter err flg RECFMS types 02 or 03 */
+	__u16   prodcnt;        /* Product error counter */
+	__u16   comadptr;       /* Communication adapter error counter */
+	__u16   snaneg;         /* SNA neg resps originating at this node */
 };
 
 /* Comm adapter error set indicators */
@@ -3830,186 +3796,186 @@ struct sna_summary_err
 /* Data for counters sets 1 and 2 */
 struct sna_comm_adptr_set1
 {
-        /* Communication adapter counter validity mask bytes */
+	/* Communication adapter counter validity mask bytes */
 
-        __u8    nonprod_to:1,   /* Nonproductive time-out */
-                idle_to:1,      /* Idle time-out counter */
-                wrty:1,         /* Write retry counter */
-                ovrn:1,         /* Overrun counter */
-                undrn:1,        /* Underrun counter */
-                connprb:1,      /* Connection problem counter */
-                fcserr:1,       /* FCS error counter */
-                psabort:1;      /* Primary station abort counter */
+	__u8    nonprod_to:1,   /* Nonproductive time-out */
+		idle_to:1,      /* Idle time-out counter */
+		wrty:1,         /* Write retry counter */
+		ovrn:1,         /* Overrun counter */
+		undrn:1,        /* Underrun counter */
+		connprb:1,      /* Connection problem counter */
+		fcserr:1,       /* FCS error counter */
+		psabort:1;      /* Primary station abort counter */
 
-        __u8    cmdrej:1,       /* SDLC Command reject counter */
-                dceerr:1,       /* SDLC DCE error counter */
-                wto:1,          /* Write time-out counter */
-                inval:1,        /* Invalid status counter */
-                comm_chk:1,     /* Comm adapter machine check counter */
-                __pad1:3;
+	__u8    cmdrej:1,       /* SDLC Command reject counter */
+		dceerr:1,       /* SDLC DCE error counter */
+		wto:1,          /* Write time-out counter */
+		inval:1,        /* Invalid status counter */
+		comm_chk:1,     /* Comm adapter machine check counter */
+		__pad1:3;
 
-        __u8    __pad2;
+	__u8    __pad2;
 
-        __u8    nonprod_to_cnt; /* Nonproductive time-out counter */
-        __u8    idle_to_cnt;    /* Idle time-out counter */
-        __u8    wrty_cnt;       /* Write retry counter */
-        __u8    ovrn_cnt;       /* Overrun counter */
-        __u8    undrn_cnt;      /* Underrun counter */
-        __u8    connprb_cnt;    /* Connection problem counter */
-        __u8    fcserr_cnt;     /* FCS error counter */
-        __u8    psabort_cnt;    /* Primary station abort counter */
-        __u8    cmdrej_cnt;     /* SDLC command reject counter */
-        __u8    dceerr_cnt;     /* SDLC DCE error counter */
-        __u8    wto_cnt;        /* Write time-out counter */
-        __u8    inval_cnt;      /* Invalid status counter */
-        __u8    comm_chk_cnt;   /* Communication adapter machine check cntr */
+	__u8    nonprod_to_cnt; /* Nonproductive time-out counter */
+	__u8    idle_to_cnt;    /* Idle time-out counter */
+	__u8    wrty_cnt;       /* Write retry counter */
+	__u8    ovrn_cnt;       /* Overrun counter */
+	__u8    undrn_cnt;      /* Underrun counter */
+	__u8    connprb_cnt;    /* Connection problem counter */
+	__u8    fcserr_cnt;     /* FCS error counter */
+	__u8    psabort_cnt;    /* Primary station abort counter */
+	__u8    cmdrej_cnt;     /* SDLC command reject counter */
+	__u8    dceerr_cnt;     /* SDLC DCE error counter */
+	__u8    wto_cnt;        /* Write time-out counter */
+	__u8    inval_cnt;      /* Invalid status counter */
+	__u8    comm_chk_cnt;   /* Communication adapter machine check cntr */
 };
 
 /* Data for counters set 3 */
 struct sna_comm_adptr_set3
 {
-        __u8    tx_iframes:1,   /* Total transmitted I-frames counter */
-                wrty:1,         /* Write retry counter */
-                rx_iframes:1,   /* Total received I-frames counter */
-                fcserr:1,       /* FCS error counter */
-                cmdrej:1,       /* SDLC command reject counter */
-                dceerr:1,       /* DCE error counter */
-                noprod_to:1,    /* Nonproductive time-out counter */
-                __pad1;
+	__u8    tx_iframes:1,   /* Total transmitted I-frames counter */
+		wrty:1,         /* Write retry counter */
+		rx_iframes:1,   /* Total received I-frames counter */
+		fcserr:1,       /* FCS error counter */
+		cmdrej:1,       /* SDLC command reject counter */
+		dceerr:1,       /* DCE error counter */
+		noprod_to:1,    /* Nonproductive time-out counter */
+		__pad1;
 
-        __u16   __pad2;
+	__u16   __pad2;
 
-        __u16   tx_iframes_cnt; /* Total transmitted I-frames counter */
-        __u16   wrty_cnt;       /* Write retry counter */
-        __u16   rx_iframes_cnt; /* Total received I-frames counter */
-        __u16   fcserr_cnt;     /* FCS error counter */
-        __u16   cmdrej_cnt;     /* SDLC command reject counter */
-        __u16   dceerr_cnt;     /* DCE error counter */
-        __u16   noprod_to_cnt;  /* Nonproductive time-out counter */
+	__u16   tx_iframes_cnt; /* Total transmitted I-frames counter */
+	__u16   wrty_cnt;       /* Write retry counter */
+	__u16   rx_iframes_cnt; /* Total received I-frames counter */
+	__u16   fcserr_cnt;     /* FCS error counter */
+	__u16   cmdrej_cnt;     /* SDLC command reject counter */
+	__u16   dceerr_cnt;     /* DCE error counter */
+	__u16   noprod_to_cnt;  /* Nonproductive time-out counter */
 };
 
 struct sna_comm_adptr_set4
 {
-        __u8    cmdrejwni:1,    /* Command-reject-while-not-initialized cnt */
-                cmdnrec:1,      /* Command-not-recognized counter */
-                sensewni:1,     /* Sense-while-not-initialized counter */
-                chnlpcdss:1,    /* Channel-prty-chk-during-selection-seq cnt */
-                chnlpcddws:1,   /* Channel-parity-chk-during-data-wrt-seq cnt */                oppcacu:1,      /* Output-parity-check-at-control-unit cnt */
-                ippcacu:1,      /* Input-parity-check-at-control-unit counter */
-                ipcaac:1;       /* Input-parity-check-at-adapter counter */
+	__u8    cmdrejwni:1,    /* Command-reject-while-not-initialized cnt */
+		cmdnrec:1,      /* Command-not-recognized counter */
+		sensewni:1,     /* Sense-while-not-initialized counter */
+		chnlpcdss:1,    /* Channel-prty-chk-during-selection-seq cnt */
+		chnlpcddws:1,   /* Channel-parity-chk-during-data-wrt-seq cnt */                oppcacu:1,      /* Output-parity-check-at-control-unit cnt */
+		ippcacu:1,      /* Input-parity-check-at-control-unit counter */
+		ipcaac:1;       /* Input-parity-check-at-adapter counter */
 
-        __u8    dataeaa:1,      /* Data-error-at-adapter counter */
-                datasseq:1,     /* Data-stop-sequence counter */
-                shrtfolchk:1,   /* Short-frame-or-length-check counter */
-                connrcvwac:1,   /* Connect-rcvd-when-already-connected cnt */
-                disrcvwpuact:1, /* Disconnect-received-while-PU-active cnt */
-                longru:1,       /* Long-RU counter */
-                connprmold:1,   /* Connect-parameter-error counter */
-                rdstrtoldrcv:1; /* Read-Start-Old-received counter */
+	__u8    dataeaa:1,      /* Data-error-at-adapter counter */
+		datasseq:1,     /* Data-stop-sequence counter */
+		shrtfolchk:1,   /* Short-frame-or-length-check counter */
+		connrcvwac:1,   /* Connect-rcvd-when-already-connected cnt */
+		disrcvwpuact:1, /* Disconnect-received-while-PU-active cnt */
+		longru:1,       /* Long-RU counter */
+		connprmold:1,   /* Connect-parameter-error counter */
+		rdstrtoldrcv:1; /* Read-Start-Old-received counter */
 
-        __u8    __pad1;
+	__u8    __pad1;
 
-        __u8    cmdrejwni_cnt;  /* Command-reject-while-not-initialized cnt */
-        __u8    cmdnrec_cnt;    /* Command-not-recognized counter */
-        __u8    sensewni_cnt;   /* Sense-while-not-initialized counter */
-        __u8    chnlpcdss_cnt;  /* Channel-prty-chk-during-selection-seq cnt */
-        __u8    chnlpcddws_cnt; /* Channel-parity-chk-during-data-wrt-seq cnt */        __u8    oppcacu_cnt;    /* Output-parity-check-at-control-unit cnt */
-        __u8    ippcacu_cnt;    /* Input-parity-check-at-control-unit counter */        __u8    ipcaac_cnt;     /* Input-parity-check-at-adapter counter */
-        __u8    dataeaa_cnt;    /* Data-error-at-adapter counter */
-        __u8    datasseq_cnt;   /* Data-stop-sequence counter */
-        __u8    shrtfolchk_cnt; /* Short-frame-or-length-check counter */
-        __u8    connrcvwac_cnt; /* Connect-rcvd-when-already-connected cnt */
-        __u8    disrcvwpuact_cnt;       /* Disconn-rcvd-while-PU-active cnt */
-        __u8    longru_cnt;     /* Long-RU counter */
-        __u8    connprmold_cnt; /* Connect-parameter-error counter */
-        __u8    rdstrtoldrcv_cnt;       /* Read-Start-Old-received counter */
+	__u8    cmdrejwni_cnt;  /* Command-reject-while-not-initialized cnt */
+	__u8    cmdnrec_cnt;    /* Command-not-recognized counter */
+	__u8    sensewni_cnt;   /* Sense-while-not-initialized counter */
+	__u8    chnlpcdss_cnt;  /* Channel-prty-chk-during-selection-seq cnt */
+	__u8    chnlpcddws_cnt; /* Channel-parity-chk-during-data-wrt-seq cnt */        __u8    oppcacu_cnt;    /* Output-parity-check-at-control-unit cnt */
+	__u8    ippcacu_cnt;    /* Input-parity-check-at-control-unit counter */        __u8    ipcaac_cnt;     /* Input-parity-check-at-adapter counter */
+	__u8    dataeaa_cnt;    /* Data-error-at-adapter counter */
+	__u8    datasseq_cnt;   /* Data-stop-sequence counter */
+	__u8    shrtfolchk_cnt; /* Short-frame-or-length-check counter */
+	__u8    connrcvwac_cnt; /* Connect-rcvd-when-already-connected cnt */
+	__u8    disrcvwpuact_cnt;       /* Disconn-rcvd-while-PU-active cnt */
+	__u8    longru_cnt;     /* Long-RU counter */
+	__u8    connprmold_cnt; /* Connect-parameter-error counter */
+	__u8    rdstrtoldrcv_cnt;       /* Read-Start-Old-received counter */
 };
 
 struct sna_comm_adptr_set5
 {
-        __u8    tx_iframes:1,   /* I-frames transmitted counter */
-                rx_iframes:1,   /* I-frames received counter */
-                tx_rrframes:1,  /* RR frames transmitted counter */
-                rx_rrframes:1,  /* RR frames received counter */
-                tx_rnrframes:1, /* RNR frames transmitted counter */
-                rx_rnrframes:1, /* RNR frames received counter */
-                tx_rejframes:1, /* REJ frames transmitted counter */
-                rx_rejframes:1; /* REJ frames received counter */
+	__u8    tx_iframes:1,   /* I-frames transmitted counter */
+		rx_iframes:1,   /* I-frames received counter */
+		tx_rrframes:1,  /* RR frames transmitted counter */
+		rx_rrframes:1,  /* RR frames received counter */
+		tx_rnrframes:1, /* RNR frames transmitted counter */
+		rx_rnrframes:1, /* RNR frames received counter */
+		tx_rejframes:1, /* REJ frames transmitted counter */
+		rx_rejframes:1; /* REJ frames received counter */
 
-        __u8    retransmit:1,   /* Number of retransmissions counter */
-                fcs_frames:1,   /* Number of frames rcvd with FCS errors cnt */
-                rcverr:1,       /* Number of errors on receive side counter */
-                ovrn_rxs:1,     /* Number of overruns on receive side counter */                undrn_txs:1,    /* Number of underruns on transmit side cntr */
-                __pad1:3;
+	__u8    retransmit:1,   /* Number of retransmissions counter */
+		fcs_frames:1,   /* Number of frames rcvd with FCS errors cnt */
+		rcverr:1,       /* Number of errors on receive side counter */
+		ovrn_rxs:1,     /* Number of overruns on receive side counter */                undrn_txs:1,    /* Number of underruns on transmit side cntr */
+		__pad1:3;
 
-        __u8    __pad2;
+	__u8    __pad2;
 
-        __u16   tx_iframes_cnt; /* I-frames transmitted counter */
-        __u16   rx_iframes_cnt; /* I-frames received counter */
-        __u16   tx_rrframes_cnt;        /* RR frames transmitted counter */
-        __u16   rx_rrframes_cnt;        /* RR frames received counter */
-        __u16   tx_rnrframes_cnt;       /* RNR frames transmitted counter */
-        __u16   rx_rnrframes_cnt;       /* RNR frames received counter */
-        __u16   tx_rejframes_cnt;       /* REJ frames transmitted counter */
-        __u16   rx_rejframes_cnt;       /* REJ frames received counter */
-        __u16   retransmit_cnt; /* Number of retransmissions counter */
-        __u16   fcs_frames_cnt; /* Number of frames rcvd with FCS errors cnt */
-        __u16   rcverr_cnt;     /* Number of errors on receive side counter */
-        __u16   ovrn_rxs_cnt;   /* Number of overruns on receive side counter */        __u16   undrn_txs_cnt;  /* Number of underruns on transmit side cnt */
+	__u16   tx_iframes_cnt; /* I-frames transmitted counter */
+	__u16   rx_iframes_cnt; /* I-frames received counter */
+	__u16   tx_rrframes_cnt;        /* RR frames transmitted counter */
+	__u16   rx_rrframes_cnt;        /* RR frames received counter */
+	__u16   tx_rnrframes_cnt;       /* RNR frames transmitted counter */
+	__u16   rx_rnrframes_cnt;       /* RNR frames received counter */
+	__u16   tx_rejframes_cnt;       /* REJ frames transmitted counter */
+	__u16   rx_rejframes_cnt;       /* REJ frames received counter */
+	__u16   retransmit_cnt; /* Number of retransmissions counter */
+	__u16   fcs_frames_cnt; /* Number of frames rcvd with FCS errors cnt */
+	__u16   rcverr_cnt;     /* Number of errors on receive side counter */
+	__u16   ovrn_rxs_cnt;   /* Number of overruns on receive side counter */        __u16   undrn_txs_cnt;  /* Number of underruns on transmit side cnt */
 };
 
 struct sna_comm_adptr_set6
 {
-        __u8    tx_ipackets:1,  /* data packets transmitted counter */
-                rx_ipackets:1,  /* data packets received counter */
-                tx_rrpackets:1, /* RR packets transmitted counter */
-                rx_rrpackets:1, /* RR packets received counter */
-                tx_rnrpackets:1,        /* RNR packets transmitted counter */
-                rx_rnrpackets:1,        /* RNR packets received counter */
-                tx_intpackets:1,        /* interrupt packets transmitted cnt */
-                rx_intpackets:1;        /* interrupt packets received counter */
-        __u8    connreq:1,      /* Number of connection requests counter */
-                conns:1,        /* Number of connections counter */
-                rstindic:1,     /* Number of reset indications counter */
-                clrindic:1,     /* Number of clear indications counter */
-                tx_dbit:1,      /* data packets with D-bit transmitted cnt */
-                rx_dbit:1,      /* data packets with D-bit received counter */
-                __pad1:2;
+	__u8    tx_ipackets:1,  /* data packets transmitted counter */
+		rx_ipackets:1,  /* data packets received counter */
+		tx_rrpackets:1, /* RR packets transmitted counter */
+		rx_rrpackets:1, /* RR packets received counter */
+		tx_rnrpackets:1,        /* RNR packets transmitted counter */
+		rx_rnrpackets:1,        /* RNR packets received counter */
+		tx_intpackets:1,        /* interrupt packets transmitted cnt */
+		rx_intpackets:1;        /* interrupt packets received counter */
+	__u8    connreq:1,      /* Number of connection requests counter */
+		conns:1,        /* Number of connections counter */
+		rstindic:1,     /* Number of reset indications counter */
+		clrindic:1,     /* Number of clear indications counter */
+		tx_dbit:1,      /* data packets with D-bit transmitted cnt */
+		rx_dbit:1,      /* data packets with D-bit received counter */
+		__pad1:2;
 
-        __u8    __pad2;
+	__u8    __pad2;
 
-        __u16   tx_ipackets_cnt;        /* I packets transmitted */
-        __u16   rx_ipackets_cnt;        /* I packets received */
-        __u16   tx_rrpackets_cnt;       /* RR packets transmitted */
-        __u16   rx_rrpackets_cnt;       /* RR packets received */
-        __u16   tx_rnrpackets_cnt;      /* RNR packets transmitted counter */
-        __u16   rx_rnrpackets_cnt;      /* RNR packets received counter */
-        __u16   tx_intpackets_cnt;      /* interrupt packets transmitted cnt */
-        __u16   rx_intpackets_cnt;      /* interrupt packets received counter */        __u16   connreq_cnt;    /* Total number of connection requests */
-        __u16   conns_cnt;      /* Total number of connections*/
-        __u16   rstindic_cnt;   /* Number of reset indications */
-        __u16   clrindic_cnt;   /* Number of clear indications */
-        __u16   tx_dbit_cnt;    /* Number of data pkts with D-bit transmitted */        __u16   rx_dbit_cnt;    /* Number of data packets with D-bit received */};
+	__u16   tx_ipackets_cnt;        /* I packets transmitted */
+	__u16   rx_ipackets_cnt;        /* I packets received */
+	__u16   tx_rrpackets_cnt;       /* RR packets transmitted */
+	__u16   rx_rrpackets_cnt;       /* RR packets received */
+	__u16   tx_rnrpackets_cnt;      /* RNR packets transmitted counter */
+	__u16   rx_rnrpackets_cnt;      /* RNR packets received counter */
+	__u16   tx_intpackets_cnt;      /* interrupt packets transmitted cnt */
+	__u16   rx_intpackets_cnt;      /* interrupt packets received counter */        __u16   connreq_cnt;    /* Total number of connection requests */
+	__u16   conns_cnt;      /* Total number of connections*/
+	__u16   rstindic_cnt;   /* Number of reset indications */
+	__u16   clrindic_cnt;   /* Number of clear indications */
+	__u16   tx_dbit_cnt;    /* Number of data pkts with D-bit transmitted */        __u16   rx_dbit_cnt;    /* Number of data packets with D-bit received */};
 
 struct sna_comm_adptr_stats
 {
-        struct recfms_request *request; /* header */
-        __u8    errset;         /* Comm adapter error counter sets */
+	struct recfms_request *request; /* header */
+	__u8    errset;         /* Comm adapter error counter sets */
 
-        union {         /* Data sets */
-                struct sna_comm_adptr_set1      set1;
-                struct sna_comm_adptr_set1      set2;
-                struct sna_comm_adptr_set3      set3;
-                struct sna_comm_adptr_set4      set4;
-                struct sna_comm_adptr_set5      set5;
-                struct sna_comm_adptr_set6      set6;
-        } counter;
+	union {         /* Data sets */
+		struct sna_comm_adptr_set1      set1;
+		struct sna_comm_adptr_set1      set2;
+		struct sna_comm_adptr_set3      set3;
+		struct sna_comm_adptr_set4      set4;
+		struct sna_comm_adptr_set5      set5;
+		struct sna_comm_adptr_set6      set6;
+	} counter;
 };
 
 struct sna_generic_stats
 {
-        struct recfms_request *request;
-        unsigned char *data;
+	struct recfms_request *request;
+	unsigned char *data;
 };
 
 /* Data selection indicators */
@@ -4029,93 +3995,93 @@ struct sna_generic_stats
 
 struct sna_lcsub_stats
 {
-        struct recfms_request *request;
+	struct recfms_request *request;
 
-        __u8    datasel;        /* Data selection */
-        __u8    lctype;         /* Link connection subsystem type */
+	__u8    datasel;        /* Data selection */
+	__u8    lctype;         /* Link connection subsystem type */
 
-        /* Validity indicators */
-        __u16   rmodem_stat:2,  /* Remote modem status */
-                lmodem_stat:2,  /* Local modem status */
-                modem_stest:2,  /* Modem self test */
-                __pad1:2,
-                rdte_stat:2,    /* Remote DTE interface status */
-                __pad2:4,
-                lfmt:2;         /* Link conn subsystem data format indicator */
+	/* Validity indicators */
+	__u16   rmodem_stat:2,  /* Remote modem status */
+		lmodem_stat:2,  /* Local modem status */
+		modem_stest:2,  /* Modem self test */
+		__pad1:2,
+		rdte_stat:2,    /* Remote DTE interface status */
+		__pad2:4,
+		lfmt:2;         /* Link conn subsystem data format indicator */
 
-        /* Remote modem status */
-        __u16   rhcount:6,      /* Hit count */
-                rrinit:1,       /* Modem reinitialization was performed */
-                rlrcvsig:1,     /* Loss of receive line signal */
-                rquaderr:4,     /* Quadratic error value */
-                rrdtepwroff:1,  /* Remote DTE power off detected */
-                rldtr:1,        /* Data Terminal Ready loss detected */
-                rswntwkbkup:1,  /* Switched-Network-Back-Up connected */
-                rdtestream:1;   /* DTE streaming condition detected */
+	/* Remote modem status */
+	__u16   rhcount:6,      /* Hit count */
+		rrinit:1,       /* Modem reinitialization was performed */
+		rlrcvsig:1,     /* Loss of receive line signal */
+		rquaderr:4,     /* Quadratic error value */
+		rrdtepwroff:1,  /* Remote DTE power off detected */
+		rldtr:1,        /* Data Terminal Ready loss detected */
+		rswntwkbkup:1,  /* Switched-Network-Back-Up connected */
+		rdtestream:1;   /* DTE streaming condition detected */
 
-        /* Local modem status */
-        __u16   lhcount:6,      /* Hit count */
-                lrinit:1,       /* Modem reinitialization was performed */
-                llrcvsig:1,     /* Loss of receive line signal */
-                lquaderr:4,     /* Quadratic error value */
-                lrdtepwroff:1,  /* Remote DTE power off detected */
-                lspeed:1,       /* Speed */
-                lswntwkbkup:1,  /* Switched-Network-Back-Up connected */
-                ldtestream:1;   /* DTE streaming condition detected */
+	/* Local modem status */
+	__u16   lhcount:6,      /* Hit count */
+		lrinit:1,       /* Modem reinitialization was performed */
+		llrcvsig:1,     /* Loss of receive line signal */
+		lquaderr:4,     /* Quadratic error value */
+		lrdtepwroff:1,  /* Remote DTE power off detected */
+		lspeed:1,       /* Speed */
+		lswntwkbkup:1,  /* Switched-Network-Back-Up connected */
+		ldtestream:1;   /* DTE streaming condition detected */
 
-        __u16   modelbits:3,    /* Model bits */
-                linktype:1,     /* Link connection type */
-                config:1,       /* Configuration */
-                mrole:1,        /* Modem role */
-                ctds:1,         /* Clear To Send delay */
-                rcvlsigdet:1,   /* Received line signal detector sensitivity */
-                modelbit1:1,    /* Model bit */
-                stest:1,        /* Modem self-test result */
-                rttest:1,       /* Remote tone test result */
-                fcarderr:1,     /* Feature card suspected in error */
-                rcvxcard:1,     /* Receiver card extension suspected in error */                frntcard:1,     /* Front end card is suspected in error */
-                modelbit2:1,    /* Model bit */
-                fcardinst:1;    /* Feature card installed */
-        __u8    swntwkbkup:1,   /* Switched-Network-Back-Up installed */
-                modelbit3:1,    /* Model bit */
-                modelbit4:1,    /* Model bit */
-                microcode:5;    /* Microcode EC level */
+	__u16   modelbits:3,    /* Model bits */
+		linktype:1,     /* Link connection type */
+		config:1,       /* Configuration */
+		mrole:1,        /* Modem role */
+		ctds:1,         /* Clear To Send delay */
+		rcvlsigdet:1,   /* Received line signal detector sensitivity */
+		modelbit1:1,    /* Model bit */
+		stest:1,        /* Modem self-test result */
+		rttest:1,       /* Remote tone test result */
+		fcarderr:1,     /* Feature card suspected in error */
+		rcvxcard:1,     /* Receiver card extension suspected in error */                frntcard:1,     /* Front end card is suspected in error */
+		modelbit2:1,    /* Model bit */
+		fcardinst:1;    /* Feature card installed */
+	__u8    swntwkbkup:1,   /* Switched-Network-Back-Up installed */
+		modelbit3:1,    /* Model bit */
+		modelbit4:1,    /* Model bit */
+		microcode:5;    /* Microcode EC level */
 
-        __u8    rts:1,          /* Request To Send */
-                cts:1,          /* Clear To Send */
-                __pad3:1,
-                td:1,           /* Transmit Data */
-                __pad4:1,
-                dtr:1,          /* Data Terminal Ready */
-                speed:1,        /* Speed */
-                dtepwrloss:1;   /* DTE power loss */
+	__u8    rts:1,          /* Request To Send */
+		cts:1,          /* Clear To Send */
+		__pad3:1,
+		td:1,           /* Transmit Data */
+		__pad4:1,
+		dtr:1,          /* Data Terminal Ready */
+		speed:1,        /* Speed */
+		dtepwrloss:1;   /* DTE power loss */
 
-        __u8    rtqc:1,         /* Request To Send changed at least once */
-                ctsc:1,         /* Clear To Send changed at least once */
-                rdc:1,          /* Received Data changed state */
-                tdc:1,          /* Transmit Data changed state */
-                rcvlsigc:1,     /* Received Line Signal loss was detected */
-                dtrd:1,         /* Data Terminal Ready dropped */
-                speedc:1,       /* Modem speed was changed */
-                dtepwrlossc:1;  /* DTE power loss was detected */
+	__u8    rtqc:1,         /* Request To Send changed at least once */
+		ctsc:1,         /* Clear To Send changed at least once */
+		rdc:1,          /* Received Data changed state */
+		tdc:1,          /* Transmit Data changed state */
+		rcvlsigc:1,     /* Received Line Signal loss was detected */
+		dtrd:1,         /* Data Terminal Ready dropped */
+		speedc:1,       /* Modem speed was changed */
+		dtepwrlossc:1;  /* DTE power loss was detected */
 
-                /* Channelization status */
-        __u8    channelized:1,  /* Is associated with a channelized modem */
-                tailed:1,       /* Is associated with a tailed link chnl mdm */
-                channela:1,     /* associated with channel A */
-                __pad5:5;
+		/* Channelization status */
+	__u8    channelized:1,  /* Is associated with a channelized modem */
+		tailed:1,       /* Is associated with a tailed link chnl mdm */
+		channela:1,     /* associated with channel A */
+		__pad5:5;
 
-        __u16   channelnum;     /* Channelization correlation number */
+	__u16   channelnum;     /* Channelization correlation number */
 
-        __u8    ldblvl;         /* Local modem receive dB level */
-        unsigned char __pad6[6];
+	__u8    ldblvl;         /* Local modem receive dB level */
+	unsigned char __pad6[6];
 
-        __u8    rdblvl;         /* Remote modem receive dB level */
-        unsigned char __pad7[6];
+	__u8    rdblvl;         /* Remote modem receive dB level */
+	unsigned char __pad7[6];
 
-        __u8    lladdr;         /* Link-level addr used to addr the rmt modem */        __u8    rdteifacex;     /* Remote DTE Interface Extension */
+	__u8    lladdr;         /* Link-level addr used to addr the rmt modem */        __u8    rdteifacex;     /* Remote DTE Interface Extension */
 
-        unsigned char   __pad8[5];
+	unsigned char   __pad8[5];
 };
 
 /* CNM Vectors not included here */
@@ -4124,43 +4090,43 @@ struct sna_recfms
 {
 //        sna_ru_request  *ru_request;
 
-        __u16   cmntid;         /* CNM target ID */
+	__u16   cmntid;         /* CNM target ID */
 
-        __u16   __pad1:2,
-                cnmtidd:2,      /* CNM target ID descriptor */
-                prid:12;        /* Procedure related identifier */
+	__u16   __pad1:2,
+		cnmtidd:2,      /* CNM target ID descriptor */
+		prid:12;        /* Procedure related identifier */
 
-        union {         /* Request specific information */
-                struct sna_sdlc_stats           sdlc;
-                struct sna_summary_err          sna;
-                struct sna_comm_adptr_stats     adptr;
-                struct sna_generic_stats        pulu;
-                struct sna_generic_stats        enginr;
-                struct sna_lcsub_stats          lcsub;
-        } stats;
+	union {         /* Request specific information */
+		struct sna_sdlc_stats           sdlc;
+		struct sna_summary_err          sna;
+		struct sna_comm_adptr_stats     adptr;
+		struct sna_generic_stats        pulu;
+		struct sna_generic_stats        enginr;
+		struct sna_lcsub_stats          lcsub;
+	} stats;
 };
 
 struct sna_rms_gen_specific
 {
-        __u8    reset:1,        /* Reset indicator */
-                __pad1:1,
-                tcode:6;        /* Type code */
+	__u8    reset:1,        /* Reset indicator */
+		__pad1:1,
+		tcode:6;        /* Type code */
 };
 
 struct sna_rms_pulu
 {
-        __u8    reset:1,        /* Reset indicator */
-                __pad1:1,
-                tcode:6;        /* Type code */
-        unsigned char *data;    /* PU- or LU-dependent request parameters */
+	__u8    reset:1,        /* Reset indicator */
+		__pad1:1,
+		tcode:6;        /* Type code */
+	unsigned char *data;    /* PU- or LU-dependent request parameters */
 };
 
 struct sna_rms_lcsub
 {
-        __u8    reset:1,        /* Reset indicator */
-                __pad1:1,
-                tcode:6;        /* Type code */
-        __u8    dselrq;         /* Data selection requested */
+	__u8    reset:1,        /* Reset indicator */
+		__pad1:1,
+		tcode:6;        /* Type code */
+	__u8    dselrq;         /* Data selection requested */
 
 };
 
@@ -4168,21 +4134,21 @@ struct sna_rms
 {
 //        sna_ru_request  *ru_request;
 
-        __u16   cmntid;         /* CNM target ID */
+	__u16   cmntid;         /* CNM target ID */
 
-        __u16   __pad1:2,
-                cnmtidd:2,      /* CNM target ID descriptor */
-                prid:12;        /* Procedure related identifier */
+	__u16   __pad1:2,
+		cnmtidd:2,      /* CNM target ID descriptor */
+		prid:12;        /* Procedure related identifier */
 
-        union {
-                struct sna_rms_gen_specific     request;
-                struct sna_rms_gen_specific     sdlc;
-                struct sna_rms_gen_specific     sna;
-                struct sna_rms_gen_specific     adptr;
-                struct sna_rms_pulu             pulu;
-                struct sna_rms_gen_specific     enginr;
-                struct sna_rms_lcsub            lcsub;
-        } rms;
+	union {
+		struct sna_rms_gen_specific     request;
+		struct sna_rms_gen_specific     sdlc;
+		struct sna_rms_gen_specific     sna;
+		struct sna_rms_gen_specific     adptr;
+		struct sna_rms_pulu             pulu;
+		struct sna_rms_gen_specific     enginr;
+		struct sna_rms_lcsub            lcsub;
+	} rms;
 };
 
 /* XID.
@@ -4207,203 +4173,201 @@ struct sna_rms
 #define SNA_XID_XSTATE_PN	0x03
 
 typedef struct {
-        __u16   rsv1;
-        __u8    rsv2:2,
-                ls_role:1,
-                rsv3:1,
-                ls_txrx_cap:4;
-        __u8    rsv4:2,
-                seg_asm_cap:2,
-                rsv5:2,
-                sh_mode_status:1,
-                sh_mode_support:1;
-        __u16   format:1,
-                max_ifield_len:15;
-        __u8    rsv6:4,
-                sdlc_cmd_rsp_profile:4;
-        __u8    rsv7:2,
-                sdlc_init_mode:1,
-                rsv8:5;
-        __u16   rsv9;
-        __u8    rsv10:1,
-                max_rx_iframe_win:7;
-        __u8    rsv11;
+	__u16   rsv1;
+	__u8    rsv2:2,
+		ls_role:1,
+		rsv3:1,
+		ls_txrx_cap:4;
+	__u8    rsv4:2,
+		seg_asm_cap:2,
+		rsv5:2,
+		sh_mode_status:1,
+		sh_mode_support:1;
+	__u16   format:1,
+		max_ifield_len:15;
+	__u8    rsv6:4,
+		sdlc_cmd_rsp_profile:4;
+	__u8    rsv7:2,
+		sdlc_init_mode:1,
+		rsv8:5;
+	__u16   rsv9;
+	__u8    rsv10:1,
+		max_rx_iframe_win:7;
+	__u8    rsv11;
 
-        /* SDLC address assignment field */
-        /*
-         * Not supported yet.
-         */
+	/* SDLC address assignment field */
+	/*
+	 * Not supported yet.
+	 */
 } sna_xid1;
 
 typedef struct {
-        __u8    raw;
+	__u8    raw;
 } sna_xid2;
 
-typedef struct {
-        unsigned        rsv1:1                  __attribute__ ((packed));
-        unsigned        abm:1                   __attribute__ ((packed));
-        unsigned        ls_role_xid_sender:2    __attribute__ ((packed));
-        unsigned        sh_mode_status:1        __attribute__ ((packed));
-        unsigned        sh_mode:1               __attribute__ ((packed));
-        unsigned        ls_txrx_cap:2           __attribute__ ((packed));
-        unsigned        abm_nonact_xid:1        __attribute__ ((packed));
-        unsigned        rsv2:7                  __attribute__ ((packed));
-        unsigned        max_btu_len_format:1    __attribute__ ((packed));
-        __u16           max_btu_len:15          __attribute__ ((packed));
-        unsigned        rsv3                    __attribute__ ((packed));
-        unsigned        rsv4:2                  __attribute__ ((packed));
-        unsigned        dlc_init_mode:1         __attribute__ ((packed));
-        unsigned        rsv5:5                  __attribute__ ((packed));
-        __u16           rsv6                    __attribute__ ((packed));
-        unsigned        rsv7:1                  __attribute__ ((packed));
-        unsigned        max_rx_iframes:7        __attribute__ ((packed));
+typedef struct __attribute__ ((packed)) {
+	unsigned        rsv1:1;
+	unsigned        abm:1;
+	unsigned        ls_role_xid_sender:2;
+	unsigned        sh_mode_status:1;
+	unsigned        sh_mode:1;
+	unsigned        ls_txrx_cap:2;
+	unsigned        abm_nonact_xid:1;
+	unsigned        rsv2:7;
+	unsigned        max_btu_len_format:1;
+	__u16           max_btu_len:15;
+	unsigned        rsv3;
+	unsigned        rsv4:2;
+	unsigned        dlc_init_mode:1;
+	unsigned        rsv5:5;
+	__u16           rsv6;
+	unsigned        rsv7:1;
+	unsigned        max_rx_iframes:7;
 } sna_xid_dlc_satf;
 
 typedef struct {
-        __u16   cdlc_chg:1,
-                attn_timeout_sup:1,
-                data_stream:1,
-                cdlc_chg_sup:1,
-                rsv1:12;
-        __u16   max_lpiu_len;
-        __u8    buf_prefetch;
-        __u16   num_read_cmds;
-        __u16   buf_size;
-        __u16   blocking_delay;
-        __u16   attn_timeout;
-        __u16   pre_num_read_cmds;
-        __u16   prev_pri_buf_size;
-        __u8    time_unit;
+	__u16   cdlc_chg:1,
+		attn_timeout_sup:1,
+		data_stream:1,
+		cdlc_chg_sup:1,
+		rsv1:12;
+	__u16   max_lpiu_len;
+	__u8    buf_prefetch;
+	__u16   num_read_cmds;
+	__u16   buf_size;
+	__u16   blocking_delay;
+	__u16   attn_timeout;
+	__u16   pre_num_read_cmds;
+	__u16   prev_pri_buf_size;
+	__u8    time_unit;
 } sna_xid_dlc_s390_channel;
 
 typedef struct {
-        __u8    rsv1:2,
-                xid_role:2,
-                rsv2:4;
-        __u8    rsv3;
-        __u16   max_btu_size;
+	__u8    rsv1:2,
+		xid_role:2,
+		rsv2:4;
+	__u8    rsv3;
+	__u16   max_btu_size;
 
-        /* Start of Control Vectors */
-        __u8    cv;
+	/* Start of Control Vectors */
+	__u8    cv;
 } sna_xid_dlc_appn_channel;
 
-#pragma pack(1)
-typedef struct {
+typedef struct __attribute__ ((packed)) {
 #if defined(__LITTLE_ENDIAN_BITFIELD)
 	u_int8_t	type:4,
-			format:4		__attribute__ ((packed));
-	u_int8_t	len			__attribute__ ((packed));
-	u_int32_t	nodeid			__attribute__ ((packed));
-	u_int16_t	rsv1			__attribute__ ((packed));
+			format:4;
+	u_int8_t	len;
+	u_int32_t	nodeid;
+	u_int16_t	rsv1;
 	u_int8_t	rsv2:4,
-                        whole_bind_piu_req:1,
-                        whole_bind:1,
-                        standalone_bind:1,
-                        init_self:1		__attribute__ ((packed));
+			whole_bind_piu_req:1,
+			whole_bind:1,
+			standalone_bind:1,
+			init_self:1;
 	u_int8_t	cp_name_chg:1,
 			sec_nonactive_xchg:1,
 			state:2,
 			cp_cp_support:1,
 			cp_services:1,
 			network_node:1,
-			actpu_suppression:1	__attribute__ ((packed));
+			actpu_suppression:1;
 	u_int8_t	adptv_bind_pacing:2,
 			rsv3:1,
 			appn_pbn:1,
 			pu_cap_sup:1,
 			quiesce_tg:1,
 			rx_adaptive_bind_pacing:1,
-			tx_adaptive_bind_pacing:1 __attribute__ ((packed));
+			tx_adaptive_bind_pacing:1;
 	u_int8_t	rsv5:5,
 			dedicated_scv:1,
 			tg_sharing_prohibited:1,
-			rsv4:1			__attribute__ ((packed));
-	u_int8_t	rsv6[3]			__attribute__ ((packed));
+			rsv4:1;
+	u_int8_t	rsv6[3];
 	u_int8_t	rsv7:3,
 			gen_odai_usage_opt_set:1,
 			xhpr_bn:1,
 			dlus_lu_reg:1,
 			dlur_actpu:1,
-			parallel_tg_sup:1	__attribute__ ((packed));
-	u_int8_t	tg_num			__attribute__ ((packed));	
-	u_int8_t	dlc_type		__attribute__ ((packed));
-	u_int8_t	dlc_len			__attribute__ ((packed));
+			parallel_tg_sup:1;
+	u_int8_t	tg_num;
+	u_int8_t	dlc_type;
+	u_int8_t	dlc_len;
 	u_int8_t	ls_txrx_cap:2,
 			sh_mode:1,
 			sh_mode_status:1,
 			ls_role:2,
 			dlc_abm:1,
-			rsv8:1			__attribute__ ((packed));
+			rsv8:1;
 	u_int8_t	rsv9:7,
-			abm_nonact_xid:1	__attribute__ ((packed));
-	u_int16_t	max_btu_len		__attribute__ ((packed));
-	u_int8_t	rsv10			__attribute__ ((packed));
+			abm_nonact_xid:1;
+	u_int16_t	max_btu_len;
+	u_int8_t	rsv10;
 	u_int8_t	rsv12:5,
 			dlc_init_mode:1,
-			rsv11:2			__attribute__ ((packed));
-	u_int16_t	rsv13			__attribute__ ((packed));
-	u_int8_t	max_iframes		__attribute__ ((packed));
-	u_int8_t	rsv14			__attribute__ ((packed));
+			rsv11:2;
+	u_int16_t	rsv13;
+	u_int8_t	max_iframes;
+	u_int8_t	rsv14;
 #elif defined(__BIG_ENDIAN_BITFIELD)
 	u_int8_t        format:4,
-                        type:4                	__attribute__ ((packed));
-        u_int8_t        len                     __attribute__ ((packed));
-	u_int32_t       nodeid                  __attribute__ ((packed));
-        u_int16_t       rsv1                    __attribute__ ((packed));
-        u_int8_t       	init_self:1,
-                        standalone_bind:1,
-                        whole_bind:1,
-                        whole_bind_piu_req:1,
-                        rsv2:4			__attribute__ ((packed));
+			type:4;
+	u_int8_t        len;
+	u_int32_t       nodeid;
+	u_int16_t       rsv1;
+	u_int8_t       	init_self:1,
+			standalone_bind:1,
+			whole_bind:1,
+			whole_bind_piu_req:1,
+			rsv2:4;
 	u_int8_t	actpu_suppression:1,
-                        network_node:1,
-                        cp_services:1,
-                        cp_cp_support:1,
-                        state:2,
-                        sec_nonactive_xchg:1,
-                        cp_name_chg:1           __attribute__ ((packed));
-        u_int8_t        tx_adaptive_bind_pacing:1,
-                        rx_adaptive_bind_pacing:1,
-                        quiesce_tg:1,
-                        pu_cap_sup:1,
-                        appn_pbn:1,
-                        rsv3:1,
-                        adptv_bind_pacing:2     __attribute__ ((packed));
-        u_int8_t        rsv4:1,
-                        tg_sharing_prohibited:1,
-                        dedicated_scv:1,
-                        rsv5:5                  __attribute__ ((packed));
-        u_int8_t        rsv6[3]                 __attribute__ ((packed));
-        u_int8_t        parallel_tg_sup:1,
-                        dlur_actpu:1,
-                        dlus_lu_reg:1,
-                        xhpr_bn:1,
-                        gen_odai_usage_opt_set:1,
-                        rsv7:3                  __attribute__ ((packed));
-        u_int8_t        tg_num                  __attribute__ ((packed));
-        u_int8_t        dlc_type                __attribute__ ((packed));
-        u_int8_t        dlc_len                 __attribute__ ((packed));
-        u_int8_t        rsv8:1,
-                        dlc_abm:1,
-                        ls_role:2,
-                        sh_mode_status:1,
-                        sh_mode:1,
-                        ls_txrx_cap:2           __attribute__ ((packed));
-        u_int8_t        abm_nonact_xid:1,
-                        rsv9:7                  __attribute__ ((packed));
-        u_int16_t       max_btu_len             __attribute__ ((packed));
-        u_int8_t       	rsv10                   __attribute__ ((packed));
-        u_int8_t        rsv11:2,
-                        dlc_init_mode:1,
-                        rsv12:5                 __attribute__ ((packed));
-        u_int16_t       rsv13                   __attribute__ ((packed));
-        u_int8_t        max_iframes             __attribute__ ((packed));
-	u_int8_t        rsv14                   __attribute__ ((packed));
+			network_node:1,
+			cp_services:1,
+			cp_cp_support:1,
+			state:2,
+			sec_nonactive_xchg:1,
+			cp_name_chg:1;
+	u_int8_t        tx_adaptive_bind_pacing:1,
+			rx_adaptive_bind_pacing:1,
+			quiesce_tg:1,
+			pu_cap_sup:1,
+			appn_pbn:1,
+			rsv3:1,
+			adptv_bind_pacing:2;
+	u_int8_t        rsv4:1,
+			tg_sharing_prohibited:1,
+			dedicated_scv:1,
+			rsv5:5;
+	u_int8_t        rsv6[3];
+	u_int8_t        parallel_tg_sup:1,
+			dlur_actpu:1,
+			dlus_lu_reg:1,
+			xhpr_bn:1,
+			gen_odai_usage_opt_set:1,
+			rsv7:3;
+	u_int8_t        tg_num;
+	u_int8_t        dlc_type;
+	u_int8_t        dlc_len;
+	u_int8_t        rsv8:1,
+			dlc_abm:1,
+			ls_role:2,
+			sh_mode_status:1,
+			sh_mode:1,
+			ls_txrx_cap:2;
+	u_int8_t        abm_nonact_xid:1,
+			rsv9:7;
+	u_int16_t       max_btu_len;
+	u_int8_t       	rsv10;
+	u_int8_t        rsv11:2,
+			dlc_init_mode:1,
+			rsv12:5;
+	u_int16_t       rsv13;
+	u_int8_t        max_iframes;
+	u_int8_t        rsv14;
 #else
 #error  "Please fix <asm/byteorder.h>"
 #endif
 } sna_xid3;
-#pragma pack()
 
 #endif  /* __KERNEL__ */
 #endif  /* __NET_SNA_FORMATS_H */

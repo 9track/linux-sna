@@ -10,30 +10,13 @@
  * See the GNU General Public License for more details.
  */
 
-#include <asm/uaccess.h>
-#include <asm/system.h>
-#include <asm/bitops.h>
 #include <linux/types.h>
 #include <linux/kernel.h>
-#include <linux/sched.h>
 #include <linux/string.h>
-#include <linux/mm.h>
-#include <linux/socket.h>
-#include <linux/sockios.h>
-#include <linux/in.h>
-#include <linux/errno.h>
-#include <linux/interrupt.h>
-#include <linux/notifier.h>
-#include <linux/netdevice.h>
-#include <linux/inetdevice.h>
-#include <linux/route.h>
-#include <linux/inet.h>
-#include <linux/skbuff.h>
-#include <net/datalink.h>
-#include <net/sock.h>
 #include <linux/if_arp.h>
-#include <linux/proc_fs.h>
 #include <linux/sna.h>
+#include <linux/timer.h>
+#include <linux/workqueue.h>
 
 #ifdef CONFIG_SNA_LLC
 #include <net/llc_if.h>
@@ -55,14 +38,14 @@ static u_int32_t	sna_cs_system_index	= 0;
 static u_int32_t	sna_dlc_system_index	= 0;
 static u_int32_t	sna_port_system_index 	= 0;
 
-static void xid_output_connect_finish(void *data);
+static void xid_output_connect_finish(struct work_struct *work);
 static int xid_doit(struct sna_ls_cb *ls);
 static int sna_cs_stop_port_gen(struct sna_port_cb *port);
 static int sna_cs_delete_port_gen(struct sna_port_cb *port);
 
 struct sna_cs_cb *sna_cs_get_by_name(char *name)
 {
-        struct sna_cs_cb *cs;
+	struct sna_cs_cb *cs;
 	struct list_head *le;
 
 	sna_debug(5, "init: %s\n", name);
@@ -70,95 +53,95 @@ struct sna_cs_cb *sna_cs_get_by_name(char *name)
 		cs = list_entry(le, struct sna_cs_cb, list);
 		sna_debug(5, "-%s- -%s-\n", cs->netid.name, name);
 		if (!strncmp(cs->netid.name, name, SNA_NODE_NAME_LEN))
-                       	return cs;
+			return cs;
 	}
-        return NULL;
+	return NULL;
 }
 
 static struct sna_cs_cb *sna_cs_get_by_index(u_int32_t index)
 {
-        struct sna_cs_cb *cs;
-        struct list_head *le;
+	struct sna_cs_cb *cs;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &cs_list) {
-                cs = list_entry(le, struct sna_cs_cb, list);
-                if (cs->index == index)
-                        return cs;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &cs_list) {
+		cs = list_entry(le, struct sna_cs_cb, list);
+		if (cs->index == index)
+			return cs;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_cs_new_index(void)
 {
-        for (;;) {
-                if (++sna_cs_system_index <= 0)
-                        sna_cs_system_index = 1;
-                if (sna_cs_get_by_index(sna_cs_system_index) == NULL)
-                        return sna_cs_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_cs_system_index <= 0)
+			sna_cs_system_index = 1;
+		if (sna_cs_get_by_index(sna_cs_system_index) == NULL)
+			return sna_cs_system_index;
+	}
+	return 0;
 }
 
 static struct sna_dlc_cb *sna_cs_dlc_get_by_name(char *name)
 {
-        struct sna_dlc_cb *dlc;
+	struct sna_dlc_cb *dlc;
 	struct list_head *le;
 
 	sna_debug(5, "init: %s\n", name);
 	list_for_each(le, &dlc_list) {
 		dlc = list_entry(le, struct sna_dlc_cb, list);
-                if (!strncmp(dlc->dev->name, name, IFNAMSIZ))
+		if (!strncmp(dlc->dev->name, name, IFNAMSIZ))
 			return dlc;
 	}
-        return NULL;
+	return NULL;
 }
 
 struct sna_dlc_cb *sna_cs_dlc_get_by_index(u_int32_t index)
 {
 	struct sna_dlc_cb *dlc;
-        struct list_head *le;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &dlc_list) {
-                dlc = list_entry(le, struct sna_dlc_cb, list);
+	sna_debug(5, "init\n");
+	list_for_each(le, &dlc_list) {
+		dlc = list_entry(le, struct sna_dlc_cb, list);
 		if (dlc->index == index)
-                        return dlc;
-        }
-        return NULL;
+			return dlc;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_cs_dlc_new_index(void)
 {
-        for (;;) {
-                if (++sna_dlc_system_index <= 0)
-                        sna_dlc_system_index = 1;
-                if (sna_cs_dlc_get_by_index(sna_dlc_system_index) == NULL)
-                        return sna_dlc_system_index;
-        }
+	for (;;) {
+		if (++sna_dlc_system_index <= 0)
+			sna_dlc_system_index = 1;
+		if (sna_cs_dlc_get_by_index(sna_dlc_system_index) == NULL)
+			return sna_dlc_system_index;
+	}
 	return 0;
 }
 
 static struct sna_port_cb *sna_cs_port_get_by_name(char *name)
 {
 	struct sna_port_cb *port;
-        struct list_head *le;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &port_list) {
-                port = list_entry(le, struct sna_port_cb, list);
+	sna_debug(5, "init\n");
+	list_for_each(le, &port_list) {
+		port = list_entry(le, struct sna_port_cb, list);
 		sna_debug(5, "-%s- -%s-\n", port->use_name, name);
-                if (!strcmp(port->use_name, name))
-                        return port;
-        }
-        return NULL;
+		if (!strcmp(port->use_name, name))
+			return port;
+	}
+	return NULL;
 }
 
 struct sna_port_cb *sna_cs_port_get_by_addr(char *saddr)
 {
-        struct sna_port_cb *port;
+	struct sna_port_cb *port;
 	struct list_head *le;
-	
+
 	sna_debug(5, "init\n");
 	list_for_each(le, &port_list) {
 		port = list_entry(le, struct sna_port_cb, list);
@@ -166,51 +149,51 @@ struct sna_port_cb *sna_cs_port_get_by_addr(char *saddr)
 		if (!strncmp(port->saddr, saddr, 1))
 			return port;
 	}
-        return NULL; 
+	return NULL;
 }
 
 struct sna_port_cb *sna_cs_port_get_by_index(u_int32_t index)
 {
-        struct sna_port_cb *port;
-        struct list_head *le;
+	struct sna_port_cb *port;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &port_list) {
-                port = list_entry(le, struct sna_port_cb, list);
-                if (port->index == index)
-                        return port;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &port_list) {
+		port = list_entry(le, struct sna_port_cb, list);
+		if (port->index == index)
+			return port;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_cs_port_new_index(void)
 {
-        for (;;) {
-                if (++sna_port_system_index <= 0)
-                        sna_port_system_index = 1;
-                if (sna_cs_port_get_by_index(sna_port_system_index) == NULL)
-                        return sna_port_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++sna_port_system_index <= 0)
+			sna_port_system_index = 1;
+		if (sna_cs_port_get_by_index(sna_port_system_index) == NULL)
+			return sna_port_system_index;
+	}
+	return 0;
 }
 
 struct sna_ls_cb *sna_cs_ls_get_by_name(char *name)
 {
 	struct sna_port_cb *port;
-        struct sna_ls_cb *ls;
-        struct list_head *le, *se;
+	struct sna_ls_cb *ls;
+	struct list_head *le, *se;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &port_list) {
-                port = list_entry(le, struct sna_port_cb, list);
-                list_for_each(se, &port->ls_list) {
-                        ls = list_entry(se, struct sna_ls_cb, list);
+	sna_debug(5, "init\n");
+	list_for_each(le, &port_list) {
+		port = list_entry(le, struct sna_port_cb, list);
+		list_for_each(se, &port->ls_list) {
+			ls = list_entry(se, struct sna_ls_cb, list);
 			sna_debug(5, "-%s- -%s-\n", ls->use_name, name);
-                        if (!strcmp(ls->use_name, name))
-                                return ls;
-                }
-        }
-        return NULL;
+			if (!strcmp(ls->use_name, name))
+				return ls;
+		}
+	}
+	return NULL;
 }
 
 /**
@@ -219,10 +202,10 @@ struct sna_ls_cb *sna_cs_ls_get_by_name(char *name)
 struct sna_ls_cb *sna_cs_ls_get_by_addr(char *mac, char *lsap)
 {
 	struct sna_port_cb *port;
-        struct sna_ls_cb *ls;
+	struct sna_ls_cb *ls;
 	struct list_head *le, *se;
-	
-        sna_debug(5, "init\n");
+
+	sna_debug(5, "init\n");
 	list_for_each(le, &port_list) {
 		port = list_entry(le, struct sna_port_cb, list);
 		list_for_each(se, &port->ls_list) {
@@ -235,47 +218,47 @@ struct sna_ls_cb *sna_cs_ls_get_by_addr(char *mac, char *lsap)
 				return ls;
 		}
 	}
-        return NULL;
+	return NULL;
 }
 
 struct sna_ls_cb *sna_cs_ls_get_by_index(struct sna_port_cb *port, u_int32_t index)
 {
-        struct sna_ls_cb *ls;
-        struct list_head *le;
+	struct sna_ls_cb *ls;
+	struct list_head *le;
 
-        sna_debug(5, "init\n");
-        list_for_each(le, &port->ls_list) {
-                ls = list_entry(le, struct sna_ls_cb, list);
-                if (ls->index == index)
-                        return ls;
-        }
-        return NULL;
+	sna_debug(5, "init\n");
+	list_for_each(le, &port->ls_list) {
+		ls = list_entry(le, struct sna_ls_cb, list);
+		if (ls->index == index)
+			return ls;
+	}
+	return NULL;
 }
 
 static u_int32_t sna_cs_ls_new_index(struct sna_port_cb *port)
 {
-        for (;;) {
-                if (++port->ls_system_index <= 0)
-                        port->ls_system_index = 1;
-                if (sna_cs_ls_get_by_index(port, port->ls_system_index) == NULL)
-                        return port->ls_system_index;
-        }
-        return 0;
+	for (;;) {
+		if (++port->ls_system_index <= 0)
+			port->ls_system_index = 1;
+		if (sna_cs_ls_get_by_index(port, port->ls_system_index) == NULL)
+			return port->ls_system_index;
+	}
+	return 0;
 }
 
 int sna_cs_start(struct sna_nof_node *node)
 {
 	struct sna_cs_cb *cs;
-	
+
 	sna_debug(5, "init\n");
 	cs = sna_cs_get_by_name(node->netid.name);
-        if (!cs)
-                return -ENOENT;
+	if (!cs)
+		return -ENOENT;
 	if (cs->flags & SNA_RUNNING)
 		return -EUSERS;
 	cs->flags &= ~SNA_STOPPED;
-        cs->flags |= SNA_RUNNING;
-        return 0;
+	cs->flags |= SNA_RUNNING;
+	return 0;
 }
 
 int sna_cs_stop(struct sna_nof_node *node)
@@ -283,21 +266,21 @@ int sna_cs_stop(struct sna_nof_node *node)
 	struct list_head *le, *se;
 	struct sna_port_cb *port;
 	struct sna_cs_cb *cs;
-	
-        sna_debug(5, "init\n");
+
+	sna_debug(5, "init\n");
 	cs = sna_cs_get_by_name(node->netid.name);
-        if (!cs)
-                return -ENOENT;
+	if (!cs)
+		return -ENOENT;
 	if (cs->flags & SNA_STOPPED)
 		return 0;
 	cs->flags &= ~SNA_RUNNING;
-        cs->flags |= SNA_STOPPED;
+	cs->flags |= SNA_STOPPED;
 	list_for_each_safe(le, se, &port_list) {
 		port = list_entry(le, struct sna_port_cb, list);
 		if (!memcmp(&node->netid, &port->netid, sizeof(sna_netid)))
 			sna_cs_stop_port_gen(port);
 	}
-        return 0;
+	return 0;
 }
 
 int sna_cs_create(struct sna_nof_node *start)
@@ -316,11 +299,10 @@ int sna_cs_create(struct sna_nof_node *start)
 	cs->nodeid	= start->nodeid;
 	memcpy(&cs->netid, &start->netid, sizeof(sna_netid));
 	list_add_tail(&cs->list, &cs_list);
-	sna_mod_inc_use_count();
 
 #ifdef NOT
 	struct sna_pc_cb *pc;
-        struct sna_rm_act_session_rq *as;
+	struct sna_rm_act_session_rq *as;
 
 	/* Create the intranode Path Control - One per Node */
 	new(pc, GFP_KERNEL);
@@ -353,26 +335,25 @@ int sna_cs_destroy(struct sna_nof_node *node)
 	struct sna_port_cb *port;
 	struct sna_cs_cb *cs;
 
-        sna_debug(5, "init\n");
-        cs = sna_cs_get_by_name(node->netid.name);
-        if (!cs)
-                return -ENOENT;
+	sna_debug(5, "init\n");
+	cs = sna_cs_get_by_name(node->netid.name);
+	if (!cs)
+		return -ENOENT;
 
 	/* ensure cs is inactive. */
 	sna_cs_stop(node);
 
 	/* delete port and link stations. */
 	list_for_each_safe(le, se, &port_list) {
-                port = list_entry(le, struct sna_port_cb, list);
-                if (!memcmp(&node->netid, &port->netid, sizeof(sna_netid)))
+		port = list_entry(le, struct sna_port_cb, list);
+		if (!memcmp(&node->netid, &port->netid, sizeof(sna_netid)))
 			sna_cs_delete_port_gen(port);
-        }
+	}
 
 	/* delete this cs. */
 	list_del(&cs->list);
 	kfree(cs);
 
-	sna_mod_dec_use_count();
 	return 0;
 }
 
@@ -382,11 +363,11 @@ int sna_cs_destroy(struct sna_nof_node *node)
 static u_int16_t sna_cs_dlc_port_type(struct sna_dlc_cb *dlc)
 {
 	switch (dlc->type) {
-                case ARPHRD_LOOPBACK:
+		case ARPHRD_LOOPBACK:
 			return SNA_PORT_TYPE_LOOPBACK;
-                case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
+		case ARPHRD_ETHER:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
 			return SNA_PORT_TYPE_LLC;
 	}
 	return SNA_PORT_TYPE_INVALID;
@@ -396,8 +377,8 @@ static u_int8_t sna_cs_dlc_xid_type(struct sna_dlc_cb *dlc)
 {
 	switch (dlc->type) {
 		case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
 			return 0x01;
 	}
 	return 0;
@@ -406,75 +387,75 @@ static u_int8_t sna_cs_dlc_xid_type(struct sna_dlc_cb *dlc)
 static u_int8_t sna_cs_dlc_xid_len(struct sna_dlc_cb *dlc)
 {
 	switch (dlc->type) {
-                case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
-                        return 11;
-        }
-        return 0;
+		case ARPHRD_ETHER:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
+			return 11;
+	}
+	return 0;
 }
 
 static u_int8_t sna_cs_dlc_xid_abm(struct sna_dlc_cb *dlc)
 {
-        switch (dlc->type) {
-                case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
-                        return 1;
-        }
-        return 0;
+	switch (dlc->type) {
+		case ARPHRD_ETHER:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
+			return 1;
+	}
+	return 0;
 }
 
 static u_int8_t sna_cs_dlc_xid_init_mode(struct sna_dlc_cb *dlc)
 {
-        switch (dlc->type) {
-                case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
-                        return 0;
-        }
-        return 0;
+	switch (dlc->type) {
+		case ARPHRD_ETHER:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
+			return 0;
+	}
+	return 0;
 }
 
 static u_int16_t sna_cs_dlc_xid_max_btu_len(struct sna_dlc_cb *dlc)
 {
-        switch (dlc->type) {
-                case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
+	switch (dlc->type) {
+		case ARPHRD_ETHER:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
 			return htons(dlc->dev->mtu - dlc->dev->hard_header_len);
-        }
-        return 0;
+	}
+	return 0;
 }
 
 static u_int8_t sna_cs_dlc_xid_max_iframes(struct sna_dlc_cb *dlc)
 {
-        switch (dlc->type) {
-                case ARPHRD_ETHER:
-                case ARPHRD_IEEE802:
-                case ARPHRD_FDDI:
-                        return 2;
-        }
-        return 0;
+	switch (dlc->type) {
+		case ARPHRD_ETHER:
+		case ARPHRD_IEEE802:
+		case ARPHRD_FDDI:
+			return 2;
+	}
+	return 0;
 }
 
 int sna_cs_dlc_delete(struct net_device *dev)
 {
-        struct list_head *le, *se;
-        struct sna_dlc_cb *dlc;
+	struct list_head *le, *se;
+	struct sna_dlc_cb *dlc;
 
-        sna_debug(5, "init: %s\n", dev->name);
-        list_for_each_safe(le, se, &dlc_list) {
-                dlc = list_entry(le, struct sna_dlc_cb, list);
-                if (!strncmp(dlc->dev->name, dev->name, IFNAMSIZ)) {
-                        list_del(&dlc->list);
-                        if (dlc->dev)
-                                dev_put(dlc->dev);
-                        kfree(dlc);
-                        return 0;
-                }
-        }
-        return -ENOENT;
+	sna_debug(5, "init: %s\n", dev->name);
+	list_for_each_safe(le, se, &dlc_list) {
+		dlc = list_entry(le, struct sna_dlc_cb, list);
+		if (!strncmp(dlc->dev->name, dev->name, IFNAMSIZ)) {
+			list_del(&dlc->list);
+			if (dlc->dev)
+				dev_put(dlc->dev);
+			kfree(dlc);
+			return 0;
+		}
+	}
+	return -ENOENT;
 }
 
 /**
@@ -498,10 +479,10 @@ int sna_cs_dlc_create(struct net_device *dev)
 			dev_hold(dev);
 			dlc->dev        = dev;
 			dlc->type	= dev->type;
-                        dlc->index    	= sna_cs_dlc_new_index();
-                        dlc->flags      = SNA_UP | SNA_RUNNING;
+			dlc->index    	= sna_cs_dlc_new_index();
+			dlc->flags      = SNA_UP | SNA_RUNNING;
 			list_add_tail(&dlc->list, &dlc_list);
-                        break;
+			break;
 #ifdef CONFIG_SNA_ATM
 		case ARPHRD_ATM:
 			break;
@@ -533,7 +514,7 @@ int sna_cs_define_ls(struct sna_nof_ls *cfg)
 	struct sna_cs_cb *cs;
 	struct sna_dlc_cb *dlc;
 	struct sna_ls_cb *ls;
-        int err = -ENOENT;
+	int err = -ENOENT;
 
 	sna_debug(5, "init\n");
 	cs = sna_cs_get_by_name(cfg->netid.name);
@@ -558,24 +539,22 @@ int sna_cs_define_ls(struct sna_nof_ls *cfg)
 		goto out;
 	err = 0;
 	init_waitqueue_head(&ls->sleep);
-	memset(&ls->connect, 0, sizeof(struct tq_struct));
-        ls->connect.routine 		= xid_output_connect_finish;
-        ls->connect.data    		= ls;
+	INIT_WORK(&ls->connect, xid_output_connect_finish);
 	memcpy(&ls->use_name, &cfg->use_name, SNA_USE_NAME_LEN);
 	ls->index       		= sna_cs_ls_new_index(port);
 	ls->cs_index			= cs->index;
 	ls->dlc_index   		= dlc->index;
-        ls->port_index  		= port->index;
-        ls->flags       		= SNA_UP | SNA_STOPPED;
+	ls->port_index  		= port->index;
+	ls->flags       		= SNA_UP | SNA_STOPPED;
 	ls->state			= SNA_LS_STATE_DEFINED;
 	ls->role                        = cfg->role;
 	ls->direction			= cfg->direction;
 	ls->effective_role		= cfg->role;
 	if (ls->direction == SNA_LS_DIR_OUT)
-	        ls->co_status           = CO_RESET;
-        else
-                ls->co_status           = CO_TEST_OK;
-        ls->xid_state  			= XID_STATE_RESET;
+		ls->co_status           = CO_RESET;
+	else
+		ls->co_status           = CO_TEST_OK;
+	ls->xid_state  			= XID_STATE_RESET;
 	ls->xid_input			= XID_IN_RESET;
 	ls->byteswap			= cfg->byteswap;
 	ls->retry_on_fail		= cfg->retry_on_fail;
@@ -592,9 +571,7 @@ int sna_cs_define_ls(struct sna_nof_ls *cfg)
 	ls->user2			= cfg->user2;
 	ls->user3			= cfg->user3;
 	ls->plu_port 			= cfg->daddr[0];
-	init_timer(&ls->retry);
-	ls->retry.function		= sna_cs_connect_out;
-	ls->retry.data			= (unsigned long)ls;
+	timer_setup(&ls->retry, sna_cs_connect_out, 0);
 	ls->retries			= 0;
 	ls->plu_node_id 		= cfg->plu_node_id;
 	memcpy(ls->plu_mac_addr, cfg->dname, IFHWADDRLEN);
@@ -604,32 +581,31 @@ int sna_cs_define_ls(struct sna_nof_ls *cfg)
 	/* default settings for now. */
 	if (cs->node_type == SNA_APPN_NET_NODE)
 		ls->xid_network_node = 1;
-	else 
+	else
 		ls->xid_network_node = 0;
-        ls->xid_type                    = SNA_XID_NODE_T2;
-        ls->xid_format                  = SNA_XID_TYPE_3;
+	ls->xid_type                    = SNA_XID_NODE_T2;
+	ls->xid_format                  = SNA_XID_TYPE_3;
 	ls->xid_init_self		= 1;
-        ls->xid_standalone_bind		= 0;
-        ls->xid_whole_bind		= 1;
-        ls->xid_whole_bind_piu_req	= 1;
-        ls->xid_actpu_suppression	= 1;
-        ls->xid_cp_services		= 0;
-        ls->xid_sec_nonactive_xchg	= 0;
-        ls->xid_cp_name_chg		= 0;
-        ls->xid_tx_adaptive_bind_pacing	= 0;
-        ls->xid_rx_adaptive_bind_pacing = 0;
-        ls->xid_quiesce_tg		= 0;
-        ls->xid_pu_cap_sup		= 1;
-        ls->xid_appn_pbn		= 0;
-        ls->xid_parallel_tg_sup		= 0;
-        ls->xid_ls_txrx_cap		= 0;
+	ls->xid_standalone_bind		= 0;
+	ls->xid_whole_bind		= 1;
+	ls->xid_whole_bind_piu_req	= 1;
+	ls->xid_actpu_suppression	= 1;
+	ls->xid_cp_services		= 0;
+	ls->xid_sec_nonactive_xchg	= 0;
+	ls->xid_cp_name_chg		= 0;
+	ls->xid_tx_adaptive_bind_pacing	= 0;
+	ls->xid_rx_adaptive_bind_pacing = 0;
+	ls->xid_quiesce_tg		= 0;
+	ls->xid_pu_cap_sup		= 1;
+	ls->xid_appn_pbn		= 0;
+	ls->xid_parallel_tg_sup		= 0;
+	ls->xid_ls_txrx_cap		= 0;
 	ls->xid_gen_odai_usage_opt_set	= 0;
 #ifdef CONFIG_SNA_LLC
 	ls->llc_sk			= NULL;
 #endif
 	list_add_tail(&ls->list, &port->ls_list);
 	port->ls_qlen++;
-	sna_mod_inc_use_count();
 out:	return err;
 }
 
@@ -675,7 +651,6 @@ int sna_cs_define_port(struct sna_nof_port *dport)
 #endif
 	INIT_LIST_HEAD(&port->ls_list);
 	list_add_tail(&port->list, &port_list);
-	sna_mod_inc_use_count();
 	sna_debug(5, "fini\n");
 	return 0;
 }
@@ -684,22 +659,22 @@ int sna_cs_start_ls(struct sna_nof_ls *cfg)
 {
 	struct sna_port_cb *port;
 	struct sna_cs_cb *cs;
-        struct sna_ls_cb *ls;
+	struct sna_ls_cb *ls;
 	int err = -ENOENT;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	ls = sna_cs_ls_get_by_name(cfg->use_name);
 	if (!ls)
 		goto out;
 	port = sna_cs_port_get_by_index(ls->port_index);
-        if (!port)
+	if (!port)
 		goto out;
 	cs = sna_cs_get_by_index(port->cs_index);
-        if (!cs)
+	if (!cs)
 		goto out;
-        if (cs->flags & SNA_STOPPED) {
+	if (cs->flags & SNA_STOPPED) {
 		sna_debug(5, "node is not ACTIVE.\n");
-                err = -EHOSTDOWN;
+		err = -EHOSTDOWN;
 		goto out;
 	}
 	if (port->flags & SNA_STOPPED) {
@@ -712,14 +687,14 @@ int sna_cs_start_ls(struct sna_nof_ls *cfg)
 		err = -EUSERS;
 		goto out;
 	}
-	
+
 	err			= 0;
 	ls->state		= SNA_LS_STATE_ACTIVATED;
 	ls->xid_input		= XID_IN_BEGIN;
 	ls->xid_direction	= XID_DIR_OUTBOUND;
 	ls->flags      		&= ~SNA_STOPPED;
-        ls->flags      		|= SNA_RUNNING;
-	sna_cs_connect_out((unsigned long)ls);
+	ls->flags      		|= SNA_RUNNING;
+	sna_cs_connect_out(&ls->retry);
 out:	return err;
 }
 
@@ -734,7 +709,7 @@ int sna_cs_start_port(struct sna_nof_port *sport)
 {
 	struct sna_port_cb *port;
 	struct sna_cs_cb *cs;
-	
+
 	sna_debug(5, "init\n");
 	port = sna_cs_port_get_by_name(sport->use_name);
 	if (!port)
@@ -769,30 +744,30 @@ static int sna_cs_stop_ls_gen(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
 	if (ls->flags & SNA_STOPPED)
-                return 0;
+		return 0;
 	ls->flags &= ~SNA_RUNNING;
-        ls->flags |= SNA_STOPPED;
-        if (ls->xid_state == XID_STATE_ACTIVE) {
+	ls->flags |= SNA_STOPPED;
+	if (ls->xid_state == XID_STATE_ACTIVE) {
 #ifdef CONFIG_SNA_LLC
-                sna_dlc_disc_req(ls);
+		sna_dlc_disc_req(ls);
 
-                /* in case we don't get a disc rsp, force cleanup. */
-                ls->xid_input 	  = XID_IN_RESET;
-                ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-                add_timer(&ls->retry);
+		/* in case we don't get a disc rsp, force cleanup. */
+		ls->xid_input 	  = XID_IN_RESET;
+		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
+		add_timer(&ls->retry);
 #endif
-        } else {
-                ls->xid_input = XID_IN_RESET;
-                xid_doit(ls);
-        }
+	} else {
+		ls->xid_input = XID_IN_RESET;
+		xid_doit(ls);
+	}
 	return 0;
 }
 
 int sna_cs_stop_ls(struct sna_nof_ls *sls)
 {
-        struct sna_ls_cb *ls;
+	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	ls = sna_cs_ls_get_by_name(sls->use_name);
 	if (!ls)
 		return -ENOENT;
@@ -817,13 +792,12 @@ static int sna_cs_delete_ls_gen(struct sna_ls_cb *ls)
 	sna_debug(5, "init\n");
 
 	/* ensure link is offline. */
-        sna_cs_stop_ls_gen(ls);
+	sna_cs_stop_ls_gen(ls);
 
-        /* remove the link from the system. */
-        list_del(&ls->list);
-        kfree(ls);
+	/* remove the link from the system. */
+	list_del(&ls->list);
+	kfree(ls);
 
-        sna_mod_dec_use_count();
 	return 0;
 }
 
@@ -832,10 +806,10 @@ int sna_cs_delete_ls(struct sna_nof_ls *dls)
 	struct sna_port_cb *port;
 	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
-        ls = sna_cs_ls_get_by_name(dls->use_name);
-        if (!ls)
-                return -ENOENT;
+	sna_debug(5, "init\n");
+	ls = sna_cs_ls_get_by_name(dls->use_name);
+	if (!ls)
+		return -ENOENT;
 	port = sna_cs_port_get_by_index(ls->port_index);
 	if (!port)
 		return -ENOENT;
@@ -846,39 +820,39 @@ int sna_cs_delete_ls(struct sna_nof_ls *dls)
 static int sna_cs_delete_ls_all(struct sna_port_cb *port)
 {
 	struct list_head *le, *se;
-        struct sna_ls_cb *ls;
+	struct sna_ls_cb *ls;
 
-        sna_debug(5, "init\n");
-        list_for_each_safe(le, se, &port->ls_list) {
-                ls = list_entry(le, struct sna_ls_cb, list);
+	sna_debug(5, "init\n");
+	list_for_each_safe(le, se, &port->ls_list) {
+		ls = list_entry(le, struct sna_ls_cb, list);
 		sna_cs_delete_ls_gen(ls);
 		port->ls_qlen--;
-        }
-        return 0;
+	}
+	return 0;
 }
 
 static int sna_cs_stop_port_gen(struct sna_port_cb *port)
 {
 	sna_debug(5, "init\n");
 	if (port->flags & SNA_STOPPED)
-                return 0;
+		return 0;
 	port->flags &= ~SNA_RUNNING;
-        port->flags |= SNA_STOPPED;
-	
-	/* stop all link stations using this port. */
-        sna_cs_stop_ls_all(port);
+	port->flags |= SNA_STOPPED;
 
-        /* stop the actual port. */
-        switch (port->type) {
+	/* stop all link stations using this port. */
+	sna_cs_stop_ls_all(port);
+
+	/* stop the actual port. */
+	switch (port->type) {
 #ifdef CONFIG_SNA_LLC
-                case SNA_PORT_TYPE_LLC:
-                        if (port->llc_dl)
-                                llc_sap_close(port->llc_dl);
-                        break;
+		case SNA_PORT_TYPE_LLC:
+			if (port->llc_dl)
+				llc_sap_close(port->llc_dl);
+			break;
 #endif
-                default:
-                        return -EINVAL;
-        }
+		default:
+			return -EINVAL;
+	}
 	return 0;
 }
 
@@ -886,7 +860,7 @@ int sna_cs_stop_port(struct sna_nof_port *sport)
 {
 	struct sna_port_cb *port;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	port = sna_cs_port_get_by_name(sport->use_name);
 	if (!port)
 		return -ENOENT;
@@ -898,16 +872,15 @@ static int sna_cs_delete_port_gen(struct sna_port_cb *port)
 	sna_debug(5, "init\n");
 
 	/* ensure port is inactive. */
-        sna_cs_stop_port_gen(port);
+	sna_cs_stop_port_gen(port);
 
-        /* delete all link stations using this port. */
-        sna_cs_delete_ls_all(port);
+	/* delete all link stations using this port. */
+	sna_cs_delete_ls_all(port);
 
-        /* remove the port from the system. */
-        list_del(&port->list);
-        kfree(port);
+	/* remove the port from the system. */
+	list_del(&port->list);
+	kfree(port);
 
-        sna_mod_dec_use_count();
 	return 0;
 }
 
@@ -915,10 +888,10 @@ int sna_cs_delete_port(struct sna_nof_port *sport)
 {
 	struct sna_port_cb *port;
 
-        sna_debug(5, "init\n");
-        port = sna_cs_port_get_by_name(sport->use_name);
-        if (!port)
-                return -ENOENT;
+	sna_debug(5, "init\n");
+	port = sna_cs_port_get_by_name(sport->use_name);
+	if (!port)
+		return -ENOENT;
 	return sna_cs_delete_port_gen(port);
 }
 
@@ -929,84 +902,84 @@ int sna_dlc_ginfo(struct sna_dlc_cb *dlc, char *buf, int len)
 
 	sna_debug(5, "init\n");
 	if (!buf) {
-                done += sizeof(dr);
-                return done;
-        }
-        if (len < (int)sizeof(dr))
-                return done;
-        memset(&dr, 0, sizeof(struct dlcreq));
+		done += sizeof(dr);
+		return done;
+	}
+	if (len < (int)sizeof(dr))
+		return done;
+	memset(&dr, 0, sizeof(struct dlcreq));
 
-        /* Move the data here */
+	/* Move the data here */
 	strcpy(dr.dev_name, dlc->dev->name);
 	memcpy(dr.dev_addr, dlc->dev->dev_addr, MAX_ADDR_LEN);
 	dr.index 		= dlc->index;
 	dr.flags 		= dlc->flags;
 	dr.type			= dlc->type;
 	dr.mtu			= dlc->dev->mtu;
-	
-        if (copy_to_user(buf, &dr, sizeof(struct dlcreq)))
-                return -EFAULT;
-        buf  += sizeof(struct dlcreq);
-        len  -= sizeof(struct dlcreq);
-        done += sizeof(struct dlcreq);
+
+	if (copy_to_user(buf, &dr, sizeof(struct dlcreq)))
+		return -EFAULT;
+	buf  += sizeof(struct dlcreq);
+	len  -= sizeof(struct dlcreq);
+	done += sizeof(struct dlcreq);
 	return done;
 }
 
 int sna_cs_query_dlc(char *arg)
 {
-        struct sna_dlc_cb *dlc;
+	struct sna_dlc_cb *dlc;
 	struct list_head *le;
 	int len, total, done;
-        struct dlconf dc;
-        char *pos;
+	struct dlconf dc;
+	char *pos;
 
-        sna_debug(5, "sna_cs_query_dlc\n");
-        if (copy_from_user(&dc, arg, sizeof(dc)))
-                return -EFAULT;
+	sna_debug(5, "sna_cs_query_dlc\n");
+	if (copy_from_user(&dc, arg, sizeof(dc)))
+		return -EFAULT;
 
-        pos = dc.dlc_buf;
-        len = dc.dlc_len;
+	pos = dc.dlc_buf;
+	len = dc.dlc_len;
 
-        /*
-         * Get the data and put it into the structure
-         */
-        total = 0;
+	/*
+	 * Get the data and put it into the structure
+	 */
+	total = 0;
 	list_for_each(le, &dlc_list) {
 		dlc = list_entry(le, struct sna_dlc_cb, list);
-                if (pos == NULL)
-                        done = sna_dlc_ginfo(dlc, NULL, 0);
-                else
-                        done = sna_dlc_ginfo(dlc, pos + total, len - total);
-                if (done < 0)
-                        return -EFAULT;
-                total += done;
-        }
+		if (pos == NULL)
+			done = sna_dlc_ginfo(dlc, NULL, 0);
+		else
+			done = sna_dlc_ginfo(dlc, pos + total, len - total);
+		if (done < 0)
+			return -EFAULT;
+		total += done;
+	}
 
-        dc.dlc_len = total;
-        if (copy_to_user(arg, &dc, sizeof(dc)))
-                return -EFAULT;
-        return 0;
+	dc.dlc_len = total;
+	if (copy_to_user(arg, &dc, sizeof(dc)))
+		return -EFAULT;
+	return 0;
 }
 
 int sna_port_ginfo(struct sna_port_cb *port, char *buf, int len)
 {
 	struct sna_dlc_cb *dlc;
-        struct portreq pr;
-        int done = 0;
+	struct portreq pr;
+	int done = 0;
 
-        sna_debug(10, "sna_port_ginfo\n");
+	sna_debug(10, "sna_port_ginfo\n");
 	dlc = sna_cs_dlc_get_by_index(port->dlc_index);
 	if (!dlc)
 		return done;
-        if (!buf) {
-                done += sizeof(pr);
-                return done;
-        }
-        if (len < (int)sizeof(pr))
-                return done;
-        memset(&pr, 0, sizeof(struct portreq));
+	if (!buf) {
+		done += sizeof(pr);
+		return done;
+	}
+	if (len < (int)sizeof(pr))
+		return done;
+	memset(&pr, 0, sizeof(struct portreq));
 
-        /* Move the data here */
+	/* Move the data here */
 	memcpy(&pr.netid, &port->netid, sizeof(sna_netid));
 	memcpy(&pr.use_name, &port->use_name, SNA_RESOURCE_NAME_LEN);
 	memcpy(&pr.saddr, port->saddr, 12);
@@ -1019,12 +992,12 @@ int sna_port_ginfo(struct sna_port_cb *port, char *buf, int len)
 	pr.mia		= port->mia;
 	pr.moa		= port->moa;
 
-        if (copy_to_user(buf, &pr, sizeof(struct portreq)))
-                return -EFAULT;
-        buf  += sizeof(struct portreq);
-        len  -= sizeof(struct portreq);
-        done += sizeof(struct portreq);
-        return done;
+	if (copy_to_user(buf, &pr, sizeof(struct portreq)))
+		return -EFAULT;
+	buf  += sizeof(struct portreq);
+	len  -= sizeof(struct portreq);
+	done += sizeof(struct portreq);
+	return done;
 }
 
 int sna_cs_query_port(char *arg)
@@ -1033,31 +1006,31 @@ int sna_cs_query_port(char *arg)
 	struct sna_port_cb *port;
 	int len, total, done;
 	struct portconf pc;
-        char *pos;
+	char *pos;
 
-        sna_debug(10, "init\n");
-        if (copy_from_user(&pc, arg, sizeof(pc)))
-                return -EFAULT;
-        pos = pc.portc_buf;
-        len = pc.port_len;
+	sna_debug(10, "init\n");
+	if (copy_from_user(&pc, arg, sizeof(pc)))
+		return -EFAULT;
+	pos = pc.portc_buf;
+	len = pc.port_len;
 
 	/*
-         * Get the data and put it into the structure
-         */
-        total = 0;
+	 * Get the data and put it into the structure
+	 */
+	total = 0;
 	list_for_each(le, &port_list) {
 		port = list_entry(le, struct sna_port_cb, list);
-                if (pos == NULL)
-                        done = sna_port_ginfo(port, NULL, 0);
-                else
-                        done = sna_port_ginfo(port,pos+total,len-total);
-                if (done < 0)
-                        return -EFAULT;
-                total += done;
+		if (pos == NULL)
+			done = sna_port_ginfo(port, NULL, 0);
+		else
+			done = sna_port_ginfo(port,pos+total,len-total);
+		if (done < 0)
+			return -EFAULT;
+		total += done;
 	}
-        pc.port_len = total;
-        if (copy_to_user(arg, &pc, sizeof(pc)))
-                return -EFAULT;
+	pc.port_len = total;
+	if (copy_to_user(arg, &pc, sizeof(pc)))
+		return -EFAULT;
 	return 0;
 }
 
@@ -1065,40 +1038,40 @@ int sna_ls_ginfo(struct sna_ls_cb *ls, char *buf, int len)
 {
 	struct sna_port_cb *port;
 	struct sna_dlc_cb *dlc;
-        struct lsreq lr;
-        int done = 0;
+	struct lsreq lr;
+	int done = 0;
 
-        sna_debug(10, "sna_ls_ginfo\n");
+	sna_debug(10, "sna_ls_ginfo\n");
 	port = sna_cs_port_get_by_index(ls->port_index);
 	if (!port)
 		return done;
 	dlc = sna_cs_dlc_get_by_index(ls->dlc_index);
 	if (!dlc)
 		return done;
-        if (!buf) {
-                done += sizeof(lr);
-                return done;
-        }
-        if (len < (int)sizeof(lr))
-                return done;
-        memset(&lr, 0, sizeof(struct lsreq));
+	if (!buf) {
+		done += sizeof(lr);
+		return done;
+	}
+	if (len < (int)sizeof(lr))
+		return done;
+	memset(&lr, 0, sizeof(struct lsreq));
 
-        /* Move the data here */
+	/* Move the data here */
 	memcpy(&lr.netid, &ls->netid, sizeof(sna_netid));
 	strcpy(lr.use_name, ls->use_name);
 	strcpy(lr.port_name, port->use_name);
-        strcpy(lr.dev_name, dlc->dev->name);
-	
+	strcpy(lr.dev_name, dlc->dev->name);
+
 	lr.index			= ls->index;
 	lr.flags			= ls->flags;
 
 	lr.retries			= ls->retries;
 	lr.xid_count			= ls->xid_count;
-	
+
 	lr.state			= ls->state;
 	lr.co_status			= ls->co_status;
 	lr.xid_state			= ls->xid_state;
-	
+
 	lr.effective_role		= ls->effective_role;
 	lr.effective_tg			= ls->effective_tg;
 
@@ -1106,7 +1079,7 @@ int sna_ls_ginfo(struct sna_ls_cb *ls, char *buf, int len)
 	lr.rx_max_btu			= ls->rx_max_btu;
 	lr.tx_window			= ls->tx_window;
 	lr.rx_window			= ls->rx_window;
-	
+
 	memcpy(&lr.plu_name, &ls->plu_name, sizeof(sna_netid));
 	memcpy(&lr.plu_node_id, &ls->plu_node_id, sizeof(sna_nodeid));
 	memcpy(lr.plu_mac_addr, ls->plu_mac_addr, IFHWADDRLEN);
@@ -1130,50 +1103,50 @@ int sna_ls_ginfo(struct sna_ls_cb *ls, char *buf, int len)
 	lr.user2			= ls->user2;
 	lr.user3			= ls->user3;
 
-        if (copy_to_user(buf, &lr, sizeof(struct lsreq)))
-                return -EFAULT;
-        buf  += sizeof(struct lsreq);
-        len  -= sizeof(struct lsreq);
-        done += sizeof(struct lsreq);
-        return done;
+	if (copy_to_user(buf, &lr, sizeof(struct lsreq)))
+		return -EFAULT;
+	buf  += sizeof(struct lsreq);
+	len  -= sizeof(struct lsreq);
+	done += sizeof(struct lsreq);
+	return done;
 }
 
 int sna_cs_query_ls(char *arg)
 {
 	struct sna_port_cb *port;
-        int len, total, done;
+	int len, total, done;
 	struct sna_ls_cb *ls;
 	struct list_head *se, *ae;
 	struct lsconf lc;
-        char *pos;
+	char *pos;
 
-       	sna_debug(10, "init\n");
-        if (copy_from_user(&lc, arg, sizeof(lc)))
-                return -EFAULT;
-        pos = lc.lsc_buf;
-        len = lc.ls_len;
+	sna_debug(10, "init\n");
+	if (copy_from_user(&lc, arg, sizeof(lc)))
+		return -EFAULT;
+	pos = lc.lsc_buf;
+	len = lc.ls_len;
 
-        /*
-         * Get the data and put it into the structure
-         */
-        total = 0;
+	/*
+	 * Get the data and put it into the structure
+	 */
+	total = 0;
 	list_for_each(se, &port_list) {
 		port = list_entry(se, struct sna_port_cb, list);
 		list_for_each(ae, &port->ls_list) {
 			ls = list_entry(ae, struct sna_ls_cb, list);
-	                if (pos == NULL)
-	                        done = sna_ls_ginfo(ls, NULL, 0);
-	                else
-		                done = sna_ls_ginfo(ls,pos+total,len-total);
-	                if (done < 0)
-	                        return -EFAULT;
-	                total += done;
-	        }
+			if (pos == NULL)
+				done = sna_ls_ginfo(ls, NULL, 0);
+			else
+				done = sna_ls_ginfo(ls,pos+total,len-total);
+			if (done < 0)
+				return -EFAULT;
+			total += done;
+		}
 	}
-        lc.ls_len = total;
-        if (copy_to_user(arg, &lc, sizeof(lc)))
-                return -EFAULT;
-        return 0;
+	lc.ls_len = total;
+	if (copy_to_user(arg, &lc, sizeof(lc)))
+		return -EFAULT;
+	return 0;
 }
 
 int sna_cs_pc_activate(struct sna_ls_cb *ls)
@@ -1183,10 +1156,10 @@ int sna_cs_pc_activate(struct sna_ls_cb *ls)
 
 	sna_debug(5, "init\n");
 	new(pc, GFP_ATOMIC);
-        if (!pc) {
+	if (!pc) {
 		sna_debug(5, "out of memory, pc_init failed\n");
 		goto out;
-        }
+	}
 	memcpy(&pc->cp_name, &ls->plu_name, sizeof(sna_netid));
 	pc->odai                	= ls->odai;
 	pc->tx_max_btu			= ls->tx_max_btu;
@@ -1194,18 +1167,18 @@ int sna_cs_pc_activate(struct sna_ls_cb *ls)
 	pc->intranode                   = 0;
 	pc->limited_resource		= 0;
 	pc->ls_index                    = ls->index;
-        pc->port_index                  = ls->port_index;
-        pc->dlc_index                   = ls->dlc_index;
+	pc->port_index                  = ls->port_index;
+	pc->dlc_index                   = ls->dlc_index;
 	pc->tg_number			= ls->effective_tg;
 	pc->whole_bind			= ls->xid_whole_bind;
 	pc->whole_bind_piu_req		= ls->xid_whole_bind_piu_req;
-      	pc->gen_odai_usage_opt_set	= ls->xid_gen_odai_usage_opt_set;
-        ls->pc_index    		= sna_pc_init(pc, &err);
-        if (err < 0) {
-        	sna_debug(5, "pc_init failed `%d'.\n", err);
+	pc->gen_odai_usage_opt_set	= ls->xid_gen_odai_usage_opt_set;
+	ls->pc_index    		= sna_pc_init(pc, &err);
+	if (err < 0) {
+		sna_debug(5, "pc_init failed `%d'.\n", err);
 		kfree(pc);
 		goto out;
-        }
+	}
 out:	return err;
 }
 
@@ -1265,7 +1238,7 @@ int sna_cs_tg_activate(struct sna_ls_cb *ls)
 {
 	struct sna_tg_update *tg;
 	int err = -ENOMEM;
-	
+
 	sna_debug(5, "init\n");
 	new(tg, GFP_ATOMIC);
 	if (!tg) {
@@ -1299,14 +1272,14 @@ int sna_cs_xid_results(struct sna_ls_cb *ls, int suprise)
 	remote = (sna_xid3 *)ls->xid_last_rx->data;
 
 	switch (ls->effective_role) {
-                case SNA_LS_ROLE_PRI:
-                        ls->odai = 0;
-                        break;
-                case SNA_LS_ROLE_SEC:
-                default:
-                        ls->odai = 1;
-                        break;
-        }	
+		case SNA_LS_ROLE_PRI:
+			ls->odai = 0;
+			break;
+		case SNA_LS_ROLE_SEC:
+		default:
+			ls->odai = 1;
+			break;
+	}
 	if (suprise) {
 		ls->tx_max_btu	= ntohs(local->max_btu_len);
 		ls->rx_max_btu	= ntohs(local->max_btu_len);
@@ -1338,7 +1311,7 @@ int sna_cs_xid_pkt_input(struct sk_buff *skb)
 	sna_debug(5, "state = %d role = %d\n", xid->state, xid->ls_role);
 	if (xid->state == SNA_XID_XCHG_STATE_PN)
 		return XID_IN_PN;
-	if (xid->state == SNA_XID_XCHG_STATE_NONE 
+	if (xid->state == SNA_XID_XCHG_STATE_NONE
 		|| xid->state == SNA_XID_XCHG_STATE_NEG) {
 		if (xid->ls_role == SNA_LS_ROLE_SEC)
 			return XID_IN_SEC;
@@ -1372,7 +1345,7 @@ int xid_node_id_high(struct sna_ls_cb *ls)
 	if (!ls->xid_last_rx)
 		return 1;
 	cs = sna_cs_get_by_index(ls->cs_index);
-        if (!cs)
+	if (!cs)
 		return 0;
 	xid = (sna_xid3 *)ls->xid_last_rx->data;
 	if (cs->nodeid	> xid->nodeid)
@@ -1383,34 +1356,34 @@ int xid_node_id_high(struct sna_ls_cb *ls)
 int xid_node_id_low(struct sna_ls_cb *ls)
 {
 	struct sna_cs_cb *cs;
-        sna_xid3 *xid;
+	sna_xid3 *xid;
 
 	sna_debug(5, "init\n");
 	if (!ls->xid_last_rx)
-                return 1;
-        cs = sna_cs_get_by_index(ls->cs_index);
-        if (!cs)
-                return 0;
-        xid = (sna_xid3 *)ls->xid_last_rx->data;
+		return 1;
+	cs = sna_cs_get_by_index(ls->cs_index);
+	if (!cs)
+		return 0;
+	xid = (sna_xid3 *)ls->xid_last_rx->data;
 	if (cs->nodeid < xid->nodeid)
-                return 1;
+		return 1;
 	return 0;
 }
 
 int xid_node_id_eq(struct sna_ls_cb *ls)
 {
 	struct sna_cs_cb *cs;
-        sna_xid3 *xid;
+	sna_xid3 *xid;
 
 	sna_debug(5, "init\n");
 	if (!ls->xid_last_rx)
-                return 1;
-        cs = sna_cs_get_by_index(ls->cs_index);
-        if (!cs)
-                return 0;
-        xid = (sna_xid3 *)ls->xid_last_rx->data;
+		return 1;
+	cs = sna_cs_get_by_index(ls->cs_index);
+	if (!cs)
+		return 0;
+	xid = (sna_xid3 *)ls->xid_last_rx->data;
 	if (cs->nodeid == xid->nodeid)
-                return 1;
+		return 1;
 	return 0;
 }
 
@@ -1428,7 +1401,7 @@ static int sna_cs_tg_name_high(sna_netid *local_n, sna_netid *remote_n)
 static int sna_cs_tg_negotiate(struct sna_ls_cb *ls)
 {
 	int err = 0;
-	
+
 	sna_debug(5, "init\n");
 	if (ls->tg_input == SNA_TG_INPUT_BEGIN
 		|| ls->tg_input == SNA_TG_INPUT_NULL) {
@@ -1487,11 +1460,11 @@ static int sna_cs_tg_negotiate(struct sna_ls_cb *ls)
 				goto out;
 			}
 			if (ls->tg_state == SNA_TG_STATE_DONE_PARTNER) {
-                                /* use the current local tg.
-                                 * ls->effective_tg = ls->effective_tg;
-                                 */
-                                goto out;
-                        }
+				/* use the current local tg.
+				 * ls->effective_tg = ls->effective_tg;
+				 */
+				goto out;
+			}
 			goto out;
 		}
 		goto out;
@@ -1530,10 +1503,10 @@ sna_xid3 *xid_pkt_init(struct sna_ls_cb *ls, struct sk_buff *skb)
 {
 	struct sna_cs_cb *cs;
 	struct sna_dlc_cb *dlc;
-        sna_xid3 *x3;
+	sna_xid3 *x3;
 	u_int8_t len;
-	
-        sna_debug(5, "init\n");
+
+	sna_debug(5, "init\n");
 	cs = sna_cs_get_by_index(ls->cs_index);
 	if (!cs)
 		return NULL;
@@ -1541,7 +1514,7 @@ sna_xid3 *xid_pkt_init(struct sna_ls_cb *ls, struct sk_buff *skb)
 	if (!dlc)
 		return NULL;
 	len = sizeof(*x3);
-        x3  = (sna_xid3 *)skb_put(skb, sizeof(*x3));
+	x3  = (sna_xid3 *)skb_put(skb, sizeof(*x3));
 	memset(x3, 0, sizeof(*x3));
 
 	/* gathered xid values. */
@@ -1549,7 +1522,7 @@ sna_xid3 *xid_pkt_init(struct sna_ls_cb *ls, struct sk_buff *skb)
 	x3->format			= ls->xid_format;
 	x3->ls_role			= ls->effective_role;
 	x3->nodeid 			= htonl(cs->nodeid);
-	
+
 	/* settable xid values. */
 	x3->init_self			= ls->xid_init_self;
 	x3->standalone_bind		= ls->xid_standalone_bind;
@@ -1565,11 +1538,11 @@ sna_xid3 *xid_pkt_init(struct sna_ls_cb *ls, struct sk_buff *skb)
 	x3->appn_pbn			= ls->xid_appn_pbn;
 	x3->parallel_tg_sup		= ls->xid_parallel_tg_sup;
 	x3->ls_txrx_cap			= ls->xid_ls_txrx_cap;
-	
+
 	/* dlc related xid values. */
 	x3->tg_num			= ls->effective_tg;
 	x3->dlc_type			= sna_cs_dlc_xid_type(dlc);
-        x3->dlc_len                    	= sna_cs_dlc_xid_len(dlc);
+	x3->dlc_len                    	= sna_cs_dlc_xid_len(dlc);
 	x3->dlc_abm			= sna_cs_dlc_xid_abm(dlc);
 	x3->dlc_init_mode		= sna_cs_dlc_xid_init_mode(dlc);
 	x3->max_btu_len                 = sna_cs_dlc_xid_max_btu_len(dlc);
@@ -1582,20 +1555,20 @@ sna_xid3 *xid_pkt_init(struct sna_ls_cb *ls, struct sk_buff *skb)
 
 	/* product id control vector information. */
 	len += sna_vector_product_id(skb);
-	
+
 	/* network name control vector information. */
 	len += sna_vector_network_name(&cs->netid, skb);
-	
+
 	/* set xid length for data we added. */
 	x3->len = len;
-        return x3;
+	return x3;
 }
 
 static int xid_suprise_srnm(struct sna_ls_cb *ls)
 {
 	sna_xid3 *xid;
 	int err = -EINVAL;
-	
+
 	sna_debug(5, "init\n");
 	if (!ls->xid_last_rx)
 		goto out;
@@ -1650,35 +1623,36 @@ static int xid_suprise_srnm(struct sna_ls_cb *ls)
 	}
 
 	ls->tg_input  = SNA_TG_INPUT_SETMODE;
-        sna_cs_tg_negotiate(ls);
+	sna_cs_tg_negotiate(ls);
 	ls->xid_input = XID_IN_ACTIVE;
 	err = xid_doit(ls);
 out:	return err;
 }
 
-static void xid_output_connect_finish(void *data)
+static void xid_output_connect_finish(struct work_struct *work)
 {
-	struct sna_ls_cb *ls = (struct sna_ls_cb *)data;
+	struct sna_ls_cb *ls = container_of(work, struct sna_ls_cb, connect);
 
 	if (!ls) {
 		sna_debug(5, "!ls\n");
 		return;
 	}
 	if (ls->xid_input == XID_IN_ACTIVE) {
+#ifdef CONFIG_SNA_LLC
 		if (!ls->llc_sk)
 			return;		/* retry timer will try again. */
+#endif
 		/* execute active state change. */
-	        ls->xid_input           = XID_IN_ACTIVE;
-	        ls->xid_direction       = XID_DIR_OUTBOUND;
-	        xid_doit(ls);
+		ls->xid_input           = XID_IN_ACTIVE;
+		ls->xid_direction       = XID_DIR_OUTBOUND;
+		xid_doit(ls);
 		return;
 	}
 	if (ls->xid_state == XID_STATE_RESET)
 		return;
 	if (signal_pending(current))
 		return;
-        queue_task(&ls->connect, &tq_immediate);
-        mark_bh(IMMEDIATE_BH);
+	schedule_work(&ls->connect);
 	return;
 }
 
@@ -1702,23 +1676,23 @@ static int xid_output_resend(struct sna_ls_cb *ls)
 		err = 0;
 		goto out;
 	}
-        if (!ls->retry_on_fail || (ls->retry_on_fail
-        	&& ls->retry_times && ls->retries >= ls->retry_times)) {
+	if (!ls->retry_on_fail || (ls->retry_on_fail
+		&& ls->retry_times && ls->retries >= ls->retry_times)) {
 		sna_debug(5, "XID failed\n");
 		ls->xid_input = XID_IN_RESET;
-                xid_doit(ls);
+		xid_doit(ls);
 		err = 0;
 		goto out;
 	}
-        ls->retries++;
-        ls->retry.expires = jiffies + sysctl_xid_retry_limit;
-        add_timer(&ls->retry);
+	ls->retries++;
+	ls->retry.expires = jiffies + sysctl_xid_retry_limit;
+	add_timer(&ls->retry);
 
 	ls->xid_count++;
 	if (ls->xid_last_tx_direction == XID_DIR_OUTBOUND)
-                err = sna_dlc_xid_req(ls, skb);
-        else
-                err = sna_dlc_xid_rsp(ls, skb);
+		err = sna_dlc_xid_req(ls, skb);
+	else
+		err = sna_dlc_xid_rsp(ls, skb);
 out:    return err;
 }
 
@@ -1729,10 +1703,10 @@ static int xid_output_null(struct sna_ls_cb *ls)
 
 	sna_debug(5, "init: %p\n", xid_output_null);
 	size = sna_dlc_xid_min_len(ls) + 150;   /* static max for now. */
-        skb = sna_alloc_skb(size, GFP_ATOMIC);
-        if (!skb)
+	skb = sna_alloc_skb(size, GFP_ATOMIC);
+	if (!skb)
 		goto out;
-        sna_dlc_xid_reserve(ls, skb);
+	sna_dlc_xid_reserve(ls, skb);
 	if (ls->xid_last_tx) {
 		sna_debug(5, "prev->skb=%p\n", ls->xid_last_tx);
 		kfree_skb(ls->xid_last_tx);
@@ -1744,7 +1718,7 @@ static int xid_output_null(struct sna_ls_cb *ls)
 	sna_debug(5, "skb=%p, copy=%p\n", skb, ls->xid_last_tx);
 	if (ls->xid_direction == XID_DIR_OUTBOUND) {
 		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-	        add_timer(&ls->retry);
+		add_timer(&ls->retry);
 		err = sna_dlc_xid_req(ls, skb);
 	} else
 		err = sna_dlc_xid_rsp(ls, skb);
@@ -1754,15 +1728,15 @@ out:	return err;
 static int xid_output_pn(struct sna_ls_cb *ls)
 {
 	struct sk_buff *skb;
-        int size, err = -ENOMEM;
+	int size, err = -ENOMEM;
 	sna_xid3 *x3;
 
-        sna_debug(5, "init\n");
-        size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
-        skb = sna_alloc_skb(size, GFP_ATOMIC);
-        if (!skb)
-                goto out;
-        sna_dlc_xid_reserve(ls, skb);
+	sna_debug(5, "init\n");
+	size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
+	skb = sna_alloc_skb(size, GFP_ATOMIC);
+	if (!skb)
+		goto out;
+	sna_dlc_xid_reserve(ls, skb);
 	x3 = xid_pkt_init(ls, skb);
 	if (!x3) {
 		kfree_skb(skb);
@@ -1770,167 +1744,167 @@ static int xid_output_pn(struct sna_ls_cb *ls)
 	}
 	/* set prenegotiation xid values. */
 	x3->state = SNA_XID_XCHG_STATE_PN;
-        if (ls->xid_last_tx) {
-                kfree_skb(ls->xid_last_tx);
+	if (ls->xid_last_tx) {
+		kfree_skb(ls->xid_last_tx);
 		ls->xid_last_tx = NULL;
 	}
 	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
-        ls->xid_last_tx_direction       = ls->xid_direction;
-        ls->xid_count++;
+	ls->xid_last_tx_direction       = ls->xid_direction;
+	ls->xid_count++;
 	if (ls->xid_direction == XID_DIR_OUTBOUND) {
 		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-                add_timer(&ls->retry);
-                err = sna_dlc_xid_req(ls, skb);
-        } else
-                err = sna_dlc_xid_rsp(ls, skb);
+		add_timer(&ls->retry);
+		err = sna_dlc_xid_req(ls, skb);
+	} else
+		err = sna_dlc_xid_rsp(ls, skb);
 out:    return err;
 }
 
 static int xid_output_neg(struct sna_ls_cb *ls)
 {
 	struct sk_buff *skb;
-        int size, err = -ENOMEM;
+	int size, err = -ENOMEM;
 	sna_xid3 *x3;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	ls->tg_input = SNA_TG_INPUT_ADJ_LOC;
 	sna_cs_tg_negotiate(ls);
-        size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
-        skb = sna_alloc_skb(size, GFP_ATOMIC);
-        if (!skb)
-                goto out;
-        sna_dlc_xid_reserve(ls, skb);
+	size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
+	skb = sna_alloc_skb(size, GFP_ATOMIC);
+	if (!skb)
+		goto out;
+	sna_dlc_xid_reserve(ls, skb);
 	x3 = xid_pkt_init(ls, skb);
-        if (!x3) {
-                kfree_skb(skb);
-                goto out;
-        }
+	if (!x3) {
+		kfree_skb(skb);
+		goto out;
+	}
 	/* set negotiation-proceeding xid values. */
 	x3->state = SNA_XID_XCHG_STATE_NEG;
-        if (ls->xid_last_tx) {
-                kfree_skb(ls->xid_last_tx);
+	if (ls->xid_last_tx) {
+		kfree_skb(ls->xid_last_tx);
 		ls->xid_last_tx = NULL;
 	}
 	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
-        ls->xid_last_tx_direction       = ls->xid_direction;
-        ls->xid_count++;
+	ls->xid_last_tx_direction       = ls->xid_direction;
+	ls->xid_count++;
 	if (ls->xid_direction == XID_DIR_OUTBOUND) {
 		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-                add_timer(&ls->retry);
-                err = sna_dlc_xid_req(ls, skb);
-        } else
-                err = sna_dlc_xid_rsp(ls, skb);
+		add_timer(&ls->retry);
+		err = sna_dlc_xid_req(ls, skb);
+	} else
+		err = sna_dlc_xid_rsp(ls, skb);
 out:    return err;
 }
 
 static int xid_output_neg_id(struct sna_ls_cb *ls)
 {
-        struct sk_buff *skb;
-        int size, err = -ENOMEM;
+	struct sk_buff *skb;
+	int size, err = -ENOMEM;
 	sna_xid3 *x3;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	ls->tg_input = SNA_TG_INPUT_ADJ_LOC;
-        sna_cs_tg_negotiate(ls);
-        size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
-        skb = sna_alloc_skb(size, GFP_ATOMIC);
-        if (!skb)
-                goto out;
-        sna_dlc_xid_reserve(ls, skb);
+	sna_cs_tg_negotiate(ls);
+	size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
+	skb = sna_alloc_skb(size, GFP_ATOMIC);
+	if (!skb)
+		goto out;
+	sna_dlc_xid_reserve(ls, skb);
 	x3 = xid_pkt_init(ls, skb);
-        if (!x3) {
-                kfree_skb(skb);
-                goto out;
-        }
-        /* set negotiation-proceeding xid values. */
+	if (!x3) {
+		kfree_skb(skb);
+		goto out;
+	}
+	/* set negotiation-proceeding xid values. */
 	x3->state = SNA_XID_XCHG_STATE_NEG;
-        if (ls->xid_last_tx) {
-                kfree_skb(ls->xid_last_tx);
+	if (ls->xid_last_tx) {
+		kfree_skb(ls->xid_last_tx);
 		ls->xid_last_tx = NULL;
 	}
 	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
-        ls->xid_last_tx_direction       = ls->xid_direction;
-        ls->xid_count++;
+	ls->xid_last_tx_direction       = ls->xid_direction;
+	ls->xid_count++;
 	if (ls->xid_direction == XID_DIR_OUTBOUND) {
 		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-                add_timer(&ls->retry);
-                err = sna_dlc_xid_req(ls, skb);
-        } else
-                err = sna_dlc_xid_rsp(ls, skb);
+		add_timer(&ls->retry);
+		err = sna_dlc_xid_req(ls, skb);
+	} else
+		err = sna_dlc_xid_rsp(ls, skb);
 out:    return err;
 }
 
 static int xid_output_pri(struct sna_ls_cb *ls)
 {
-        struct sk_buff *skb;
-        int size, err = -ENOMEM;
+	struct sk_buff *skb;
+	int size, err = -ENOMEM;
 	sna_xid3 *x3;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	ls->tg_input = SNA_TG_INPUT_ADJ_LOC;
-        sna_cs_tg_negotiate(ls);
-        size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
-        skb = sna_alloc_skb(size, GFP_ATOMIC);
-        if (!skb)
-                goto out;
-        sna_dlc_xid_reserve(ls, skb);
+	sna_cs_tg_negotiate(ls);
+	size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
+	skb = sna_alloc_skb(size, GFP_ATOMIC);
+	if (!skb)
+		goto out;
+	sna_dlc_xid_reserve(ls, skb);
 	x3 = xid_pkt_init(ls, skb);
-        if (!x3) {
-                kfree_skb(skb);
-                goto out;
-        }
-        /* set negotiation-proceeding xid values. */
+	if (!x3) {
+		kfree_skb(skb);
+		goto out;
+	}
+	/* set negotiation-proceeding xid values. */
 	x3->state = SNA_XID_XCHG_STATE_NEG;
-        if (ls->xid_last_tx) {
-                kfree_skb(ls->xid_last_tx);
+	if (ls->xid_last_tx) {
+		kfree_skb(ls->xid_last_tx);
 		ls->xid_last_tx = NULL;
 	}
 	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
-        ls->xid_last_tx_direction       = ls->xid_direction;
-        ls->xid_count++;
+	ls->xid_last_tx_direction       = ls->xid_direction;
+	ls->xid_count++;
 	if (ls->xid_direction == XID_DIR_OUTBOUND) {
 		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-                add_timer(&ls->retry);
-                err = sna_dlc_xid_req(ls, skb);
-        } else
-                err = sna_dlc_xid_rsp(ls, skb);
+		add_timer(&ls->retry);
+		err = sna_dlc_xid_req(ls, skb);
+	} else
+		err = sna_dlc_xid_rsp(ls, skb);
 out:    return err;
 }
 
 static int xid_output_sec(struct sna_ls_cb *ls)
 {
-        struct sk_buff *skb;
-        int size, err = -ENOMEM;
+	struct sk_buff *skb;
+	int size, err = -ENOMEM;
 	sna_xid3 *x3;
 
-        sna_debug(5, "init\n");
+	sna_debug(5, "init\n");
 	ls->tg_input = SNA_TG_INPUT_ADJ_LOC;
-        sna_cs_tg_negotiate(ls);
-        size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
-        skb = sna_alloc_skb(size, GFP_ATOMIC);
-        if (!skb)
-                goto out;
-        sna_dlc_xid_reserve(ls, skb);
+	sna_cs_tg_negotiate(ls);
+	size = sna_dlc_xid_min_len(ls) + sizeof(*x3) + 150;   /* static max for now. */
+	skb = sna_alloc_skb(size, GFP_ATOMIC);
+	if (!skb)
+		goto out;
+	sna_dlc_xid_reserve(ls, skb);
 	x3 = xid_pkt_init(ls, skb);
-        if (!x3) {
-                kfree_skb(skb);
-                goto out;
-        }
-        /* set negotiation-proceeding xid values. */
+	if (!x3) {
+		kfree_skb(skb);
+		goto out;
+	}
+	/* set negotiation-proceeding xid values. */
 	x3->state = SNA_XID_XCHG_STATE_NEG;
-        if (ls->xid_last_tx) {
-                kfree_skb(ls->xid_last_tx);
+	if (ls->xid_last_tx) {
+		kfree_skb(ls->xid_last_tx);
 		ls->xid_last_tx = NULL;
 	}
 	ls->xid_last_tx                 = skb_copy(skb, GFP_ATOMIC);
-        ls->xid_last_tx_direction       = ls->xid_direction;
-        ls->xid_count++;
+	ls->xid_last_tx_direction       = ls->xid_direction;
+	ls->xid_count++;
 	if (ls->xid_direction == XID_DIR_OUTBOUND) {
 		ls->retry.expires = jiffies + sysctl_xid_idle_limit;
-                add_timer(&ls->retry);
-                err = sna_dlc_xid_req(ls, skb);
-        } else
-                err = sna_dlc_xid_rsp(ls, skb);
+		add_timer(&ls->retry);
+		err = sna_dlc_xid_req(ls, skb);
+	} else
+		err = sna_dlc_xid_rsp(ls, skb);
 out:    return err;
 }
 
@@ -1957,19 +1931,19 @@ static int xid_output_random(struct sna_ls_cb *ls)
 static int xid_output_err_opt(struct sna_ls_cb *ls)
 {
 	int err;
-	
+
 	sna_debug(5, "init\n");
 	err = xid_suprise_srnm(ls);
 	if (err < 0) {
 		ls->tg_input 		= SNA_TG_INPUT_RESET;
-                sna_cs_tg_negotiate(ls);
+		sna_cs_tg_negotiate(ls);
 		ls->xid_input 		= XID_IN_RESET;
 		xid_doit(ls);
 		ls->xid_input 		= XID_IN_PN;
 		ls->xid_direction 	= XID_DIR_OUTBOUND;
 		xid_doit(ls);
 	}
-        return 0;
+	return 0;
 }
 
 static int xid_output_z1(struct sna_ls_cb *ls)
@@ -1977,18 +1951,18 @@ static int xid_output_z1(struct sna_ls_cb *ls)
 	sna_debug(5, "init\n");
 	if (ls->xid_state == XID_STATE_RESET) {
 		ls->tg_input 		= SNA_TG_INPUT_RESET;
-	        sna_cs_tg_negotiate(ls);
+		sna_cs_tg_negotiate(ls);
 		ls->xid_input 		= XID_IN_PN;
 		ls->xid_direction	= XID_DIR_OUTBOUND;
 		xid_doit(ls);
 	}
-        return 0;
+	return 0;
 }
 
 static int xid_output_z2(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        return 0;
+	return 0;
 }
 
 static int xid_output(struct sna_ls_cb *ls, int action)
@@ -2000,48 +1974,48 @@ static int xid_output(struct sna_ls_cb *ls, int action)
 		case XID_OUT_NULL:
 			err = xid_output_null(ls);
 			break;
-        	case XID_OUT_PN:
+		case XID_OUT_PN:
 			err = xid_output_pn(ls);
 			break;
-        	case XID_OUT_NEG:
+		case XID_OUT_NEG:
 			ls->effective_role = SNA_LS_ROLE_NEG;
 			err = xid_output_neg(ls);
 			break;
-        	case XID_OUT_NEG_ID:
+		case XID_OUT_NEG_ID:
 			ls->effective_role = SNA_LS_ROLE_NEG;
 			err = xid_output_neg_id(ls);
 			break;
-        	case XID_OUT_PRI:
+		case XID_OUT_PRI:
 			ls->effective_role = SNA_LS_ROLE_PRI;
 			err = xid_output_pri(ls);
 			break;
-        	case XID_OUT_SEC:
+		case XID_OUT_SEC:
 			ls->effective_role = SNA_LS_ROLE_SEC;
 			err = xid_output_sec(ls);
 			break;
-        	case XID_OUT_PRI_R:
+		case XID_OUT_PRI_R:
 			err = xid_output_pri_r(ls);
 			break;
-        	case XID_OUT_SEC_R:
+		case XID_OUT_SEC_R:
 			err = xid_output_sec_r(ls);
 			break;
-        	case XID_OUT_RANDOM:
+		case XID_OUT_RANDOM:
 			err = xid_output_random(ls);
 			break;
-        	case XID_OUT_ERR_OPT:
+		case XID_OUT_ERR_OPT:
 			err = xid_output_err_opt(ls);
 			break;
-        	case XID_OUT_Z1:
+		case XID_OUT_Z1:
 			err = xid_output_z1(ls);
 			break;
-        	case XID_OUT_Z2:
+		case XID_OUT_Z2:
 			err = xid_output_z2(ls);
 			break;
 		case XID_OUT_RESEND:
 			err = xid_output_resend(ls);
 			break;
 		default:
-			sna_debug(5, "Uknown output command `0x%02X'.\n", 
+			sna_debug(5, "Uknown output command `0x%02X'.\n",
 				action);
 			break;
 	}
@@ -2052,7 +2026,7 @@ static int xid_output(struct sna_ls_cb *ls, int action)
 static int xid_input_begin(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-	
+
 	/* allow user defined link activation direction. */
 	if (ls->xid_direction == XID_DIR_INBOUND
 		&& ls->direction == SNA_LS_DIR_OUT)
@@ -2082,7 +2056,7 @@ static int xid_input_begin(struct sna_ls_cb *ls)
 			}
 			/* DNP,DPRI: 4 (PRI) */
 			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
-                                && ls->effective_role == SNA_LS_ROLE_PRI) {
+				&& ls->effective_role == SNA_LS_ROLE_PRI) {
 				xid_output(ls, XID_OUT_PRI);
 				ls->xid_state = XID_STATE_S_PRI;
 				break;
@@ -2095,7 +2069,7 @@ static int xid_input_begin(struct sna_ls_cb *ls)
 		case XID_STATE_R_PRI_S_SEC:
 		case XID_STATE_S_PRI_R_SEC:
 		case XID_STATE_ACTIVE:
-                        break;
+			break;
 	}
 	return 0;
 }
@@ -2103,97 +2077,97 @@ static int xid_input_begin(struct sna_ls_cb *ls)
 static int xid_input_null(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
-                        /* DNULL|DPN: - 2 (PN) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NULL
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
+			/* DNULL|DPN: - 2 (PN) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NULL
 				|| ls->xid_init_method == SNA_LS_XID_INIT_PN) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_PN);
+				xid_output(ls, XID_OUT_PN);
 				ls->xid_state = XID_STATE_S_PN;
 				break;
-                        }
-                        /* DNP,DNEG: 3 (NEG) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NP
+			}
+			/* DNP,DNEG: 3 (NEG) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
 				&& ls->effective_role == SNA_LS_ROLE_NEG) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_NEG);
-                                ls->xid_state = XID_STATE_S_NEG;
+				xid_output(ls, XID_OUT_NEG);
+				ls->xid_state = XID_STATE_S_NEG;
 				break;
-                        }
-                        /* DNP,DPRI: 4 (PRI) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NP
-                                && ls->effective_role == SNA_LS_ROLE_PRI) {
+			}
+			/* DNP,DPRI: 4 (PRI) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
+				&& ls->effective_role == SNA_LS_ROLE_PRI) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_PRI);
-                                ls->xid_state = XID_STATE_S_PRI;
+				xid_output(ls, XID_OUT_PRI);
+				ls->xid_state = XID_STATE_S_PRI;
 				break;
-                        }
-                        /* DNP,DSEC: 5 (SEC) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NP
-                                && ls->effective_role == SNA_LS_ROLE_SEC) {
+			}
+			/* DNP,DSEC: 5 (SEC) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
+				&& ls->effective_role == SNA_LS_ROLE_SEC) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_SEC);
-                                ls->xid_state = XID_STATE_S_SEC;
+				xid_output(ls, XID_OUT_SEC);
+				ls->xid_state = XID_STATE_S_SEC;
 				break;
-                        }
-                        break;
-                case XID_STATE_S_PN:
-                case XID_STATE_S_NEG:
-                case XID_STATE_S_PRI:
-                case XID_STATE_S_SEC:
-                case XID_STATE_R_PRI_S_SEC:
-                case XID_STATE_S_PRI_R_SEC:
+			}
+			break;
+		case XID_STATE_S_PN:
+		case XID_STATE_S_NEG:
+		case XID_STATE_S_PRI:
+		case XID_STATE_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_S_PRI_R_SEC:
 			/* resend last tx'd XID image. */
 			xid_output(ls, XID_OUT_RESEND);
 			break;
-                case XID_STATE_ACTIVE:
+		case XID_STATE_ACTIVE:
 			/* send to nonactive fsm. */
 			sna_debug(5, "FIXME: nonactive fsm\n");
-                        break;
-        }
-        return 0;
+			break;
+	}
+	return 0;
 }
 
 static int xid_input_pn(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
 			/* DNULL|DPN: - 2 (PN) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NULL
-                                || ls->xid_init_method == SNA_LS_XID_INIT_PN) {
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NULL
+				|| ls->xid_init_method == SNA_LS_XID_INIT_PN) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_PN);
-                                ls->xid_state = XID_STATE_S_PN;
+				xid_output(ls, XID_OUT_PN);
+				ls->xid_state = XID_STATE_S_PN;
 				break;
-                        }
-                        /* DNP,DNEG: 3 (NEG) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NP
-                                && ls->effective_role == SNA_LS_ROLE_NEG) {
+			}
+			/* DNP,DNEG: 3 (NEG) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
+				&& ls->effective_role == SNA_LS_ROLE_NEG) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_NEG);
-                                ls->xid_state = XID_STATE_S_NEG;
+				xid_output(ls, XID_OUT_NEG);
+				ls->xid_state = XID_STATE_S_NEG;
 				break;
-                        }
-                        /* DNP,DPRI: 4 (PRI) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NP
-                                && ls->effective_role == SNA_LS_ROLE_PRI) {
+			}
+			/* DNP,DPRI: 4 (PRI) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
+				&& ls->effective_role == SNA_LS_ROLE_PRI) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_PRI);
-                                ls->xid_state = XID_STATE_S_PRI;
+				xid_output(ls, XID_OUT_PRI);
+				ls->xid_state = XID_STATE_S_PRI;
 				break;
-                        }
-                        /* DNP,DSEC: 5 (SEC) */
-                        if (ls->xid_init_method == SNA_LS_XID_INIT_NP
-                                && ls->effective_role == SNA_LS_ROLE_SEC) {
+			}
+			/* DNP,DSEC: 5 (SEC) */
+			if (ls->xid_init_method == SNA_LS_XID_INIT_NP
+				&& ls->effective_role == SNA_LS_ROLE_SEC) {
 				xid_flip_direction(ls);
-                                xid_output(ls, XID_OUT_SEC);
-                                ls->xid_state = XID_STATE_S_SEC;
+				xid_output(ls, XID_OUT_SEC);
+				ls->xid_state = XID_STATE_S_SEC;
 				break;
-                        }
-                        break;
-                case XID_STATE_S_PN:
+			}
+			break;
+		case XID_STATE_S_PN:
 			/* DNEG: 3 (NEG) */
 			if (ls->effective_role == SNA_LS_ROLE_NEG) {
 				xid_flip_direction(ls);
@@ -2216,29 +2190,29 @@ static int xid_input_pn(struct sna_ls_cb *ls)
 				break;
 			}
 			break;
-                case XID_STATE_S_NEG:
-                case XID_STATE_S_PRI:
-                case XID_STATE_S_SEC:
-                case XID_STATE_R_PRI_S_SEC:
-                case XID_STATE_S_PRI_R_SEC:
+		case XID_STATE_S_NEG:
+		case XID_STATE_S_PRI:
+		case XID_STATE_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_S_PRI_R_SEC:
 			/* resend last tx'd XID image. */
 			xid_output(ls, XID_OUT_RESEND);
-                        break;
-                case XID_STATE_ACTIVE:
+			break;
+		case XID_STATE_ACTIVE:
 			/* send to nonactive fsm. */
 			sna_debug(5, "FIXME: nonactive fsm\n");
-                        break;
-        }
-        return 0;
+			break;
+	}
+	return 0;
 }
 
 static int xid_input_neg(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
 		case XID_STATE_S_PN:
-                        /* DNEG,HI: 4 (PRI) */
+			/* DNEG,HI: 4 (PRI) */
 			if (ls->effective_role == SNA_LS_ROLE_NEG
 				&& xid_node_id_high(ls)) {
 				xid_flip_direction(ls);
@@ -2276,8 +2250,8 @@ static int xid_input_neg(struct sna_ls_cb *ls)
 				ls->xid_state = XID_STATE_S_SEC;
 				break;
 			}
-                        break;
-                case XID_STATE_S_NEG:
+			break;
+		case XID_STATE_S_NEG:
 			/* HI: 4 (PRI-R) */
 			if (xid_node_id_high(ls)) {
 				xid_output(ls, XID_OUT_PRI_R);
@@ -2296,26 +2270,26 @@ static int xid_input_neg(struct sna_ls_cb *ls)
 				break;
 			}
 			break;
-                case XID_STATE_S_PRI:
-                case XID_STATE_S_SEC:
-                case XID_STATE_R_PRI_S_SEC:
-                case XID_STATE_S_PRI_R_SEC:
+		case XID_STATE_S_PRI:
+		case XID_STATE_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_S_PRI_R_SEC:
 			/* resend last tx'd XID image. */
 			xid_output(ls, XID_OUT_RESEND);
 			break;
-                case XID_STATE_ACTIVE:
+		case XID_STATE_ACTIVE:
 			/* send to nonactive fsm. */
 			sna_debug(5, "FIXME: nonactive fsm\n");
-                        break;
-        }
-        return 0;
+			break;
+	}
+	return 0;
 }
 
 static int xid_input_pri(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
 			/* DNEG: 6 (SEC) */
 			if (ls->effective_role == SNA_LS_ROLE_NEG) {
 				xid_flip_direction(ls);
@@ -2335,8 +2309,8 @@ static int xid_input_pri(struct sna_ls_cb *ls)
 				ls->xid_state = XID_STATE_R_PRI_S_SEC;
 				break;
 			}
-                        break;
-                case XID_STATE_S_PN:
+			break;
+		case XID_STATE_S_PN:
 			/* DNEG: 6 (SEC) */
 			if (ls->effective_role == SNA_LS_ROLE_NEG) {
 				xid_flip_direction(ls);
@@ -2359,42 +2333,42 @@ static int xid_input_pri(struct sna_ls_cb *ls)
 				break;
 			}
 			break;
-                case XID_STATE_S_NEG:
+		case XID_STATE_S_NEG:
 			/* 6 (SEC-R) */
 			xid_output(ls, XID_OUT_SEC_R);
 			ls->xid_state = XID_STATE_R_PRI_S_SEC;
 			break;
-                case XID_STATE_S_PRI:
+		case XID_STATE_S_PRI:
 			/* 1 (Z1) */
 			xid_output(ls, XID_OUT_Z1);
 			ls->xid_state = XID_STATE_RESET;
 			break;
-                case XID_STATE_S_SEC:
+		case XID_STATE_S_SEC:
 			/* 6 */
 			ls->xid_state = XID_STATE_R_PRI_S_SEC;
 			break;
-                case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
 			break;
-                case XID_STATE_S_PRI_R_SEC:
+		case XID_STATE_S_PRI_R_SEC:
 			/* 1 (Z1) */
 			xid_output(ls, XID_OUT_Z1);
-                        ls->xid_state = XID_STATE_RESET;
+			ls->xid_state = XID_STATE_RESET;
 			break;
-                case XID_STATE_ACTIVE:
+		case XID_STATE_ACTIVE:
 			/* send to nonactive fsm. */
 			sna_debug(5, "FIXME: nonactive fsm\n");
-                        break;
-        }
-        return 0;
+			break;
+	}
+	return 0;
 }
 
 static int xid_input_sec(struct sna_ls_cb *ls)
 {
 	int err = 0;
-	
+
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
 		case XID_STATE_S_PN:
 			/* !DSEC: 4 (PRI) */
 			if (ls->effective_role != SNA_LS_ROLE_SEC) {
@@ -2405,13 +2379,13 @@ static int xid_input_sec(struct sna_ls_cb *ls)
 				/* DSEC: - (Z1) */
 				xid_output(ls, XID_OUT_Z1);
 			}
-                        break;
-                case XID_STATE_S_NEG:
+			break;
+		case XID_STATE_S_NEG:
 			/* 4 (PRI-R) */
 			xid_output(ls, XID_OUT_PRI_R);
 			ls->xid_state = XID_STATE_S_PRI;
 			break;
-                case XID_STATE_S_PRI:
+		case XID_STATE_S_PRI:
 			/* 7 */
 			ls->xid_state = XID_STATE_S_PRI_R_SEC;
 			/* we are currently in interrupt context here, so
@@ -2420,85 +2394,84 @@ static int xid_input_sec(struct sna_ls_cb *ls)
 			 * has finished from there.
 			 */
 			err = sna_dlc_conn_req(ls);
-		        if (err)
-		                goto out;
-			queue_task(&ls->connect, &tq_immediate);
-                        mark_bh(IMMEDIATE_BH);
+			if (err)
+				goto out;
+			schedule_work(&ls->connect);
 			break;
-                case XID_STATE_S_SEC:
+		case XID_STATE_S_SEC:
 		case XID_STATE_R_PRI_S_SEC:
 			/* 1 (Z1) */
 			xid_output(ls, XID_OUT_Z1);
 			ls->xid_state = XID_STATE_RESET;
 			break;
-                case XID_STATE_S_PRI_R_SEC:
+		case XID_STATE_S_PRI_R_SEC:
 			/* ignore xid. */
 			break;
-                case XID_STATE_ACTIVE:
+		case XID_STATE_ACTIVE:
 			/* send to nonactive fsm. */
 			sna_debug(5, "FIXME: nonactive fsm\n");
-                        break;
-        }
+			break;
+	}
 out:	return err;
 }
 
 static int xid_input_setmode(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
-                case XID_STATE_S_PN:
-                case XID_STATE_S_NEG:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
+		case XID_STATE_S_PN:
+		case XID_STATE_S_NEG:
 		case XID_STATE_S_SEC:
 			/* 6 (ERR_OPT) */
 			xid_output(ls, XID_OUT_ERR_OPT);
 			ls->xid_state = XID_STATE_R_PRI_S_SEC;
 			break;
-                case XID_STATE_S_PRI:
+		case XID_STATE_S_PRI:
 		case XID_STATE_S_PRI_R_SEC:
 			/* 1 (Z2) */
 			xid_output(ls, XID_OUT_Z2);
 			ls->xid_state = XID_STATE_RESET;
 			break;
-                case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
 			/* this is simple for us, if we get here the llc connection is
 			 * successful and we can move right into an ACTIVE state.
-			 * execute active state change. 
+			 * execute active state change.
 			 */
-                        ls->xid_input           = XID_IN_ACTIVE;
-                        ls->xid_direction       = XID_DIR_INBOUND;
-                        xid_doit(ls);
+			ls->xid_input           = XID_IN_ACTIVE;
+			ls->xid_direction       = XID_DIR_INBOUND;
+			xid_doit(ls);
 			break;
-                case XID_STATE_ACTIVE:
+		case XID_STATE_ACTIVE:
 			/* send to nonactive fsm. */
 			sna_debug(5, "FIXME: nonactive fsm\n");
-                        break;
-        }
-        return 0;
+			break;
+	}
+	return 0;
 }
 
 static int xid_input_active(struct sna_ls_cb *ls)
 {
 	int err;
-	
+
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
-                case XID_STATE_S_PN:
-                case XID_STATE_S_NEG:
-                case XID_STATE_S_PRI:
-                case XID_STATE_S_SEC:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
+		case XID_STATE_S_PN:
+		case XID_STATE_S_NEG:
+		case XID_STATE_S_PRI:
+		case XID_STATE_S_SEC:
 			sna_debug(5, "active state from others.\n");
 			ls->xid_state   = XID_STATE_ACTIVE;
-                        ls->state       = SNA_LS_STATE_ACTIVE;
+			ls->state       = SNA_LS_STATE_ACTIVE;
 
 			/* only get here from suprise. */
 			sna_cs_xid_results(ls, 1);
 			err = sna_cs_pc_activate(ls);
-                        if (err < 0) {
-                                sna_debug(5, "pc_activate failed `%d'.\n", err);
-                                return err;
-                        }
+			if (err < 0) {
+				sna_debug(5, "pc_activate failed `%d'.\n", err);
+				return err;
+			}
 			err = sna_cs_as_activate(ls);
 			if (err < 0) {
 				sna_debug(5, "as_activate failed `%d'.\n", err);
@@ -2512,12 +2485,12 @@ static int xid_input_active(struct sna_ls_cb *ls)
 			/* wake up anyone waiting for this link to become active. */
 			wake_up_interruptible(&ls->sleep);
 			break;
-                case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
 		case XID_STATE_S_PRI_R_SEC:
 			sna_debug(5, "active state from normal.\n");
 			ls->xid_state 	= XID_STATE_ACTIVE;
 			ls->state	= SNA_LS_STATE_ACTIVE;
-			
+
 			/* perform necessary finish XID processing for CS. */
 			sna_cs_xid_results(ls, 0);
 			err = sna_cs_pc_activate(ls);
@@ -2526,10 +2499,10 @@ static int xid_input_active(struct sna_ls_cb *ls)
 				return err;
 			}
 			err = sna_cs_as_activate(ls);
-                        if (err < 0) {
-                                sna_debug(5, "as_activate failed '%d'.\n", err);
-                                return err;
-                        }
+			if (err < 0) {
+				sna_debug(5, "as_activate failed '%d'.\n", err);
+				return err;
+			}
 			err = sna_cs_tg_activate(ls);
 			if (err < 0) {
 				sna_debug(5, "tg_activate_failed `%d'.\n", err);
@@ -2538,34 +2511,34 @@ static int xid_input_active(struct sna_ls_cb *ls)
 			/* wake up anyone waiting for this link to become active. */
 			wake_up_interruptible(&ls->sleep);
 			break;
-                case XID_STATE_ACTIVE:
-                        break;
-        }
-        return 0;
+		case XID_STATE_ACTIVE:
+			break;
+	}
+	return 0;
 }
 
 static int xid_input_reset(struct sna_ls_cb *ls)
 {
 	sna_debug(5, "init\n");
-        switch (ls->xid_state) {
-                case XID_STATE_RESET:
-                case XID_STATE_S_PN:
-                case XID_STATE_S_NEG:
-                case XID_STATE_S_PRI:
-                case XID_STATE_S_SEC:
-                case XID_STATE_R_PRI_S_SEC:
-                case XID_STATE_S_PRI_R_SEC:
-                case XID_STATE_ACTIVE:
+	switch (ls->xid_state) {
+		case XID_STATE_RESET:
+		case XID_STATE_S_PN:
+		case XID_STATE_S_NEG:
+		case XID_STATE_S_PRI:
+		case XID_STATE_S_SEC:
+		case XID_STATE_R_PRI_S_SEC:
+		case XID_STATE_S_PRI_R_SEC:
+		case XID_STATE_ACTIVE:
 			del_timer(&ls->retry);
 			ls->retries			= 0;
 			ls->tg_input  			= SNA_TG_INPUT_RESET;
-		        sna_cs_tg_negotiate(ls);
+			sna_cs_tg_negotiate(ls);
 			if (ls->direction == SNA_LS_DIR_OUT)
 				ls->co_status 		= CO_RESET;
 			else
-		                ls->co_status           = CO_TEST_OK;
+				ls->co_status           = CO_TEST_OK;
 			ls->xid_state                   = XID_STATE_RESET;
-                        ls->xid_input                   = XID_IN_RESET;		
+			ls->xid_input                   = XID_IN_RESET;
 			ls->xid_direction 		= 0;
 			ls->xid_count 			= 0;
 			ls->xid_last_tx_direction	= 0;
@@ -2594,16 +2567,16 @@ static int xid_input_reset(struct sna_ls_cb *ls)
 			 */
 			if (ls->flags & SNA_RUNNING) {
 				ls->state               = SNA_LS_STATE_ACTIVATED;
-        			ls->xid_input           = XID_IN_BEGIN;
-        			ls->xid_direction       = XID_DIR_OUTBOUND;
-        			sna_cs_connect_out((unsigned long)ls);
+				ls->xid_input           = XID_IN_BEGIN;
+				ls->xid_direction       = XID_DIR_OUTBOUND;
+				sna_cs_connect_out(&ls->retry);
 			} else {
 				wake_up_interruptible(&ls->sleep);
 				ls->state = SNA_LS_STATE_DEFINED;
 			}
-                        break;
-        }
-        return 0;
+			break;
+	}
+	return 0;
 }
 
 static int xid_doit(struct sna_ls_cb *ls)
@@ -2656,8 +2629,8 @@ int sna_cs_connect_in(struct sna_ls_cb *ls)
 	if (ls->state == SNA_LS_STATE_DEFINED)
 		return err;
 	err = xid_doit(ls);
-        if (err < 0)
-                sna_debug(5, "xid_doit error `%d'.\n", err);
+	if (err < 0)
+		sna_debug(5, "xid_doit error `%d'.\n", err);
 	return err;
 }
 
@@ -2665,13 +2638,13 @@ int sna_cs_connect_in(struct sna_ls_cb *ls)
  * sna_cs_connect_out - outbound xid connection state machine.
  * 			perform all necessary functions to make a link up.
  */
-void sna_cs_connect_out(unsigned long data)
+void sna_cs_connect_out(struct timer_list *t)
 {
-	struct sna_ls_cb *ls = (struct sna_ls_cb *)data;
+	struct sna_ls_cb *ls = from_timer(ls, t, retry);
 	int err;
-	
+
 	sna_debug(5, "init: %p ls=%d role=%d retry_on_fail=%d retry_times=%d retires=%d\n",
-		sna_cs_connect_out, ls->index, ls->role, ls->retry_on_fail, 
+		sna_cs_connect_out, ls->index, ls->role, ls->retry_on_fail,
 		ls->retry_times, ls->retries);
 	del_timer(&ls->retry);
 	switch (ls->co_status) {
@@ -2679,7 +2652,7 @@ void sna_cs_connect_out(unsigned long data)
 		case CO_S_TEST_C:
 			if (ls->state != SNA_LS_STATE_ACTIVATED)
 				return;
-			if (!ls->retry_on_fail || (ls->retry_on_fail 
+			if (!ls->retry_on_fail || (ls->retry_on_fail
 				&& ls->retry_times && ls->retries >= ls->retry_times)) {
 				sna_debug(5, "CO test failed\n");
 				ls->co_status = CO_FAIL;
@@ -2690,8 +2663,8 @@ void sna_cs_connect_out(unsigned long data)
 			ls->retry.expires 	= jiffies + sysctl_test_retry_limit;
 			add_timer(&ls->retry);
 			err = sna_dlc_test_req(ls);
-                        if (err < 0)
-                                sna_debug(5, "dlc_test_req err = %d\n", err);
+			if (err < 0)
+				sna_debug(5, "dlc_test_req err = %d\n", err);
 			return;
 		case CO_R_TEST_R:
 			ls->co_status 	= CO_TEST_OK;
@@ -2711,34 +2684,36 @@ void sna_cs_connect_out(unsigned long data)
 
 int sna_cs_wait_for_link_station(struct sna_ls_cb *ls, int seconds)
 {
-        DECLARE_WAITQUEUE(wait, current);
-        int rc, timeout = seconds * HZ;
+	DECLARE_WAITQUEUE(wait, current);
+	int rc, timeout = seconds * HZ;
 
-        sna_debug(5, "init\n");
-        add_wait_queue_exclusive(&ls->sleep, &wait);
-        for (;;) {
-                __set_current_state(TASK_INTERRUPTIBLE);
-                rc = 0;
+	sna_debug(5, "init\n");
+	add_wait_queue_exclusive(&ls->sleep, &wait);
+	for (;;) {
+		__set_current_state(TASK_INTERRUPTIBLE);
+		rc = 0;
 		if (ls->state != SNA_LS_STATE_ACTIVE)
-                        timeout = schedule_timeout(timeout);
-                if (ls->state == SNA_LS_STATE_ACTIVE) {
-                        if (!ls->llc_sk)
-                                rc = -EAGAIN;
-                        break;
-                }
-                rc = -EAGAIN;
-                if (ls->state == SNA_LS_STATE_DEFINED)
-                        break;
-                rc = -ERESTARTSYS;
-                if (signal_pending(current))
-                        break;
-                rc = -EAGAIN;
-                if (!timeout)
-                        break;
-        }
-        __set_current_state(TASK_RUNNING);
-        remove_wait_queue(&ls->sleep, &wait);
-        return rc;
+			timeout = schedule_timeout(timeout);
+		if (ls->state == SNA_LS_STATE_ACTIVE) {
+#ifdef CONFIG_SNA_LLC
+			if (!ls->llc_sk)
+				rc = -EAGAIN;
+#endif
+			break;
+		}
+		rc = -EAGAIN;
+		if (ls->state == SNA_LS_STATE_DEFINED)
+			break;
+		rc = -ERESTARTSYS;
+		if (signal_pending(current))
+			break;
+		rc = -EAGAIN;
+		if (!timeout)
+			break;
+	}
+	__set_current_state(TASK_RUNNING);
+	remove_wait_queue(&ls->sleep, &wait);
+	return rc;
 }
 
 /**
@@ -2776,7 +2751,7 @@ u_int32_t sna_cs_activate_route(struct sna_tg_cb *tg, sna_netid *remote_name, in
 		sna_debug(5, "active connection found\n");
 		goto done;
 	}
-	sna_cs_connect_out((unsigned long)ls);
+	sna_cs_connect_out(&ls->retry);
 	*err = sna_cs_wait_for_link_station(ls, 255);
 	if (*err < 0) {
 		sna_debug(5, "connect out failed `%d'.\n", *err);
@@ -2787,116 +2762,66 @@ out:	return pc_index;
 }
 
 #ifdef CONFIG_PROC_FS
-int sna_cs_get_info_dlc(char *buffer, char **start,
-        off_t offset, int length)
+int sna_cs_get_info_dlc(struct seq_file *m, void *v)
 {
-        off_t pos = 0, begin = 0;
 	struct sna_dlc_cb *dlc;
 	struct list_head *le;
-        int len = 0;
 
-        /* output the dlc data for the /proc filesystem. */
-	len += sprintf(buffer, "%-8s%-6s%-5s%-5s\n",
+	/* output the dlc data for the /proc filesystem. */
+	seq_printf(m, "%-8s%-6s%-5s%-5s\n",
 		"name", "index", "type", "flags");
 	list_for_each(le, &dlc_list) {
 		dlc = list_entry(le, struct sna_dlc_cb, list);
-                len += sprintf(buffer + len, "%-8s%-6d%03X  %02X   \n",
+		seq_printf(m, "%-8s%-6d%03X  %02X   \n",
 			dlc->dev->name, dlc->index, dlc->type, dlc->flags);
-		pos = begin + len;
-                if (pos < offset) {
-                        len   = 0;
-			begin = pos;
-                }
-                if (pos > offset + length)
-                        break;
-        }
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	}
+	return 0;
 }
 
-int sna_cs_get_info_port(char *buffer, char **start,
-        off_t offset, int length)
+int sna_cs_get_info_port(struct seq_file *m, void *v)
 {
-	off_t pos = 0, begin = 0;
-        struct sna_port_cb *port;
+	struct sna_port_cb *port;
 	struct list_head *le;
-        int len = 0;
 
-        /* output the port data for the /proc filesystem. */
-	len += sprintf(buffer, "%-20s%-6s%-5s%-6s%-5s%-8s%-5s%-5s%-5s\n",
+	/* output the port data for the /proc filesystem. */
+	seq_printf(m, "%-20s%-6s%-5s%-6s%-5s%-8s%-5s%-5s%-5s\n",
 		"name", "index", "type", "flags", "lsap", "ls_qlen",
 		"btu", "mia", "moa");
 	list_for_each(le, &port_list) {
 		port = list_entry(le, struct sna_port_cb, list);
-		len += sprintf(buffer + len, "%-20s%-6d%02X   %02X    0x%02X %-8d%-5d%-5d%-5d\n",
+		seq_printf(m, "%-20s%-6d%02X   %02X    0x%02X %-8d%-5d%-5d%-5d\n",
 			port->use_name, port->index, port->type, port->flags,
 			port->saddr[0], port->ls_qlen, port->btu, port->mia,
 			port->moa);
-		pos = begin + len;
-                if (pos < offset) {
-                        len   = 0; 
-			begin = pos;
-               	}
-               	if (pos > offset + length)
-                       	break;
 	}
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 
-int sna_cs_get_info_ls(char *buffer, char **start,
-        off_t offset, int length)
+int sna_cs_get_info_ls(struct seq_file *m, void *v)
 {
 	struct list_head *le, *se;
-	off_t pos = 0, begin = 0;
 	struct sna_port_cb *port;
 	struct sna_ls_cb *ls;
-        int len = 0;
 
-        /* output the link station data for the /proc filesystem. */
-	len += sprintf(buffer, "%-20s%-6s%-6s%-6s%-5s%-4s%-11s%-11s\n",
+	/* output the link station data for the /proc filesystem. */
+	seq_printf(m, "%-20s%-6s%-6s%-6s%-5s%-4s%-11s%-11s\n",
 		"name", "index", "flags", "state", "role", "tg", "tx_max_btu", "rx_max_btu");
-	len += sprintf(buffer + len, "  %-18s%-12s%-13s%-9s\n",
+	seq_printf(m, "  %-18s%-12s%-13s%-9s\n",
 		"plu_name", "plu_node_id", "plu_mac_addr", "plu_lsap");
 	list_for_each(le, &port_list) {
 		port = list_entry(le, struct sna_port_cb, list);
 		list_for_each(se, &port->ls_list) {
 			ls = list_entry(se, struct sna_ls_cb, list);
-			len += sprintf(buffer + len, "%-20s%-6d%02X    %02X    %-5d%-4d%-11d%-11d\n",
-				ls->use_name, ls->index, ls->flags, ls->state, 
-                                ls->effective_role, ls->effective_tg, 
+			seq_printf(m, "%-20s%-6d%02X    %02X    %-5d%-4d%-11d%-11d\n",
+				ls->use_name, ls->index, ls->flags, ls->state,
+				ls->effective_role, ls->effective_tg,
 				ls->tx_max_btu, ls->rx_max_btu);
-			len += sprintf(buffer + len, "  %-18s%-12s%-13s%02X\n",
-				sna_pr_netid(&ls->plu_name), 
+			seq_printf(m, "  %-18s%-12s%-13s%02X\n",
+				sna_pr_netid(&ls->plu_name),
 				sna_pr_nodeid(ls->plu_node_id),
 				sna_pr_ether(ls->plu_mac_addr), ls->plu_port);
-               			if (pos < offset) {
-                       			len = 0;
-					begin = pos;
-               			}
-               			if (pos > offset + length) 
-                       			break;
-       		}
+		}
 	}
-        /* The data in question runs from begin to begin+len */
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);   /* Remove unwanted header data from length */
-	if (len > length)
-                len = length;      /* Remove unwanted tail data from length */
-        if (len < 0)
-                len = 0;
-        return len;
+	return 0;
 }
 #endif

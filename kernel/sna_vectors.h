@@ -33,8 +33,8 @@
 #define SNA_CV_KEY_CP_NAME              0xF4
 
 typedef struct {
-        u_int8_t        key;
-        u_int8_t        len;
+	u_int8_t        key;
+	u_int8_t        len;
 } sna_vector_t;
 
 #define SNA_NETNAME_TYPE_PU		0xF1
@@ -101,9 +101,9 @@ typedef struct {
 /* sna vector macros.
  */
 #define SNA_CV_OK(cv, llen)    	((llen) > 0 && (cv)->len >= sizeof(sna_vector_t) \
-                                && (cv)->len <= (llen))
+				&& (cv)->len <= (llen))
 #define SNA_CV_NEXT(cv,attrlen) ((attrlen) -= (cv)->len, \
-                                (sna_vector_t *)(((char *)(cv)) + (cv)->len))
+				(sna_vector_t *)(((char *)(cv)) + (cv)->len))
 #define SNA_CV_TLEN(cv)		((cv)->len + sizeof(sna_vector_t))
 #define SNA_CV_DLEN(len)	((len) - sizeof(sna_vector_t))
 #define SNA_CV_LENGTH(len)      (sizeof(sna_vector_t) + (len))
@@ -114,52 +114,52 @@ typedef struct {
 
 #define sna_vector_put_w_offset(cvkey, cvlen, cvdata, olen, odata) \
 ({                                                              \
-        sna_vector_t *__cv = NULL;                              \
-        int __llen = SNA_CV_LENGTH(cvlen + olen);         	\
-                                                                \
-        __cv = kmalloc(__llen, GFP_KERNEL);                     \
-        if (__cv) {                                             \
-                memset(__cv, 0, __llen);                        \
-                __cv->len = SNA_CV_DLEN(__llen);                \
-                __cv->key = cvkey;                              \
-                memcpy(SNA_CV_DATA_W_OFFSET(__cv, olen), cvdata, cvlen); \
+	sna_vector_t *__cv = NULL;                              \
+	int __llen = SNA_CV_LENGTH(cvlen + olen);         	\
+								\
+	__cv = kmalloc(__llen, GFP_KERNEL);                     \
+	if (__cv) {                                             \
+		memset(__cv, 0, __llen);                        \
+		__cv->len = SNA_CV_DLEN(__llen);                \
+		__cv->key = cvkey;                              \
+		memcpy(SNA_CV_DATA_W_OFFSET(__cv, olen), cvdata, cvlen); \
 		odata = SNA_CV_DATA(__cv);			\
-        }                                                       \
-        __cv;                                                   \
+	}                                                       \
+	__cv;                                                   \
 })
-	
+
 #define sna_vector_put(cvkey, cvlen, cvdata)            	\
 ({                                                              \
-        sna_vector_t *__cv = NULL;                              \
-        int __llen = SNA_CV_LENGTH(cvlen);                     	\
-                                                                \
+	sna_vector_t *__cv = NULL;                              \
+	int __llen = SNA_CV_LENGTH(cvlen);                     	\
+								\
 	__cv = kmalloc(__llen, GFP_KERNEL);			\
 	if (__cv) {						\
 		memset(__cv, 0, __llen);			\
-        	__cv->len = SNA_CV_DLEN(__llen);                \
-        	__cv->key = cvkey;                              \
-        	memcpy(SNA_CV_DATA(__cv), cvdata, cvlen);       \
+		__cv->len = SNA_CV_DLEN(__llen);                \
+		__cv->key = cvkey;                              \
+		memcpy(SNA_CV_DATA(__cv), cvdata, cvlen);       \
 	}							\
-        __cv;                                                   \
+	__cv;                                                   \
 })
 
 #define sna_vector_parse(cvstart, cvtlen, pfn, args...)       	\
 ({                                                              \
-        sna_vector_t *__cv = ((void *)(cvstart));              	\
-        int __llen = cvtlen;                 			\
-        int __err = 0;                                          \
-                                                                \
-        while (SNA_CV_OK(__cv, __llen)) {                      	\
-                __err = pfn(__cv, SNA_CV_DATA(__cv), ## args); 	\
-                if(__err != 0)                                  \
-                       break;                                   \
-                __cv = SNA_CV_NEXT(__cv, __llen);              	\
-        }                                                       \
-        __err;                                                  \
+	sna_vector_t *__cv = ((void *)(cvstart));              	\
+	int __llen = cvtlen;                 			\
+	int __err = 0;                                          \
+								\
+	while (SNA_CV_OK(__cv, __llen)) {                      	\
+		__err = pfn(__cv, SNA_CV_DATA(__cv), ## args); 	\
+		if(__err != 0)                                  \
+		       break;                                   \
+		__cv = SNA_CV_NEXT(__cv, __llen);              	\
+	}                                                       \
+	__err;                                                  \
 })
 
 extern int sna_vector_cos_tpf(u_int8_t *name, int net_pri, int tx_pri,
-        struct sk_buff *skb);
+	struct sk_buff *skb);
 extern int sna_vector_fqpcid(sna_netid *name, sna_fqpcid *fqpcid, struct sk_buff *skb);
 extern int sna_vector_network_name(sna_netid *netid, struct sk_buff *skb);
 extern int sna_vector_product_id(struct sk_buff *skb);
