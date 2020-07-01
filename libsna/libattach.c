@@ -18,11 +18,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
 
-#include <linux/unistd.h>
-#include <sys/syscall.h>
-
+#include <linux/sna.h>
 #include <linux/attach.h>
+
 #include "attach.h"
 
 /**
@@ -32,11 +33,13 @@ int tp_register(int afd, struct tp_info *tp)
 {
 	int opcode = ATTACH_TP_REGISTER;
 	attach_args *args;
-	int err;
-	
-	aargo4(args, &opcode, &err, &afd, tp);
-	syscall(__NR_attachcall, args);
+	int err, ret;
+
+	aargo3(args, &opcode, &ret, tp);
+	err = ioctl(afd, 0, args);
 	free(args);
+	if (err == 0)
+		err = ret;
 	return err;
 }
 
@@ -47,11 +50,13 @@ int tp_unregister(int afd, int tp_index)
 {
 	int opcode = ATTACH_TP_UNREGISTER;
 	attach_args *args;
-	int err;
-	
-	aargo4(args, &opcode, &err, &afd, &tp_index);
-	syscall(__NR_attachcall, args);
+	int err, ret;
+
+	aargo3(args, &opcode, &err, &tp_index);
+	err = ioctl(afd, 0, args);
 	free(args);
+	if (err == 0)
+		err = ret;
 	return err;
 }
 
@@ -62,24 +67,19 @@ int tp_correlate(int afd, pid_t pid, unsigned long tcb_id, char *tp_name)
 {
 	int opcode = ATTACH_TP_CORRELATE;
 	attach_args *args;
-	int err;
-	
-	aargo6(args, &opcode, &err, &afd, &pid, &tcb_id, tp_name);
-	syscall(__NR_attachcall, args);
+	int err, ret;
+
+	aargo5(args, &opcode, &err, &pid, &tcb_id, tp_name);
+	err = ioctl(afd, 0, args);
 	free(args);
+	if (err == 0)
+		err = ret;
 	return 0;
 }
 
 int attach_open(void)
 {
-	int opcode = ATTACH_OPEN;
-	attach_args *args;
-	int err;
-	
-	aargo2(args, &opcode, &err);
-	syscall(__NR_attachcall, args);
-	free(args);
-	return err;
+	return socket(PF_SNA, SOCK_DGRAM, SNAPROTO_ATTACH);
 }
 
 /**
@@ -87,14 +87,7 @@ int attach_open(void)
  */
 int attach_listen(int afd, void *buf, int len, unsigned int flags)
 {
-	int opcode = ATTACH_LISTEN;
-	attach_args *args;
-        int err;
-
-	aargo6(args, &opcode, &err, &afd, buf, &len, &flags);
-	syscall(__NR_attachcall, args);
-	free(args);
-	return err;
+	return recv(afd, buf, len, flags);
 }
 
 /**
@@ -102,12 +95,5 @@ int attach_listen(int afd, void *buf, int len, unsigned int flags)
  */
 int attach_close(int afd)
 {
-	int opcode = ATTACH_CLOSE;
-	attach_args *args;
-        int err;
-
-	aargo3(args, &opcode, &err, &afd);
-	syscall(__NR_attachcall, args);
-	free(args);
-	return err;
+	return close(afd);
 }

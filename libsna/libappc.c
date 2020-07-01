@@ -19,13 +19,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include <linux/unistd.h>
-#include <sys/syscall.h>
-
 #include <linux/appc.h>
 
 void appc(unsigned short opcode, unsigned char opext,
         unsigned short rcpri, unsigned long rcsec, void *uaddr)
 {
-	syscall(__NR_appcall, opcode, opext, rcpri, rcsec, uaddr);
 }
