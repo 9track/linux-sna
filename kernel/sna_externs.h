@@ -14,8 +14,6 @@
 #ifndef __NET_SNA_EXTERNS_H
 #define __NET_SNA_EXTERNS_H
 
-#ifdef __KERNEL__
-
 extern int sna_netid_to_char(sna_netid *n, unsigned char *c);
 extern sna_netid *sna_char_to_netid(unsigned char *c);
 extern char *sna_pr_ether(unsigned char *ptr);
@@ -290,5 +288,4 @@ extern struct sna_tg_cb *sna_tdm_find_tg_by_mac(char *mac);
 extern int sna_trs_create(struct sna_nof_node *start);
 extern int sna_trs_destroy(struct sna_nof_node *delete);
 
-#endif	/* __KERNEL__ */
 #endif	/* __NET_SNA_EXTERNS_H */

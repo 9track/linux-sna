@@ -11,7 +11,6 @@
  * See the GNU General Public License for more details.
  */
 
-#if defined(CONFIG_SNA_CPIC)
 #include <linux/types.h>
 #include <linux/kernel.h>
 #include <linux/string.h>
@@ -21,13 +20,34 @@
 #include <linux/sna.h>
 #include <linux/appc.h>
 #include <linux/cpic.h>
-#include <net/cpic.h>
+
+#include "sna_common.h"
 
 #define MAX_CPIC_ADDR	1024
 
 static LIST_HEAD(cpic_list);
 static LIST_HEAD(cpic_side_list);
 static u_int32_t sna_cpic_side_system_index = 0;
+
+struct cpic {
+	struct list_head		list;
+
+	u_int32_t              		state;
+	u_int32_t			flags;
+
+	struct cpic_ops         	*ops;
+	struct sna_cpic_side_info   	*side;
+	struct inode            	*inode;
+	struct fasync_struct    	*fasync_list;
+	struct file             	*file;
+	pid_t                   	pid;
+
+	wait_queue_head_t       	wait;
+
+	union {
+		struct sna_tp_cb        *sna;
+	} vi;
+};
 
 struct cpic_sock {
 	struct sock sk;
@@ -6515,310 +6535,245 @@ static int sna_cpic_cpicall(struct socket *sock, void *uaddr)
 	switch (args->opcode) {
 		case CM_CMACCI:
 			rc = sna_cpic_cmacci(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMACCP: /* No Cvid */
 			rc = sna_cpic_cmaccp(cpic, (pid_t *)args->a1);
 			break;
 		case CM_CMALLC:
 			rc = sna_cpic_cmallc(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMCANC:
 			rc = sna_cpic_cmcanc(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMCFM:
 			rc = sna_cpic_cmcfm(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMCFMD:
 			rc = sna_cpic_cmcfmd(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMDEAL:
 			rc = sna_cpic_cmdeal(cpic);
 			break;
 		case CM_CMDFDE:
 			rc = sna_cpic_cmdfde(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEACN:
 			rc = sna_cpic_cmeacn(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEAEQ:
 			rc = sna_cpic_cmeaeq(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEAPT:
 			rc = sna_cpic_cmeapt(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMECS:
 			rc = sna_cpic_cmecs(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMECT:
 			rc = sna_cpic_cmect(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMECTX:
 			rc = sna_cpic_cmectx(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEID:
 			rc = sna_cpic_cmeid(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEMN:
 			rc = sna_cpic_cmemn(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEPID:
 			rc = sna_cpic_cmepid(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4, (__u32 *)args->a5,
 				(__u32 *)args->a6, (__u32 *)args->a7);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMEPLN:
 			rc = sna_cpic_cmepln(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMESI:
 			rc = sna_cpic_cmesi(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMESL:
 			rc = sna_cpic_cmesl(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMESRM:
 			rc = sna_cpic_cmesrm(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMESUI:
 			rc = sna_cpic_cmesui(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMETC:
 			rc = sna_cpic_cmetc(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMETPN:
 			rc = sna_cpic_cmetpn(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMFLUS:
 			rc = sna_cpic_cmflus(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMINCL:
 			rc = sna_cpic_cmincl(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMINIC:
 			rc = sna_cpic_cminic(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMINIT: /* No Cvid */
-			rc = sna_cpic_cminit(cpic, (__u8 *)args->a1);
+            rc = sna_cpic_cminit(cpic, (__u8 *)args->a1);
 			break;
 		case CM_CMPREP:
 			rc = sna_cpic_cmprep(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMPTR:
 			rc = sna_cpic_cmptr(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMRCV:
 			rc = sna_cpic_cmrcv(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4, (__u32 *)args->a5,
 				(__u32 *)args->a6);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMRCVX:
 			rc = sna_cpic_cmrcvx(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4, (__u32 *)args->a5);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMRTS:
 			rc = sna_cpic_cmrts(cpic);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSAC:
 			rc = sna_cpic_cmsac(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSACN:
 			rc = sna_cpic_cmsacn(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSAEQ:
 			rc = sna_cpic_cmsaeq(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSAPT:
 			rc = sna_cpic_cmsapt(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSBT:
 			rc = sna_cpic_cmsbt(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSCSP:
 			rc = sna_cpic_cmscsp(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSCST:
 			rc = sna_cpic_cmscst(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSCSU:
 			rc = sna_cpic_cmscsu(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSCT:
 			rc = sna_cpic_cmsct(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSCU:
 			rc = sna_cpic_cmscu(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSDT:
 			rc = sna_cpic_cmsdt(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSED:
 			rc = sna_cpic_cmsed(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			 break;
 		case CM_CMSEND:
 			rc = sna_cpic_cmsend(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSERR:
 			rc = sna_cpic_cmserr(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSF:
 			rc = sna_cpic_cmsf(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSID:
 			rc = sna_cpic_cmsid(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSLD:
 			rc = sna_cpic_cmsld(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSMN:
 			rc = sna_cpic_cmsmn(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSNDX:
 			rc = sna_cpic_cmsndx(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSPDP:
 			rc = sna_cpic_cmspdp(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSPID:
 			rc = sna_cpic_cmspid(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4, (__u32 *)args->a5,
 				(__u32 *)args->a6);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSPLN:
 			rc = sna_cpic_cmspln(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSPM:
 			rc = sna_cpic_cmspm(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSPTR:
 			rc = sna_cpic_cmsptr(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSQCF:
 			rc = sna_cpic_cmsqcf(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSQPM:
 			rc = sna_cpic_cmsqpm(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2, (__u32 *)args->a3,
 				(__u32 *)args->a4);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSRC:
 			rc = sna_cpic_cmsrc(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSRT:
 			rc = sna_cpic_cmsrt(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSSL:
 			rc = sna_cpic_cmssl(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSSRM:
 			rc = sna_cpic_cmssrm(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSST:
 			rc = sna_cpic_cmsst(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSTC:
 			rc = sna_cpic_cmstc(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMSTPN:
 			rc = sna_cpic_cmstpn(cpic, (__u32 *)args->a1,
 				(__u32 *)args->a2);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMTRTS:
 			rc = sna_cpic_cmtrts(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		case CM_CMWAIT:
 			rc = sna_cpic_cmwait(cpic, (__u32 *)args->a1);
-			cpic_put_fd(cpic);
 			break;
 		default:
 			sna_debug(5, "unknown opcode=%02X\n", args->opcode);
@@ -6992,4 +6947,3 @@ int sna_cpic_fini(void)
 	}
 	return 0;
 }
-#endif	/* CONFIG_SNA_CPIC */

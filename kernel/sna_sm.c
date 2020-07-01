@@ -26,6 +26,8 @@
 #include <linux/llc.h>
 #endif  /* CONFIG_SNA_LLC */
 
+#include "sna_common.h"
+
 static LIST_HEAD(lulu_list);
 static u_int32_t sna_lulu_system_index = 0;
 

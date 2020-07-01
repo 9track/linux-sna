@@ -15,6 +15,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 sna_ms_sub_vector_t *sna_ms_build_product_id_sv(sna_ms_product_id_c *sv_c)
 {
 	sna_ms_sw_prd_prg_num sw_prd_prg_num;

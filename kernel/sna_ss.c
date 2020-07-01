@@ -16,6 +16,8 @@
 #include <linux/list.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(ss_clients);
 
 struct sna_ss_pinfo *sna_ss_find(char *name)

@@ -13,6 +13,8 @@
 
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 int sna_ps_mc(int verb, struct sna_tcb *tcb)
 {
 	sna_debug(5, "init\n");

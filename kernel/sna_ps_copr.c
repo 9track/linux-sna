@@ -16,6 +16,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 int sna_ps_copr(int verb, struct sna_tcb *tcb)
 {
 #ifdef NOT

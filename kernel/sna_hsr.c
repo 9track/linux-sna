@@ -16,6 +16,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(hs_list);
 static u_int32_t sna_hs_system_index = 0;
 

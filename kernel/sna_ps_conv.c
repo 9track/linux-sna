@@ -17,7 +17,8 @@
 #include <linux/sna.h>
 #include <linux/appc.h>
 #include <linux/cpic.h>
-#include <net/cpic.h>
+
+#include "sna_common.h"
 
 static u_int32_t sna_ps_conv_attach_sqn = 1;
 

@@ -17,7 +17,8 @@
 #include <linux/sna.h>
 #include <linux/appc.h>
 #include <linux/cpic.h>
-#include <net/cpic.h>
+
+#include "sna_common.h"
 
 static LIST_HEAD(tp_list);
 static LIST_HEAD(mode_list);

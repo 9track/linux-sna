@@ -22,11 +22,46 @@
 #include <linux/attach.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(attach_tp_list);
 static u_int32_t attach_tp_system_index = 0;
 
 struct sk_buff_head attach_queue;
 wait_queue_head_t attach_wait;
+
+typedef enum {
+	AT_RESET = 1,
+	AT_INIT,
+	AT_WAITING,
+	AT_ATTACHED
+} attach_state;
+
+struct attach_tp_info {
+	struct list_head 	list;
+
+	u_int32_t		index;
+	u_int8_t		name[64];
+
+	attach_state	state;
+	unsigned short	flags;
+	pid_t		pid;
+
+	unsigned char   cnv_type;
+	unsigned char   sync_level;
+	unsigned long   limit;
+};
+
+struct attach {
+	unsigned short          flags;
+
+	struct attach_ops       *ops;		/* Calls backs for this ID */
+	struct inode            *inode;
+	struct fasync_struct    *fasync_list;
+	struct file             *file;
+
+	wait_queue_head_t       wait;
+};
 
 struct attach_sock {
 	struct sock sk;
@@ -115,18 +150,13 @@ error:	return err;
  * TODO: Is this required?
  */
 
-static int sna_attach_tp_register(u_int32_t *afd, u_int32_t *tp_info_ptr)
+static int sna_attach_tp_register(u_int32_t *tp_info_ptr)
 {
 	struct tp_info tp_info;
 	struct attach_tp_info *tp;
-	struct attach *at;
-	int fd, err = -EBADF;
+	int err = -EBADF;
 
 	sna_debug(5, "init\n");
-	sna_utok(afd, sizeof(fd), &fd);
-	at = attach_lookup_fd(fd, &err);
-	if (!at)
-		goto out;
 	sna_utok(tp_info_ptr, sizeof(tp_info), &tp_info);
 	tp = sna_attach_tp_get_by_name(tp_info.tp_name);
 	if (tp) {
@@ -144,26 +174,20 @@ static int sna_attach_tp_register(u_int32_t *afd, u_int32_t *tp_info_ptr)
 	tp->state	= AT_INIT;
 	strcpy(tp->name, tp_info.tp_name);
 	list_add_tail(&tp->list, &attach_tp_list);
-error:	attach_put_fd(at);
-out:    return err;
+error:	return err;
 }
 
 /* Unregister a transaction program
  * TODO: Is this required?
  */
 
-static int sna_attach_tp_unregister(u_int32_t *afd, u_int32_t *tp_index_ptr)
+static int sna_attach_tp_unregister(u_int32_t *tp_index_ptr)
 {
 	struct attach_tp_info *tp;
-	struct attach *at;
-	int fd, err = -EBADF;
+	int err = -EBADF;
 	u_int32_t tp_index;
 
 	sna_debug(5, "init\n");
-	sna_utok(afd, sizeof(fd), &fd);
-	at = attach_lookup_fd(fd, &err);
-	if (!at)
-		goto out;
 	sna_utok(tp_index_ptr, sizeof(tp_index), &tp_index);
 	tp = sna_attach_tp_get_by_index(tp_index);
 	if (!tp) {
@@ -173,8 +197,7 @@ static int sna_attach_tp_unregister(u_int32_t *afd, u_int32_t *tp_index_ptr)
 	err = 0;
 	list_del(&tp->list);
 	kfree(tp);
-error:	attach_put_fd(at);
-out:    return err;
+error:	return err;
 }
 
 /* Notify processes waiting on recvmsg that a new attach
@@ -192,20 +215,15 @@ int sna_attach_execute_tp(u_int32_t tcb_id, struct sk_buff *skb)
 
 /* Associate a PID with a transaction program */
 
-static int sna_tp_correlate(u_int32_t *afd, u_int32_t *pid_ptr,
+static int sna_tp_correlate(u_int32_t *pid_ptr,
 	u_int32_t *tp_index_ptr, u_int32_t *tp_name_ptr)
 {
-	struct attach *at;
 	struct sna_tp_cb *tp;
-	int fd, err = -EBADF;
+	int err = -EBADF;
 	u_int32_t tp_index;
 	pid_t pid;
 
 	sna_debug(5, "init\n");
-	sna_utok(afd, sizeof(fd), &fd);
-	at = attach_lookup_fd(fd, &err);
-	if (!at)
-		goto out;
 	sna_utok(pid_ptr, sizeof(pid), &pid);
 	sna_utok(tp_index_ptr, sizeof(tp_index), &tp_index);
 	tp = sna_rm_tp_get_by_index(tp_index);
@@ -215,8 +233,7 @@ static int sna_tp_correlate(u_int32_t *afd, u_int32_t *pid_ptr,
 	}
 	err 	= 0;
 	tp->pid = pid;
-error:	attach_put_fd(at);
-out:    return err;
+error:	return err;
 }
 
 static int sna_attach_error(void *uaddr, u_int32_t return_code)
@@ -258,17 +275,14 @@ static int sna_attach_ioctl(struct socket *sock, unsigned int cmd, unsigned long
 	sna_utok(args->a1, sizeof(u_int32_t), &opcode);
 	switch (opcode) {
 		case ATTACH_TP_REGISTER:
-			err = sna_attach_tp_register((u_int32_t *)args->a3,
-				(u_int32_t *)args->a4);
+			err = sna_attach_tp_register((u_int32_t *)args->a3);
 			break;
 		case ATTACH_TP_UNREGISTER:
-			err = sna_attach_tp_unregister((u_int32_t *)args->a3,
-				(u_int32_t *)args->a4);
+			err = sna_attach_tp_unregister((u_int32_t *)args->a3);
 			break;
 		case ATTACH_TP_CORRELATE:
 			err = sna_tp_correlate((u_int32_t *)args->a3,
-				(u_int32_t *)args->a4, (u_int32_t *)args->a5,
-				(u_int32_t *)args->a6);
+				(u_int32_t *)args->a4, (u_int32_t *)args->a5);
 			break;
 		default:
 			sna_debug(5, "unknown opcode=%02X\n", opcode);

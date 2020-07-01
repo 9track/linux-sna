@@ -22,6 +22,8 @@
 
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(asm_list);
 
 /* Display a Path Control ID */

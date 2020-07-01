@@ -13,7 +13,10 @@
 #include <linux/bitops.h>
 #include <linux/types.h>
 #include <linux/kernel.h>
+
 #include <linux/sna.h>
+
+#include "sna_common.h"
 
 unsigned char etor(unsigned char a)
 {

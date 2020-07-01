@@ -21,6 +21,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 int sna_rss_request_route(struct sna_rss_route *r)
 {
 	return 0;

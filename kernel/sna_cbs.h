@@ -14,8 +14,6 @@
 #ifndef __NET_SNA_CBS_H
 #define __NET_SNA_CBS_H
 
-#ifdef __KERNEL__
-
 #include <linux/netdevice.h>
 
 /* CREATE.
@@ -2395,5 +2393,5 @@ struct sna_ss_pinfo {
 	unsigned long   bind_reassembly;
 	unsigned long   adaptive_bind_pacing;
 };
-#endif	/* __KERNEL__ */
+
 #endif	/* __NET_SNA_CBS_H */

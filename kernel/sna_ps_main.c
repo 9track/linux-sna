@@ -16,7 +16,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 #include <linux/cpic.h>
-#include <net/cpic.h>
+
+#include "sna_common.h"
 
 /* sna_ps_init - initialize anything required for a new transation program.
  * @tp: transaction program control block.

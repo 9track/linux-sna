@@ -16,6 +16,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static int sna_tc_send_to_pc(struct sna_hs_cb *hs, struct sk_buff *skb);
 
 /**

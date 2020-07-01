@@ -26,6 +26,8 @@
 #include <linux/llc.h>
 #endif  /* CONFIG_SNA_LLC */
 
+#include "sna_common.h"
+
 u_int32_t sysctl_xid_idle_limit		= SNA_XID_IDLE_LIMIT;
 u_int32_t sysctl_xid_retry_limit	= SNA_XID_RETRY_LIMIT;
 u_int32_t sysctl_test_retry_limit	= SNA_TEST_RETRY_LIMIT;

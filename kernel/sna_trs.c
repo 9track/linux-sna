@@ -12,6 +12,8 @@
 
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 int sna_trs_create(struct sna_nof_node *start)
 {
 	sna_debug(5, "init\n");

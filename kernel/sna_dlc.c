@@ -24,6 +24,8 @@
 #include <linux/llc.h>
 #endif
 
+#include "sna_common.h"
+
 extern char sna_product_name[];
 
 #ifdef CONFIG_SNA_LOOPBACK

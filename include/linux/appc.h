@@ -734,14 +734,4 @@ struct sna_signoff {
 };
 #endif
 
-extern void appc(unsigned short opcode, unsigned char opext,
-	unsigned short rcpri, unsigned long rcsec, void *uaddr);
-
-#ifdef __KERNEL__
-
-struct appc_ops {
-	int family;
-};
-
-#endif /* __KERNEL__ */
 #endif /* _APPC_H */

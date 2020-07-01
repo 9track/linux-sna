@@ -22,6 +22,8 @@
 #include <linux/list.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(node_list);
 static LIST_HEAD(ancb_list);
 

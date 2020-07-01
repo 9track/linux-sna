@@ -25,6 +25,8 @@
 
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(cosm_list);
 
 struct sna_cosm_cb *sna_cosm_find(unsigned char *name)

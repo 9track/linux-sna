@@ -15,6 +15,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 int sna_vector_cos_tpf(u_int8_t *name, int net_pri, int tx_pri,
 	struct sk_buff *skb)
 {

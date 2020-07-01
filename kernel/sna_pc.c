@@ -17,6 +17,8 @@
 #include <linux/list.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(pc_list);
 static u_int32_t sna_pc_system_index = 0;
 

@@ -1,56 +1,6 @@
 #ifndef _LINUX_ATTACH_H
 #define _LINUX_ATTACH_H
 
-#ifdef __KERNEL__
-typedef enum {
-	AT_RESET = 1,
-	AT_INIT,
-	AT_WAITING,
-	AT_ATTACHED
-} attach_state;
-
-struct attach_tp_info {
-	struct list_head 	list;
-
-	u_int32_t		index;
-	u_int8_t		name[64];
-
-	attach_state	state;
-	unsigned short	flags;
-	pid_t		pid;
-
-	unsigned char   cnv_type;
-	unsigned char   sync_level;
-	unsigned long   limit;
-};
-
-struct attach {
-	unsigned short          flags;
-
-	struct attach_ops       *ops;		/* Calls backs for this ID */
-	struct inode            *inode;
-	struct fasync_struct    *fasync_list;
-	struct file             *file;
-
-	wait_queue_head_t       wait;
-};
-
-struct attach_ops {
-	int family;
-	void (*call)	(void *uaddr);
-	int  (*release)	(struct attach *at);
-};
-
-extern int attach_register(struct attach_ops *ops);
-extern int attach_unregister(int family);
-extern struct attach *attach_alloc(void);
-extern struct attach *attach_lookup_fd(int fd, int *err);
-extern void attach_release(struct attach *at);
-extern int attach_map_fd(struct attach *at);
-extern void attach_put_fd(struct attach *at);
-
-#endif /* __KERNEL__ */
-
 struct tp_info {
 	char            tp_name[64];
 	unsigned char   cnv_type;

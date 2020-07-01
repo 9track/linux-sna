@@ -16,6 +16,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static int sna_dfc_send_rsp_mu(struct sna_hs_cb *hs, struct sk_buff *skb,
 	u_int8_t expedite, u_int8_t negative, u_int32_t sense);
 static int sna_dfc_ct_update(struct sna_hs_cb *hs, struct sk_buff *skb);

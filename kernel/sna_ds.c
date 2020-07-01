@@ -15,6 +15,8 @@
 #include <linux/string.h>
 #include <linux/sna.h>
 
+#include "sna_common.h"
+
 static LIST_HEAD(ds_clients);
 
 struct sna_ds_pinfo *sna_ds_find(__u8 *name)

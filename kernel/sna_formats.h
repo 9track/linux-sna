@@ -14,8 +14,6 @@
 #ifndef __NET_SNA_FORMATS_H
 #define __NET_SNA_FORMATS_H
 
-#ifdef __KERNEL__
-
 /* MU.
  */
 
@@ -4369,5 +4367,4 @@ typedef struct __attribute__ ((packed)) {
 #endif
 } sna_xid3;
 
-#endif  /* __KERNEL__ */
 #endif  /* __NET_SNA_FORMATS_H */

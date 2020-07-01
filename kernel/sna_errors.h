@@ -14,7 +14,6 @@
 #ifndef __NET_SNA_ERRORS_H
 #define __NET_SNA_ERRORS_H
 
-#ifdef __KERNEL__
 
 #define	RESOURCE_FAILURE_NO_RETRY	1008600B
 
@@ -39,5 +38,4 @@
 #define SVC_ERROR_PURGING		08890100
 #define SVC_ERROR_TRUNC			08890101
 
-#endif	/* __KERNEL__ */
 #endif	/* __NET_SNA_ERRORS_H */

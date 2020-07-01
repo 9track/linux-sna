@@ -11,7 +11,6 @@
  * See the GNU General Public License for more details.
  */
 
-#if defined(CONFIG_SNA) || defined(CONFIG_SNA_MODULE)
 #include <linux/module.h>
 #include <linux/types.h>
 #include <linux/kernel.h>
@@ -40,6 +39,8 @@
 #include <linux/sna.h>
 #include <linux/cpic.h>
 #include <linux/attach.h>
+
+#include "sna_common.h"
 
 #ifdef CONFIG_SYSCTL
 extern inline void sna_register_sysctl(void);
@@ -573,18 +574,14 @@ static int __init sna_init(void)
 #endif /* CONFIG_SYSCTL */
 
 	sna_attach_init();
-#if defined(CONFIG_SNA_CPIC)
 	sna_cpic_init();
-#endif /* CONFIG_SNA_CPIC */
 
 	return 0;
 }
 
 static void __exit sna_exit(void)
 {
-#if defined(CONFIG_SNA_CPIC)
 	sna_cpic_fini();
-#endif /* CONFIG_SNA_CPIC */
 	sna_attach_fini();
 
 	/* Remove out notifier from the netdevice layer. */
@@ -625,4 +622,3 @@ EXPORT_SYMBOL(sna_ktou);
 module_init(sna_init);
 module_exit(sna_exit);
 MODULE_LICENSE("GPL");
-#endif /* CONFIG_SNA || CONFIG_SNA_MODULE */

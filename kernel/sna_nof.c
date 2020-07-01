@@ -16,7 +16,8 @@
 #include <linux/skbuff.h>
 #include <linux/sna.h>
 #include <linux/cpic.h>
-#include <net/cpic.h>
+
+#include "sna_common.h"
 
 extern int sna_cpic_create(struct sna_nof_node *node);
 extern int sna_cpic_destroy(struct sna_nof_node *delete);
