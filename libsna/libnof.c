@@ -29,12 +29,6 @@
 #include <linux/sna.h>
 #include <linux/cpic.h>
 
-#ifndef SOL_SNA_NOF
-#define SOL_SNA_NOF	278
-#endif
-#ifndef SOL_SNA_CPIC
-#define SOL_SNA_CPIC	279
-#endif
 
 struct sna_qcpics *nof_query_cpic_side_info(int sk, char *net, 
 	char *name, char *cpic_name)

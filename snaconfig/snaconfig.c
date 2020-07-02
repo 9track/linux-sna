@@ -45,9 +45,6 @@ char 	web_s[]			= "http://www.linux-sna.org";
 int 	sna_debug_level		= 1;
 global_info *sna_config_info	= NULL;
 
-#ifndef SOL_SNA_NOF
-#define SOL_SNA_NOF     278
-#endif
 
 int help(void)
 {
@@ -118,7 +115,7 @@ int sna_nof_connect(void)
 {
 	int sk;
 
-	sk = socket(AF_SNA, SOCK_DGRAM, SOL_SNA_NOF);
+	sk = socket(AF_SNA, SOCK_DGRAM, SNAPROTO_DEFAULT);
         if (sk < 0) {
 		sna_debug(1, "unable to open connection to NOF.\n");
 		sna_debug(1, "did you load the sna modules?\n");
