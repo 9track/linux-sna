@@ -25,7 +25,7 @@ extern __u32   	sysctl_max_tx_ru_size;
 extern __u32   	sysctl_max_rx_ru_size;
 extern __u32   	sysctl_max_auto_activation_limit;
 extern __u32   	sysctl_bind_pacing_cnt;
-extern __u8    	sna_debug_level;
+extern __u32   	sna_debug_level;
 
 /* xid. */
 extern u_int32_t sysctl_xid_idle_limit;
