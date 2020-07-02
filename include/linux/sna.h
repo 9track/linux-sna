@@ -18,7 +18,7 @@
 #define SNAPROTO_DEFAULT	0
 #define SNAPROTO_ATTACH		1
 #define SNAPROTO_CPIC		2
-#define SNA_MAX_PROTO		(SNAPROTO_CPIC)
+#define SNA_MAX_PROTO		3	/* Number of protocols */
 
 #define SOL_SNA_NOF		315	/* SNA Network Operator Facility */
 #define SOL_SNA_CPIC		316	/* CPI-C v2.1 */
