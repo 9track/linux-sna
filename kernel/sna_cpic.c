@@ -4520,7 +4520,6 @@ static CM_RETURN_CODE sna_cpic_create_session(struct sna_cpic_side_info *side,
 			&side->netid_plu, &err);
 	if (tp)
 		cpic->vi.sna = tp;
-	list_add_tail(&cpic->list, &cpic_list);
 	return err;
 }
 
@@ -6836,6 +6835,7 @@ static int sna_cpic_create(struct net *net, struct socket *sock, int protocol,
 			int kern)
 {
 	struct sock *sk;
+	struct cpic *cpic;
 
 	sock->state = SS_UNCONNECTED;
 	sock->ops = &cpic_sock_ops;
@@ -6845,6 +6845,9 @@ static int sna_cpic_create(struct net *net, struct socket *sock, int protocol,
 		return -ENOMEM;
 
 	sock_init_data(sock, sk);
+	cpic = &cpic_pi(sk)->cpic;
+	memset(cpic, 0, sizeof(struct cpic));
+	list_add_tail(&cpic->list, &cpic_list);
 	return 0;
 }
 
